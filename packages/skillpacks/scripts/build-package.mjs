@@ -52,6 +52,7 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "docs/social-video-content-convention.md", to: "assets/social-video-content-convention.md" },
   { fromRoot: repoRoot, from: "docs/social-ledger-convention.md", to: "assets/social-ledger-convention.md" },
   { fromRoot: repoRoot, from: "docs/social", to: "assets/social" },
+  { fromRoot: packageRoot, from: "assets/templates", to: "assets/templates" },
   { fromRoot: repoRoot, from: "README.md", to: "README.md" },
   { fromRoot: repoRoot, from: "CHANGELOG.md", to: "CHANGELOG.md" },
   { fromRoot: repoRoot, from: "LICENSE", to: "LICENSE" }
@@ -88,6 +89,8 @@ const requiredBuildFiles = [
   "assets/alignment-page-convention.md",
   "assets/interrogation-page-convention.md",
   "assets/design-tree-loop-convention.md",
+  "assets/templates/alignment-page.html",
+  "assets/templates/interrogation-page.html",
   "assets/social-post-convention.md",
   "assets/social-video-content-convention.md",
   "assets/social-ledger-convention.md",

@@ -32,6 +32,8 @@ const expectedMatrix = new Map([
   ['alignment pages open <alignment/page.html> [--browser <browser>]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment pages serve [--port <port>]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['alignment pages inject-tts [--force] [alignment/<page>.html]', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
+  ['alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html', { owner: 'Node-owned writer', bash: 'No', jq: 'No' }],
+  ['interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html', { owner: 'Node-owned writer', bash: 'No', jq: 'No' }],
   ['alignment verify', { owner: 'Node-owned wrapper', bash: 'No', jq: 'No' }],
   ['prune [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['pin <skill> <version>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],

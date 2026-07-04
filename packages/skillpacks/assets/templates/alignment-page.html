@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" data-alignment-category="{{ALIGNMENT_CATEGORY}}" data-visual-tier="{{VISUAL_TIER}}" data-alignment-status="review">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --orange: #d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(100% - 32px, 1040px);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 32px 0 64px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 10px; font-size: 2rem; }
+    h2 { margin-top: 0; color: var(--accent); font-size: 1.25rem; }
+    a { color: var(--accent); }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    pre {
+      white-space: pre-wrap;
+      overflow: auto;
+      background: #0f1520;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    header, section, .toc, .status, .question, .compile-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 16px 0;
+    }
+    .muted { color: var(--muted); }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--orange);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--orange);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .question {
+      background: #1c2333;
+      border-color: #33456a;
+    }
+    .question label {
+      display: block;
+      min-height: 44px;
+      padding: 10px 0;
+    }
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1520;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: var(--accent);
+      background: #13243b;
+      color: #fff;
+    }
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1520;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+    @media (max-width: 560px) {
+      main { width: calc(100vw - 22px); padding-top: 22px; }
+      h1 { font-size: 1.45rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p><span class="badge">review</span></p>
+      <h1>{{TITLE}}</h1>
+      <p class="muted">Scaffolded on {{DATE}} for <code>{{PAGE_PATH}}</code>. Replace placeholders with the producing skill's evidence, gates, and approval record before handoff.</p>
+    </header>
+
+    <nav class="toc" aria-label="Page sections">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#review">Review Packet</a></li>
+        <li><a href="#approval">Approval Gate</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="status" class="status">
+      <h2>Status</h2>
+      <p><strong>Skill:</strong> <code>{{SKILL}}</code></p>
+      <p><strong>Topic:</strong> <code>{{TOPIC}}</code></p>
+      <p><strong>Alignment date:</strong> {{DATE}}</p>
+      <p><strong>State:</strong> review</p>
+    </section>
+
+    <section id="review">
+      <h2>Review Packet</h2>
+      <p>Replace this starter packet with the complete rendered deliverable, evidence matrix, assumptions and confidence register, source gaps, proposed file changes, and any skill-specific review sections.</p>
+    </section>
+
+    <section id="approval" class="question" data-required="true" data-question-id="final-artifact-approval">
+      <h2>Approval Gate</h2>
+      <p>Replace this generic gate with the producing skill's required approval questions.</p>
+      <label><input type="radio" name="final-artifact-approval" value="approve" data-approval-effect="approve"> Approve this scaffold after the producing skill fills the review packet.</label>
+      <label><input type="radio" name="final-artifact-approval" value="revise" data-approval-effect="block"> Request revisions before approval.</label>
+    </section>
+
+    <section id="compile" class="compile-section">
+      <h2>Compile Responses</h2>
+      <p class="muted">Replace this starter compiler with the producing skill's full YAML compiler before user review.</p>
+      <button type="button" class="primary">Compile Responses</button>
+      <textarea readonly aria-label="Compiled response YAML"># Invoke with: {{COMMAND}}
+command: "{{COMMAND}}"
+alignment_page: {{PAGE_PATH}}
+approval_status: not-approved
+response_status: scaffold
+required_gate_status: incomplete
+unanswered_required_questions:
+  - final-artifact-approval
+</textarea>
+    </section>
+  </main>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+  <script src="../scripts/alignment-question-nav.js"></script>
+</body>
+</html>

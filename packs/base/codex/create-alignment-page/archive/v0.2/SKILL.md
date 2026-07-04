@@ -2,14 +2,14 @@
 name: create-alignment-page
 description: Create or amend a portable HTML alignment review page in a target repo using bundled conventions and skillpacks alignment commands
 type: ops
-version: v0.3
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "<skill-or-topic> [target artifact or repo path]"
 ---
 
 # Create Alignment Page
 
-Invoke as `/create-alignment-page`.
+Invoke as `$create-alignment-page`.
 
 Use this skill when the user asks to create, refresh, or amend an `alignment/*.html` review page for an existing skill output, research artifact, spec, plan, report, prototype, or other durable deliverable. This skill is for target repositories that may only have skills installed through the `skillpacks` npm package, so it must not assume this source checkout's `docs/` or `scripts/` directories are present.
 
@@ -23,13 +23,11 @@ Use this skill when the user asks to create, refresh, or amend an `alignment/*.h
 
 2. Load the best available convention:
    - First read the producing skill's bundled sibling `ALIGNMENT-PAGE.md` from the installed skill directory, such as `.codex/skills/<skill>/ALIGNMENT-PAGE.md` or `.claude/skills/<skill>/ALIGNMENT-PAGE.md`.
-   - For ad hoc pages that are not owned by a normal producing skill, create the starter file with `npx skillpacks alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html`, then replace every placeholder with the actual artifact, evidence, gates, and compiler content before handoff.
    - In this source checkout or a package-shaped checkout with `docs/`, `base/`, and `packs/`, source paths such as `base/<agent>/<skill>/ALIGNMENT-PAGE.md`, `packs/<pack>/<agent>/<skill>/ALIGNMENT-PAGE.md`, `docs/alignment-page-convention.md`, and `node scripts/upgrade-alignment-page.mjs --check` are acceptable maintenance fallbacks.
    - `npx skillpacks alignment bundles --check` is a source/package maintenance check for repositories that contain the packaged convention inputs (`docs/`, `base/`, and `packs/`). Do not use it as a bare target-repo fallback.
-   - If a normal producing skill should own the page but no installed sibling `ALIGNMENT-PAGE.md` or valid source/package-shaped convention source exists, stop and report which skill convention is missing. Do not route that normal skill invocation through `create-alignment-page`; the scaffold is infrastructure, not a replacement for skill-owned gates.
+   - If no installed sibling `ALIGNMENT-PAGE.md` or valid source/package-shaped convention source exists, stop and report which skill convention is missing. Do not invent a simplified template.
 
 3. Build or amend the page:
-   - For a new ad hoc page, run the scaffold command before filling the page. If the target page already exists, archive it first and amend the archived-derived page manually rather than rerunning scaffold over it.
    - Render the full source artifact content directly in HTML. Do not replace the deliverable with an iframe, object embed, or link-only preview.
    - Preserve evidence, assumptions, decisions, source paths, proposed file changes, gate questions, feedback context, and prior approval records.
    - For a new review page, set `data-alignment-status="review"`, `data-alignment-category`, and `data-visual-tier`.
@@ -44,7 +42,7 @@ Use this skill when the user asks to create, refresh, or amend an `alignment/*.h
    - Treat browser-open status `blocked` as non-fatal when the page was written and audited successfully; report the absolute path.
 
 5. Handoff:
-   - If the page is in `review`, give a concrete handoff: ask the user to review `alignment/<skill-name>-<topic>.html`, use local `Compile Feedback YAML` under a section for targeted revision feedback or bottom `Compile Responses` for gate answers and final approval, then paste the YAML into the producing skill context, normally `/<producing-skill> ...` with the YAML included.
+   - If the page is in `review`, give a concrete handoff: ask the user to review `alignment/<skill-name>-<topic>.html`, use local `Compile Feedback YAML` under a section for targeted revision feedback or bottom `Compile Responses` for gate answers and final approval, then paste the YAML into the producing skill context, normally `$<producing-skill> ...` with the YAML included.
    - Treat section-feedback YAML, `feedback_status: revision-request`, partial response YAML, and any `approval_status: not-approved` YAML as a review/revision request. The receiving producing skill investigates, answers or pushes back when needed, amends the page or artifacts when warranted, and returns the page for renewed review.
    - Treat only final compiled response YAML with `approval_status: ready-for-agent-review` and no unresolved negative or clarification feedback as authorization to write or confirm approved canonical artifacts.
    - If the user is already consuming pasted YAML in a fresh session, do not recommend another context clear; continue through the current YAML handling path.
@@ -69,7 +67,6 @@ Report:
 - Do not write outside the target repository.
 - Do not overwrite an existing alignment page without archiving it first.
 - Do not create a second alignment page merely to review the alignment page created by this skill; the requested page is the review artifact.
-- Do not make ordinary skill invocations call this skill as a subskill; producing skills populate their own alignment pages directly, using the packaged scaffold/template only as infrastructure when useful.
 
 ## Alignment Page
 

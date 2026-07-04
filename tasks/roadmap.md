@@ -2,6 +2,27 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
+
+### Goal
+
+Update `alignment/analyze-sessions-skill-usage-rates.html` with a reproducible breakdown of skill invocation volume by actor: user-invoked skill commands versus agent-invoked or agent-recommended skill usage.
+
+### Plan
+
+- [x] Capture the visible `$analyze-sessions` prompt in `prompts/analyze-sessions/`.
+- [ ] Inspect the existing alignment page, session insight memory, and available Claude/Codex history sources.
+- [ ] Build or run a scriptable parser over the selected history scope to count skill invocation patterns by source and actor.
+- [ ] Render the results into the requested alignment HTML page, including counting rules, evidence samples, charts/tables, and recommendations.
+- [ ] Update the alignment index if needed, verify the page, update `.session-insights/`, and record the review in `tasks/todo.md`.
+
+### Acceptance Criteria
+
+- Counts distinguish user-authored `$skill` or `/skill` invocations from agent-authored skill references, handoffs, or recommendations.
+- Counts include source coverage and limitations for Claude history, Codex compact prompt history, and Codex rich sessions.
+- The alignment page remains self-contained and auditable under the bundled convention.
+- No unrelated dirty worktree changes are reverted or absorbed.
+
 ## Historical Implementation - Patch Packaged Alignment Audit Missing Shared Lib
 
 ### Goal
@@ -7443,3 +7464,35 @@ Patch skillpacks so installed skills can load every convention or contract docum
 - Refresh restores deleted convention docs even when skill files are already current.
 - Doctor reports missing or stale convention docs and recommends the existing refresh command.
 - Package build output includes all registry convention/contract docs.
+
+## Current Plan - Shared Alignment and Interrogation HTML Scaffolds
+
+### Goal
+
+Add packaged starter HTML scaffolds for alignment and interrogation pages so installed `skillpacks` users can create convention-shaped pages without repo-local `docs/` or generator scripts, while keeping normal skills responsible for their own content and approval gates.
+
+### Plan
+
+- [x] Inspect the existing `gskp alignment` CLI namespace, package staging boundary, and tests.
+- [x] Add packaged template assets under `packages/skillpacks/assets/templates/`.
+- [x] Add strict scaffold commands for `alignment pages scaffold` and `interrogation pages scaffold`.
+- [x] Package the templates through build staging and npm `files`.
+- [x] Update `create-alignment-page` and convention guidance to use the scaffold as infrastructure without routing normal skills through the skill.
+- [x] Add package-boundary, CLI, and fixture audit coverage.
+- [x] Run focused verification, update task review, then ship the intended changes.
+
+### Acceptance Criteria
+
+- [x] `gskp alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html` writes a safe repo-relative page.
+- [x] `gskp interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html` writes a safe repo-relative page.
+- [x] The npm publish target includes both templates and excludes denied repo paths.
+- [x] Generated fixture pages pass the existing active-page auditors.
+- [x] `create-alignment-page` can rely on packaged scaffold support when source checkout docs/scripts are unavailable.
+
+### Test Plan
+
+- `node --test packages/skillpacks/test/alignment.test.mjs`
+- `node --test packages/skillpacks/test/package-boundary.test.mjs`
+- `npm --workspace skillpacks run build:check`
+- `npm --workspace skillpacks run pack:dry-run`
+- `git diff --check`

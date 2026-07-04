@@ -27,6 +27,11 @@ import {
   uninstallGlobal,
   unpinSkill
 } from './lifecycle.mjs';
+import {
+  resolveAlignmentScaffold,
+  resolveInterrogationScaffold,
+  runPageScaffold
+} from './page-scaffold.mjs';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -41,6 +46,8 @@ const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs
 const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
 const alignmentServeScriptPath = resolvePackagedPath('scripts/serve-alignment.mjs');
 const alignmentTtsAssetPath = resolvePackagedPath('scripts/alignment-tts-kokoro.js');
+const alignmentTemplatePath = resolvePackagedPath('assets/templates/alignment-page.html');
+const interrogationTemplatePath = resolvePackagedPath('assets/templates/interrogation-page.html');
 const ALIGNMENT_PAGE_BROWSERS = new Set(['auto', 'brave', 'chrome', 'safari', 'edge', 'default']);
 
 function resolvePackagedPath(relativePath) {
@@ -162,6 +169,7 @@ Usage:
   gskp alignment pages open <alignment/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
   gskp alignment pages serve [--port <port>]
   gskp alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
+  gskp alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html
   gskp alignment verify
 
 Commands:
@@ -173,7 +181,18 @@ Commands:
   pages open                 Open or focus an alignment HTML page
   pages serve                Serve alignment pages from the current repo over localhost
   pages inject-tts           Add the packaged Brief Me TTS script tag to pages
+  pages scaffold             Create a starter alignment HTML page from the packaged template
   verify                     Run the focused alignment verification set when present`);
+}
+
+function interrogationHelp() {
+  console.log(`gskp interrogation
+
+Usage:
+  gskp interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html
+
+Commands:
+  pages scaffold             Create a starter interrogation HTML page from the packaged template`);
 }
 
 function prototypeHelp() {
@@ -404,6 +423,15 @@ export function resolveAlignmentCommand(args, options = {}) {
       };
     }
 
+    if (pagesCommand === 'scaffold') {
+      return {
+        kind: 'scaffold',
+        scaffold: resolveAlignmentScaffold(pagesRest),
+        templatePath: alignmentTemplatePath,
+        projectRoot
+      };
+    }
+
     throw new Error(`alignment pages: unknown command '${pagesCommand}'`);
   }
 
@@ -430,6 +458,35 @@ export function resolveAlignmentCommand(args, options = {}) {
   }
 
   throw new Error(`alignment: unknown command '${scope}'`);
+}
+
+export function resolveInterrogationCommand(args, options = {}) {
+  const projectRoot = resolve(options.projectRoot || process.cwd());
+  const [scope, ...rest] = args;
+
+  if (!scope || scope === 'help' || scope === '--help' || scope === '-h') {
+    return { kind: 'help' };
+  }
+
+  if (scope === 'pages') {
+    const [pagesCommand, ...pagesRest] = rest;
+    if (!pagesCommand || pagesCommand === 'help' || pagesCommand === '--help' || pagesCommand === '-h') {
+      return { kind: 'help' };
+    }
+
+    if (pagesCommand === 'scaffold') {
+      return {
+        kind: 'scaffold',
+        scaffold: resolveInterrogationScaffold(pagesRest),
+        templatePath: interrogationTemplatePath,
+        projectRoot
+      };
+    }
+
+    throw new Error(`interrogation pages: unknown command '${pagesCommand}'`);
+  }
+
+  throw new Error(`interrogation: unknown command '${scope}'`);
 }
 
 export function resolvePrototypeCommand(args, options = {}) {
@@ -487,10 +544,34 @@ function runAlignment(args) {
   }
 
   requireCommand('node', 'Install Node.js before running gskp alignment commands.');
+  if (resolved.kind === 'scaffold') {
+    return runPageScaffold(resolved.scaffold, {
+      projectRoot: resolved.projectRoot,
+      templatePath: resolved.templatePath
+    });
+  }
   if (resolved.ensureTtsAsset) {
     ensureAlignmentTtsAsset(process.cwd());
   }
   return runCommand(resolved.command, resolved.args, { env: resolved.env || process.env });
+}
+
+function runInterrogation(args) {
+  const resolved = resolveInterrogationCommand(args, { projectRoot: process.cwd() });
+  if (resolved.kind === 'help') {
+    interrogationHelp();
+    return 0;
+  }
+
+  requireCommand('node', 'Install Node.js before running gskp interrogation commands.');
+  if (resolved.kind === 'scaffold') {
+    return runPageScaffold(resolved.scaffold, {
+      projectRoot: resolved.projectRoot,
+      templatePath: resolved.templatePath
+    });
+  }
+
+  throw new Error(`unsupported interrogation command kind '${resolved.kind}'`);
 }
 
 function runPrototype(args) {
@@ -700,6 +781,10 @@ Commands:
                                Serve alignment pages from the current repo over localhost
   alignment pages inject-tts [--force] [alignment/<page>.html]
                                Add the packaged Brief Me TTS script include
+  alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html
+                               Create a starter alignment HTML page
+  interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html
+                               Create a starter interrogation HTML page
   alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
@@ -874,6 +959,10 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'alignment') {
     return runAlignment(rest);
+  }
+
+  if (command === 'interrogation') {
+    return runInterrogation(rest);
   }
 
   if (command === 'prototype') {

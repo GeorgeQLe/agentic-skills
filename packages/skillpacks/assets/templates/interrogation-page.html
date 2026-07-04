@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-visual-tier="{{VISUAL_TIER}}" data-interrogation-status="review" data-interrogation-round="{{ROUND}}" data-interrogation-gate="continue">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --purple: #bc8cff;
+      --orange: #d29922;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(100% - 32px, 1040px);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 32px 0 64px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 10px; font-size: 2rem; }
+    h2 { margin-top: 0; color: var(--accent); font-size: 1.25rem; }
+    a { color: var(--accent); }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    header, section, .toc, .question, .compile-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 16px 0;
+    }
+    .muted { color: var(--muted); }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--purple);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--purple);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .question {
+      background: #1c2333;
+      border-color: #33456a;
+    }
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1520;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1520;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: var(--accent);
+      background: #13243b;
+      color: #fff;
+    }
+    @media (max-width: 560px) {
+      main { width: calc(100vw - 22px); padding-top: 22px; }
+      h1 { font-size: 1.45rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p><span class="badge">stage zero · round {{ROUND}}</span></p>
+      <h1>{{TITLE}}</h1>
+      <p class="muted">Scaffolded on {{DATE}} for <code>{{PAGE_PATH}}</code>. Replace placeholders with the parent skill's assumptions, open questions, confidence gate, and compiler before handoff.</p>
+    </header>
+
+    <nav class="toc" aria-label="Page sections">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#questions">Open Questions</a></li>
+        <li><a href="#compile">Compile Responses</a></li>
+      </ol>
+    </nav>
+
+    <section id="status">
+      <h2>Status</h2>
+      <p><strong>Skill:</strong> <code>{{SKILL}}</code></p>
+      <p><strong>Round:</strong> {{ROUND}}</p>
+      <p><strong>Branch:</strong> <code>{{BRANCH}}</code></p>
+      <p><strong>Interrogation date:</strong> {{DATE}}</p>
+    </section>
+
+    <section id="questions" class="question" data-open-question>
+      <h2>Open Question</h2>
+      <p>Replace this placeholder with one genuinely open question that shapes downstream research.</p>
+      <p data-recommended-answer>Recommended answer shape: provide the decision, constraint, or preference in one or two specific sentences.</p>
+      <span data-agent-recommended-answer hidden>Replace with an evidence-backed recommended answer before handoff.</span>
+      <p><span data-agent-confidence="low">Agent confidence: low</span></p>
+      <textarea data-open-input aria-label="Open answer"></textarea>
+      <p>
+        <button type="button" data-clarify-copy>Need clarification</button>
+        <button type="button" data-apply-recommended>Apply recommended</button>
+        <span data-apply-recommended-status class="muted"></span>
+      </p>
+    </section>
+
+    <section id="compile" class="compile-section" data-answer-sidecar="research/_working/interrogation-{{SKILL}}-r{{ROUND}}.yaml">
+      <h2>Compile Responses</h2>
+      <p class="muted">Replace this starter compiler with the parent skill's complete interrogation YAML compiler before user review.</p>
+      <button type="button" class="primary">Compile Responses</button>
+      <textarea readonly aria-label="Compiled response YAML"># Invoke with: {{COMMAND}}
+command: "{{COMMAND}}"
+interrogation_page: {{PAGE_PATH}}
+round: {{ROUND}}
+round_status: partial
+gate_state: continue
+agent_routing:
+  workflow: interrogation-loop
+  parent_skill: {{SKILL}}
+  command: "{{COMMAND}}"
+  gate_owner: parent-orchestrator
+  gate_type: interrogation-round
+  round: {{ROUND}}
+  answer_sidecar: research/_working/interrogation-{{SKILL}}-r{{ROUND}}.yaml
+  next_resolution: parent-resolves-from-yaml-and-filesystem
+</textarea>
+    </section>
+  </main>
+  <script>
+document.addEventListener("click", async (event) => {
+  const clarify = event.target.closest("[data-clarify-copy]");
+  if (clarify) {
+    const block = clarify.closest("[data-open-question]");
+    const text = block?.querySelector("h2")?.textContent?.trim() || "Open question";
+    const payload = `Question: "${text}"\nI need clarification on what this is asking before I can answer.`;
+    try {
+      await navigator.clipboard.writeText(payload);
+      clarify.textContent = "Clarification copied";
+    } catch {
+      clarify.textContent = "Select text to copy";
+    }
+  }
+  const apply = event.target.closest("[data-apply-recommended]");
+  if (!apply) return;
+  const block = apply.closest("[data-open-question]");
+  const source = block?.querySelector("[data-agent-recommended-answer]");
+  const input = block?.querySelector("[data-open-input]");
+  const recommended = source?.textContent?.trim() || "";
+  if (!input || !recommended) return;
+  if (input.value.trim() && !window.confirm("Replace your current answer with the recommended answer?")) return;
+  input.value = recommended;
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
+  const status = block.querySelector("[data-apply-recommended-status]");
+  if (status) status.textContent = "Recommended answer applied.";
+});
+  </script>
+  <script src="../scripts/alignment-tts-kokoro.js"></script>
+  <script src="../scripts/alignment-question-nav.js"></script>
+</body>
+</html>

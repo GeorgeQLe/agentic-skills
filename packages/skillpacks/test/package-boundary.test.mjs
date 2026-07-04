@@ -103,6 +103,8 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/alignment-page-convention.md',
       'assets/interrogation-page-convention.md',
       'assets/design-tree-loop-convention.md',
+      'assets/templates/alignment-page.html',
+      'assets/templates/interrogation-page.html',
       'assets/social-post-convention.md',
       'assets/social-video-content-convention.md',
       'assets/social-ledger-convention.md',

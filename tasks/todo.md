@@ -1,3 +1,26 @@
+# Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
+
+Project: `agentic-skills`.
+
+## Goal
+
+Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-history analysis that separates user-invoked skill counts from agent-invoked skill counts.
+
+## Plan
+
+- [x] Capture the visible `$analyze-sessions` prompt.
+- [ ] Inspect existing alignment page and relevant session-history files.
+- [ ] Parse Claude and Codex history for skill invocations by actor.
+- [ ] Update the alignment page and index with the skill usage breakdown.
+- [ ] Verify the updated page/artifacts and document results.
+
+## Acceptance Criteria
+
+- The report shows exact counts for user-invoked and agent-invoked skill usage where history evidence supports classification.
+- Counting rules are explicit enough to reproduce.
+- Existing unrelated worktree changes are preserved.
+- Alignment page verification passes or any failure is reported with the failing check.
+
 # Current Task State
 
 ## Review - Hard-Rename Design Inspiration Workflows
@@ -810,3 +833,31 @@ This section is preserved from the pre-existing task state and is intentionally 
 - [x] Verify: contract grep — `rg -n "assemble-ready|Progress Handoff Block|whole-set alignment review|Invoke With YAML" packs/product-design/codex/ux-variations/SKILL.md docs/design-tree-loop-convention.md` confirms assemble-ready (SKILL.md:285, convention §5:476–481) decoupled from repeat-command/second-YAML framing; setup (234–235) + per-variation (242) stops retain it. Canonical-source acceptance replay confirmed (a) leads with HTML review path, (b) only compiled response YAML, (c) no repeat-`$ux-variations`/second-YAML/`Exact next command`, (d) retains completed-count + durable-cursor.
 - [x] Verify (acceptance): confirmed on the refreshed runtime `.codex/skills/ux-variations/{SKILL,DESIGN-TREE-LOOP}.md` — SKILL.md is v0.33 with the §0c exception + step-8 carve-out (lead with HTML review path, only the compiled response YAML, no repeat-`$ux-variations`/second-YAML/`Exact next command`, retains completed-count + durable-cursor); DESIGN-TREE-LOOP.md carries the Assemble-ready review-gate exception.
 - [x] Commit source + regenerated bundles + manifest together on `master` and push — commit `a81db4dc7`, pushed `a5098efa4..a81db4dc7`; scoped to these files, pre-existing untracked `.agents/skillpacks/` left untouched (concurrent-session caution).
+
+## Current Implementation - Shared Alignment and Interrogation HTML Scaffolds
+
+### Execution Profile
+
+- Parallel mode: parallel read-only inspection where useful; serial edits for CLI code, templates, tests, package metadata, and skill docs.
+- Safety boundary: preserve unrelated product-design renames and pre-existing task edits; do not run install/init skillpacks commands in this source repo; do not publish.
+
+### Plan
+
+- [x] Inspect existing CLI namespace, package staging, and package boundary tests.
+- [x] Add scaffold templates and CLI command resolution.
+- [x] Update package staging and npm boundary assertions.
+- [x] Update create-alignment-page and convention text for scaffold usage.
+- [x] Add focused CLI and fixture audit tests.
+- [x] Run verification and record results.
+
+### Review
+
+Verified:
+
+- `node --test packages/skillpacks/test/alignment.test.mjs` passed: 19 tests, including alignment and interrogation scaffold fixture audits.
+- `node --test packages/skillpacks/test/package-boundary.test.mjs` passed and confirmed both `assets/templates/*.html` files are in the npm tarball.
+- `npm --workspace skillpacks run test:node` passed: 184 tests.
+- `npm --workspace skillpacks run build:check` passed after the final docs updates.
+- `npm --workspace skillpacks run pack:dry-run` passed and the dry-run tarball listed `assets/templates/alignment-page.html`, `assets/templates/interrogation-page.html`, and `src/cli/page-scaffold.mjs`.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `git diff --check` passed.

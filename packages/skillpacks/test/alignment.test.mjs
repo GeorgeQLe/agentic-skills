@@ -1,14 +1,18 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { afterEach, describe, it } from 'node:test';
 import {
   resolveAlignmentCommand,
+  resolveInterrogationCommand,
   resolvePrototypeCommand,
   runSkillpacksCli
 } from '../src/cli/run-pack-script.mjs';
 
+const packageRoot = resolve(new URL('..', import.meta.url).pathname);
+const repoRoot = resolve(packageRoot, '../..');
 const tmpDirs = [];
 
 function makeTempProject() {
@@ -49,6 +53,7 @@ describe('skillpacks alignment command parsing', () => {
     assert.match(stdout, /alignment pages open <alignment\/page.html>/);
     assert.match(stdout, /alignment pages serve \[--port <port>\]/);
     assert.match(stdout, /alignment pages inject-tts \[--force\]/);
+    assert.match(stdout, /alignment pages scaffold <skill> <topic> --out alignment\/<skill>-<topic>\.html/);
     assert.match(stdout, /alignment verify/);
   });
 
@@ -205,6 +210,139 @@ describe('skillpacks alignment command parsing', () => {
       () => resolveAlignmentCommand(['pages', 'serve', '--port', '9000', '--port=9001']),
       /--port can only be provided once/
     );
+  });
+
+  it('resolves alignment scaffold commands and rejects unsafe output paths', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveAlignmentCommand(
+      ['pages', 'scaffold', 'investigate', 'template-test', '--out', 'alignment/investigate-template-test.html'],
+      { projectRoot }
+    );
+
+    assert.equal(command.kind, 'scaffold');
+    assert.equal(command.projectRoot, projectRoot);
+    assert.deepEqual(command.scaffold, {
+      kind: 'alignment',
+      skill: 'investigate',
+      topic: 'template-test',
+      out: 'alignment/investigate-template-test.html'
+    });
+    assert.equal(command.templatePath.endsWith('assets/templates/alignment-page.html'), true);
+
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'scaffold', 'Investigate', 'template-test', '--out', 'alignment/Investigate-template-test.html']),
+      /skill must be a lowercase slug/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'scaffold', 'investigate', 'template-test', '--out', '../alignment/investigate-template-test.html']),
+      /dot path segments/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'scaffold', 'investigate', 'template-test', '--out', 'alignment/other-template-test.html']),
+      /--out must be alignment\/investigate-template-test\.html/
+    );
+  });
+
+  it('scaffolds an alignment page and index that pass the active-page audit', async () => {
+    const projectRoot = makeTempProject();
+    const originalCwd = process.cwd();
+    process.chdir(projectRoot);
+    try {
+      const { exitCode, stdout } = await captureCli([
+        'alignment',
+        'pages',
+        'scaffold',
+        'investigate',
+        'template-test',
+        '--out',
+        'alignment/investigate-template-test.html'
+      ]);
+
+      assert.equal(exitCode, 0);
+      assert.match(stdout, /Scaffolded alignment\/investigate-template-test\.html/);
+      assert.match(stdout, /Created alignment\/index\.html/);
+    } finally {
+      process.chdir(originalCwd);
+    }
+
+    const audit = spawnSync(process.execPath, ['scripts/audit-alignment-pages.mjs', '--root', projectRoot], {
+      cwd: repoRoot,
+      encoding: 'utf8'
+    });
+    assert.equal(audit.status, 0, [audit.stdout, audit.stderr].filter(Boolean).join('\n'));
+  });
+});
+
+describe('skillpacks interrogation command parsing', () => {
+  it('prints interrogation-specific help', async () => {
+    const { exitCode, stdout } = await captureCli(['interrogation', '--help']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /gskp interrogation/);
+    assert.match(stdout, /interrogation pages scaffold <skill> <round> <branch> --out interrogation\/<skill>-r<round>-<branch>\.html/);
+  });
+
+  it('resolves interrogation scaffold commands and rejects invalid arguments', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveInterrogationCommand(
+      ['pages', 'scaffold', 'customer-discovery', '2', 'acme', '--out', 'interrogation/customer-discovery-r2-acme.html'],
+      { projectRoot }
+    );
+
+    assert.equal(command.kind, 'scaffold');
+    assert.equal(command.projectRoot, projectRoot);
+    assert.deepEqual(command.scaffold, {
+      kind: 'interrogation',
+      skill: 'customer-discovery',
+      round: '2',
+      branch: 'acme',
+      out: 'interrogation/customer-discovery-r2-acme.html'
+    });
+    assert.equal(command.templatePath.endsWith('assets/templates/interrogation-page.html'), true);
+
+    assert.throws(
+      () => resolveInterrogationCommand(['pages', 'scaffold', 'customer-discovery', '0', 'acme', '--out', 'interrogation/customer-discovery-r0-acme.html']),
+      /round must be a positive integer/
+    );
+    assert.throws(
+      () => resolveInterrogationCommand(['pages', 'scaffold', 'customer-discovery', '2', 'acme', '--out', 'interrogation/customer-discovery-r3-acme.html']),
+      /--out must be interrogation\/customer-discovery-r2-acme\.html/
+    );
+    assert.throws(
+      () => resolveInterrogationCommand(['pages', 'repair']),
+      /interrogation pages: unknown command 'repair'/
+    );
+  });
+
+  it('scaffolds an interrogation page that passes the active-page audit', async () => {
+    const projectRoot = makeTempProject();
+    const originalCwd = process.cwd();
+    process.chdir(projectRoot);
+    try {
+      const { exitCode, stdout } = await captureCli([
+        'interrogation',
+        'pages',
+        'scaffold',
+        'customer-discovery',
+        '1',
+        'acme',
+        '--out',
+        'interrogation/customer-discovery-r1-acme.html'
+      ]);
+
+      assert.equal(exitCode, 0);
+      assert.match(stdout, /Scaffolded interrogation\/customer-discovery-r1-acme\.html/);
+    } finally {
+      process.chdir(originalCwd);
+    }
+
+    const audit = spawnSync(process.execPath, ['scripts/audit-interrogation-pages.mjs', '--root', projectRoot], {
+      cwd: repoRoot,
+      encoding: 'utf8'
+    });
+    assert.equal(audit.status, 0, [audit.stdout, audit.stderr].filter(Boolean).join('\n'));
   });
 });
 
