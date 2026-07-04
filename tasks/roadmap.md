@@ -2,7 +2,34 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Investigate Permission Gate 2026-07-04
+## Current Implementation - Deprecated Product-Design Alias Cleanup 2026-07-04
+
+### Goal
+
+Archive deprecated product-design alias skills out of active discovery and extend `skillpacks cleanup` so managed project-local installs of those aliases are removed safely.
+
+### Plan
+
+- [x] Archive active alias skill directories for Claude and Codex under `archive/deprecated-skills/2026-07-product-design-aliases/`.
+- [x] Remove active `prototype`, `create-ui-experiment`, and `consolidate-variations` source directories from `packs/product-design`.
+- [x] Extend `packages/skillpacks/src/cli/lifecycle.mjs` cleanup to remove managed project-local deprecated alias installs and preserve unmanaged directories.
+- [x] Update package lifecycle tests, product-design route tests, and manifest/catalog expectations for replacement skills only.
+- [x] Regenerate package manifest/catalog exports if source discovery changes.
+- [x] Run focused verification and record results.
+
+### Acceptance Criteria
+
+- `packs/product-design/**` no longer exposes active alias skill directories.
+- Generated manifest/catalog exports omit deprecated aliases and retain `build-ui-screens`, `logic-wiring`, and `consolidate-prototypes`.
+- `cleanup` and `uninstall-global` remove managed installed alias copies under discovered project `.claude/skills` and `.codex/skills` roots, including dry-run previews.
+- Unmanaged directories with those names are left untouched.
+- Existing global cleanup, BIP cleanup, and base reinstall behavior remains intact.
+
+### Review
+
+Deprecated product-design alias skill dirs were archived out of active `packs/` discovery, cleanup/uninstall-global now removes managed project-local alias installs with dry-run support, and active route/docs/generated metadata now use `build-ui-screens`, `logic-wiring`, and `consolidate-prototypes`. Focused package, product-design route, archive, generated export, task-doc, skillpacks verify, and diff hygiene checks passed. A broader layer1 run also exposed unrelated existing product-path/base-pack coverage failures that were not folded into this alias cleanup.
+
+## Historical Implementation - Investigate Permission Gate 2026-07-04
 
 ### Goal
 

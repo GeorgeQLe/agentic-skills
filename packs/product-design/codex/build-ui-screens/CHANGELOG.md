@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-04
+
+- Removed active-contract wording that referenced the archived `create-ui-experiment` alias; the visual build leaf now names only `build-ui-screens` and `$logic-wiring`.
+
 ## v0.3 - 2026-07-04
 
 - Updated optional inspiration inputs for the hard rename: read `design/brainstorm-inspirations-{topic}.md` and `design/take-inspiration-{topic}-*.md` artifacts when present.

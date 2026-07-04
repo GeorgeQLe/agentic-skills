@@ -110,7 +110,7 @@ branches:
             artifacts:
               - design/ui-invoice-approval.md
             experiment_path: experiments/invoice-approval/wizard-stepper/
-            review_evidence: alignment/create-ui-experiment-invoice-approval.html#wizard-stepper-review
+            review_evidence: alignment/build-ui-screens-invoice-approval.html#wizard-stepper-review
             decision_id: approve-wizard-stepper
             # v0.4 flow-walk: per-screen JIT state-model attachment.
             model_ref: design/model-tree-invoice-approval-submit-and-approve.yaml

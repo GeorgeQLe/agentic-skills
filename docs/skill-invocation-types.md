@@ -278,10 +278,11 @@
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
 | `brainstorm` | primary | user | Idea generation needed |
+| `build-ui-screens` | chained | after ui-interview | Approved UI branch needs visual screen buildout |
 | `consolidate-prototypes` | chained | after ux-variations + evaluation | Variations need convergence |
 | `design-system` | primary | user | Design system needed |
 | `feature-interview` | primary | user | Feature requirements interview |
-| `prototype` | chained | after ui-interview | Prototype build needed |
+| `logic-wiring` | chained | after build-ui-screens or prototype build plan | Clickable/state-backed prototype build needed |
 | `spec-interview` | primary | user | Spec elicitation interview |
 | `ui-interview` | chained | after ux-variations | UI detail interview |
 | `ux-variations` | chained | after positioning | UX variation exploration |

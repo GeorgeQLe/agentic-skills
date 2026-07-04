@@ -2,7 +2,7 @@
 name: build-ui-screens
 description: Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.
 type: execution
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[approved-ui-experiment]"
 context_intake: scoped
@@ -13,7 +13,7 @@ visual_tier: prototype
 
 Invoke as `/build-ui-screens`.
 
-Build the visual UI screens for one approved UI branch. Use this skill after `/ui-interview [specific-ux-variation]` approves a UI experiment branch and the branch needs concrete screens before the clickable, state-backed prototype exists. This is the visual half of the build leaf (renamed from `create-ui-experiment` in v0.4); `/logic-wiring` is the wiring half that makes these screens reachable and interactive.
+Build the visual UI screens for one approved UI branch. Use this skill after `/ui-interview [specific-ux-variation]` approves a UI experiment branch and the branch needs concrete screens before the clickable, state-backed prototype exists. This is the visual half of the build leaf; `/logic-wiring` is the wiring half that makes these screens reachable and interactive.
 
 This skill builds screens as an **ordered element-batch loop**: one flow step at a time, adding the elements that step needs, pausing at a **per-batch visual checkpoint**, and stopping at the **minimum UI** that lets the flow step read as real. It uses fake, fixture, local, or in-memory data. It must not introduce durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, production observability, or other production infrastructure — that wiring belongs to `/logic-wiring` and later production planning.
 

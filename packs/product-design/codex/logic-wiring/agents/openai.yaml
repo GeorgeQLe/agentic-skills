@@ -1,7 +1,7 @@
 interface:
   display_name: "Prototype"
   short_description: "Build runnable prototype variations from UX and UI specs"
-  default_prompt: "Use $prototype to build runnable prototype variations from UX variation and UI specs, then route to $uat --variant-evaluation."
+  default_prompt: "Use $logic-wiring to build runnable prototype variations from UX variation and UI specs, then route to $uat --variant-evaluation."
 
 policy:
   allow_implicit_invocation: true

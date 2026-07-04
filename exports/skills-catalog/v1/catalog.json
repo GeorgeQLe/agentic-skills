@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "b67bde2715bd733874ce118e92e35eb3903f890f",
-  "generated_at": "2026-07-04T23:11:33.362Z",
-  "source_fingerprint": "2fb50a418d4223a886e769386fe81023b5cc628fb030b59c514cd7c8332f29aa",
-  "source_count": 457,
-  "skill_count": 413,
+  "source_commit": "6af5171558b3ca95c11b8190e6cc64f6b26cc071",
+  "generated_at": "2026-07-04T23:42:01.781Z",
+  "source_fingerprint": "33c4afb32ccda366515b30a7368cc13b3e6a598cb3d8866efe69691c79936c77",
+  "source_count": 451,
+  "skill_count": 407,
   "pack_count": 42,
   "deck_count": 5,
   "set_count": 3,
@@ -3905,7 +3905,7 @@
       "type": "debugging",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [],
       "argumentHint": "<error, bug description, user observations, or issue URL> [--ui] [--data] [--plan]",
       "platform": "claude",
@@ -3980,7 +3980,7 @@
       "type": "debugging",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [],
       "argumentHint": null,
       "platform": "codex",
@@ -8002,7 +8002,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8051,58 +8051,6 @@
         "planning",
         "product-design",
         "prototypes"
-      ]
-    },
-    {
-      "id": "pack-product-design-claude-consolidate-variations",
-      "name": "consolidate-variations",
-      "title": "Consolidate Variations",
-      "description": "Deprecated compatibility alias for consolidate-prototypes; use the primary prototype-consolidation skill instead",
-      "type": "planning",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[optional: topic, page, or path to prototype branches]",
-      "platform": "claude",
-      "command": "/consolidate-variations",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/claude/consolidate-variations/SKILL.md",
-      "mirrorKey": "consolidate-variations",
-      "tags": [
-        "claude",
-        "consolidate",
-        "pack",
-        "planning",
-        "product-design",
-        "variations"
-      ]
-    },
-    {
-      "id": "pack-product-design-claude-create-ui-experiment",
-      "name": "create-ui-experiment",
-      "title": "Create Ui Experiment",
-      "description": "Deprecated compatibility alias for build-ui-screens; use the primary visual UI screen builder instead",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[approved-ui-experiment]",
-      "platform": "claude",
-      "command": "/create-ui-experiment",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/claude/create-ui-experiment/SKILL.md",
-      "mirrorKey": "create-ui-experiment",
-      "tags": [
-        "claude",
-        "create",
-        "execution",
-        "experiment",
-        "pack",
-        "product-design"
       ]
     },
     {
@@ -8169,7 +8117,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -8245,31 +8193,6 @@
         "pack",
         "product-design",
         "wiring"
-      ]
-    },
-    {
-      "id": "pack-product-design-claude-prototype",
-      "name": "prototype",
-      "title": "Prototype",
-      "description": "Deprecated compatibility alias for logic-wiring; use the primary clickable/state-backed wiring skill instead",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[optional: topic, --variant N]",
-      "platform": "claude",
-      "command": "/prototype",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/claude/prototype/SKILL.md",
-      "mirrorKey": "prototype",
-      "tags": [
-        "claude",
-        "execution",
-        "pack",
-        "product-design",
-        "prototype"
       ]
     },
     {
@@ -8369,7 +8292,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.31",
+      "version": "v0.32",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8429,7 +8352,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.32",
+      "version": "v0.33",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8515,7 +8438,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8564,58 +8487,6 @@
         "planning",
         "product-design",
         "prototypes"
-      ]
-    },
-    {
-      "id": "pack-product-design-codex-consolidate-variations",
-      "name": "consolidate-variations",
-      "title": "Consolidate Variations",
-      "description": "Deprecated compatibility alias for consolidate-prototypes; use the primary prototype-consolidation skill instead",
-      "type": "planning",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[optional: topic, page, or path to prototype branches]",
-      "platform": "codex",
-      "command": "$consolidate-variations",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/codex/consolidate-variations/SKILL.md",
-      "mirrorKey": "consolidate-variations",
-      "tags": [
-        "codex",
-        "consolidate",
-        "pack",
-        "planning",
-        "product-design",
-        "variations"
-      ]
-    },
-    {
-      "id": "pack-product-design-codex-create-ui-experiment",
-      "name": "create-ui-experiment",
-      "title": "Create Ui Experiment",
-      "description": "Deprecated compatibility alias for build-ui-screens; use the primary visual UI screen builder instead",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[approved-ui-experiment]",
-      "platform": "codex",
-      "command": "$create-ui-experiment",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/codex/create-ui-experiment/SKILL.md",
-      "mirrorKey": "create-ui-experiment",
-      "tags": [
-        "codex",
-        "create",
-        "execution",
-        "experiment",
-        "pack",
-        "product-design"
       ]
     },
     {
@@ -8682,7 +8553,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -8758,31 +8629,6 @@
         "pack",
         "product-design",
         "wiring"
-      ]
-    },
-    {
-      "id": "pack-product-design-codex-prototype",
-      "name": "prototype",
-      "title": "Prototype",
-      "description": "Deprecated compatibility alias for logic-wiring; use the primary clickable/state-backed wiring skill instead",
-      "type": "execution",
-      "contextIntake": null,
-      "visualTier": null,
-      "version": "v0.0",
-      "requiredConventions": [],
-      "argumentHint": "[optional: topic, --variant N]",
-      "platform": "codex",
-      "command": "$prototype",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/codex/prototype/SKILL.md",
-      "mirrorKey": "prototype",
-      "tags": [
-        "codex",
-        "execution",
-        "pack",
-        "product-design",
-        "prototype"
       ]
     },
     {
@@ -8882,7 +8728,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.31",
+      "version": "v0.32",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8942,7 +8788,7 @@
       "type": "planning",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.33",
+      "version": "v0.34",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -11681,7 +11527,7 @@
         "claude",
         "codex"
       ],
-      "skillCount": 36,
+      "skillCount": 30,
       "path": "packs/product-design/PACK.md"
     },
     {

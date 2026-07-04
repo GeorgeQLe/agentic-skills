@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.33
+version: v0.34
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
@@ -286,7 +286,7 @@ Use the same `$ux-variations` command in `agent_routing.command` for setup → f
      - On approval, write the final variation plan and interview log, create or update the scoped flow-tree `ux_variations[]` status/artifact entries, and archive the brief plus the per-variation intermediates per the convention's archive-at-canonical-write timing.
      - There is exactly one alignment gate for the whole set, not one per variation, so whole-set comparison is preserved.
    - Recommend serial full buildout of all approved variants only when the user is using `--layout-mode` or explicitly records an ad hoc bypass that asks to compare built interfaces before UI interview approval. Do not recommend building a subset first unless the user asks for a smaller experiment.
-   - In default progression mode, route experiments are proposed validation targets only until an approved `$ui-interview` branch exists. Name potential future experiment routes, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, but do not write prototype buildout instructions, `$prototype` routing, or build-plan items from default UX variation output alone. Keep shared production infrastructure out of those future routes unless explicitly approved.
+   - In default progression mode, route experiments are proposed validation targets only until an approved `$ui-interview` branch exists. Name potential future experiment routes, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, but do not write prototype buildout instructions, `$logic-wiring` routing, or build-plan items from default UX variation output alone. Keep shared production infrastructure out of those future routes unless explicitly approved.
 - If route experiments imply materially different products, apps, ICPs, or product lines, update `research/.progress.yaml` with experiment product-path entries instead of making every divergent path a required UX variation. Include `id`, `label`, `source_skill: ux-variations`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage: ux-variations`, and `last_touched`.
    - Product paths are not git branches; keep route-experiment product-path tracking in `research/.progress.yaml` distinct from git workflow branch terminology.
    - After progression variants are specified, route the next selected branch to `$ui-interview [specific-ux-variation]` for visual mockup and approval/rejection. If the user explicitly bypasses that default and asks to build variants before UI interview, record the bypass and rationale in the variation plan and recommend `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) before `$consolidate-prototypes`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
@@ -329,13 +329,13 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 ## Next Work
 
-**Next work:** after the variation plan is approved, route the chosen variation branch to `$ui-interview [specific-ux-variation]` for visual mockup and UI-experiment growth. In layout-mode, build the variations via `$prototype`, then evaluate with `$uat --variant-evaluation` before `$consolidate-prototypes`.
+**Next work:** after the variation plan is approved, route the chosen variation branch to `$ui-interview [specific-ux-variation]` for visual mockup and UI-experiment growth. In layout-mode, build the variations via `$logic-wiring`, then evaluate with `$uat --variant-evaluation` before `$consolidate-prototypes`.
 
 **Recommended next command:** `$ui-interview [specific-ux-variation]`.
 
 ## Invoke With YAML
 
-Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$ui-interview [specific-ux-variation]` for the selected variation; in layout-mode, `$prototype` then `$uat --variant-evaluation`.
+Emit the `agent_routing` payload with the exact resolved next-invocation command, `{slug}`/`{topic}`/branch filled to literal values: `$ui-interview [specific-ux-variation]` for the selected variation; in layout-mode, `$logic-wiring` then `$uat --variant-evaluation`.
 
 ## Constraints
 
@@ -346,7 +346,7 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 - Do not ignore implementation cost. A compelling variation still needs a validation path and selection criteria, with prototype buildout deferred until UI experiment approval unless layout-mode or an explicit bypass applies.
 - Do not route directly from built UI variants to `$consolidate-prototypes`; insert `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `npx skillpacks install product-testing` from the project shell, first) unless the user explicitly confirms they have already evaluated the variants.
 - Do not skip `$ui-interview` for a UX variation branch that needs a proposed UI, HTML visual mockup, or approval/rejection decision.
-- Do not recommend or write `$prototype` buildout, prototype build-plan items, or built route experiments from default progression-mode UX variation output before an approved UI experiment branch exists. Pre-UI buildout is allowed only in `--layout-mode` or when the user explicitly records an ad hoc bypass.
+- Do not recommend or write `$logic-wiring` buildout, prototype build-plan items, or built route experiments from default progression-mode UX variation output before an approved UI experiment branch exists. Pre-UI buildout is allowed only in `--layout-mode` or when the user explicitly records an ad hoc bypass.
 - Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack is shared unless the user explicitly locks a shared constraint.
 - Do not write pre-prototype UX variation plans to `specs/`. `design/` is the canonical home for flow maps, UX variation plans, UI branch packets, branch decisions, mockup references, and flow-tree manifests.
 - Do not use `tasks/todo.md` for UX/design branch progress or human variant review. Human prototype/UAT evaluation belongs in `tasks/manual-todo.md`; implementation fixes may enter `tasks/todo.md` only after human evidence exists.

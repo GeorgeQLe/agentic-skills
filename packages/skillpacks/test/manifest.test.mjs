@@ -83,17 +83,27 @@ describe('skillpacks manifest deck metadata', () => {
     );
   });
 
-  it('captures deprecation metadata for compatibility aliases', () => {
-    const prototype = skillByPath('packs/product-design/claude/prototype/SKILL.md');
+  it('keeps deprecated product-design aliases out of active manifest discovery', () => {
     const logicWiring = skillByPath('packs/product-design/claude/logic-wiring/SKILL.md');
+    const buildUiScreens = skillByPath('packs/product-design/claude/build-ui-screens/SKILL.md');
+    const consolidatePrototypes = skillByPath('packs/product-design/claude/consolidate-prototypes/SKILL.md');
 
-    assert.ok(prototype, 'prototype alias skill should exist');
-    assert.equal(prototype.deprecated, true);
-    assert.equal(prototype.replaced_by, 'logic-wiring');
+    assert.equal(skillByPath('packs/product-design/claude/prototype/SKILL.md'), undefined);
+    assert.equal(skillByPath('packs/product-design/claude/create-ui-experiment/SKILL.md'), undefined);
+    assert.equal(skillByPath('packs/product-design/claude/consolidate-variations/SKILL.md'), undefined);
+    assert.equal(skillByPath('packs/product-design/codex/prototype/SKILL.md'), undefined);
+    assert.equal(skillByPath('packs/product-design/codex/create-ui-experiment/SKILL.md'), undefined);
+    assert.equal(skillByPath('packs/product-design/codex/consolidate-variations/SKILL.md'), undefined);
 
     assert.ok(logicWiring, 'logic-wiring primary skill should exist');
+    assert.ok(buildUiScreens, 'build-ui-screens primary skill should exist');
+    assert.ok(consolidatePrototypes, 'consolidate-prototypes primary skill should exist');
     assert.equal(logicWiring.deprecated, false);
     assert.equal(logicWiring.replaced_by, null);
+    assert.equal(buildUiScreens.deprecated, false);
+    assert.equal(buildUiScreens.replaced_by, null);
+    assert.equal(consolidatePrototypes.deprecated, false);
+    assert.equal(consolidatePrototypes.replaced_by, null);
   });
 
   it('exposes required convention metadata for bundled skills', () => {

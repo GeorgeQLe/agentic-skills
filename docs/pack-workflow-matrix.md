@@ -44,7 +44,7 @@ Business app:
 business-research -> customer-lifecycle -> business-growth -> business-ops
 ```
 
-Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-prototypes -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`. `consolidate-prototypes` writes AFPS graduation under `design/` after MVP approval; `research-roadmap --post-prototype` reads it as the bounded cleanup signal before spec work.
+Default business-product route: `customer-discovery -> competitive-analysis -> journey-map -> positioning -> user-flow-map -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> logic-wiring -> uat --variant-evaluation -> consolidate-prototypes -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap`. `consolidate-prototypes` writes AFPS graduation under `design/` after MVP approval; `research-roadmap --post-prototype` reads it as the bounded cleanup signal before spec work.
 
 Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only as explicit bounded detours when a fixed content/data/action contract and layout-only alternatives are needed.
 

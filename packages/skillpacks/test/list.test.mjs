@@ -16,16 +16,18 @@ describe('skillpacks list --skills formatter', () => {
     assert.match(output, /\[base\]/, 'should list at least one base-scope skill');
   });
 
-  it('annotates deprecated aliases with their replacement', () => {
-    const line = output.split('\n').find((l) => /^\s+prototype\s+\[/.test(l));
-    assert.ok(line, 'prototype alias should appear in the listing');
-    assert.match(line, /deprecated → logic-wiring/);
+  it('omits archived deprecated aliases from the listing', () => {
+    assert.doesNotMatch(output, /^\s+prototype\s+\[/m);
+    assert.doesNotMatch(output, /^\s+create-ui-experiment\s+\[/m);
+    assert.doesNotMatch(output, /^\s+consolidate-variations\s+\[/m);
   });
 
-  it('does not mark the live replacement skill as deprecated', () => {
-    const line = output.split('\n').find((l) => /^\s+logic-wiring\s+\[/.test(l));
-    assert.ok(line, 'logic-wiring should appear in the listing');
-    assert.doesNotMatch(line, /deprecated/);
+  it('does not mark the live replacement skills as deprecated', () => {
+    for (const skillName of ['logic-wiring', 'build-ui-screens', 'consolidate-prototypes']) {
+      const line = output.split('\n').find((l) => new RegExp(`^\\s+${skillName}\\s+\\[`).test(l));
+      assert.ok(line, `${skillName} should appear in the listing`);
+      assert.doesNotMatch(line, /deprecated/);
+    }
   });
 });
 
@@ -38,15 +40,17 @@ describe('skillpacks list --tree formatter', () => {
     assert.match(output, new RegExp(`product-design  \\(${productDesign.skill_count} skills\\)`));
   });
 
-  it('nests the deprecated alias under its pack with a marker', () => {
+  it('nests replacement skills under the pack without deprecated alias rows', () => {
     const lines = output.split('\n');
     const headerIndex = lines.findIndex((l) => l.startsWith('product-design  ('));
     assert.notEqual(headerIndex, -1);
-    const prototypeLine = lines
-      .slice(headerIndex + 1)
-      .find((l) => /^\s+prototype\s+\(/.test(l));
-    assert.ok(prototypeLine, 'prototype should be nested under product-design');
-    assert.match(prototypeLine, /deprecated → logic-wiring/);
+    const productDesignLines = lines.slice(headerIndex + 1, lines.findIndex((l, index) => index > headerIndex && /^[a-z0-9-]+  \(\d+ skills\)/.test(l)));
+    assert.ok(productDesignLines.some((l) => /^\s+logic-wiring\s+\(/.test(l)), 'logic-wiring should be nested under product-design');
+    assert.ok(productDesignLines.some((l) => /^\s+build-ui-screens\s+\(/.test(l)), 'build-ui-screens should be nested under product-design');
+    assert.ok(productDesignLines.some((l) => /^\s+consolidate-prototypes\s+\(/.test(l)), 'consolidate-prototypes should be nested under product-design');
+    assert.equal(productDesignLines.some((l) => /^\s+prototype\s+\(/.test(l)), false);
+    assert.equal(productDesignLines.some((l) => /^\s+create-ui-experiment\s+\(/.test(l)), false);
+    assert.equal(productDesignLines.some((l) => /^\s+consolidate-variations\s+\(/.test(l)), false);
   });
 
   it('includes a base group', () => {

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.34 - 2026-07-04
+
+- Replaced layout-mode and default-mode build routing text that named archived `$prototype` with `$logic-wiring`.
+
 ## v0.33 - 2026-07-03
 
 - Added an assemble-ready review-gate carve-out to the chunked assemble+approve stop: because the deliverable alignment page is already in `review`, the alignment convention's Pre-approval stop governs. The stop now leads with the HTML review path and presents only the page's single compiled response YAML — no repeat-`$ux-variations` framing, no `Why repeat this command` / `Session guidance` lines, and no second `## Invoke With YAML` payload. Repeat-command framing is retained for the setup and per-variation stops. Resolves the two-YAML same-command collision at the assemble stop.

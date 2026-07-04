@@ -608,14 +608,13 @@ only — they hand results back to the invoking/owning skill and do **not** rout
   `scripts/upgrade-prototype-session-loop.mjs`).
 - `docs/research-session-loop-convention.md` (business-research Pattern A) is **unchanged** and
   out of scope.
-- **Flow-walk re-cut (flow-tree schema v0.4).** The build leaf split into two skills: `prototype`
-  was renamed to **`logic-wiring`** (route step 4 token `prototype` → `logic-wiring`) and
-  `create-ui-experiment` was renamed to **`build-ui-screens`** (the visual screen builder feeding
-  `logic-wiring`). Deprecated `prototype` and `create-ui-experiment` aliases still route to the
-  primaries. A new trunk skill **`key-moments`** ranks flows by proof priority after
+- **Flow-walk routing (flow-tree schema v0.4).** The build leaf is **`logic-wiring`**
+  (route step 4) and the visual screen builder feeding it is **`build-ui-screens`**.
+  Deprecated alias skill directories are archived out of active discovery.
+  A new trunk skill **`key-moments`** ranks flows by proof priority after
   `user-flow-map`. The word "prototype" is intentionally retained as artifact/phase vocabulary
   (`prototype_build_plan`, `prototypes/`, prototype build-plan, runnable prototype); only the
-  skill/route token changed. The six-step route tuple and three-role model are unchanged.
+  skill/route command is `logic-wiring`. The six-step route tuple and three-role model are unchanged.
 - **Platform Fit Workshop (flow-tree schema v0.5).** `user-flow-map` owns additive
   `platform_fit` state and broad platform ranking as a trunk concern after surface/channel
   inventory. Platform probes are thin `prototype_build_plan.items[].platform_probe` artifacts

@@ -39,7 +39,7 @@ idea-scope-brief
   -> state-model (optional: flow-anchored logical domain/state/logic model before variation work; orthogonal sibling, not a flow-tree route step)
   -> ui-interview --requirements-only
   -> ux-variations --layout-mode
-  -> prototype
+  -> logic-wiring
   -> uat --variant-evaluation
   -> consolidate-prototypes
   -> research-roadmap --post-prototype
@@ -112,7 +112,7 @@ npx skillpacks install business-growth           # optional: when repeat-use, pr
 /user-flow-map
 /ui-interview --requirements-only
 /ux-variations --layout-mode
-/prototype
+/logic-wiring
 /uat --variant-evaluation
 /consolidate-prototypes
 /research-roadmap --post-prototype
@@ -146,7 +146,7 @@ $gtm                                    # optional: channel/launch path affects 
 $user-flow-map
 $ui-interview --requirements-only
 $ux-variations --layout-mode
-$prototype
+$logic-wiring
 $uat --variant-evaluation
 $consolidate-prototypes
 $research-roadmap --post-prototype
@@ -179,7 +179,7 @@ The current `roadmap` contract distinguishes unresolved ideas from confirmed ful
 | No specs and missing journey for user-facing work | Queue `journey-map` first. |
 | No specs, unresolved idea, unclear destination | Queue `feature-interview`. |
 | No specs, user already selected full production spec creation | Queue `spec-interview`. |
-| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ux-variations [specific-user-flow]`, `ui-interview [specific-ux-variation]`, `user-flow-map --prototype-build-plan [topic]`, `prototype`, `uat --variant-evaluation`, `consolidate-prototypes`, or post-prototype refresh. Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only when a fixed content contract and layout-only alternatives are explicitly needed. |
+| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `user-flow-map`, `ux-variations [specific-user-flow]`, `ui-interview [specific-ux-variation]`, `user-flow-map --prototype-build-plan [topic]`, `logic-wiring`, `uat --variant-evaluation`, `consolidate-prototypes`, or post-prototype refresh. Use `ui-interview --requirements-only` and `ux-variations --layout-mode` only when a fixed content contract and layout-only alternatives are explicitly needed. |
 | Production spec exists, roadmap missing | Build or update `tasks/roadmap.md`, then seed `plan-phase`. |
 | All roadmap phases complete | Queue `research-roadmap`, then route to `brainstorm` unless a concrete idea is selected. |
 
@@ -198,7 +198,7 @@ The current product-spec path is gated by built and reviewed prototypes:
 1. `user-flow-map` turns positioning and journey evidence into concrete flow structure.
 2. `ui-interview --requirements-only` captures screen and content requirements for the accepted flow.
 3. `ux-variations --layout-mode` creates multiple layout directions from research, journey, flow, and UI-requirement evidence.
-4. `prototype` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
+4. `logic-wiring` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
 5. `uat --variant-evaluation` creates the human-run comparison plan and evidence capture.
 6. `consolidate-prototypes` compares reviewed prototypes, interviews the user on keep/reject decisions, resolves conflicts, builds `prototypes/{topic}/consolidated/`, and writes AFPS graduation under `design/`.
 7. `research-roadmap --post-prototype` reads the graduation document when present and checks only for contradicted, stale, or pre-spec-blocking research.
@@ -329,7 +329,7 @@ idea-scope-brief
   -> user-flow-map
   -> ui-interview --requirements-only
   -> ux-variations --layout-mode
-  -> prototype
+  -> logic-wiring
   -> uat --variant-evaluation
   -> consolidate-prototypes
   -> AFPS graduation document
@@ -364,7 +364,7 @@ research-roadmap
 
 ## Confidence And Open Questions
 
-Confidence is high that this report reflects the current stated contracts because the same routing appears in `roadmap`, `research-roadmap`, `prototype`, `uat`, `consolidate-prototypes`, `spec-interview`, `feature-interview`, pack docs, and recent lessons.
+Confidence is high that this report reflects the current stated contracts because the same routing appears in `roadmap`, `research-roadmap`, `logic-wiring`, `uat`, `consolidate-prototypes`, `spec-interview`, `feature-interview`, pack docs, and recent lessons.
 
 Open questions:
 

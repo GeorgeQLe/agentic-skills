@@ -2,7 +2,7 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.7
+version: v0.8
 required_conventions: [alignment-page]
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 context_intake: deep
@@ -101,7 +101,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - For user-facing product or feature work, confirm the prototype-first decision: what users can click through first, whether multiple experiments should live on separate routes, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into a later production phase.
    - Scope triage for post-ship features:
      - Small (config, copy, toggle) → `$spec-interview` + `$exec` directly
-     - Medium (new component, screen, workflow) → single-variation mini-prototype (`$prototype --variant 1`)
+     - Medium (new component, screen, workflow) → single-variation mini-prototype (`$logic-wiring --variant 1`)
      - Large (new product area, major redesign) → full pipeline starting at `$ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.

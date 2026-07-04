@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.31
+version: v0.32
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -236,7 +236,7 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$build-ui-screens [approved-ui-experiment]` when an approved branch needs a clickable route experiment, `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$prototype`, `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
+Only after the page is converted to `confirmed` and canonical files are written, route based on the branch decision: recommend `$build-ui-screens [approved-ui-experiment]` when an approved branch needs a clickable route experiment, `$ui-interview [next-specific-ux-variation]` for the next UX variation branch, `$ux-variations [next-specific-user-flow]` when the next user flow still needs progression variants, or `$user-flow-map --prototype-build-plan [topic]` when all target user-flow and UI branch decisions are complete enough to synthesize the prototype build ledger. Do not route from `ui-interview` directly to `$logic-wiring`, `$roadmap`, `agent-work-admin`, implementation planning, or production sequencing during the research/prototype phase.
 
 ### Alignment Page
 

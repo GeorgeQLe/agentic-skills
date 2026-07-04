@@ -41,6 +41,11 @@ const HIBERNATED_REACTIVATION_TEXT =
 const TOOLS = ['claude', 'codex'];
 const AGENT_DOCS = ['AGENTS.md', 'CLAUDE.md'];
 const BIP_CONFIG_KEYS = ['build_in_public', 'bip_platforms', 'bip_prompt_dismissed'];
+const DEPRECATED_ALIAS_REPLACEMENTS = new Map([
+  ['prototype', 'logic-wiring'],
+  ['create-ui-experiment', 'build-ui-screens'],
+  ['consolidate-variations', 'consolidate-prototypes']
+]);
 const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7', 'v0.8', 'v0.9', 'v0.10', 'v0.11']);
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
@@ -1699,6 +1704,65 @@ async function cleanupBuildInPublicConfigs({ rootDir, dryRun, commandLabel }) {
   return changes;
 }
 
+function displayProjectTarget(rootDir, projectRoot, target) {
+  const projectRel = relative(rootDir, projectRoot) || '.';
+  const targetRel = relativeProjectPath(projectRoot, target);
+  return projectRel === '.' ? `./${targetRel}` : `${projectRel}/${targetRel}`;
+}
+
+async function cleanupDeprecatedAliasInstalls({ rootDir, dryRun, commandLabel }) {
+  const roots = discoverProjectRoots(rootDir);
+  const changes = [];
+
+  for (const root of roots) {
+    for (const tool of TOOLS) {
+      for (const [skillName, replacement] of DEPRECATED_ALIAS_REPLACEMENTS) {
+        const target = targetPath(root, tool, skillName);
+        if (!existsSync(target) || !isManagedSkillDir(target) || !targetManagedBySkillpacks(target)) {
+          continue;
+        }
+
+        changes.push({
+          root,
+          target,
+          display: displayProjectTarget(rootDir, root, target),
+          reason: `deprecated alias replaced by ${replacement}`
+        });
+      }
+    }
+  }
+
+  if (dryRun) {
+    if (changes.length === 0) {
+      console.log(`Dry run. No deprecated alias skill installs found under ${rootDir}.`);
+      return changes;
+    }
+    for (const change of changes) {
+      console.log(`Would remove ${change.display} (${change.reason})`);
+    }
+    console.log(`Dry run. Would remove ${changes.length} deprecated alias skill install(s) under ${rootDir}.`);
+    return changes;
+  }
+
+  if (changes.length === 0) {
+    console.log(`No deprecated alias skill installs found under ${rootDir}.`);
+    return changes;
+  }
+
+  for (const change of changes) {
+    await withProjectLock(change.root, commandLabel, async () => {
+      if (existsSync(change.target) && isManagedSkillDir(change.target) && targetManagedBySkillpacks(change.target)) {
+        rmSync(change.target, { recursive: true, force: true });
+        console.log(`Removed ${change.display} (${change.reason})`);
+      }
+      return 0;
+    });
+  }
+
+  console.log(`Removed ${changes.length} deprecated alias skill install(s) under ${rootDir}.`);
+  return changes;
+}
+
 export async function uninstallGlobal({
   homeRoot = homedir(),
   manifest = null,
@@ -1737,6 +1801,7 @@ export async function uninstallGlobal({
   }
 
   await cleanupBuildInPublicConfigs({ rootDir, dryRun, commandLabel });
+  await cleanupDeprecatedAliasInstalls({ rootDir, dryRun, commandLabel });
 
   if (!reinstallBase) {
     return 0;

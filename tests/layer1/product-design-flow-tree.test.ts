@@ -403,7 +403,7 @@ describe("product-design flow tree artifact boundaries", () => {
     expect(sample).toContain("ui_experiments:");
     expect(sample).toContain("ui_experiment_id: wizard-stepper");
     expect(sample).toContain("experiment_path: experiments/invoice-approval/wizard-stepper/");
-    expect(sample).toContain("review_evidence: alignment/create-ui-experiment-invoice-approval.html#wizard-stepper-review");
+    expect(sample).toContain("review_evidence: alignment/build-ui-screens-invoice-approval.html#wizard-stepper-review");
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
     const uiExperimentKeys = collectUiExperimentKeys(sample);
     for (const key of uiExperimentKeys) {
@@ -517,7 +517,7 @@ describe("product-design flow tree artifact boundaries", () => {
 
       expectContainsAll(buildUiScreens, [
         "name: build-ui-screens",
-        "version: v0.3",
+        "version: v0.4",
         "Build the visual UI screens for one approved UI branch",
         "fake, fixture, local, or in-memory data",
         "first-value journey",
@@ -534,18 +534,14 @@ describe("product-design flow tree artifact boundaries", () => {
       expect(buildUiScreens).toContain(`**Recommended next command:** \`${sigil}logic-wiring\``);
     }
 
-    // Deprecated aliases still route to the renamed primaries.
+    // Deprecated aliases are archived out of active discovery; replacements remain active.
     for (const mirror of mirrors) {
-      const sigil = command[mirror];
-      const createUiAlias = read(`packs/product-design/${mirror}/create-ui-experiment/SKILL.md`);
-      expect(createUiAlias).toContain("deprecated: true");
-      expect(createUiAlias).toContain("replaced_by: build-ui-screens");
-      expect(createUiAlias).toContain(`${sigil}build-ui-screens`);
-
-      const prototypeAlias = read(`packs/product-design/${mirror}/prototype/SKILL.md`);
-      expect(prototypeAlias).toContain("deprecated: true");
-      expect(prototypeAlias).toContain("replaced_by: logic-wiring");
-      expect(prototypeAlias).toContain(`${sigil}logic-wiring`);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/create-ui-experiment/SKILL.md`))).toBe(false);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/prototype/SKILL.md`))).toBe(false);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/consolidate-variations/SKILL.md`))).toBe(false);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/build-ui-screens/SKILL.md`))).toBe(true);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/logic-wiring/SKILL.md`))).toBe(true);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/consolidate-prototypes/SKILL.md`))).toBe(true);
     }
   });
 
@@ -895,9 +891,9 @@ describe("product-design flow tree artifact boundaries", () => {
     }
   });
 
-  it("preserves the mirrored AFPS product-design route through prototype consolidation and specs", () => {
+  it("preserves the mirrored AFPS product-design route through logic wiring, consolidation, and specs", () => {
     const expectedRoute =
-      "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> prototype -> uat --variant-evaluation -> consolidate-prototypes -> research-roadmap --post-prototype -> spec-interview";
+      "user-flow-map -> state-model [topic] (optional sibling) -> ux-variations [specific-user-flow] -> ui-interview [specific-ux-variation] -> user-flow-map --prototype-build-plan [topic] -> logic-wiring -> uat --variant-evaluation -> consolidate-prototypes -> research-roadmap --post-prototype -> spec-interview";
 
     expect(read("docs/skill-next-step-contracts.md")).toContain(expectedRoute);
 

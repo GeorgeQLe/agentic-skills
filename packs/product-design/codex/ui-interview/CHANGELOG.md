@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.32 - 2026-07-04
+
+- Updated the direct-build guard to name `$logic-wiring` instead of the archived `$prototype` alias.
+
 ## v0.31 - 2026-07-04
 
 - Updated inspiration inputs for the hard rename: read approved `design/**/brainstorm-inspirations-{topic}.md` and `design/**/take-inspiration-{topic}-*.md` artifacts instead of the retired active `design-inspirations` skill.

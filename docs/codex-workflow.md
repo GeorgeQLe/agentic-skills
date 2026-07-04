@@ -289,7 +289,7 @@ If you are used to this Claude Code rhythm:
 7. `$user-flow-map`
 8. `$ui-interview --requirements-only`
 9. `$ux-variations --layout-mode`
-10. `$prototype`
+10. `$logic-wiring`
 11. `$uat --variant-evaluation`
 12. `$consolidate-prototypes`
 13. `$research-roadmap --post-prototype`
@@ -315,7 +315,7 @@ The closest Codex translation is:
 7. `$user-flow-map`
 8. `$ui-interview --requirements-only`
 9. `$ux-variations --layout-mode`
-10. `$prototype`
+10. `$logic-wiring`
 11. `$uat --variant-evaluation`
 12. `$consolidate-prototypes`
 13. `$research-roadmap --post-prototype`

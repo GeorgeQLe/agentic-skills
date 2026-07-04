@@ -569,6 +569,91 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(join(project, '.agents/.pack.lock')), false);
   });
 
+  it('cleanup --dry-run previews managed deprecated product-design alias removals without deleting them', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const project = join(root, 'project-a');
+    writeProjectConfig(project, {
+      project_type: 'business-app',
+      enabled_packs: ['product-design'],
+      skill_pack_version: 1
+    });
+
+    writeManagedSkillDir(
+      skillPath(project, 'claude', 'prototype'),
+      join(repoRoot, 'packs/product-design/claude/prototype')
+    );
+    writeManagedSkillDir(
+      skillPath(project, 'codex', 'create-ui-experiment'),
+      join(repoRoot, 'packs/product-design/codex/create-ui-experiment')
+    );
+    writeManagedSkillDir(
+      skillPath(project, 'codex', 'consolidate-variations'),
+      join(repoRoot, 'packs/product-design/codex/consolidate-variations')
+    );
+
+    const unmanaged = skillPath(project, 'claude', 'create-ui-experiment');
+    mkdirSync(unmanaged, { recursive: true });
+    writeFileSync(join(unmanaged, 'SKILL.md'), 'local alias override\n');
+
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup', '--dry-run'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove project-a\/\.claude\/skills\/prototype \(deprecated alias replaced by logic-wiring\)/);
+    assert.match(stdout, /Would remove project-a\/\.codex\/skills\/create-ui-experiment \(deprecated alias replaced by build-ui-screens\)/);
+    assert.match(stdout, /Would remove project-a\/\.codex\/skills\/consolidate-variations \(deprecated alias replaced by consolidate-prototypes\)/);
+    assert.match(stdout, /Dry run\. Would remove 3 deprecated alias skill install\(s\)/);
+    assert.equal(existsSync(skillPath(project, 'claude', 'prototype')), true);
+    assert.equal(existsSync(skillPath(project, 'codex', 'create-ui-experiment')), true);
+    assert.equal(existsSync(skillPath(project, 'codex', 'consolidate-variations')), true);
+    assert.equal(existsSync(unmanaged), true);
+  });
+
+  it('cleanup removes managed deprecated product-design alias installs while preserving unmanaged directories', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const project = join(root, 'project-a');
+    writeProjectConfig(project, {
+      project_type: 'business-app',
+      enabled_packs: ['product-design'],
+      skill_pack_version: 1
+    });
+
+    writeManagedSkillDir(
+      skillPath(project, 'claude', 'prototype'),
+      join(repoRoot, 'packs/product-design/claude/prototype')
+    );
+    writeManagedSkillDir(
+      skillPath(project, 'codex', 'create-ui-experiment'),
+      join(repoRoot, 'packs/product-design/codex/create-ui-experiment')
+    );
+    writeManagedSkillDir(
+      skillPath(project, 'codex', 'consolidate-variations'),
+      join(repoRoot, 'packs/product-design/codex/consolidate-variations')
+    );
+    writeManagedSkillDir(
+      skillPath(project, 'codex', 'logic-wiring'),
+      join(repoRoot, 'packs/product-design/codex/logic-wiring')
+    );
+
+    const unmanaged = skillPath(project, 'claude', 'create-ui-experiment');
+    mkdirSync(unmanaged, { recursive: true });
+    writeFileSync(join(unmanaged, 'SKILL.md'), 'local alias override\n');
+
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed project-a\/\.claude\/skills\/prototype \(deprecated alias replaced by logic-wiring\)/);
+    assert.match(stdout, /Removed project-a\/\.codex\/skills\/create-ui-experiment \(deprecated alias replaced by build-ui-screens\)/);
+    assert.match(stdout, /Removed project-a\/\.codex\/skills\/consolidate-variations \(deprecated alias replaced by consolidate-prototypes\)/);
+    assert.match(stdout, /Removed 3 deprecated alias skill install\(s\)/);
+    assert.equal(existsSync(skillPath(project, 'claude', 'prototype')), false);
+    assert.equal(existsSync(skillPath(project, 'codex', 'create-ui-experiment')), false);
+    assert.equal(existsSync(skillPath(project, 'codex', 'consolidate-variations')), false);
+    assert.equal(existsSync(skillPath(project, 'codex', 'logic-wiring')), true);
+    assert.equal(existsSync(unmanaged), true);
+  });
+
   it('keeps uninstall-global as a compatibility alias for cleanup', async () => {
     const root = makeTempProject();
     const home = makeTempProject();
@@ -586,6 +671,26 @@ describe('Node lifecycle commands', () => {
     assert.equal(exitCode, 0);
     assert.match(stdout, /Removed alignment\.build_in_public from \.\/\.agents\/project\.json/);
     assert.equal(Object.hasOwn(readProjectConfig(root), 'alignment'), false);
+  });
+
+  it('uninstall-global compatibility alias also removes managed deprecated project-local aliases', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    writeProjectConfig(root, {
+      project_type: 'business-app',
+      enabled_packs: ['product-design'],
+      skill_pack_version: 1
+    });
+    writeManagedSkillDir(
+      skillPath(root, 'claude', 'prototype'),
+      join(repoRoot, 'packs/product-design/claude/prototype')
+    );
+
+    const { stdout, exitCode } = await runSkillpacks(root, ['uninstall-global'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Removed \.\/\.claude\/skills\/prototype \(deprecated alias replaced by logic-wiring\)/);
+    assert.equal(existsSync(skillPath(root, 'claude', 'prototype')), false);
   });
 
   it('rejects arguments to cleanup', async () => {
