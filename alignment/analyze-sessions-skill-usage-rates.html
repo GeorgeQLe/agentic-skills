@@ -74,12 +74,13 @@ button.secondary { background: var(--surface); color: var(--text); border: 1px s
 <main>
 <h1>Skill Usage Rates — Full-History Session Audit</h1>
 <p><span class="status-badge">alignment_status: review</span></p>
-<p>Full-history read of Claude Code and Codex prompt history (<strong>20,783 user prompts</strong>, Dec 10 2025 – Jul 3 2026) answering: <strong>with ~182 skills in this repo, at what rates do we actually use them — and where am I hand-typing prompts that an existing skill already covers?</strong> Headline: usage is extremely head-heavy (<code>/ship</code> alone is 13.7% of every Claude prompt; the top 3 commands are ~78% of all Claude skill invocations), <strong>95 of 182 repo skills were never invoked as a command</strong>, and the largest adoption gap is habit, not coverage — <strong>~550 hand-typed "why is…" prompts</strong> shadow <code>/investigate</code>, which was only invoked 166 times.</p>
+<p>Full-history read of Claude Code and Codex prompt history plus rich assistant transcripts (<strong>20,971 user prompts</strong>, Dec 10 2025 - Jul 4 2026) answering: <strong>with 184 active skills in this repo, at what rates do users invoke skills and how often do agents invoke or recommend them?</strong> Headline: direct user usage is still head-heavy (<code>/ship</code> alone is 13.6% of every Claude prompt; the top 3 user commands are 66.5% of all direct user skill invocations), while agents touch a much wider surface: <strong>3,215 user-authored repo-skill invocations</strong> versus <strong>9,125 assistant-side skill contract-load events</strong> (<strong>3,747 distinct session-skill pairs</strong>) and <strong>1,267 assistant recommendation/use-reference events</strong>. The largest adoption gap remains habit, not coverage: <strong>~550 hand-typed "why is..." prompts</strong> shadow <code>/investigate</code>, which was directly invoked 166 times.</p>
 
 <div class="toc">
 <strong>Table of Contents</strong>
 <ul>
 <li><a href="#overview">1. Overview Stats</a></li>
+<li><a href="#actor-split">1b. User-Invoked vs. Agent-Invoked Skill Counts</a></li>
 <li><a href="#topskills">2. Top Skills by Invocation (chart)</a></li>
 <li><a href="#concentration">3. Usage Concentration — Head vs. Dead Tail</a></li>
 <li><a href="#shadow">4. Manual Prompts That Shadow Existing Skills (chart)</a></li>
@@ -99,53 +100,76 @@ button.secondary { background: var(--surface); color: var(--text); border: 1px s
 <h2 id="overview"><span class="sec-head"><span>1. Overview Stats</span><span class="fb-controls" data-fb-section="overview-stats"></span></span></h2>
 <div class="fb-area" id="fb-overview-stats"></div>
 <div class="stat-grid">
-<div class="stat-card"><div class="value">20,783</div><div class="label">total user prompts (11,616 Claude / 9,167 Codex)</div></div>
-<div class="stat-card accent"><div class="value">2,698</div><div class="label">Claude repo-skill invocations (23% of Claude prompts)</div></div>
-<div class="stat-card purple"><div class="value">87 / 182</div><div class="label">repo skills ever invoked as a command</div></div>
-<div class="stat-card red"><div class="value">95</div><div class="label">repo skills never invoked (27 more used once)</div></div>
-<div class="stat-card orange"><div class="value">13.7%</div><div class="label">of every Claude prompt is <code>/ship</code></div></div>
+<div class="stat-card"><div class="value">20,971</div><div class="label">total user prompts (11,704 Claude / 9,267 Codex)</div></div>
+<div class="stat-card accent"><div class="value">3,215</div><div class="label">direct user repo-skill invocations</div></div>
+<div class="stat-card purple"><div class="value">9,125</div><div class="label">assistant-side skill contract-load events</div></div>
+<div class="stat-card green"><div class="value">3,747</div><div class="label">distinct assistant session-skill pairs</div></div>
+<div class="stat-card red"><div class="value">93</div><div class="label">active repo skills never invoked directly by user command</div></div>
 </div>
 <div class="table-wrap"><table>
 <tr><th>Metric</th><th>Claude</th><th>Codex</th></tr>
-<tr><td>Date range</td><td>2025-12-10 → 2026-07-03</td><td>2026-01-20 → 2026-07-03</td></tr>
-<tr><td>User prompts</td><td>11,616</td><td>9,167</td></tr>
-<tr><td>Slash/command prompts</td><td>4,726 (incl. built-ins)</td><td>699</td></tr>
-<tr><td>Repo-skill invocations</td><td>2,698</td><td>699 (nearly all repo skills / <code>$run</code>)</td></tr>
+<tr><td>Date range</td><td>2025-12-10 → 2026-07-04</td><td>2026-01-20 → 2026-07-04</td></tr>
+<tr><td>User prompts</td><td>11,704</td><td>9,267</td></tr>
+<tr><td>Slash/command prompts</td><td>4,779 (incl. built-ins)</td><td>708</td></tr>
+<tr><td>Direct user repo-skill invocations</td><td>2,714</td><td>501</td></tr>
 <tr><td>Built-in harness cmds (<code>/clear</code>, <code>/usage</code>…)</td><td>1,502</td><td>—</td></tr>
-<tr><td>Manual (non-command) prompts</td><td>6,881</td><td>8,468</td></tr>
+<tr><td>Manual (non-command) prompts</td><td>6,925</td><td>8,559</td></tr>
 </table></div>
-<p class="caveat"><strong>Method:</strong> a skill invocation is counted as a leading <code>/command</code> (Claude <code>history.jsonl</code> <code>display</code> field) or leading <code>/</code>/<code>$command</code> (Codex <code>history.jsonl</code> <code>text</code> field), matched against the 182 skill directories under <code>packs/*/claude/*/SKILL.md</code>. Built-in harness commands (<code>/clear</code>, <code>/usage</code>, <code>/resume</code>, <code>/model</code>, <code>/pack</code>…) are separated out and not counted as repo-skill usage.</p>
+<p class="caveat"><strong>Method:</strong> a user skill invocation is counted as a leading <code>/command</code> (Claude <code>history.jsonl</code> <code>display</code> field) or leading <code>/</code>/<code>$command</code> (Codex <code>history.jsonl</code> <code>text</code> field), matched against the 184 active skill directories under <code>packs/*/{claude,codex}/*/SKILL.md</code>. Built-in harness commands (<code>/clear</code>, <code>/usage</code>, <code>/resume</code>, <code>/model</code>, <code>/pack</code>...) are separated out and not counted as repo-skill usage. Agent-side counts come from assistant records in <code>~/.claude/projects/**/*.jsonl</code> and <code>~/.codex/sessions/**/*.jsonl</code>: exact skill contract loads are assistant tool-call arguments that read a recognized <code>SKILL.md</code>; recommendations/use-references are assistant-authored text such as "Using the <code>x</code> skill" or "Recommended next skill: <code>/x</code>". Reproduce this snapshot with <code>node scripts/analyze-skill-usage-actors.mjs --cutoff 2026-07-04T20:45:12.007Z</code>; the cutoff prevents this analysis session from changing its own counts during later verification.</p>
+
+<h2 id="actor-split"><span class="sec-head"><span>1b. User-Invoked vs. Agent-Invoked Skill Counts</span><span class="fb-controls" data-fb-section="actor-split"></span></span></h2>
+<div class="fb-area" id="fb-actor-split"></div>
+<p>The actor split changes the interpretation of "unused." Direct user commands cover 91 of 184 active skills, but assistant-side skill-contract loads touch a much broader slice of the registry, especially orchestration and design-tree skills that are often loaded by the agent during execution rather than typed by the user.</p>
+<div class="chart-container" id="chart-actor-split" data-tts-narrative="Bar chart comparing direct user repo-skill invocations with assistant-side skill usage signals. Users directly invoked repo skills 3,215 times. Assistants loaded skill contracts 9,125 times, representing 3,747 distinct session-skill pairs, and produced 1,267 recommendation or use-reference events.">
+<button class="chart-toggle" type="button">View as table</button>
+</div>
+<div class="table-wrap"><table>
+<tr><th>Actor / signal</th><th>Count</th><th>Meaning</th><th>Best use</th></tr>
+<tr><td>User-authored direct skill invocations</td><td>3,215</td><td>Leading <code>/skill</code> or <code>$skill</code> prompts matched to active repo skills</td><td>Measures user habit and command discoverability</td></tr>
+<tr><td>Assistant-side skill contract-load events</td><td>9,125</td><td>Assistant tool-call arguments reading a recognized <code>SKILL.md</code></td><td>Measures agent execution of skill contracts; raw events can include repeated reads in one session</td></tr>
+<tr><td>Assistant distinct session-skill pairs</td><td>3,747</td><td>Unique <code>source:session:skill</code> pairs with at least one contract load</td><td>Best conservative "agent invoked skill in a session" count</td></tr>
+<tr><td>Assistant recommendation/use-reference events</td><td>1,267</td><td>Assistant-authored text recommending or declaring use of a skill</td><td>Measures routing/handoff visibility, not necessarily execution</td></tr>
+</table></div>
+<div class="table-wrap"><table>
+<tr><th>Top direct user skills</th><th>User invokes</th><th>Top assistant-loaded skills</th><th>Contract-load events</th><th>Top assistant recommendations</th><th>Events</th></tr>
+<tr><td><code>ship</code></td><td>1,598</td><td><code>customer-discovery</code></td><td>493</td><td><code>exec</code></td><td>244</td></tr>
+<tr><td><code>ship-end</code></td><td>375</td><td><code>user-flow-map</code></td><td>482</td><td><code>investigate</code></td><td>125</td></tr>
+<tr><td><code>investigate</code></td><td>166</td><td><code>ux-variations</code></td><td>479</td><td><code>ship</code></td><td>86</td></tr>
+<tr><td><code>sync</code></td><td>105</td><td><code>competitive-analysis</code></td><td>436</td><td><code>roadmap</code></td><td>53</td></tr>
+<tr><td><code>benchmark-test-skill</code></td><td>84</td><td><code>ui-interview</code></td><td>433</td><td><code>guide</code></td><td>51</td></tr>
+</table></div>
+<p class="caveat"><strong>Interpretation:</strong> "Agent invoked" is not identical to "the user typed a skill." The strongest agent-side signal is a contract-load event because it proves the assistant read a skill contract while acting. The session-skill-pair count is less inflated than raw reads and is the best single count for "agents invoked skills." Recommendation events are reported separately because they may be handoff text rather than actual execution.</p>
 
 <h2 id="topskills"><span class="sec-head"><span>2. Top Skills by Invocation (all-time, Claude + Codex)</span><span class="fb-controls" data-fb-section="top-skills"></span></span></h2>
 <div class="fb-area" id="fb-top-skills"></div>
-<div class="chart-container" id="chart-top-skills" data-tts-narrative="Horizontal bar chart of the most-invoked repo skills across both tools. ship dominates at 1595 invocations, followed by ship-end at 372 and investigate at 166; every other skill is under 105.">
+<div class="chart-container" id="chart-top-skills" data-tts-narrative="Horizontal bar chart of the most-invoked direct user repo skills across both tools. ship dominates at 1598 invocations, followed by ship-end at 375 and investigate at 166; every other skill is at or under 105.">
 <button class="chart-toggle" type="button">View as table</button>
 </div>
 <div class="table-wrap"><table>
 <tr><th>Command</th><th>Uses</th><th>% of Claude prompts</th><th>Command</th><th>Uses</th></tr>
-<tr><td>/ship</td><td>1,595</td><td>13.7%</td><td>/roadmap</td><td>73</td></tr>
-<tr><td>/ship-end</td><td>372</td><td>3.1%</td><td>/spec-interview</td><td>52</td></tr>
-<tr><td>/investigate</td><td>166</td><td>1.3%</td><td>/exec</td><td>47</td></tr>
-<tr><td>/sync</td><td>103</td><td>0.9%</td><td>/analyze-sessions</td><td>44</td></tr>
-<tr><td>/targeted-skill-builder</td><td>100</td><td>Codex-heavy</td><td>/plan-phase</td><td>40</td></tr>
-<tr><td>/benchmark-test-skill</td><td>84</td><td>Codex-heavy</td><td>/benchmark-agent-review</td><td>33</td></tr>
-<tr><td>/session-triage</td><td>77</td><td>Codex-heavy</td><td>/customer-discovery</td><td>33</td></tr>
+<tr><td>/ship</td><td>1,598</td><td>13.6%</td><td>/roadmap</td><td>73</td></tr>
+<tr><td>/ship-end</td><td>375</td><td>3.2%</td><td>/spec-interview</td><td>53</td></tr>
+<tr><td>/investigate</td><td>166</td><td>1.4%</td><td>/exec</td><td>50</td></tr>
+<tr><td>/sync</td><td>105</td><td>0.9%</td><td>/analyze-sessions</td><td>44</td></tr>
+<tr><td>/benchmark-test-skill</td><td>84</td><td>Codex-heavy</td><td>/customer-discovery</td><td>40</td></tr>
+<tr><td>/session-triage</td><td>77</td><td>Codex-heavy</td><td>/plan-phase</td><td>40</td></tr>
+<tr><td>/competitive-analysis</td><td>29</td><td>Mixed</td><td>/benchmark-agent-review</td><td>33</td></tr>
 </table></div>
 
 <h2 id="concentration"><span class="sec-head"><span>3. Usage Concentration — Head vs. Dead Tail</span><span class="fb-controls" data-fb-section="concentration"></span></span></h2>
 <div class="fb-area" id="fb-concentration"></div>
-<p>The distribution is not just skewed — it is a spike plus a long dead tail. Of the 2,698 Claude repo-skill invocations, the top 3 (<code>ship</code>, <code>ship-end</code>, <code>investigate</code>) account for <strong>2,106 (78%)</strong>.</p>
-<div class="chart-container" id="chart-concentration" data-tts-narrative="Bar chart of the 182 repo skills bucketed by lifetime invocation count. 95 skills were never invoked, 27 were invoked exactly once, 24 were invoked two to five times, and only 36 skills cleared five invocations.">
+<p>The distribution is still skewed, but the actor split matters. For <em>direct user commands</em>, the top 3 (<code>ship</code>, <code>ship-end</code>, <code>investigate</code>) account for <strong>2,139 of 3,215 invocations (66.5%)</strong>. For <em>assistant contract loads</em>, the top 5 are research/design orchestrators (<code>customer-discovery</code>, <code>user-flow-map</code>, <code>ux-variations</code>, <code>competitive-analysis</code>, <code>ui-interview</code>), which shows agents exercise a different part of the skill surface.</p>
+<div class="chart-container" id="chart-concentration" data-tts-narrative="Bar chart of the 184 active repo skills bucketed by direct user invocation count. 93 skills were never directly invoked by a user command, 29 were invoked exactly once, 27 were invoked two to five times, and 35 cleared five invocations.">
 <button class="chart-toggle" type="button">View as table</button>
 </div>
 <div class="table-wrap"><table>
-<tr><th>Invocation tier</th><th>Repo skills</th><th>Share of 182</th></tr>
-<tr><td>Never invoked as a command</td><td>95</td><td>52%</td></tr>
-<tr><td>Invoked exactly once</td><td>27</td><td>15%</td></tr>
-<tr><td>Invoked 2–5 times</td><td>24</td><td>13%</td></tr>
-<tr><td>Invoked more than 5 times</td><td>36</td><td>20%</td></tr>
+<tr><th>Invocation tier</th><th>Repo skills</th><th>Share of 184</th></tr>
+<tr><td>Never invoked directly by user command</td><td>93</td><td>51%</td></tr>
+<tr><td>Invoked exactly once</td><td>29</td><td>16%</td></tr>
+<tr><td>Invoked 2–5 times</td><td>27</td><td>15%</td></tr>
+<tr><td>Invoked more than 5 times</td><td>35</td><td>19%</td></tr>
 </table></div>
-<p class="caveat"><strong>Caveat — "unused" ≠ "dead":</strong> invocation rate alone can't tell a genuinely dead skill from a new or library skill. The whole <code>game-*</code>, <code>devtool-*</code>, <code>creator-*</code>, most <code>youtube-*</code>, and the research-framework sub-skills sit at 0–2 lifetime invocations. Some may be recently built, built for other repos/users, or invoked indirectly (framework sub-skills are called by a parent skill, not typed). Separating dead from new/library is exactly what a <code>skill-inventory</code> pass would resolve (Rec 2).</p>
+<p class="caveat"><strong>Caveat — "unused" ≠ "dead":</strong> the 93-skill tail is measured only as <em>never directly typed by the user</em>. Rich transcript parsing now proves agents do load skill contracts independently, so direct-command absence is not enough to delete a skill. Separating dead from new/library/agent-only/parent-invoked is exactly what a <code>skill-inventory</code> pass would resolve (Rec 2).</p>
 <div class="question-block" data-qid="q3" data-section="Usage Concentration" data-gate="candidate/verdict decisions">
 <h4>Q3 (required) — Do you confirm the concentration reading (spike + dead tail)?</h4>
 <label><input type="radio" name="q3" value="Confirmed" data-approval-effect="approve"> Confirmed — head-heavy with a large unused tail</label>
@@ -164,8 +188,8 @@ button.secondary { background: var(--surface); color: var(--text); border: 1px s
 <div class="table-wrap"><table>
 <tr><th>Manual intent</th><th>Manual prompts</th><th>Skill that covers it</th><th>Skill's actual uses</th></tr>
 <tr><td>"why is / investigate X"</td><td class="tag red">~550</td><td><code>/investigate</code></td><td>166</td></tr>
-<tr><td>"update docs and push"</td><td class="tag orange">~258</td><td><code>/ship-end</code>, <code>/reconcile-dev-docs</code></td><td>372 / 31</td></tr>
-<tr><td>"commit &amp; push to github"</td><td class="tag orange">~211</td><td><code>/ship</code>, <code>/ship-end</code></td><td>1,595 / 372</td></tr>
+<tr><td>"update docs and push"</td><td class="tag orange">~258</td><td><code>/ship-end</code>, <code>/reconcile-dev-docs</code></td><td>375 / 31</td></tr>
+<tr><td>"commit &amp; push to github"</td><td class="tag orange">~211</td><td><code>/ship</code>, <code>/ship-end</code></td><td>1,598 / 375</td></tr>
 <tr><td>"run/start the app / dev server"</td><td class="tag">~61</td><td><code>/run</code></td><td>121 (in harness)</td></tr>
 <tr><td>"update TODO.md / roadmap"</td><td class="tag">~47</td><td><code>/roadmap</code></td><td>73</td></tr>
 </table></div>
@@ -179,7 +203,7 @@ button.secondary { background: var(--surface); color: var(--text); border: 1px s
 <div class="example">can you update the documentation and push to github?</div>
 <div class="example">update TODO.md</div>
 <div class="example">can you pull from master now?  <span class="tag">(typed 2× → /sync)</span></div>
-<p class="caveat"><strong>Why this is a habit gap, not a skill gap:</strong> <code>/ship</code> is muscle memory (1,595 uses) because it's the natural end-of-turn action. The shadowed skills fire from a <em>mid-work realization</em> ("wait, why is this…") where you're already typing a sentence, so the slash prefix never happens. Bare "why is X" also doesn't feel like it needs a skill — but that's exactly <code>/investigate</code>'s job.</p>
+<p class="caveat"><strong>Why this is a habit gap, not a skill gap:</strong> <code>/ship</code> is muscle memory (1,598 uses) because it's the natural end-of-turn action. The shadowed skills fire from a <em>mid-work realization</em> ("wait, why is this...") where you're already typing a sentence, so the slash prefix never happens. Bare "why is X" also doesn't feel like it needs a skill — but that's exactly <code>/investigate</code>'s job.</p>
 <p class="caveat"><strong>Count precision:</strong> "commit &amp; push" is the tightened count (requires git/github/commit-message/branch context, excludes database/seed pushes). A looser "commit OR push" match returns ~696 but folds in DB-push false positives, so the tightened 211 is the conservative figure. Buckets use first-match keyword classification and are not mutually exhaustive.</p>
 
 <h2 id="tools"><span class="sec-head"><span>5. Claude vs. Codex Personality Split</span><span class="fb-controls" data-fb-section="tools-split"></span></span></h2>
@@ -187,17 +211,17 @@ button.secondary { background: var(--surface); color: var(--text); border: 1px s
 <p>The two tools are used for different jobs — usage rates reflect that clearly:</p>
 <ul>
 <li><strong>Claude = the shipping surface.</strong> Dominated by <code>ship</code> / <code>ship-end</code> / <code>investigate</code> / <code>sync</code> — day-to-day dev flow.</li>
-<li><strong>Codex = the skill-development bench.</strong> Its top commands are <code>targeted-skill-builder</code> (93), <code>benchmark-test-skill</code> (82), <code>session-triage</code> (65), and <code>benchmark-agent-review</code> (32) — authoring and testing skills, not shipping product.</li>
-<li>Only 699 of 9,167 Codex prompts (7.6%) are commands vs 23% repo-skill on Claude — Codex work leans on longer freeform plan-implement prompts.</li>
+<li><strong>Codex = the skill-development bench.</strong> Its top direct commands are <code>benchmark-test-skill</code> (82), <code>session-triage</code> (65), <code>benchmark-agent-review</code> (32), and <code>customer-discovery</code> (32) — authoring, testing, and research/design orchestration rather than routine product shipping.</li>
+<li>Only 708 of 9,267 Codex prompts (7.6%) are command prompts, and 501 are active repo-skill invocations. Claude has 2,714 direct repo-skill invocations across 11,704 prompts (23.2%), so Claude remains the heavier direct-command surface.</li>
 </ul>
 
 <h2 id="tokens"><span class="sec-head"><span>6. Token &amp; Cost Check</span><span class="fb-controls" data-fb-section="token-cost"></span></span></h2>
 <div class="fb-area" id="fb-token-cost"></div>
 <div class="caveat">
-<strong>Not parsed this run — and honestly labeled as such.</strong> This question was about invocation <em>rates</em>, which come from prompt-command parsing, not token metadata. So:
+<strong>Actor usage was parsed; token spend was not re-estimated.</strong> This question was about invocation <em>rates</em>, and this update parsed rich assistant transcripts for agent-side skill use, but it did not re-run the Codex token/cost rollup. So:
 <ul>
 <li><strong>Claude:</strong> <code>~/.claude/history.jsonl</code> carries no token/usage fields — a permanent coverage gap for this source regardless of parse depth.</li>
-<li><strong>Codex:</strong> the compact <code>history.jsonl</code> used for these counts has no token fields; the rich <code>~/.codex/sessions/**</code> rollups (which do carry <code>token_count</code> events) were <em>not</em> re-parsed this run.</li>
+<li><strong>Codex:</strong> rich <code>~/.codex/sessions/**</code> records were parsed for assistant messages and tool-call arguments, but token-count events were intentionally left out of this actor split.</li>
 <li><strong>Cost: unavailable.</strong> No cost fields in either log, no pricing table provided, no provider pricing verified this run. Per skill constraints, no dollar estimate is made.</li>
 </ul>
 Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-sessions-token-spend-value.html">analyze-sessions-token-spend-value.html</a>, <a href="analyze-sessions-skill-gaps-manual-asks.html">analyze-sessions-skill-gaps-manual-asks.html</a>). Q2 lets you require a token re-parse before acting on any recommendation.
@@ -208,7 +232,7 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
 <div class="table-wrap"><table>
 <tr><th>#</th><th>Pattern</th><th>Frequency</th><th>Type</th><th>Suggested action</th><th>Owner surface</th><th>Validation</th></tr>
 <tr><td>1</td><td>"why is…" typed raw instead of <code>/investigate</code></td><td>~550 manual vs 166 skill</td><td><strong>Standing instruction (hook)</strong></td><td><code>UserPromptSubmit</code> hook: detect a bare <code>why (is|does|isn't|won't)…</code> opener and suggest routing through <code>/investigate</code></td><td>settings.json hook (via <code>update-config</code>)</td><td>fire the hook on a sample "why is X" prompt; confirm suggestion, no false-trigger on <code>/investigate</code></td></tr>
-<tr><td>2</td><td>95 never-invoked skills (dead vs new/library unknown)</td><td>52% of 182</td><td>Inventory audit</td><td>Run <code>/skill-inventory</code> to classify the tail; prune/archive genuinely dead skills to shrink the registry and improve recall</td><td>skill-dev pack (installed ✓)</td><td>inventory output separates dead / new / library / indirect</td></tr>
+<tr><td>2</td><td>93 never-directly-user-invoked skills (dead vs new/library/agent-only unknown)</td><td>51% of 184</td><td>Inventory audit</td><td>Run <code>/skill-inventory</code> to classify the tail; prune/archive genuinely dead skills to shrink the registry and improve recall</td><td>skill-dev pack (installed ✓)</td><td>inventory output separates dead / new / library / indirect / agent-only</td></tr>
 <tr><td>3</td><td>commit-push / update-docs typed as sentences</td><td>~470 combined</td><td>Standing convention nudge</td><td>Lightweight CLAUDE.md nudge (+ optional hook) so end-of-turn "push/update docs" reaches for <code>/ship-end</code></td><td>CLAUDE.md shared conventions</td><td>spot-check the nudge text; measure recurrence next audit</td></tr>
 </table></div>
 <div class="question-block" data-qid="q4" data-section="Recommendation 1: /investigate prompt-nudge hook" data-gate="candidate/verdict decisions">
@@ -235,21 +259,22 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
 <div class="fb-area" id="fb-impact"></div>
 <ol>
 <li><strong><code>/investigate</code> prompt-nudge hook</strong> — ~550 historical hits, the largest single shadowed intent, and the highest-value one (it restores claim-validation before an answer).</li>
-<li><strong>skill-inventory audit</strong> — resolves the 95-never-invoked ambiguity in one pass; a smaller registry improves skill recall for every future session.</li>
+<li><strong>skill-inventory audit</strong> — resolves the 93-skill direct-command tail ambiguity in one pass; a smaller and better-labeled registry improves skill recall for every future session.</li>
 <li><strong>ship-end / docs nudge</strong> — ~470 combined commit-push/update-docs sentences; pure convention change, zero new code.</li>
-<li><strong>Already-won baseline:</strong> <code>/ship</code> at 1,595 uses is the single largest automation in the dataset — proof the head of the distribution is healthy; the opportunity is entirely in the tail and the shadowed mid-work intents.</li>
+<li><strong>Already-won baseline:</strong> <code>/ship</code> at 1,598 uses is the single largest user-invoked automation in the dataset — proof the head of the distribution is healthy; the opportunity is in the tail, the agent-only surface, and the shadowed mid-work intents.</li>
 </ol>
 
 <h2 id="evidence"><span class="sec-head"><span>9. Evidence Matrix</span><span class="fb-controls" data-fb-section="evidence-matrix"></span></span></h2>
 <div class="fb-area" id="fb-evidence-matrix"></div>
 <div class="table-wrap"><table>
 <tr><th>Claim</th><th>Evidence (source · observation · date)</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr>
-<tr><td><code>/ship</code> is 13.7% of all Claude prompts</td><td>history.jsonl · 1,591 leading <code>/ship</code> of 11,616 prompts · Dec 2025–Jul 2026</td><td>Shipping is fully automated and habitual</td><td>High</td><td>No action on git-flow head</td></tr>
-<tr><td>Top 3 = 78% of Claude skill invocations</td><td>history.jsonl · ship 1,591 + ship-end 364 + investigate 151 = 2,106 / 2,698 · same window</td><td>Usage is a spike, not a spread</td><td>High</td><td>Frames the whole audit (Q3)</td></tr>
-<tr><td>95 of 182 repo skills never invoked as a command</td><td>packs/*/claude/*/SKILL.md inventory (182) ∩ command counts (87 seen) · Jul 2026</td><td>Over half the surface is unexercised or invoked only indirectly</td><td>High for the count; Medium for "dead" (indirect/library not separated)</td><td>Approve/reject skill-inventory audit (Q5)</td></tr>
+<tr><td><code>/ship</code> is 13.6% of all Claude prompts</td><td>history.jsonl · 1,594 leading <code>/ship</code> of 11,704 Claude prompts · Dec 2025–Jul 2026</td><td>Shipping is fully automated and habitual</td><td>High</td><td>No action on git-flow head</td></tr>
+<tr><td>Top 3 user commands = 66.5% of direct user skill invocations</td><td>history.jsonl · ship 1,598 + ship-end 375 + investigate 166 = 2,139 / 3,215 · same window</td><td>User command usage remains a spike, but less extreme after including Codex/user updates</td><td>High</td><td>Frames the whole audit (Q3)</td></tr>
+<tr><td>93 of 184 active repo skills were never directly invoked by a user command</td><td>packs/*/{claude,codex}/*/SKILL.md active inventory (184) ∩ command counts (91 seen) · Jul 2026</td><td>Over half the surface is not user-discoverable or is agent-only/parent-invoked</td><td>High for direct-command count; Medium for "dead" (agent-only/library/new not separated)</td><td>Approve/reject skill-inventory audit (Q5)</td></tr>
+<tr><td>Agents invoked or touched skills far more often than users typed them</td><td>rich transcripts · 9,125 assistant-side skill contract-load events; 3,747 distinct session-skill pairs; 1,267 recommendation/use-reference events · Mar-Jul 2026</td><td>Agent use is broad and should be analyzed separately from user command habit</td><td>High for contract-load count; Medium for recommendations (text-pattern classified)</td><td>Prevents mislabeling agent-only skills as dead</td></tr>
 <tr><td>"why is…" is hand-typed ~550× vs 166 <code>/investigate</code></td><td>history.jsonl+codex · 550 regex matches over 15,349 manual prompts; 166 <code>/investigate</code> invocations · full window</td><td>Largest shadowed intent; ~3:1 manual-to-skill</td><td>Medium-High (keyword classification, not exhaustive)</td><td>Approve/reject the nudge hook (Q4)</td></tr>
 <tr><td>Commit-push typed ~211× despite <code>/ship</code></td><td>history.jsonl+codex · tightened match (git context, excl. DB) · full window</td><td>End-of-turn intent occasionally bypasses the skill</td><td>Medium (looser match = ~696 with false positives)</td><td>Approve/reject the CLAUDE.md nudge (Q5)</td></tr>
-<tr><td>Codex is the skill-dev bench, Claude the shipping surface</td><td>codex history · top cmds targeted-skill-builder 93, benchmark-test-skill 82, session-triage 65 vs Claude ship/investigate/sync · full window</td><td>Tool roles are specialized</td><td>High</td><td>Context only; no action</td></tr>
+<tr><td>Codex is the skill-dev bench, Claude the shipping surface</td><td>codex history · top direct commands benchmark-test-skill 82, session-triage 65, benchmark-agent-review 32, customer-discovery 32 vs Claude ship/investigate/sync · full window</td><td>Tool roles are specialized</td><td>High</td><td>Context only; no action</td></tr>
 </table></div>
 <div class="question-block" data-qid="q1" data-section="Evidence Matrix" data-gate="evidence coverage">
 <h4>Q1 (required) — Is the evidence base sufficient for these recommendations?</h4>
@@ -261,9 +286,9 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
 <textarea data-role="notes" placeholder="Notes (optional)"></textarea>
 </div>
 <div class="question-block" data-qid="q2" data-section="Research completeness" data-gate="research completeness">
-<h4>Q2 (required) — Could missing context change the recommendations? (Indirect/framework skill calls, Claude transcript sub-agent skill use, and Codex rollup token data were not parsed.)</h4>
+<h4>Q2 (required) — Could missing context change the recommendations? (Rich assistant transcripts were parsed for skill contract loads, but token spend and semantic intent classification were not re-run.)</h4>
 <label><input type="radio" name="q2" value="No — accept gaps as noted" data-approval-effect="approve"> No — accept the coverage gaps as noted</label>
-<label><input type="radio" name="q2" value="Yes — count indirect skill calls first" data-approval-effect="block"> Yes — measure indirect/parent-invoked skill calls before calling the tail "unused"</label>
+<label><input type="radio" name="q2" value="Yes — classify agent-only vs dead tail first" data-approval-effect="block"> Yes — classify agent-only/parent-invoked skills before calling the direct-command tail "unused"</label>
 <label><input type="radio" name="q2" value="Yes — re-parse token data first" data-approval-effect="block"> Yes — re-parse Codex rollup token usage before confirming</label>
 <label><input type="radio" name="q2" value="__other__" data-approval-effect="other"> Other / None of the above</label>
 <label><input type="radio" name="q2" value="__clarify__" data-approval-effect="clarify"> Need clarification</label>
@@ -274,8 +299,9 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
 <div class="fb-area" id="fb-confidence-register"></div>
 <div class="table-wrap"><table>
 <tr><th>Conclusion</th><th>Status</th><th>What would change it</th></tr>
-<tr><td>Usage is head-heavy; top 3 = 78%</td><td>Evidence-backed (exact command counts)</td><td>Nothing plausible — direct count</td></tr>
-<tr><td>95 skills are "unused"</td><td>Provisional — measured as <em>never typed as a command</em>; framework sub-skills and parent-invoked skills run without a typed command</td><td>Counting indirect invocations (parent skills, sub-agent calls) in the rich transcripts</td></tr>
+<tr><td>User command usage is head-heavy; top 3 = 66.5%</td><td>Evidence-backed (exact command counts)</td><td>Nothing plausible — direct count</td></tr>
+<tr><td>93 skills are "unused" by direct user command</td><td>Provisional — measured as <em>never typed as a command</em>; rich transcript parsing shows agents load many skills separately</td><td>Inventory classification that labels each tail skill as dead, new, library, parent-invoked, or agent-only</td></tr>
+<tr><td>Agent-side skill usage is larger than user direct usage</td><td>Evidence-backed for contract-loads: 9,125 events / 3,747 session-skill pairs</td><td>Deduping multiple reads inside a session would lower raw events but not erase the session-pair signal</td></tr>
 <tr><td><code>/investigate</code> is the top shadowed intent</td><td>Evidence-backed (~550 vs 166), keyword-classified</td><td>A stricter classifier that excludes rhetorical "why" questions could lower the 550</td></tr>
 <tr><td>Commit-push shadowing volume</td><td>Provisional — 211 tightened vs 696 loose; DB false positives in the loose count</td><td>Manual review of the ~485 delta prompts</td></tr>
 <tr><td>Codex = skill-dev bench</td><td>Evidence-backed (command mix)</td><td>—</td></tr>
@@ -284,19 +310,19 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
 <ul>
 <li><strong>Do nothing — the head is healthy.</strong> Rejected as a full answer: true for shipping, but it leaves the ~550 shadowed <code>/investigate</code> asks (the highest-value gap) on the table.</li>
 <li><strong>Auto-run <code>/investigate</code> on any "why" prompt.</strong> Rejected — too aggressive; a suggestion nudge preserves user control and avoids false triggers on rhetorical questions.</li>
-<li><strong>Delete all 95 unused skills now.</strong> Rejected — can't distinguish dead from new/library/indirect without the inventory audit first (Rec 2).</li>
+<li><strong>Delete all 93 direct-command-unused skills now.</strong> Rejected — can't distinguish dead from new/library/agent-only/indirect without the inventory audit first (Rec 2).</li>
 </ul>
 <h3>Source coverage gaps</h3>
 <ul>
 <li>Claude <code>history.jsonl</code> has no token/cost metadata; all dollar costs unavailable.</li>
-<li>Indirect skill invocations (framework sub-skills, parent-invoked skills, sub-agent skill calls) are not counted — only typed leading commands.</li>
-<li>Rich Claude transcripts (<code>~/.claude/projects/**</code>) and Codex rollups (<code>~/.codex/sessions/**</code>) were not parsed this run — compact prompt history only.</li>
+<li>Agent-side skill contract loads are counted, but semantic categories such as parent-invoked, framework-invoked, library-only, and genuinely dead still need inventory classification.</li>
+<li>Codex rollup token events were not parsed for this update; rich Codex records were used only for assistant messages/tool-call arguments.</li>
 <li>Intent buckets use first-match keyword classification and are not mutually exhaustive.</li>
 </ul>
 <h3>Downstream implications</h3>
 <ul>
 <li>Approving Rec 1 routes to <code>update-config</code> (a settings.json hook edit — local, reversible).</li>
-<li>Approving Rec 2 routes to <code>/skill-inventory</code> (skill-dev pack, installed ✓ per <code>.agents/project.json</code>).</li>
+<li>Approving Rec 2 routes to <code>/skill-inventory</code> (available in current session) to classify the 93-skill direct-command tail.</li>
 <li>Approving Rec 3 edits CLAUDE.md shared conventions, which propagates to future sessions repo-wide.</li>
 </ul>
 
@@ -438,29 +464,39 @@ Prior analyze-sessions pages hold the Codex token totals (e.g. <a href="analyze-
   }
 
   wire('chart-top-skills',
-    [{label:'/ship',value:1595},{label:'/ship-end',value:372},{label:'/investigate',value:166},
-     {label:'/sync',value:103},{label:'/targeted-skill-builder',value:100},{label:'/benchmark-test-skill',value:84},
-     {label:'/session-triage',value:77},{label:'/roadmap',value:73},{label:'/spec-interview',value:52},
-     {label:'/exec',value:47},{label:'/analyze-sessions',value:44},{label:'/plan-phase',value:40}],
-    {title:'Top 12 skills by invocation (Claude + Codex)'},
+    [{label:'/ship',value:1598},{label:'/ship-end',value:375},{label:'/investigate',value:166},
+     {label:'/sync',value:105},{label:'/benchmark-test-skill',value:84},{label:'/session-triage',value:77},
+     {label:'/roadmap',value:73},{label:'/spec-interview',value:53},{label:'/exec',value:50},
+     {label:'/analyze-sessions',value:44},{label:'/customer-discovery',value:40},{label:'/plan-phase',value:40}],
+    {title:'Top 12 direct user skill invocations (Claude + Codex)'},
     ['Skill','Invocations'],
-    [['/ship','1,595'],['/ship-end','372'],['/investigate','166'],['/sync','103'],['/targeted-skill-builder','100'],
-     ['/benchmark-test-skill','84'],['/session-triage','77'],['/roadmap','73'],['/spec-interview','52'],
-     ['/exec','47'],['/analyze-sessions','44'],['/plan-phase','40']]);
+    [['/ship','1,598'],['/ship-end','375'],['/investigate','166'],['/sync','105'],['/benchmark-test-skill','84'],
+     ['/session-triage','77'],['/roadmap','73'],['/spec-interview','53'],['/exec','50'],
+     ['/analyze-sessions','44'],['/customer-discovery','40'],['/plan-phase','40']]);
 
   wire('chart-concentration',
-    [{label:'Never invoked',value:95},{label:'Invoked once',value:27},{label:'Invoked 2–5×',value:24},{label:'Invoked >5×',value:36}],
-    {title:'182 repo skills by lifetime invocation tier', left:150},
+    [{label:'Never direct',value:93},{label:'Invoked once',value:29},{label:'Invoked 2-5x',value:27},{label:'Invoked >5x',value:35}],
+    {title:'184 active repo skills by direct user invocation tier', left:150},
     ['Invocation tier','Repo skills'],
-    [['Never invoked','95'],['Invoked once','27'],['Invoked 2–5×','24'],['Invoked >5×','36']]);
+    [['Never directly invoked','93'],['Invoked once','29'],['Invoked 2-5x','27'],['Invoked >5x','35']]);
+
+  wire('chart-actor-split',
+    [{label:'User direct invokes',value:3215},{label:'Agent contract loads',value:9125},
+     {label:'Agent session-skill pairs',value:3747},{label:'Agent recommendations',value:1267}],
+    {title:'Skill usage signals by actor', left:205},
+    ['Actor / signal','Count','Meaning'],
+    [['User direct invokes','3,215','Leading /skill or $skill prompts'],
+     ['Agent contract loads','9,125','Assistant-side SKILL.md loads'],
+     ['Agent session-skill pairs','3,747','Unique source:session:skill pairs with a contract load'],
+     ['Agent recommendations','1,267','Assistant-authored use/recommendation references']]);
 
   wire('chart-shadow',
     [{label:'"why is…" (investigate)',value:550},{label:'update docs + push',value:258},
      {label:'commit + push (git)',value:211},{label:'run/start app',value:61},{label:'update roadmap/todo',value:47}],
     {title:'Manual prompts that shadow an existing skill', left:200},
     ['Manual intent','Manual prompts','Covering skill (its uses)'],
-    [['"why is…"','~550','/investigate (166)'],['update docs + push','~258','/ship-end (372) · /reconcile-dev-docs (31)'],
-     ['commit + push','~211','/ship (1,595) · /ship-end (372)'],['run/start app','~61','/run (121)'],
+    [['"why is..."','~550','/investigate (166)'],['update docs + push','~258','/ship-end (375) · /reconcile-dev-docs (31)'],
+     ['commit + push','~211','/ship (1,598) · /ship-end (375)'],['run/start app','~61','/run (121)'],
      ['update roadmap/todo','~47','/roadmap (73)']]);
 })();
 </script>

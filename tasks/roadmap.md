@@ -11,10 +11,14 @@ Update `alignment/analyze-sessions-skill-usage-rates.html` with a reproducible b
 ### Plan
 
 - [x] Capture the visible `$analyze-sessions` prompt in `prompts/analyze-sessions/`.
-- [ ] Inspect the existing alignment page, session insight memory, and available Claude/Codex history sources.
-- [ ] Build or run a scriptable parser over the selected history scope to count skill invocation patterns by source and actor.
-- [ ] Render the results into the requested alignment HTML page, including counting rules, evidence samples, charts/tables, and recommendations.
-- [ ] Update the alignment index if needed, verify the page, update `.session-insights/`, and record the review in `tasks/todo.md`.
+- [x] Inspect the existing alignment page, session insight memory, and available Claude/Codex history sources.
+- [x] Build or run a scriptable parser over the selected history scope to count skill invocation patterns by source and actor.
+- [x] Render the results into the requested alignment HTML page, including counting rules, evidence samples, charts/tables, and recommendations.
+- [x] Update the alignment index if needed, verify the page, update `.session-insights/`, and record the review in `tasks/todo.md`.
+
+### Review
+
+The actor-split analysis was rendered into `alignment/analyze-sessions-skill-usage-rates.html` and indexed. The reproducible snapshot command is `node scripts/analyze-skill-usage-actors.mjs --cutoff 2026-07-04T20:45:12.007Z`; it confirms 3,215 direct user repo-skill invocations, 9,125 assistant-side contract-load events, 3,747 assistant session-skill pairs, and 1,267 assistant recommendation/use-reference events.
 
 ### Acceptance Criteria
 

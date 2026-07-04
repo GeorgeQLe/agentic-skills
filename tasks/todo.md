@@ -9,10 +9,10 @@ Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-histor
 ### Plan
 
 - [x] Capture the visible `$analyze-sessions` prompt.
-- [ ] Inspect existing alignment page and relevant session-history files.
-- [ ] Parse Claude and Codex history for skill invocations by actor.
-- [ ] Update the alignment page and index with the skill usage breakdown.
-- [ ] Verify the updated page/artifacts and document results.
+- [x] Inspect existing alignment page and relevant session-history files.
+- [x] Parse Claude and Codex history for skill invocations by actor.
+- [x] Update the alignment page and index with the skill usage breakdown.
+- [x] Verify the updated page/artifacts and document results.
 
 ### Acceptance Criteria
 
@@ -20,6 +20,21 @@ Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-histor
 - Counting rules are explicit enough to reproduce.
 - Existing unrelated worktree changes are preserved.
 - Alignment page verification passes or any failure is reported with the failing check.
+
+## Review
+
+Implemented:
+
+- Added `scripts/analyze-skill-usage-actors.mjs` to reproduce actor-split skill usage counts from Claude/Codex compact prompt histories and rich assistant transcripts.
+- Updated `alignment/analyze-sessions-skill-usage-rates.html` with user-invoked vs agent-invoked skill counts, including 3,215 direct user repo-skill invocations, 9,125 assistant-side skill contract-load events, 3,747 assistant session-skill pairs, and 1,267 assistant recommendation/use-reference events.
+- Updated `alignment/index.html` metadata for the amended review page.
+- Updated machine-local `.session-insights/` memory and watermark; it remains gitignored and should not be committed.
+
+Verified:
+
+- `node --check scripts/analyze-skill-usage-actors.mjs` passed.
+- `node scripts/analyze-skill-usage-actors.mjs --cutoff 2026-07-04T20:45:12.007Z` reproduced the page counts.
+- `node scripts/audit-alignment-pages.mjs alignment/analyze-sessions-skill-usage-rates.html` passed.
 
 # Current Task State
 
