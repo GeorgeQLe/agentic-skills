@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.30
+version: v0.31
 required_conventions: [alignment-page, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep
@@ -32,7 +32,7 @@ Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approva
 This skill runs the unified **5-stage design-tree flow** (`interrogation → research → design → plan → implement(scoped)`) from `DESIGN-TREE-LOOP.md`, scoped to the **UI-experiment branches** it grows (`ui_experiments[]` under one UX variation). The `## Process` steps below group by stage:
 
 - **Stage 0 — Interrogation**: the stage-zero loop in `## Interrogation Page` / `INTERROGATION-PAGE.md` plus the UI Assumptions Manifest — confirm scope, the selected UX variation branch, and the prototype-first boundary.
-- **Stage 1 — Research**: resolve context and gather references; consult the `design-inspirations` sub-skill for named patterns and conventions when inspiration is thin.
+- **Stage 1 — Research**: resolve context and gather references; consult approved `brainstorm-inspirations` and `take-inspiration` artifacts for named patterns, reference studies, and owner-routed design recommendations when inspiration is thin.
 - **Stage 2 — Design**: author the UI experiment packet and (full mode) the HTML visual mockup — `design/ui-[topic].md`, `design/ui-requirements-[topic].md`.
 - **Stage 3 — Plan**: the approved UI packet is the build-plan slice; the branch decision (approve/reject/retry) feeds the prototype build ledger.
 - **Stage 4 — Implement (scoped)**: write the UI packet, grow `ui_experiment` child branches under the UX variation, and pass the single binding alignment gate before any canonical write.
@@ -79,7 +79,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, route files, component directories, screenshots, and design artifacts when present.
    - Prefer `design/user-flow-*.md` and `design/**/flow-tree-*.yaml` for surface sequence, channels, visual UI candidates, route candidates, branches, decisions, states, failure paths, and low-fidelity wireframe notes before inferring UI requirements.
    - Prefer `design/ux-variations-*.md` (or product-path-scoped equivalents) for the selected UX variation branch, sibling variations, unresolved branch decisions, proposed progression paths, and branch-routing expectations.
-   - Read `design/**/design-inspirations-{topic}.md` if present and treat it as the pre-gathered "apps you admire" / reference-pattern input for mockup and spec work — named UI/UX patterns, conventions, component-library references, and annotated links. When absent, behavior is unchanged.
+   - Read `design/**/brainstorm-inspirations-{topic}.md` and `design/**/take-inspiration-{topic}-*.md` if present and treat them as approved reference-pattern input for mockup and spec work — candidate comparisons, named UI/UX patterns, reference studies, design-tree redlining, and owner-routed recommendations. When absent, behavior is unchanged.
    - If the request is for an existing UI, inspect the current implementation before interviewing.
    - If multiple apps or surfaces are plausible, ask the user which app, flow, or page to cover first.
    - If the interface has no credible surface/flow structure with visual UI candidates from a user-flow spec, existing routes, screenshot, wireframe, or explicit user prompt, stop and recommend `$user-flow-map [topic]` before UI requirements or layout decisions.
@@ -174,7 +174,7 @@ This skill already runs **one UX-variation branch per session**; this subsection
    - For material decisions, present options, a recommendation, rationale, tradeoffs, and mitigation.
    - Recommend familiar controls over novel patterns unless the product has a strong reason to deviate.
    - For frontend work, respect the existing design system, component library, and implementation patterns.
-   - Reference and inspiration questions are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input. When a `design/**/design-inspirations-{topic}.md` artifact exists (from `$design-inspirations`), it supplies that pre-gathered inspiration input, so you need not ask the reference question; still favor local project evidence and established conventions over external references.
+   - Reference and inspiration questions are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input. When `design/**/brainstorm-inspirations-{topic}.md` or `design/**/take-inspiration-{topic}-*.md` artifacts exist, they supply approved inspiration input, so you need not ask the reference question; still favor local project evidence and established conventions over external references.
 
 8. **Coverage checkpoint**
    - Before concluding, present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.

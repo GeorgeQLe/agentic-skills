@@ -105,6 +105,11 @@ function isOptionalAlignmentSkill(skillName) {
   return OPTIONAL_ALIGNMENT_SKILLS.has(skillName);
 }
 
+function alignmentOutputPath(skillName) {
+  if (skillName === "take-inspiration") return "alignment/take-inspiration-{topic}-{reference}.html";
+  return `alignment/${skillName}-{topic}.html`;
+}
+
 function optionalConventionTemplate(skillName) {
   const automaticIntro =
     "When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.";
@@ -164,6 +169,7 @@ function bundledContentFor(skillName, skillPath) {
     (isOptionalAlignmentSkill(skillName) ? optionalConventionTemplate(skillName) : conventionTemplate);
   const body = template
     .replaceAll("{skill-name}", skillName)
+    .replaceAll(`alignment/${skillName}-{topic}.html`, alignmentOutputPath(skillName))
     .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")
     .replace(/\n*\{\{SKILL_CONTEXT_INTAKE\}\}\n*/, contextText ? `\n\n${contextText}\n\n` : "\n\n")
     .replace(/\n*\{\{SKILL_VISUAL_TIER\}\}\n*/, tierText ? `\n\n${tierText}\n\n` : "\n\n")
@@ -183,9 +189,9 @@ const SHARED_RESOLVER_STUB_PREFIX = "Follow the shared alignment-page convention
 
 function stubParagraph(skillName) {
   if (isOptionalAlignmentSkill(skillName)) {
-    return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`alignment/${skillName}-{topic}.html\`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.`;
+    return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`${alignmentOutputPath(skillName)}\`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.`;
   }
-  return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`alignment/${skillName}-{topic}.html\`.`;
+  return `Follow the shared alignment-page convention via the packaged convention resolver; output path is \`${alignmentOutputPath(skillName)}\`.`;
 }
 
 function isPointerOrStub(paragraph) {
@@ -213,7 +219,8 @@ const VISUAL_TIER_SKILLS = new Set([
 const PROTOTYPE_TIER_SKILLS = new Set([
   'ux-variations', 'prototype', 'design-system', 'ui-interview', 'user-flow-map',
   'consolidate-prototypes', 'brainstorm', 'game-prototype-test', 'game-store-page-test',
-  'landing-copy', 'uat-guide', 'animation-design-planner',
+  'landing-copy', 'uat-guide', 'animation-design-planner', 'brainstorm-inspirations',
+  'take-inspiration',
 ]);
 
 function skillVisualTier(skillName, skillPath) {
@@ -428,7 +435,8 @@ function skillSpecificGates(skillName, skillPath) {
     "user-flow-map": `**User-flow-map gates.** Render surfaced flow assumptions, the proposed flow map, branch and decision coverage, state coverage, failure/recovery and handoff coverage, low-fidelity wireframe notes, output-location/change-scope decisions, and the downstream handoff choices to UI requirements as gates before writing final flow deliverables. The handoff gate must offer stop/clear-context and continue-now options, and must state that continuing immediately still requires the next skill's own interaction gates. When the approval YAML is consumed in an already-fresh session, default to continue-now and do not prompt another context clear; offer stop/clear-context only when consuming in the same session that built the page. ${outputGateDedup}`,
     "ui-interview": `**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, output-location/change-scope decisions, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals. Every \`ui-interview\` review page must include a plain-language Interview Stage section that names the invocation, distinguishes requirements-only review from a live page-by-page interview, states what user/agent interview work has already happened or was inferred from approved upstream evidence, and tells the reviewer whether the next action is section feedback, compiled approval YAML, or resuming the interview. Every page must include Interview provenance with exactly one of \`live-ui-interview\`, \`evidence-synthesis-with-explicit-skip\`, or \`invalid-missing-ui-interview\`; upstream approval alone is not interview completion. Evidence-only pages must be labeled \`evidence-synthesis review\` and route unresolved decisions to a resumed \`ui-interview\`. Render the working packet as structured HTML sections, lists, and real HTML tables; do not use a single raw Markdown \`<pre><code>\` block as the primary review surface. Raw Markdown may appear only as a supplemental source view after the rendered packet. ${outputGateDedup}`,
     "ux-variations": `**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, output-location/change-scope decisions, and coverage checkpoint as gates before writing final variation plans. ${outputGateDedup}`,
-    "design-inspirations": `**Inspiration-feeder gates.** Render the inspiration scope (surface, product class, reference products, anti-patterns to avoid) as a scope gate before any synthesized web research. Render named-pattern/convention coverage, component-library references, competitor/comparable UX notes, and annotated reference links with per-item source/link evidence and a confidence marker. Render the honest pixel-limit caveat as a first-class gate — this brief captures named patterns, conventions, and links, not a rendered pixel-level moodboard — so the reviewer confirms the scope limit explicitly. Render output-location/change-scope decisions (canonical brief path, search-log path, and the flow-tree \`source_artifacts[]\` reference) as gates before writing the canonical inspiration brief. ${outputGateDedup}`,
+    "brainstorm-inspirations": `**Inspiration-board gates.** Render the candidate-survey scope, design-tree inputs, candidate categories, source plan, and anti-patterns as scope gates before synthesized web research. Render the structured inspiration board with comparison cards or matrices for brand personality, brand identity, visual style, color, typography, layout, UI components, UX patterns, motion, imagery, copy/voice, IA, data visualization, spacing/rhythm, design-system implications, competitive references, and design-tree redlining when relevant. Render observed evidence separately from inference, include confidence markers, and make clear the board is not a pixel-perfect moodboard. Render output-location/change-scope decisions for the canonical \`design/brainstorm-inspirations-{topic}.md\` artifact and flow-tree \`source_artifacts[]\` reference before writing. ${outputGateDedup}`,
+    "take-inspiration": `**Reference-inspiration gates.** Render the chosen reference, why the user chose it, the approved/denied study lenses, design-tree inputs, source plan, and scope boundaries as gates before deep research. Render the reference-study board with evidence, screenshots/links when available, observed-vs-inferred findings, confidence markers, design-tree synthesis, and COA gates for adopt, adapt, reject, add branch, revise branch, prune branch, update design system, refactor UI/prototype, or route to an owning skill. Render output-location/change-scope decisions for the canonical \`design/take-inspiration-{topic}-{reference}.md\` artifact and flow-tree \`source_artifacts[]\` reference before writing. ${outputGateDedup}`,
     "spec-interview": `**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, output-location/change-scope decisions, and post-approval route as gates before writing or replacing specs. ${outputGateDedup}`,
     "consolidate-prototypes": `**Consolidation-specific gates.** Render UAT evidence coverage, source prototype verdicts, selected MVP decisions, rejected alternatives, unresolved assumptions, AFPS graduation output, output-location/change-scope decisions, and coverage checkpoint as gates. ${outputGateDedup}`,
     "logic-wiring": `**Prototype-specific gates.** Render source-spec coverage, consumed build-ui-screens screens, prototype scope, flow-reachability acceptance, non-goals and deferred infrastructure, route/file destinations, file mutation scope, validation plan, and post-approval UAT route as gates. ${outputGateDedup}`,

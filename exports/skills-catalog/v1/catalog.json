@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "373045a91feab43601534213cc4d8b4841b67dff",
-  "generated_at": "2026-07-04T06:25:16.440Z",
-  "source_fingerprint": "1b2d02b2610413b004ee4947ceeda2d217b32f922bc65931f7d80091172dcc90",
-  "source_count": 455,
-  "skill_count": 411,
+  "source_commit": "195c9272e98705165fbdecc3fbf7ddc130de277a",
+  "generated_at": "2026-07-04T19:17:44.337Z",
+  "source_fingerprint": "5e55514787ac463d64e1d9c65d57a2bdd1c7bc28cd3ded9d0eb6c662c79953cb",
+  "source_count": 457,
+  "skill_count": 413,
   "pack_count": 42,
   "deck_count": 5,
   "set_count": 3,
@@ -7938,6 +7938,35 @@
       ]
     },
     {
+      "id": "pack-product-design-claude-brainstorm-inspirations",
+      "name": "brainstorm-inspirations",
+      "title": "Brainstorm Inspirations",
+      "description": "Survey and compare possible product-design inspirations for current design-tree flows, surfaces, UX branches, UI direction, visual language, and product class",
+      "type": "research",
+      "contextIntake": "scoped",
+      "visualTier": "document",
+      "version": "v0.4",
+      "requiredConventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "argumentHint": "[optional: topic, surface, product class, UX branch, or design question]",
+      "platform": "claude",
+      "command": "/brainstorm-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "path": "packs/product-design/claude/brainstorm-inspirations/SKILL.md",
+      "mirrorKey": "brainstorm-inspirations",
+      "tags": [
+        "brainstorm",
+        "claude",
+        "inspirations",
+        "pack",
+        "product-design",
+        "research"
+      ]
+    },
+    {
       "id": "pack-product-design-claude-brainstorm",
       "name": "brainstorm",
       "title": "Brainstorm",
@@ -7973,7 +8002,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8074,35 +8103,6 @@
         "experiment",
         "pack",
         "product-design"
-      ]
-    },
-    {
-      "id": "pack-product-design-claude-design-inspirations",
-      "name": "design-inspirations",
-      "title": "Design Inspirations",
-      "description": "Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills",
-      "type": "research",
-      "contextIntake": "scoped",
-      "visualTier": "document",
-      "version": "v0.3",
-      "requiredConventions": [
-        "alignment-page",
-        "design-tree-loop"
-      ],
-      "argumentHint": "[optional: surface, product class, or reference products]",
-      "platform": "claude",
-      "command": "/design-inspirations",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/claude/design-inspirations/SKILL.md",
-      "mirrorKey": "design-inspirations",
-      "tags": [
-        "claude",
-        "design",
-        "inspirations",
-        "pack",
-        "product-design",
-        "research"
       ]
     },
     {
@@ -8333,6 +8333,35 @@
       ]
     },
     {
+      "id": "pack-product-design-claude-take-inspiration",
+      "name": "take-inspiration",
+      "title": "Take Inspiration",
+      "description": "Study one specific product or reference through an approved lens, synthesize it against the current design tree, and recommend owner-routed design actions",
+      "type": "research",
+      "contextIntake": "interview",
+      "visualTier": "document",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "argumentHint": "<reference product/site/app/pattern> [optional: topic, surface, or lens]",
+      "platform": "claude",
+      "command": "/take-inspiration",
+      "scope": "pack",
+      "pack": "product-design",
+      "path": "packs/product-design/claude/take-inspiration/SKILL.md",
+      "mirrorKey": "take-inspiration",
+      "tags": [
+        "claude",
+        "inspiration",
+        "pack",
+        "product-design",
+        "research",
+        "take"
+      ]
+    },
+    {
       "id": "pack-product-design-claude-ui-interview",
       "name": "ui-interview",
       "title": "Ui Interview",
@@ -8340,7 +8369,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.30",
+      "version": "v0.31",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -8422,6 +8451,35 @@
       ]
     },
     {
+      "id": "pack-product-design-codex-brainstorm-inspirations",
+      "name": "brainstorm-inspirations",
+      "title": "Brainstorm Inspirations",
+      "description": "Survey and compare possible product-design inspirations for current design-tree flows, surfaces, UX branches, UI direction, visual language, and product class",
+      "type": "research",
+      "contextIntake": "scoped",
+      "visualTier": "document",
+      "version": "v0.4",
+      "requiredConventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "argumentHint": "[optional: topic, surface, product class, UX branch, or design question]",
+      "platform": "codex",
+      "command": "$brainstorm-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "path": "packs/product-design/codex/brainstorm-inspirations/SKILL.md",
+      "mirrorKey": "brainstorm-inspirations",
+      "tags": [
+        "brainstorm",
+        "codex",
+        "inspirations",
+        "pack",
+        "product-design",
+        "research"
+      ]
+    },
+    {
       "id": "pack-product-design-codex-brainstorm",
       "name": "brainstorm",
       "title": "Brainstorm",
@@ -8457,7 +8515,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8558,35 +8616,6 @@
         "experiment",
         "pack",
         "product-design"
-      ]
-    },
-    {
-      "id": "pack-product-design-codex-design-inspirations",
-      "name": "design-inspirations",
-      "title": "Design Inspirations",
-      "description": "Gather UI/UX design inspiration once via web research — named patterns, interaction/layout conventions, component-library references, and annotated links — into a durable cited brief that feeds the prototype-phase design skills",
-      "type": "research",
-      "contextIntake": "scoped",
-      "visualTier": "document",
-      "version": "v0.3",
-      "requiredConventions": [
-        "alignment-page",
-        "design-tree-loop"
-      ],
-      "argumentHint": "[optional: surface, product class, or reference products]",
-      "platform": "codex",
-      "command": "$design-inspirations",
-      "scope": "pack",
-      "pack": "product-design",
-      "path": "packs/product-design/codex/design-inspirations/SKILL.md",
-      "mirrorKey": "design-inspirations",
-      "tags": [
-        "codex",
-        "design",
-        "inspirations",
-        "pack",
-        "product-design",
-        "research"
       ]
     },
     {
@@ -8817,6 +8846,35 @@
       ]
     },
     {
+      "id": "pack-product-design-codex-take-inspiration",
+      "name": "take-inspiration",
+      "title": "Take Inspiration",
+      "description": "Study one specific product or reference through an approved lens, synthesize it against the current design tree, and recommend owner-routed design actions",
+      "type": "research",
+      "contextIntake": "interview",
+      "visualTier": "document",
+      "version": "v0.0",
+      "requiredConventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "argumentHint": "<reference product/site/app/pattern> [optional: topic, surface, or lens]",
+      "platform": "codex",
+      "command": "$take-inspiration",
+      "scope": "pack",
+      "pack": "product-design",
+      "path": "packs/product-design/codex/take-inspiration/SKILL.md",
+      "mirrorKey": "take-inspiration",
+      "tags": [
+        "codex",
+        "inspiration",
+        "pack",
+        "product-design",
+        "research",
+        "take"
+      ]
+    },
+    {
       "id": "pack-product-design-codex-ui-interview",
       "name": "ui-interview",
       "title": "Ui Interview",
@@ -8824,7 +8882,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": "prototype",
-      "version": "v0.30",
+      "version": "v0.31",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop",
@@ -11623,7 +11681,7 @@
         "claude",
         "codex"
       ],
-      "skillCount": 34,
+      "skillCount": 36,
       "path": "packs/product-design/PACK.md"
     },
     {

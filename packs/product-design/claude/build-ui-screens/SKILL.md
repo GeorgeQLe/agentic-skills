@@ -2,7 +2,7 @@
 name: build-ui-screens
 description: Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.
 type: execution
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[approved-ui-experiment]"
 context_intake: scoped
@@ -25,7 +25,7 @@ Before building, verify the approved branch is explicit:
 
 - Read `design/**/flow-tree-*.yaml` and resolve the named `ui_experiments[]` branch. If `$ARGUMENTS` is missing, choose the first approved UI experiment branch that has no visual screens yet (no `build_ledger[]` past `minimum-ui-reached` and no `experiment_path`/`review_evidence`), honoring any recorded branch-order override.
 - Read the branch packet from `design/ui-[topic].md`, `design/ui-requirements-[topic].md`, or product-path-scoped equivalents.
-- Read the parent `design/ux-variations-[topic].md`, `design/user-flow-[topic].md`, and any relevant `design/design-inspirations-{topic}.md` when present.
+- Read the parent `design/ux-variations-[topic].md`, `design/user-flow-[topic].md`, and any relevant `design/brainstorm-inspirations-{topic}.md` or `design/take-inspiration-{topic}-*.md` when present.
 - Stop if no UI branch has an explicit approve decision. Route back to `/ui-interview [specific-ux-variation]`.
 - Stop if the requested work needs production infrastructure. Record the deferred infrastructure and route to prototype evidence first.
 

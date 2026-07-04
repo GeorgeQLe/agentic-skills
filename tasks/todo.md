@@ -1,6 +1,43 @@
 # Current Task State
 
-## Current Implementation - Uninstall-Global Ownership Investigation
+## Review - Hard-Rename Design Inspiration Workflows
+
+Project: `agentic-skills`.
+
+### Goal
+
+Replace active `design-inspirations` with `brainstorm-inspirations` and add `take-inspiration` as separate product-design skills, preserving archives and updating design-tree contracts, consumers, generated bundles, metadata, and tests.
+
+### Plan
+
+- [x] Inspect current skill mirrors, pack metadata, conventions, generated bundles, references, and tests.
+- [x] Archive and rename `design-inspirations` to `brainstorm-inspirations` in both mirrors.
+- [x] Add mirrored `take-inspiration` skills with initial changelogs and required bundled conventions.
+- [x] Update design-tree convention, alignment-page routing, consumers, metadata, catalog/manifest outputs, and generated bundles.
+- [x] Add focused layer-1 coverage for rename, optional feeder/amendment role, `source_artifacts[]`, structured board contract, and route exclusion.
+- [x] Run required verification commands and fix failures.
+- [x] Commit and push intended changes.
+
+### Review
+
+Verified:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed: 21 tests.
+- `node scripts/upgrade-design-tree-loop.mjs --check` passed: 24 skills checked, 0 bundle writes.
+- `node scripts/upgrade-alignment-page.mjs --check` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills, 0 violations.
+- `npm run skillpacks:verify` passed.
+- `scripts/validate-skills-catalog-export.sh` passed after staging regenerated catalog artifacts.
+- `git diff --check` passed.
+
+Implemented:
+
+- Hard-renamed active `design-inspirations` mirrors to `brainstorm-inspirations`, archived v0.3, bumped the active skill to v0.4, and removed active callable `design-inspirations`.
+- Added mirrored `take-inspiration` skills at v0.0.
+- Updated design-tree loop conventions, alignment page routing, pack metadata, generated convention bundles, catalog exports, package manifest, and skillmap artifacts.
+- Updated `ui-interview` and `build-ui-screens` consumers to read `brainstorm-inspirations` and `take-inspiration` artifacts.
+
+## Review - Uninstall-Global Ownership Investigation
 
 Project: `agentic-skills`.
 

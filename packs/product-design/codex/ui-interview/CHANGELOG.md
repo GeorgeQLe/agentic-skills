@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.31 - 2026-07-04
+
+- Updated inspiration inputs for the hard rename: read approved `design/**/brainstorm-inspirations-{topic}.md` and `design/**/take-inspiration-{topic}-*.md` artifacts instead of the retired active `design-inspirations` skill.
+
 ## v0.30 - 2026-07-03
 
 - Required UI review gates with wording around missing coverage, rejected branches, retry, or revision to use explicit `data-approval-effect` metadata for every radio option.

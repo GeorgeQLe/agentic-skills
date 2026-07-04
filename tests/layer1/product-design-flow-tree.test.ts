@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -243,6 +243,91 @@ describe("product-design flow tree artifact boundaries", () => {
     });
   });
 
+  it("hard-renames design inspiration workflows without changing the fixed route", () => {
+    const schema = JSON.parse(read("design/flow-tree.schema.json"));
+    const route = schema.properties.route.prefixItems.map((item: { const: string }) => item.const);
+
+    expect(route).toEqual([
+      "user-flow-map",
+      "ux-variations",
+      "ui-interview",
+      "logic-wiring",
+      "consolidate-prototypes",
+      "spec-interview",
+    ]);
+    expect(route).not.toContain("brainstorm-inspirations");
+    expect(route).not.toContain("take-inspiration");
+    expect(route).not.toContain("design-inspirations");
+
+    const generator = read("scripts/upgrade-design-tree-loop.mjs");
+    expect(generator).toContain('"brainstorm-inspirations"');
+    expect(generator).toContain('"take-inspiration"');
+    expect(generator).not.toContain('"design-inspirations"');
+
+    for (const mirror of mirrors) {
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/brainstorm-inspirations/SKILL.md`))).toBe(true);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/take-inspiration/SKILL.md`))).toBe(true);
+      expect(existsSync(resolve(ROOT, `packs/product-design/${mirror}/design-inspirations/SKILL.md`))).toBe(false);
+
+      const brainstorm = read(`packs/product-design/${mirror}/brainstorm-inspirations/SKILL.md`);
+      const take = read(`packs/product-design/${mirror}/take-inspiration/SKILL.md`);
+
+      expect(brainstorm).toContain("name: brainstorm-inspirations");
+      expect(brainstorm).toContain("version: v0.4");
+      expect(brainstorm).toContain("invocation: optional-feeder");
+      expect(brainstorm).toContain("fixed route position");
+      expect(brainstorm).toContain("source_artifacts[]");
+      expect(brainstorm).toContain("design/brainstorm-inspirations-{topic}.md");
+      expect(brainstorm).toContain("alignment/brainstorm-inspirations-{topic}.html");
+      expect(brainstorm).toContain("structured HTML board");
+      expect(brainstorm).toContain("must not be raw Markdown-only");
+      expectContainsAll(brainstorm, [
+        "Brand personality",
+        "Brand identity",
+        "Visual style",
+        "Color system",
+        "Typography",
+        "Layout",
+        "UI components",
+        "UX patterns",
+        "Motion",
+        "Illustration and imagery",
+        "Copy and voice",
+        "Information architecture",
+        "Data visualization",
+        "Spacing and rhythm",
+        "Design system implications",
+        "Competitive references",
+        "Design-tree redlining/recommendations",
+      ]);
+      expect(brainstorm).toContain("design/**/flow-tree-*.yaml");
+      expect(brainstorm).toContain("Use `research/.progress.yaml` only when the inspiration work would create or compare a materially different product path or product line.");
+
+      expect(take).toContain("name: take-inspiration");
+      expect(take).toContain("version: v0.0");
+      expect(take).toContain("invocation: optional-amendment");
+      expect(take).toContain("fixed route position");
+      expect(take).toContain("source_artifacts[]");
+      expect(take).toContain("design/take-inspiration-{topic}-{reference}.md");
+      expect(take).toContain("alignment/take-inspiration-{topic}-{reference}.html");
+      expect(take).toContain("structured reference-study board");
+      expect(take).toContain("Structured board required");
+      expectContainsAll(take, [
+        "adopt a pattern or principle as-is",
+        "adapt a pattern to fit current constraints",
+        "reject a reference aspect and state why",
+        "add a branch",
+        "revise a branch",
+        "prune a branch",
+        "update the design system",
+        "refactor UI/prototype work",
+        "route to a downstream or owning skill",
+      ]);
+      expect(take).toContain("design/**/flow-tree-*.yaml");
+      expect(take).toContain("Use `research/.progress.yaml` only when the reference study would create or compare a materially different product path or product line.");
+    }
+  });
+
   it("requires deterministic branch-order metadata on flow-tree branches", () => {
     const schema = JSON.parse(read("design/flow-tree.schema.json"));
     const userFlowBranch = schema.$defs.user_flow_branch;
@@ -432,7 +517,7 @@ describe("product-design flow tree artifact boundaries", () => {
 
       expectContainsAll(buildUiScreens, [
         "name: build-ui-screens",
-        "version: v0.2",
+        "version: v0.3",
         "Build the visual UI screens for one approved UI branch",
         "fake, fixture, local, or in-memory data",
         "first-value journey",
@@ -836,7 +921,7 @@ describe("product-design flow tree artifact boundaries", () => {
     const result = spawnSync(process.execPath, [DESIGN_TREE_LOOP_GENERATOR, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("design tree loop bundles checked: 22 skills");
+    expect(result.stdout).toContain("design tree loop bundles checked: 24 skills");
     expect(result.stdout).toContain("0 bundle write(s)");
   });
 });

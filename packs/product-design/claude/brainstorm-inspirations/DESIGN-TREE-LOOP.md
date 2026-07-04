@@ -1,4 +1,4 @@
-# Design Tree Loop - design-inspirations
+# Design Tree Loop - brainstorm-inspirations
 
 Generated from `docs/design-tree-loop-convention.md`. Edit the canonical docs file and run `scripts/upgrade-design-tree-loop.mjs`; do not hand-edit this bundle.
 
@@ -17,8 +17,8 @@ Generated from `docs/design-tree-loop-convention.md`. Edit the canonical docs fi
 ## Why this exists
 
 The design-phase skills — `user-flow-map`, `key-moments`, `state-model`, `ux-variations`, `ui-interview`,
-`build-ui-screens`, `logic-wiring`, `consolidate-prototypes`, `spec-interview`, and their subskills
-`design-inspirations` and `uat` — were previously split across three loop conventions
+`build-ui-screens`, `logic-wiring`, `consolidate-prototypes`, `spec-interview`, optional inspiration
+feeders (`brainstorm-inspirations`, `take-inspiration`), and `uat` — were previously split across three loop conventions
 (Pattern A research substeps, the prototype session loop, and the implementation exec loop).
 They share one job: **grow a design tree from a product concept to a runnable, validated,
 spec-ready MVP**, branching through user flows, per-flow domain models, UX variations, UI
@@ -230,7 +230,7 @@ cheap (same near-empty-session judgment as `docs/research-session-loop-conventio
 | Stage | Name | What it does | Heavy? |
 |---|---|---|---|
 | **0** | **Interrogation** | The stage-zero user↔agent alignment loop (`INTERROGATION-PAGE.md`): build one HTML round page per turn at `interrogation/{skill}-r{N}-{branch}.html`, loop until the **confidence gate** passes. Cannot advance until every interview area is covered or waived. | usually folds with stage 1 setup |
-| **1** | **Research** | Gather what the skill needs that is not derivable from the repo — references (`design-inspirations`), prior art, domain evidence, framework selection. Run **as needed**; skip when the repo already carries the context. | as needed |
+| **1** | **Research** | Gather what the skill needs that is not derivable from the repo — inspiration artifacts (`brainstorm-inspirations`, `take-inspiration`), prior art, domain evidence, framework selection. Run **as needed**; skip when the repo already carries the context. | as needed |
 | **2** | **Design** | Author the scoped design — the per-node `_working` drafts: flow structure, the domain model, the UX variations, the UI experiment, the consolidation choices. | yes |
 | **3** | **Plan-to-implement** | Produce the **build-plan slice** the implement stage (or downstream `logic-wiring`) will realize: ordered, scoped, with acceptance criteria. | folds with stage 2 for small scope |
 | **4** | **Implement (scoped)** | Produce the skill's scope-appropriate deliverable (see below), grow the tree's child nodes, and pass the **single binding alignment gate** (§4) before any canonical write. | yes |
@@ -305,7 +305,8 @@ the HTML page, not replacement of canonical design Markdown/YAML.
 |---|---|---|
 | **Root orchestrator** | `user-flow-map` | Creates the design-tree root and the `flow-tree-{topic}.yaml` manifest; grows one user-flow branch per flow. Owns the build-plan scaffold (`--prototype-build-plan`). `invocation: orchestrator`. |
 | **Pipeline** | `key-moments`, `state-model`, `ux-variations`, `ui-interview`, `build-ui-screens`, `logic-wiring`, `consolidate-prototypes`, `spec-interview` | Resolves the **next pending branch** from the tree, runs its 5-stage flow on that branch, grows the branch's children, and **stops**. One branch per heavy session. `key-moments` and `state-model` are pipeline skills but **not route positions** — they are invoked from `user-flow-map`'s handoff, not from a fixed route step. |
-| **Subskill** | `design-inspirations` (parent: `ui-interview`), `uat` (parents: `logic-wiring`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own research/checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
+| **Optional feeder/amendment** | `brainstorm-inspirations`, `take-inspiration` | Invoked when the user or an owning design-tree skill needs external inspiration evidence. They write approved artifacts into `design/**` and add those paths to flow-tree `source_artifacts[]`; they do **not** occupy the fixed route tuple, do not add schema fields, and route actual tree mutations to the owning skill. |
+| **Subskill** | `uat` (parents: `logic-wiring`, `consolidate-prototypes`, exec-loop) | Invoked **inline by a parent**; enters at its own checklist stage; does **no downstream routing** — it returns control to the parent, which owns the handoff. |
 
 ### Per-branch iteration contract (pipeline skills)
 
@@ -523,8 +524,8 @@ recommended. State this only at the setup stop; do not repeat it at every per-un
 
 Continue-vs-stop framing follows the routing rules: when the stop carries heavy build context,
 offer stop/clear-context-versus-continue; when already cold, default to continue-now with the
-resolved command in `## Invoke With YAML`. Only the setup stop carries the one-time single-session tradeoff note above. Subskills (`design-inspirations`, `uat`) emit a **parent-owned** handoff
-only — they hand results back to the invoking parent and do **not** route downstream.
+resolved command in `## Invoke With YAML`. Only the setup stop carries the one-time single-session tradeoff note above. Optional inspiration feeders emit owner-routed recommendations only, and `uat` emits a **parent-owned** handoff
+only — they hand results back to the invoking/owning skill and do **not** route downstream on their own.
 
 ---
 
@@ -538,6 +539,10 @@ only — they hand results back to the invoking parent and do **not** route down
 - `user-flow-map` hands off to `key-moments` to rank/order the flows by proof priority before
   `state-model`/`ux-variations` grow the promoted branches. `key-moments` writes only existing
   flow-tree ordering fields and is **not a route position**.
+- `brainstorm-inspirations` and `take-inspiration` are optional feeder/amendment skills. They
+  read `design/**/flow-tree-*.yaml`, write approved inspiration artifacts under `design/**`, and
+  add those artifacts to `source_artifacts[]`; they are **not route positions** and any actual
+  branch, UI, design-system, prototype, or spec mutation routes to the owning design-tree skill.
 - `ux-variations` requires the branch's `model_ref` confirmed; do not grow UX branches first.
 - Route an approved UI branch to `build-ui-screens` to build the visual screens, then to
   `logic-wiring` to wire them clickable. `build-ui-screens` is a branch screen builder, not a
@@ -563,8 +568,10 @@ only — they hand results back to the invoking parent and do **not** route down
   ui-interview → logic-wiring → consolidate-prototypes → spec-interview`), with
   `research-roadmap --post-prototype` as the graduation-aware cleanup pass between
   consolidation and specification. `state-model` and `key-moments` are
-  **invoked from `user-flow-map`'s handoff**, not route positions — keeping the route stable
-  while the model rides each branch and proof-ordering shapes branch growth.
+  **invoked from `user-flow-map`'s handoff**, while `brainstorm-inspirations` and
+  `take-inspiration` are optional feeder/amendment invocations; none of them are route
+  positions, keeping the route stable while the model rides each branch and proof-ordering shapes
+  branch growth.
 
 ---
 
@@ -615,3 +622,8 @@ only — they hand results back to the invoking parent and do **not** route down
   built by `logic-wiring`; `consolidate-prototypes` carries probe evidence into AFPS graduation,
   and `spec-interview` locks the final production platform decision. The six-step route tuple is
   unchanged.
+- **Inspiration workflow hard rename.** The active `design-inspirations` skill was hard-renamed
+  to `brainstorm-inspirations` and narrowed to a survey-and-compare inspiration board. A separate
+  `take-inspiration` skill studies one user-named reference through an approved lens. Both are
+  optional feeder/amendment skills that write approved artifacts to `source_artifacts[]`; neither
+  appears in the six-step route tuple.

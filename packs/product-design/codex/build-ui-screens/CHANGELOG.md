@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-04
+
+- Updated optional inspiration inputs for the hard rename: read `design/brainstorm-inspirations-{topic}.md` and `design/take-inspiration-{topic}-*.md` artifacts when present.
+
 ## v0.2 - 2026-06-26
 
 - Renamed the skill from `create-ui-experiment` to `build-ui-screens` (flow-walk re-cut). A deprecated `create-ui-experiment` alias still routes here.

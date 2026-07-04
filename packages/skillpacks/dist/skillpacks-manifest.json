@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "21ff76a5ea09429f0e6a73c097d5d474295e249f7fababb45cdc9ea7488853bc",
+  "source_fingerprint": "af749d5d7eed2bf43e74b28f1f812293fc6403fdb8846cb1bda7b78fbf3e0a38",
   "packs": [
     {
       "name": "agent-bridge",
@@ -538,11 +538,11 @@
       ],
       "skills": [
         "brainstorm",
+        "brainstorm-inspirations",
         "build-ui-screens",
         "consolidate-prototypes",
         "consolidate-variations",
         "create-ui-experiment",
-        "design-inspirations",
         "design-system",
         "eval-ideas",
         "feature-interview",
@@ -551,11 +551,12 @@
         "prototype",
         "spec-interview",
         "state-model",
+        "take-inspiration",
         "ui-interview",
         "user-flow-map",
         "ux-variations"
       ],
-      "skill_count": 17
+      "skill_count": 18
     },
     {
       "name": "product-testing",
@@ -8526,6 +8527,31 @@
       ]
     },
     {
+      "id": "pack-product-design-claude-brainstorm-inspirations",
+      "name": "brainstorm-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "claude",
+      "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/claude/brainstorm-inspirations/SKILL.md",
+      "installable": true,
+      "content_sha256": "69648e7af06e882ad904a4d0e0052421f7d260f5a052a14bea041c3c35f6bc87",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3"
+      ],
+      "command": "/brainstorm-inspirations",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-claude-brainstorm",
       "name": "brainstorm",
       "scope": "pack",
@@ -8559,7 +8585,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8568,10 +8594,11 @@
       ],
       "path": "packs/product-design/claude/build-ui-screens/SKILL.md",
       "installable": true,
-      "content_sha256": "1d5f4259ab2e0a56e21b34d4b9e2095a9954bafd7eb038d9d089441b81b8cad2",
+      "content_sha256": "612307ad302a95a3e7693914ec803a732c5b3e9bea933e579dc996d478ccdbbe",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/build-ui-screens",
       "deck_memberships": []
@@ -8652,30 +8679,6 @@
       "content_sha256": "13a0cceea8450660963d05a55c3d70cced96fb08a5a8339b5c1b384b5745e9dc",
       "archive_versions": [],
       "command": "/create-ui-experiment",
-      "deck_memberships": []
-    },
-    {
-      "id": "pack-product-design-claude-design-inspirations",
-      "name": "design-inspirations",
-      "scope": "pack",
-      "pack": "product-design",
-      "platform": "claude",
-      "version": "v0.3",
-      "deprecated": false,
-      "replaced_by": null,
-      "required_conventions": [
-        "alignment-page",
-        "design-tree-loop"
-      ],
-      "path": "packs/product-design/claude/design-inspirations/SKILL.md",
-      "installable": true,
-      "content_sha256": "5fbf39bf5cfada9aa2580c89c92e8a1762a063b6e878267508c7593118c27dce",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2"
-      ],
-      "command": "/design-inspirations",
       "deck_memberships": []
     },
     {
@@ -8909,12 +8912,32 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-claude-take-inspiration",
+      "name": "take-inspiration",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/claude/take-inspiration/SKILL.md",
+      "installable": true,
+      "content_sha256": "6886571e274c3bc0b009a6d921078213620c8c2af1a1c43d85b28ee05a9787bb",
+      "archive_versions": [],
+      "command": "/take-inspiration",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-claude-ui-interview",
       "name": "ui-interview",
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.30",
+      "version": "v0.31",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8924,7 +8947,7 @@
       ],
       "path": "packs/product-design/claude/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "e618729341a78259ce04fd3b0f20748d72820f366c63ecc62f8aaed959b0b52b",
+      "content_sha256": "731a5f791ad0e63710524fdda05608f99eff7c5ce3f6cb6e985e9ff936681391",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8950,6 +8973,7 @@
         "v0.28",
         "v0.29",
         "v0.3",
+        "v0.30",
         "v0.4",
         "v0.5",
         "v0.6",
@@ -9056,6 +9080,31 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-codex-brainstorm-inspirations",
+      "name": "brainstorm-inspirations",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "codex",
+      "version": "v0.4",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/codex/brainstorm-inspirations/SKILL.md",
+      "installable": true,
+      "content_sha256": "69c10730ff30359ca418cb762cad87af18c02da13ea046c433364de0f0b18271",
+      "archive_versions": [
+        "v0.0",
+        "v0.1",
+        "v0.2",
+        "v0.3"
+      ],
+      "command": "$brainstorm-inspirations",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-codex-brainstorm",
       "name": "brainstorm",
       "scope": "pack",
@@ -9089,7 +9138,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9098,10 +9147,11 @@
       ],
       "path": "packs/product-design/codex/build-ui-screens/SKILL.md",
       "installable": true,
-      "content_sha256": "851f341f5bcc88137d72fae4b8b6e8eb40ef1b332332e21548d356082a9b152d",
+      "content_sha256": "c5129df28fd17d3ce5a46fbe2a9aacb51879c9ab89f9333f5db8b473168be3a0",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$build-ui-screens",
       "deck_memberships": []
@@ -9182,30 +9232,6 @@
       "content_sha256": "657d6baef1ffe9f049d9e3b30caa1eb4b3f67a803eee7210cbdef0319c41ab82",
       "archive_versions": [],
       "command": "$create-ui-experiment",
-      "deck_memberships": []
-    },
-    {
-      "id": "pack-product-design-codex-design-inspirations",
-      "name": "design-inspirations",
-      "scope": "pack",
-      "pack": "product-design",
-      "platform": "codex",
-      "version": "v0.3",
-      "deprecated": false,
-      "replaced_by": null,
-      "required_conventions": [
-        "alignment-page",
-        "design-tree-loop"
-      ],
-      "path": "packs/product-design/codex/design-inspirations/SKILL.md",
-      "installable": true,
-      "content_sha256": "10a7f13e038cf1726294d0a083b46bb24cf56252a056c470ebc4dd12fcc31cfd",
-      "archive_versions": [
-        "v0.0",
-        "v0.1",
-        "v0.2"
-      ],
-      "command": "$design-inspirations",
       "deck_memberships": []
     },
     {
@@ -9440,12 +9466,32 @@
       "deck_memberships": []
     },
     {
+      "id": "pack-product-design-codex-take-inspiration",
+      "name": "take-inspiration",
+      "scope": "pack",
+      "pack": "product-design",
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "alignment-page",
+        "design-tree-loop"
+      ],
+      "path": "packs/product-design/codex/take-inspiration/SKILL.md",
+      "installable": true,
+      "content_sha256": "cd5f5f6c2e106628567b8aceee557a03d1ff605ee728cc8d4632a8aa6df48106",
+      "archive_versions": [],
+      "command": "$take-inspiration",
+      "deck_memberships": []
+    },
+    {
       "id": "pack-product-design-codex-ui-interview",
       "name": "ui-interview",
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.30",
+      "version": "v0.31",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9455,7 +9501,7 @@
       ],
       "path": "packs/product-design/codex/ui-interview/SKILL.md",
       "installable": true,
-      "content_sha256": "fa07cd542e78004cf1fc635d636ec2a23126eff050076b456089979b4ceef53d",
+      "content_sha256": "331e03f8998954cc5f783f5d0e1dd5d6ee163ea951f377fc9cbdc72d14076f42",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9481,6 +9527,7 @@
         "v0.28",
         "v0.29",
         "v0.3",
+        "v0.30",
         "v0.4",
         "v0.5",
         "v0.6",

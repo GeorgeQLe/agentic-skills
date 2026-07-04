@@ -21,7 +21,8 @@ scripts/pack.sh refresh
 - `brainstorm`: Generate and explore ideas for a product or feature direction.
 - `feature-interview`: Conduct a structured interview to define feature requirements and constraints.
 - `eval-ideas`: Loop `feature-interview` over a brainstorm idea set (one interview per fresh-context session, tracked by a run manifest) and consolidate the survivors into a prioritized `roadmap` handoff. Bridges `brainstorm` → `feature-interview` → `roadmap`.
-- `design-inspirations`: Gather UI/UX inspiration once via web research — named patterns, conventions, component-library references, and annotated links — into a durable cited brief that feeds `ui-interview` and `ux-variations`.
+- `brainstorm-inspirations`: Survey and compare possible design inspirations for current flows, surfaces, UX branches, UI direction, visual language, and product class; writes approved artifacts to flow-tree `source_artifacts[]`.
+- `take-inspiration`: Study one specific product or reference through an approved lens, synthesize it against the current design tree, and recommend owner-routed design actions.
 - `user-flow-map`: Map positioned product goals into the root of a wireframe tree with user-flow branches, decisions, states, handoffs, and low-fidelity wireframe notes.
 - `key-moments`: Rank the user-flow branches by proof priority (value × risk × frequency) after `user-flow-map`, ordering branches, gating variation breadth, and promoting or pruning flows so the tree grows in proof order. Writes existing flow-tree ordering fields only.
 - `ui-interview`: Investigate a specific UX variation branch, propose an HTML visual mockup, interview for alignment, and approve/reject/retry the branch before routing onward.

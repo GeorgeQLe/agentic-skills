@@ -7368,6 +7368,16 @@ icp -> competitive-analysis -> journey-map -> positioning
 4. Apply the smallest source fix that prevents repeated active skill discovery without deleting legitimate historical archives.
 5. Add focused regression coverage for duplicate/case-normalized skill discovery or install cleanup behavior.
 6. Run focused verification, document findings, then commit and push intended changes.
+## Historical Implementation - Hard-Rename Design Inspiration Workflows
+
+1. Inspect active `design-inspirations` skill mirrors, product-design pack metadata, design-tree convention, generated bundles, consumers, and focused layer-1 tests.
+2. Archive the current active `design-inspirations` `SKILL.md` files, then `git mv` both Codex and Claude folders to `brainstorm-inspirations`.
+3. Rewrite `brainstorm-inspirations` as the survey-and-compare optional feeder skill, with structured HTML board output, canonical `design/brainstorm-inspirations-{topic}.md`, and flow-tree `source_artifacts[]` updates.
+4. Add new mirrored `take-inspiration` skills at `version: v0.0`, using the reference-specific interrogation, approved research scope, synthesis, COA recommendation, and `source_artifacts[]` contract.
+5. Update product-design metadata, design-tree convention, generated bundles, alignment-page routing text, catalog/manifest exports, and consumers to remove active `design-inspirations` references.
+6. Add focused layer-1 coverage for the hard rename, optional feeder/amendment status, structured board contract, and absence from the fixed route tuple.
+7. Run required verification, record results, then commit and push intended changes while preserving unrelated dirty files.
+
 # Current Roadmap - Centralized Skill Convention Docs
 
 ## Current Plan - Explicit Alignment Gate Outcome Metadata
