@@ -1,4 +1,10 @@
 <!-- provision-agentic-config v0.13 -->
+## Repo-Specific: Do Not Install Skills In This Directory
+
+**This repository IS the skillpacks source of truth, so skill installation does not work here.** In this directory specifically, never run `npx skillpacks install <pack-or-skill>`, `npx skillpacks init`, `npx skillpacks which`, or any other skillpacks install/package command to obtain or enable a skill — it does not work in this repo and is never the correct fix. Every skill already exists in-tree at `packs/<pack>/{claude,codex}/<skill>/SKILL.md`. To use a skill, run it directly from its written convention in `packs/**` (or the runtime `.codex/skills/**` / `.claude/skills/**` copies produced by `scripts/pack.sh refresh`).
+
+This overrides every instruction below (and any routing from `$ship`, Missing Skill Fallback, Cross-Pack Routing, or a recommended-next-command handoff) that would tell you to run or suggest an `npx skillpacks install`/`init` command as a prerequisite for an unavailable or not-enabled pack. In this repo, treat the skill as present in-tree and run it from its source SKILL.md instead of recommending an install. The only skillpacks-related command used here is `scripts/pack.sh refresh`, which republishes the local runtime skill copies from source — it is not an install.
+
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
