@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-alignment-category="ops-analysis" data-visual-tier="document" data-alignment-status="confirmed" data-alignment-page-kind="bip" data-bip-generation="post-confirmation" data-bip-source-skill="ship-end">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIP Suggestions - ship-end (Shared Convention Resolver)</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#0f1623;--border:#30363d;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.55;letter-spacing:0}main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:32px 0 56px;overflow-wrap:break-word}h1{margin:0 0 8px;color:#fff;font-size:2rem;line-height:1.15}h2{margin:0 0 12px;color:var(--accent);font-size:1.25rem}h3{margin:0 0 8px;color:#fff;font-size:1.02rem}p{margin:10px 0}code{background:#0b1320;border:1px solid var(--border);border-radius:4px;color:#fff;padding:1px 5px;font-size:.9em}section,.meta{border:1px solid var(--border);background:var(--panel);border-radius:8px;padding:18px;margin:18px 0}.head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}.status{border:1px solid var(--border);border-radius:6px;background:#0b1320;color:#fff;padding:8px 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:14px}.card{border:1px solid var(--border);border-radius:8px;background:var(--panel2);padding:14px}.draft{white-space:pre-wrap;border:1px solid var(--border);border-radius:8px;background:#0b1320;padding:12px;margin:10px 0}.pill{display:inline-block;border-radius:4px;padding:2px 8px;font-size:.8rem;font-weight:700;margin-right:6px}.recommended{background:rgba(63,185,80,.14);color:var(--ok)}.not-now{background:rgba(210,153,34,.14);color:var(--warn)}.rejected{background:rgba(248,81,73,.14);color:var(--bad)}dl{margin:8px 0 0}dt{color:var(--accent);font-weight:700;margin-top:8px}dd{margin:2px 0 0}ul{padding-left:22px}
+</style>
+</head>
+<body>
+<main>
+  <div class="head">
+    <h2>Build-In-Public Suggestions</h2>
+    <span class="status">alignment_status: confirmed | bip_generation: post-confirmation</span>
+  </div>
+  <h1>ship-end BIP Candidates - Shared Convention Resolver Migration</h1>
+  <p>This read-only page was generated after shipping the shared convention resolver migration. It proposes source-safe public angles only; it does not publish posts, write social-ledger records, or create approval gates.</p>
+
+  <div class="meta">
+    <p><strong>bip_phase:</strong> implementation</p>
+    <p><strong>Source skill:</strong> <code>ship-end</code> | <strong>Source basis:</strong> shipped migration diff, verification commands, task history, and ship manifest.</p>
+    <p><strong>Priority metadata:</strong> no saved <code>alignment.bip_platforms</code> list was present. Every bundled text/community and video channel is included.</p>
+  </div>
+
+  <section>
+    <h2>What Shipped</h2>
+    <ul>
+      <li>Alignment and interrogation skills now point to shared resolver stubs instead of duplicating full convention prose in every skill section.</li>
+      <li>Source checkouts resolve conventions from <code>docs/*-convention.md</code>; packaged installs resolve the same convention text from packaged assets.</li>
+      <li>Existing sibling <code>ALIGNMENT-PAGE.md</code> and <code>INTERROGATION-PAGE.md</code> files remain supported as legacy fallback artifacts.</li>
+      <li>Generators, audits, package command help, documentation, and focused tests were updated to validate resolution semantics.</li>
+    </ul>
+    <p>Source-safety boundary: drafts avoid implying that old installed skills break, avoid inflated quality claims, and do not expose private session details beyond the public repository work.</p>
+  </section>
+
+  <section>
+    <h2>Fresh-Audience Brief</h2>
+    <dl>
+      <dt>fresh_audience_context</dt><dd><code>agentic-skills</code> packages reusable agent skills. Each skill can include page conventions for alignment and interrogation workflows. This migration reduces duplicated convention prose by moving the canonical instructions into shared packaged assets and leaving short skill stubs behind.</dd>
+      <dt>jargon_expansion</dt><dd>A resolver is the lookup path an agent uses to find the convention text. A packaged asset is a file shipped with the installable package. A legacy sibling bundle is the old per-skill convention file kept as fallback for already-installed skills.</dd>
+      <dt>public_significance</dt><dd>The public lesson is migration design: shared documentation can replace duplicated runtime instructions without forcing a hard break when installed copies still need compatibility.</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Text And Community Channels</h2>
+    <div class="grid">
+      <article class="card"><h3>LinkedIn post</h3><p><span class="pill recommended">recommended</span> Professional migration-design lesson.</p><div class="draft">A useful maintenance pattern: replace duplicated agent instructions with shared packaged conventions, but keep the old per-skill files as a fallback while installs catch up.
+
+That was the migration today: canonical docs in source, the same docs packaged as runtime assets, thin skill stubs, and tests that prove both source checkouts and installed packages resolve the same contract.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>recommended</dd><dt>source_basis</dt><dd>Shared convention resolver migration and verification manifest.</dd><dt>claim_safety_notes</dt><dd>Does not claim universal compatibility beyond tested resolver paths.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Confirm it is acceptable to discuss agent-skill packaging architecture publicly.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/linkedin-post-convention.md</code></dd></dl></article>
+      <article class="card"><h3>X post</h3><p><span class="pill recommended">recommended</span> Short engineering tradeoff.</p><div class="draft">Migration rule I like: remove duplicated instructions only after you have a resolver contract.
+
+Today: source docs, packaged assets, thin skill stubs, and legacy sibling-file fallback. Less duplication without a hard break for installed copies.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>recommended</dd><dt>source_basis</dt><dd>Generator and audit changes for shared conventions.</dd><dt>claim_safety_notes</dt><dd>No metrics or unsupported performance claims.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Keep within current X post length limits or split manually.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/x-post-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Bluesky post</h3><p><span class="pill recommended">recommended</span> Builder note.</p><div class="draft">Refactor note: moved alignment/interrogation conventions out of hundreds of repeated skill sections and into shared packaged docs.
+
+The important bit was the fallback path: installed skills can still resolve legacy sibling files while new stubs use the shared resolver.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>recommended</dd><dt>source_basis</dt><dd>Skill stub regeneration and legacy fallback audit.</dd><dt>claim_safety_notes</dt><dd>Plain implementation note, no private details.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Verify character count in the target client.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/bluesky-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Threads post</h3><p><span class="pill not-now">not-now</span> Similar to Bluesky; keep for dedupe.</p><div class="draft">Cleaned up duplicated agent conventions today: source docs stay canonical, package assets carry them into installs, and old sibling files remain as compatibility fallback.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>not-now</dd><dt>source_basis</dt><dd>Migration summary and tests.</dd><dt>claim_safety_notes</dt><dd>Safe but overlaps with the Bluesky angle.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Use only if not cross-posting the same wording elsewhere.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/threads-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Mastodon post</h3><p><span class="pill recommended">recommended</span> Technical open-source style.</p><div class="draft">Packaging cleanup pattern:
+
+- keep the canonical convention in source docs
+- ship the same text as package assets
+- replace generated per-skill prose with thin resolver stubs
+- keep old sibling files as legacy fallback
+- test source, package, and fallback resolution
+
+Less duplicate instruction text, no hard break for installed copies.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>recommended</dd><dt>source_basis</dt><dd>Generator/audit/package test changes.</dd><dt>claim_safety_notes</dt><dd>Generalized from verified repo changes.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Check instance norms and hashtags.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/mastodon-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Reddit post</h3><p><span class="pill rejected">rejected</span> Needs a specific subreddit and a longer public write-up.</p><div class="draft">Rejected direction: "How to migrate duplicated agent convention docs into packaged shared assets without breaking installed copies."</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>rejected</dd><dt>source_basis</dt><dd>Migration architecture.</dd><dt>claim_safety_notes</dt><dd>Could be valuable, but Reddit requires named community rules and disclosure.</dd><dt>risk_level</dt><dd>medium</dd><dt>publish_precheck</dt><dd>Name and inspect a target subreddit before drafting.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/reddit-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Hacker News</h3><p><span class="pill rejected">rejected</span> No original public article or Show HN artifact.</p><div class="draft">Human-author notes only: if this becomes a public post, focus on the compatibility problem and the resolver contract, not on announcing an internal cleanup.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>rejected</dd><dt>source_basis</dt><dd>Internal migration details.</dd><dt>claim_safety_notes</dt><dd>HN convention blocks generated comments and needs a public source URL.</dd><dt>risk_level</dt><dd>high</dd><dt>publish_precheck</dt><dd>Only submit a human-authored public source.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/hacker-news-convention.md</code></dd></dl></article>
+      <article class="card"><h3>YouTube Community</h3><p><span class="pill not-now">not-now</span> Useful only with a related devlog/video.</p><div class="draft">Poll idea: Which compatibility topic is most useful?
+
+- Shared package assets
+- Legacy fallback files
+- Generator-backed doc stubs
+- Audits that validate resolver paths</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>not-now</dd><dt>source_basis</dt><dd>Resolver migration work.</dd><dt>claim_safety_notes</dt><dd>Does not promise a video or release.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Confirm Community posts are available and audience-fit.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/youtube-community-convention.md</code></dd></dl></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Video Channels And Prompt Families</h2>
+    <div class="grid">
+      <article class="card"><h3>YouTube long-form</h3><p><span class="pill not-now">not-now</span> Good educational topic, but needs a script and sanitized visuals.</p><div class="draft">Outline: "Migrating duplicated runtime docs to shared packaged assets"
+1. Show the duplication problem.
+2. Define resolver order: source docs, packaged assets, legacy fallback.
+3. Show generator-backed stubs.
+4. Show tests that prevent install breakage.
+5. Close with the migration checklist.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>not-now</dd><dt>source_basis</dt><dd>Migration implementation and verification list.</dd><dt>claim_safety_notes</dt><dd>Requires screen redaction before recording.</dd><dt>risk_level</dt><dd>medium</dd><dt>publish_precheck</dt><dd>Verify account limits, copyright, altered-content, and private-screen redaction.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/youtube-long-form-convention.md</code></dd></dl></article>
+      <article class="card"><h3>YouTube Shorts</h3><p><span class="pill not-now">not-now</span> Needs a visual before/after.</p><div class="draft">Short concept: "The compatibility trick in a docs migration"
+Hook: "Deleting duplicated docs is easy. Not breaking installed copies is the work."
+Beat 1: old per-skill bundles.
+Beat 2: shared packaged resolver.
+Beat 3: legacy fallback and tests.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>not-now</dd><dt>source_basis</dt><dd>Convention resolver fallback design.</dd><dt>claim_safety_notes</dt><dd>No benchmark or quality claims.</dd><dt>risk_level</dt><dd>medium</dd><dt>publish_precheck</dt><dd>Check screen redaction and Content ID risk.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/youtube-shorts-convention.md</code></dd></dl></article>
+      <article class="card"><h3>LinkedIn video</h3><p><span class="pill not-now">not-now</span> Strong professional angle, not ready to record.</p><div class="draft">Captioned outline: "A safer way to remove duplicated internal docs"
+First frame: "Shared docs, no hard break"
+Arc: duplication cost, resolver contract, packaged assets, legacy fallback, verification.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>not-now</dd><dt>source_basis</dt><dd>Shared convention migration.</dd><dt>claim_safety_notes</dt><dd>Avoids customer, revenue, and adoption claims.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Confirm professional audience fit and media specs.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/linkedin-video-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Instagram Reels</h3><p><span class="pill rejected">rejected</span> Low fit for this technical migration without a strong visual treatment.</p><div class="draft">Rejected concept: fast before/after of duplicated convention prose shrinking into a resolver stub.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>rejected</dd><dt>source_basis</dt><dd>Mechanical skill stub migration.</dd><dt>claim_safety_notes</dt><dd>Could become misleading without context.</dd><dt>risk_level</dt><dd>medium</dd><dt>publish_precheck</dt><dd>Verify current Reels limits, music/IP, and audience fit.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/instagram-reels-convention.md</code></dd></dl></article>
+      <article class="card"><h3>TikTok</h3><p><span class="pill rejected">rejected</span> Poor channel fit for a repo-internal compatibility migration.</p><div class="draft">Rejected concept: "The one fallback path that made a docs migration safe."</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>rejected</dd><dt>source_basis</dt><dd>Legacy sibling fallback behavior.</dd><dt>claim_safety_notes</dt><dd>Too likely to over-simplify and imply drama.</dd><dt>risk_level</dt><dd>medium</dd><dt>publish_precheck</dt><dd>Verify platform limits, AI/synthetic labeling, and private-screen redaction.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/tiktok-convention.md</code></dd></dl></article>
+      <article class="card"><h3>Founder devtool video prompt family</h3><p><span class="pill recommended">recommended</span> Best used as a future script prompt.</p><div class="draft">Prompt family: Architecture Decision
+Source basis: Shared convention resolver migration.
+Question: "How do you reduce duplicated agent instructions while preserving installed-skill compatibility?"
+Expected answer: define resolver order, keep fallback files, update generators, and verify package/source behavior.</div><dl><dt>recommendation_notes</dt><dd>See candidate status and channel framing above.</dd><dt>recommendation_status</dt><dd>recommended</dd><dt>source_basis</dt><dd>Architecture decision embodied in the migration.</dd><dt>claim_safety_notes</dt><dd>Prompt only; no publish approval or recording approval.</dd><dt>risk_level</dt><dd>low</dd><dt>publish_precheck</dt><dd>Specialize to a selected channel and sanitize screen examples.</dd><dt>loaded_channel_convention</dt><dd><code>docs/social/founder-devtool-video-prompts-convention.md</code></dd></dl></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ledger And Shared Router Context</h2>
+    <dl>
+      <dt>loaded_channel_convention</dt><dd><code>docs/social-post-convention.md</code></dd>
+      <dt>loaded_channel_convention</dt><dd><code>docs/social-video-content-convention.md</code></dd>
+      <dt>loaded_channel_convention</dt><dd><code>docs/social-ledger-convention.md</code></dd>
+      <dt>publish_precheck</dt><dd>Human approval is required before any external publication or social-ledger write. Re-check duplicate history and public-safe links before posting.</dd>
+      <dt>claim_safety_notes</dt><dd>No generated candidate should claim the migration is published as a package release unless a later publish session verifies that separately.</dd>
+    </dl>
+  </section>
+</main>
+<script src="../../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

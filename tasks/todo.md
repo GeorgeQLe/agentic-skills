@@ -1,12 +1,12 @@
-# Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
+## Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
 
 Project: `agentic-skills`.
 
-## Goal
+### Goal
 
 Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-history analysis that separates user-invoked skill counts from agent-invoked skill counts.
 
-## Plan
+### Plan
 
 - [x] Capture the visible `$analyze-sessions` prompt.
 - [ ] Inspect existing alignment page and relevant session-history files.
@@ -14,7 +14,7 @@ Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-histor
 - [ ] Update the alignment page and index with the skill usage breakdown.
 - [ ] Verify the updated page/artifacts and document results.
 
-## Acceptance Criteria
+### Acceptance Criteria
 
 - The report shows exact counts for user-invoked and agent-invoked skill usage where history evidence supports classification.
 - Counting rules are explicit enough to reproduce.
@@ -834,7 +834,7 @@ This section is preserved from the pre-existing task state and is intentionally 
 - [x] Verify (acceptance): confirmed on the refreshed runtime `.codex/skills/ux-variations/{SKILL,DESIGN-TREE-LOOP}.md` — SKILL.md is v0.33 with the §0c exception + step-8 carve-out (lead with HTML review path, only the compiled response YAML, no repeat-`$ux-variations`/second-YAML/`Exact next command`, retains completed-count + durable-cursor); DESIGN-TREE-LOOP.md carries the Assemble-ready review-gate exception.
 - [x] Commit source + regenerated bundles + manifest together on `master` and push — commit `a81db4dc7`, pushed `a5098efa4..a81db4dc7`; scoped to these files, pre-existing untracked `.agents/skillpacks/` left untouched (concurrent-session caution).
 
-## Current Implementation - Shared Alignment and Interrogation HTML Scaffolds
+## Historical Implementation - Shared Alignment and Interrogation HTML Scaffolds
 
 ### Execution Profile
 

@@ -15376,3 +15376,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Regenerated 22 `DESIGN-TREE-LOOP.md` bundles (carry the exception). Legacy sibling `ALIGNMENT-PAGE.md` bundles are frozen fallback (not rewritten in default mode); the alignment convention propagates via the packaged resolver at build/publish.
 - Step 7 sibling check: `state-model`/`ui-interview`/`user-flow-map` do not hard-code the assemble-stop repeat-command block at the review stop; no additional edits needed.
 - Verification: `upgrade-design-tree-loop.mjs --check`, `upgrade-alignment-page.mjs --check`, `audit-alignment-pages.mjs`, `git diff --check` all clean; canonical-source acceptance replay confirmed the assemble stop leads with review, presents only the compiled response YAML, drops repeat-command/second-YAML framing, retains progress fields.
+
+## 2026-07-04 — Packaged alignment/interrogation page scaffolds
+
+- Added package-shipped starter templates for alignment and interrogation HTML pages under `packages/skillpacks/assets/templates/`.
+- Added strict CLI scaffold commands: `gskp alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html` and `gskp interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html`.
+- Kept normal producing skills responsible for their own evidence, gates, YAML compiler, and approval semantics; `create-alignment-page` now uses the scaffold only for ad hoc/non-skill pages and remains out of the mandatory normal-skill path.
+- Updated package staging, package boundary assertions, compatibility docs, canonical convention guidance, and focused tests for generated fixture pages that pass existing audits.
+- Verification: package alignment tests, package-boundary test, full package Node suite, package `build:check`, package dry-run, skill archive audit, and diff hygiene passed.
+- Commit: `147a79dd6 feat: add packaged page scaffolds`, pushed to `master`.
