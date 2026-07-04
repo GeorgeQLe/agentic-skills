@@ -2,7 +2,33 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
+## Current Implementation - Investigate Permission Gate 2026-07-04
+
+### Goal
+
+Amend the `investigate` skill so it explicitly asks the user for permission before implementing any fix.
+
+### Plan
+
+- [x] Capture the visible skill update prompt in `prompts/skill-creator/`.
+- [x] Inspect both Codex and Claude `investigate` mirrors, changelog, and archive requirements.
+- [x] Archive the current `investigate` skill version and bump the active skill version for the behavior change.
+- [x] Add an explicit post-investigation user-approval gate before any implementation path.
+- [x] Refresh generated/runtime copies if needed, validate the skill, and run focused repository checks.
+- [x] Record the review, commit, and push intended tracked changes.
+
+### Acceptance Criteria
+
+- The active `investigate` skill instructs agents to stop after root-cause/fix-plan discovery and ask the user for permission before editing files or implementing a fix.
+- Permission behavior is mirrored for Codex and Claude skill copies.
+- Version archive and changelog requirements are satisfied.
+- Verification demonstrates the skill metadata and archive state are valid.
+
+### Review
+
+The `investigate` skill now reports the root cause and proposed fix, then asks for explicit user permission before applying patches, editing files, running write-capable generation, or otherwise implementing the fix. Both mirrors are archived at v0.2 and active at v0.3, with refreshed package/catalog artifacts. Verification passed for mirror parity, archive audit, task docs, manifest freshness, catalog exports, full package verification, and diff hygiene.
+
+## Historical Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
 
 ### Goal
 

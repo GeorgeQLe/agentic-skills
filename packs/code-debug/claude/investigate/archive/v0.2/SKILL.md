@@ -2,7 +2,7 @@
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
 type: debugging
-version: v0.3
+version: v0.2
 argument-hint: <error, bug description, user observations, or issue URL> [--ui] [--data] [--plan]
 ---
 
@@ -82,14 +82,7 @@ Given a bug report, error message, unexpected behavior, or user observations abo
    - Check if the bug is reproducible from the code alone (no need to run the app unless necessary).
    - If there are related tests, run them to confirm the current state.
 
-6. **Propose the fix and request permission:**
-   - Write a concise proposed fix covering the files to change, the intended implementation, and the tests or acceptance checks to run.
-   - Ask the user for explicit permission before editing files, applying patches, running write-capable generation commands, or otherwise implementing the fix.
-   - Do not implement from this skill until the user approves.
-   - If the user approves, continue to step 6a.
-   - If the user does not approve or has not responded, stop after reporting the investigation findings and proposed fix.
-
-6a. **Apply or plan the approved fix:**
+6. **Apply or plan the fix:**
    - **Determine fix mode:**
      - If `--plan` flag is set → **plan mode** (always write to `tasks/todo.md`)
      - If fix requires 3+ discrete steps across multiple files → **plan mode**
@@ -136,15 +129,8 @@ _(Skip this section if the input was a plain error message or stack trace with n
 - **Introduced by**: commit hash or "pre-existing" if not recent
 - **Relationship to user's theory**: How this connects to (or diverges from) what the user suspected
 
-### Proposed Fix
-_(Shown before implementation approval)_
-- Files to modify and why
-- Implementation outline
-- Tests or acceptance checks to run
-- Explicit permission question before any implementation
-
 ### Fix Applied
-_(Shown in inline mode after implementation approval)_
+_(Shown in inline mode)_
 - Files modified and what changed
 - Test results
 
@@ -161,8 +147,7 @@ _(Shown in plan mode — replaces "Fix Applied")_
 - Do not refactor unrelated code while fixing the bug.
 - Do not guess — if you can't trace the root cause, say so and list what you've ruled out.
 - Always validate user claims before assuming they're correct — the user's observations are a starting point, not ground truth.
-- Do not implement fixes without explicit user permission after reporting the investigation findings and proposed fix.
-- Always run tests after applying an approved fix (inline mode).
+- Always run tests after applying the fix (inline mode).
 - If the fix requires changes outside the current project (infra, env vars, external service), document what's needed instead of attempting it.
 - Do not write to `docs/debug-changelog.md` — that is `/debug`'s domain.
 - Do not write to `tasks/todo.md` for single-step fixes unless `--plan` is explicitly set.

@@ -1,4 +1,50 @@
-## Current Implementation - Analyze Sessions Skill Usage Rates 2026-07-04
+## Current Implementation - Investigate Permission Gate 2026-07-04
+
+Project: `agentic-skills`.
+
+### Goal
+
+Amend the `investigate` skill so it explicitly asks the user for permission before implementing any fix.
+
+### Plan
+
+- [x] Capture the visible skill update prompt.
+- [x] Inspect both Codex and Claude `investigate` mirrors, changelog, and archive requirements.
+- [x] Archive the current `investigate` skill version and bump the active skill version for the behavior change.
+- [x] Add an explicit post-investigation user-approval gate before any implementation path.
+- [x] Refresh generated/runtime copies if needed, validate the skill, and run focused repository checks.
+- [x] Record the review, commit, and push intended tracked changes.
+
+### Acceptance Criteria
+
+- The active `investigate` skill instructs agents to stop after root-cause/fix-plan discovery and ask the user for permission before editing files or implementing a fix.
+- Permission behavior is mirrored for Codex and Claude skill copies.
+- Version archive and changelog requirements are satisfied.
+- Verification demonstrates the skill metadata and archive state are valid.
+
+## Review
+
+Implemented:
+
+- Archived `investigate` v0.2 for both Claude and Codex mirrors.
+- Bumped both active `investigate` mirrors to v0.3 and added a mandatory permission gate after root-cause/proposed-fix discovery.
+- Updated both changelogs, refreshed runtime skill copies, and regenerated package/catalog metadata.
+- Captured the visible prompt in `prompts/skill-creator/`.
+
+Verified:
+
+- `scripts/pack.sh refresh` passed.
+- `bash scripts/skill-mirror-parity-audit.sh` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
+- `node scripts/audit-task-docs.mjs` passed.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm run exports:check` passed.
+- `npm run skillpacks:verify` passed.
+- `git diff --check` passed.
+
+# Historical Task State
+
+## Review - Analyze Sessions Skill Usage Rates 2026-07-04
 
 Project: `agentic-skills`.
 
@@ -6,22 +52,7 @@ Project: `agentic-skills`.
 
 Update `alignment/analyze-sessions-skill-usage-rates.html` with a session-history analysis that separates user-invoked skill counts from agent-invoked skill counts.
 
-### Plan
-
-- [x] Capture the visible `$analyze-sessions` prompt.
-- [x] Inspect existing alignment page and relevant session-history files.
-- [x] Parse Claude and Codex history for skill invocations by actor.
-- [x] Update the alignment page and index with the skill usage breakdown.
-- [x] Verify the updated page/artifacts and document results.
-
-### Acceptance Criteria
-
-- The report shows exact counts for user-invoked and agent-invoked skill usage where history evidence supports classification.
-- Counting rules are explicit enough to reproduce.
-- Existing unrelated worktree changes are preserved.
-- Alignment page verification passes or any failure is reported with the failing check.
-
-## Review
+### Review
 
 Implemented:
 
@@ -35,8 +66,6 @@ Verified:
 - `node --check scripts/analyze-skill-usage-actors.mjs` passed.
 - `node scripts/analyze-skill-usage-actors.mjs --cutoff 2026-07-04T20:45:12.007Z` reproduced the page counts.
 - `node scripts/audit-alignment-pages.mjs alignment/analyze-sessions-skill-usage-rates.html` passed.
-
-# Current Task State
 
 ## Review - Hard-Rename Design Inspiration Workflows
 
@@ -877,7 +906,7 @@ Verified:
 - `bash scripts/skill-archive-audit.sh --strict` passed: 413 skills checked, 0 violations.
 - `git diff --check` passed.
 
-## Current Implementation - Cleanup Command and BIP Removal
+## Review - Cleanup Command and BIP Removal
 
 ### Plan
 

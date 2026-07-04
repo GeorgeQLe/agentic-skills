@@ -2,7 +2,7 @@
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
 type: debugging
-version: v0.3
+version: v0.2
 ---
 
 # Investigate
@@ -27,18 +27,15 @@ Use this skill when the user reports a bug, error, unexpected behavior, or provi
    - If the initial strategy hits a dead end, pivot to the other — a UI bug may have a data root cause, and vice versa.
 5. Check recent git history for changes that may have introduced the issue.
 6. Identify the root cause with file and line reference.
-7. Propose the minimal implementation plan, including files to change and tests to run.
-8. **Permission Gate**: Ask the user for explicit permission before editing files, applying patches, running write-capable generation commands, or otherwise implementing the fix. Do not implement from this skill until the user approves.
-9. After approval, apply the minimal fix and write or update tests.
-10. Run tests to verify the fix and check for regressions.
+7. Apply a minimal fix and write or update tests.
+8. Run tests to verify the fix and check for regressions.
 
 ## Output
 
 - **Strategy Used**: UI / Data / General (auto-detected or flag-forced), whether a pivot occurred
 - **User Claims Validated**: For each claim — verdict (confirmed/partially correct/not supported) and evidence. Skip if input was a plain error message.
 - **Root Cause**: file:line, what's wrong, when introduced, relationship to user's theory
-- **Proposed Fix**: files to modify, implementation outline, tests to run, and the explicit permission question
-- **Fix Applied**: files modified, test results. Include only after the user has approved implementation.
+- **Fix Applied**: files modified, test results
 - **Prevention**: what check would have caught this earlier
 
 ## Constraints
@@ -46,8 +43,7 @@ Use this skill when the user reports a bug, error, unexpected behavior, or provi
 - Do not refactor unrelated code.
 - Validate user claims before assuming they're correct — observations are a starting point, not ground truth.
 - If the root cause can't be determined, report what was ruled out.
-- Do not implement fixes without explicit user permission after reporting the investigation findings and proposed fix.
-- Always run tests after applying an approved fix.
+- Always run tests after applying the fix.
 
 
 ## Default Shipping Contract
