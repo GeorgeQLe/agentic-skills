@@ -1,0 +1,9 @@
+---
+skill: skill-creator
+agent: codex
+captured_at: 2026-07-04 10:25:34 America/New_York
+source: user-invocation
+prompt_scope: visible-user-invocation
+---
+
+I want to create a skill and add it to the design tree/prototype pack (what is it actually named - the skills under the user-flow-map umbrella?). This skill is named take-inspiration and the use case will be to provide a standard way for agents to introduce design inspirations from existing products. The skill will have agents conduct these steps: first interrogate the user to understand why they are introducing this inspiration: is it visual, tone, specific workflow/path through an app (love the speed onboarding or that their customer service feature is well implemented). Then align with the user on what the agent has gathered from the interrogation and to seek approval to do deep research on that inspiration in the angle that the user is looking for: visual, flow, tone, etc. After research is complete, the agent will run a synthesis check with the existing design tree to provide the agent's recommendation on adjustments, additions, or removals based on "lessons learned" or things to adopt/copy from the inspiration. Lastly, the agent will implement the approved findings from the synthesis check: archive and update old documentation to fit the new user-approved COAs, refactor prototypes/mockups, create new user-flow or ux-variation branches off the user-flow-map design tree or user-flow-branch respectively, and route users to do each of these things interatively using progress.yaml to insert this work into the existing design tree in the most natural order. Investigate and report back to me whether you agree with the shape of this skill, whether we have existing skills which cover this, and how this will impact the overall user-flow-map skills design tree workflow (again what's the name for this)
