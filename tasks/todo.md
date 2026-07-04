@@ -2,6 +2,29 @@
 
 No active implementation task is currently promoted.
 
+## Review - 0.1.20 Publish Dry-Run Prep 2026-07-04
+
+Project: `agentic-skills`.
+
+### Goal
+
+Prepare the tracked source tree for the user-run `./publish.sh --dry-run patch` command without running the publish dry run in this cleanup pass.
+
+### Review
+
+Verified:
+
+- Regenerated `packages/skillpacks/dist/skillpacks-manifest.json` and the public skills catalog export metadata; the package manifest was already byte-stable and the catalog export moved to the current source commit/fingerprint.
+- Updated `CHANGELOG.md` `0.1.20` for post-`dc317d64b` release-boundary changes: explicit alignment gate metadata, session-triage evidence-path fixes, UX variations assemble-stop handling, repo-local skillpacks install prohibition, and regenerated catalog/package metadata.
+- Removed untracked generated `.agents/skillpacks/` runtime docs from the release boundary.
+- Npm latest remains `0.1.19` for both `skillpacks` and `@glexcorp/gskp`; next package version remains `0.1.20`.
+- Package Node tests passed: 178 tests.
+- Package verification passed: 411 active skills, 42 packs, 383 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`.
+- Skills catalog export verification passed.
+- Skill archive audit passed: 411 skills, 0 violations.
+- Task-doc audit passed after this review conversion: 0 failures, 0 warnings.
+- Diff hygiene passed: `git diff --check`.
+
 ## Review - Design-Tree Handoff Verification 2026-07-02
 
 Project: `agentic-skills`.
@@ -419,7 +442,7 @@ Project: `agentic-skills`.
 
 Make `idea-scope-brief` the only skill that may ask a Build-In-Public (BIP) gate question. Everywhere else, BIP is non-blocking read-only output behavior. `ship` and `ship-end` may ask about BIP only as a terminal-only prompt after reporting, and only when `.agents/project.json.alignment.build_in_public` is absent.
 
-## Current Plan - Explicit Alignment Gate Outcome Metadata
+## Historical Plan - Explicit Alignment Gate Outcome Metadata
 
 ### Goal
 
@@ -433,7 +456,7 @@ Update alignment-page review readiness so it is driven by machine-readable gate 
 - [x] Regenerate generated alignment-page artifacts.
 - [x] Refresh the managed `gblock-party-redux` installed skill copy from source.
 - [x] Remediate the active `gblock-party-redux` review page still carrying the incident pattern.
-- [ ] Run verification and record review results.
+- [x] Run verification and record review results.
 
 ### Review
 

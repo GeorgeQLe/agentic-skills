@@ -2,6 +2,48 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - 0.1.20 Publish Dry-Run Prep
+
+### Goal
+
+Prepare the tracked source tree for the user-run `./publish.sh --dry-run patch` command after the post-`dc317d64b` release-boundary changes.
+
+### Plan
+
+- [x] Regenerate release metadata:
+  - `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs`
+  - `node scripts/generate-skills-catalog-export.mjs`
+- [x] Update `CHANGELOG.md` `0.1.20` to cover explicit alignment gate metadata, session-triage evidence-path fixes, UX variations assemble-stop handling, repo-local skillpacks install prohibition, and regenerated catalog/package metadata.
+- [x] Reconcile `tasks/todo.md` so task-doc audit sees completed review evidence rather than stale unchecked verification items.
+- [x] Remove generated untracked `.agents/skillpacks/` runtime docs from the release boundary.
+- [x] Run publish-prep verification:
+  - `npm --workspace packages/skillpacks run test:node`
+  - `npm run skillpacks:verify`
+  - `npm run exports:check`
+  - `bash scripts/skill-archive-audit.sh --strict`
+  - `node scripts/audit-task-docs.mjs`
+  - `git diff --check`
+
+### Acceptance Criteria
+
+- Package manifest and skills catalog exports are regenerated from the current source tree.
+- Changelog documents the full release boundary since the last 0.1.20 readiness commit.
+- Verification commands pass and npm latest remains `0.1.19` for both package names.
+- The tracked tree is clean after commit and push; `.agents/skillpacks/` is not included as a source release artifact.
+
+### Review
+
+Verified:
+
+- `npm --workspace packages/skillpacks run test:node` passed: 178 tests.
+- `npm run skillpacks:verify` passed: 411 active skills, 42 packs, 383 tracked convention bundles, package staging boundary check, and package dry-run pack.
+- `npm run exports:check` passed and confirmed fresh catalog export artifacts.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 411 skills, 0 violations.
+- `npm view skillpacks version` and `npm view @glexcorp/gskp version` both reported `0.1.19`.
+- `node scripts/audit-task-docs.mjs` passed: 0 failures, 0 warnings.
+- `git diff --check` passed.
+- Commit and push are the final shipping action after local audits pass.
+
 ## Historical Implementation - Design-Tree Handoff Verification
 
 ### Goal

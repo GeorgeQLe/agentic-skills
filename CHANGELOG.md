@@ -19,6 +19,7 @@ Release-state note: npm currently reports both package names at `0.1.19`. Source
 - Added the `research-amend` base skill for bounded, alignment-gated amendments to approved canonical research artifacts.
 - Added managed shared convention resolver docs and generated short `ALIGNMENT-PAGE.md` resolver stubs across active skills so package installs resolve current conventions from bundled shared assets instead of carrying duplicated long-form convention text.
 - Added Pattern A research-loop self-routing coverage for compiled YAML handoffs where the YAML itself carries the parent command and `agent_routing.command`.
+- Added full-history skill-usage audit evidence and session-triage handoff contract documentation for follow-up session analysis work.
 
 ### Changed
 
@@ -27,20 +28,27 @@ Release-state note: npm currently reports both package names at `0.1.19`. Source
 - Normalized Codex shipping/planning next-step routing so imported Claude slash routes resolve to Codex `$...` commands unless the next action is explicitly a cross-agent handoff.
 - Tightened interrogation-page depth ownership: agents own follow-up depth, route unknowns correctly, and cannot pass the confidence gate on shallow "covered or waived" alignment.
 - Hardened post-UAT product-design routing so one approved prototype no longer implies consolidation while approved variants remain unbuilt or UAT evidence is missing.
+- Made alignment gate metadata explicit in generated alignment bundles so approval cannot pass without an explicit gate outcome.
+- Updated this source repository's agent instructions to forbid `skillpacks install` / `init` / `which` commands here; skills must be used from in-tree sources or refreshed runtime copies in this repo.
+- Refreshed generated package manifest and public skills-catalog export metadata against the current source tree.
 
 ### Fixed
 
 - Fixed YAML-only design handoffs so chunked design-tree progress uses compiled YAML as the single copy/paste routing artifact.
 - Fixed Build-In-Public guidance so prompting is non-blocking, post-approval output is standardized, and UAT pack availability is checked before recommending UAT routes.
 - Reconciled task routing docs and active task state after the shared-convention and research-amend work.
+- Fixed session-triage evidence path handling so handoffs target canonical skill sources, resolve cross-directory files, and keep evidence paths locatable.
+- Fixed `ux-variations` assemble-stop routing so assemble/approval flows do not collide with alignment-page `Pre-approval stop` gates.
+- Fixed generated compiled YAML for overall-history alignment output so embedded newlines are real YAML newlines.
 
 ### Verification
 
+- Registry readiness confirmed both package names still report latest `0.1.19`: `npm view skillpacks version` and `npm view @glexcorp/gskp version`.
 - Package Node tests passed: `npm --workspace packages/skillpacks run test:node` (178/178).
-- Package verification passed after regenerating stale design-tree loop bundles: `npm run skillpacks:verify` (415 active skills, 42 packs, 385 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
-- Skills catalog export verification passed after regenerating stale export metadata: `npm run exports:check`.
+- Package verification passed: `npm run skillpacks:verify` (411 active skills, 42 packs, 383 tracked convention bundles, manifest check, package staging boundary check, and `npm pack ./build --dry-run`).
+- Skills catalog export verification passed after regenerating export metadata: `npm run exports:check`.
 - Pattern A handoff audit passed: `bash scripts/skill-research-loop-handoff-audit.sh`.
-- Skill archive audit passed: `bash scripts/skill-archive-audit.sh --strict` (415 skills checked, 0 violations).
+- Skill archive audit passed: `bash scripts/skill-archive-audit.sh --strict` (411 skills checked, 0 violations).
 - Task-doc audit passed after converting publish-readiness checklist items to review evidence: `node scripts/audit-task-docs.mjs`.
 - Diff hygiene passed: `git diff --check`.
 
