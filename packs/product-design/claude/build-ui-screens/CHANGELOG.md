@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5 - 2026-07-05
+
+- Changed the post-screen handoff so missing or invalid prototype build plans route to `/user-flow-map --prototype-build-plan [topic]` by default.
+- Restricted `/logic-wiring [topic]` recommendations to cases where `design/**/prototype-build-plan-*.md` includes the approved `ui_experiment_id`, while preserving explicit user-accepted untracked ad hoc bypasses.
+- Added `agent_routing` guidance to prevent unconditional wiring payloads from `build-ui-screens`.
+
 ## v0.4 - 2026-07-04
 
 - Removed active-contract wording that referenced the archived `create-ui-experiment` alias; the visual build leaf now names only `build-ui-screens` and `/logic-wiring`.

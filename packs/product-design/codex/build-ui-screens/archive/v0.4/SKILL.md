@@ -2,7 +2,7 @@
 name: build-ui-screens
 description: Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.
 type: execution
-version: v0.5
+version: v0.4
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[approved-ui-experiment]"
 context_intake: scoped
@@ -11,11 +11,11 @@ visual_tier: prototype
 
 # Build UI Screens
 
-Invoke as `/build-ui-screens`.
+Invoke as `$build-ui-screens`.
 
-Build the visual UI screens for one approved UI branch. Use this skill after `/ui-interview [specific-ux-variation]` approves a UI experiment branch and the branch needs concrete screens before the clickable, state-backed prototype exists. This is the visual half of the build leaf; `/logic-wiring` is the wiring half that makes these screens reachable and interactive.
+Build the visual UI screens for one approved UI branch. Use this skill after `$ui-interview [specific-ux-variation]` approves a UI experiment branch and the branch needs concrete screens before the clickable, state-backed prototype exists. This is the visual half of the build leaf; `$logic-wiring` is the wiring half that makes these screens reachable and interactive.
 
-This skill builds screens as an **ordered element-batch loop**: one flow step at a time, adding the elements that step needs, pausing at a **per-batch visual checkpoint**, and stopping at the **minimum UI** that lets the flow step read as real. It uses fake, fixture, local, or in-memory data. It must not introduce durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, production observability, or other production infrastructure — that wiring belongs to `/logic-wiring` and later production planning.
+This skill builds screens as an **ordered element-batch loop**: one flow step at a time, adding the elements that step needs, pausing at a **per-batch visual checkpoint**, and stopping at the **minimum UI** that lets the flow step read as real. It uses fake, fixture, local, or in-memory data. It must not introduce durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, production observability, or other production infrastructure — that wiring belongs to `$logic-wiring` and later production planning.
 
 Follow `DESIGN-TREE-LOOP.md` for design-tree routing, state storage, branch decisions, approval boundaries, and task classification. UI experiment branch state belongs in `design/**/flow-tree-*.yaml`, not `tasks/todo.md`.
 
@@ -26,12 +26,12 @@ Before building, verify the approved branch is explicit:
 - Read `design/**/flow-tree-*.yaml` and resolve the named `ui_experiments[]` branch. If `$ARGUMENTS` is missing, choose the first approved UI experiment branch that has no visual screens yet (no `build_ledger[]` past `minimum-ui-reached` and no `experiment_path`/`review_evidence`), honoring any recorded branch-order override.
 - Read the branch packet from `design/ui-[topic].md`, `design/ui-requirements-[topic].md`, or product-path-scoped equivalents.
 - Read the parent `design/ux-variations-[topic].md`, `design/user-flow-[topic].md`, and any relevant `design/brainstorm-inspirations-{topic}.md` or `design/take-inspiration-{topic}-*.md` when present.
-- Stop if no UI branch has an explicit approve decision. Route back to `/ui-interview [specific-ux-variation]`.
+- Stop if no UI branch has an explicit approve decision. Route back to `$ui-interview [specific-ux-variation]`.
 - Stop if the requested work needs production infrastructure. Record the deferred infrastructure and route to prototype evidence first.
 
 ## Process
 
-1. **Resolve scope.** Identify the product path, topic, parent user-flow branch, UX variation branch, and approved UI experiment branch. Preserve branch IDs from the flow-tree manifest. Read the batch plan authored by `/ui-interview` when present.
+1. **Resolve scope.** Identify the product path, topic, parent user-flow branch, UX variation branch, and approved UI experiment branch. Preserve branch IDs from the flow-tree manifest. Read the batch plan authored by `$ui-interview` when present.
 2. **Define the first-value journey.** Name the first-value moment, the primary task path, the entry route, the exit/success state, and the evidence needed before moving deeper.
 3. **Choose the screen home.** Prefer a project-native lightweight route when the app already has a safe local experiment surface. Otherwise create a disposable route under `experiments/{topic}/{ui-experiment-id}/`. Keep the screens easy to remove.
 4. **Walk the element-batch loop.** Treat each flow step as one batch (`build_ledger[]` entry = one `flow_step`). For each batch, in flow order:
@@ -58,26 +58,13 @@ When using a project-native route instead of `experiments/`, record the exact ro
 
 ## Next Work
 
-After the screens exist and the build ledger is written, choose the next route from filesystem state:
+After the screens exist and the build ledger is written, hand off to wiring:
 
-- `/user-flow-map --prototype-build-plan [topic]` is the default next step when no valid prototype build plan exists. Use this when `design/**/prototype-build-plan-*.md` is missing, or when present build-plan artifacts do not include the approved `ui_experiment_id` for the UI experiment just built.
-- `/logic-wiring [topic]` may be recommended only when `design/**/prototype-build-plan-*.md` exists and includes the approved `ui_experiment_id` as a build item. This makes the built screens clickable and state-backed by advancing the matching build item and `build_ledger[]` entries from `minimum-ui-reached` to `wired`.
-- `/logic-wiring [topic]` may also be used as an explicit untracked ad hoc bypass only when the user knowingly accepts skipping the prototype build-plan ledger for this run. Name that bypass in the handoff and do not imply it is the tracked default.
-- `/uat --variant-evaluation` when the screens themselves are being used as the evaluated variant artifact.
+- `$logic-wiring` to make the built screens clickable and state-backed (the default next step; advances `build_ledger[]` entries from `minimum-ui-reached` to `wired`).
+- `$user-flow-map --prototype-build-plan [topic]` when approved UI experiments are ready to become prototype build-plan items.
+- `$uat --variant-evaluation` when the screens themselves are being used as the evaluated variant artifact.
 
-**Recommended next command:** `/user-flow-map --prototype-build-plan [topic]`.
-
-If a valid prototype build-plan item already references the approved `ui_experiment_id`, the terminal handoff may instead recommend the resolved `/logic-wiring [topic]` or `/logic-wiring [topic] --variant N` command for that item.
-
-## Invoke With YAML
-
-Emit `agent_routing` only after resolving prototype-build-plan state:
-
-- Missing or invalid build plan: `approved_next_skill: "/user-flow-map --prototype-build-plan [topic]"`.
-- Valid build plan with the approved `ui_experiment_id`: set `approved_next_skill` to the resolved wiring command for the matching item, such as `/logic-wiring [topic]` or `/logic-wiring [topic] --variant N`.
-- Explicit user-accepted untracked ad hoc bypass: set `approved_next_skill` to the resolved wiring command and include `routing_note: "untracked ad hoc bypass accepted by user; no prototype build-plan item exists"`.
-
-Do not emit an unconditional wiring value in `approved_next_skill` from this skill.
+**Recommended next command:** `$logic-wiring`.
 
 Do not route to production planning, roadmap work, or durable infrastructure until experiment review evidence explicitly promotes the branch.
 
@@ -87,10 +74,9 @@ Do not route to production planning, roadmap work, or durable infrastructure unt
 - Build one approved UI experiment branch per run.
 - Build one flow-step batch at a time; stop each batch at the minimum UI that lets the step read as real.
 - Use progressive reveal; do not expose dense secondary controls before the primary task path reads.
-- Do not wire clickable navigation, state transitions, or runnable logic — that is `/logic-wiring`'s job.
+- Do not wire clickable navigation, state transitions, or runnable logic — that is `$logic-wiring`'s job.
 - Do not build production infrastructure, external account integrations, deployment automation, or durable storage.
-- Do not skip the review evidence gate before handing off to `/user-flow-map --prototype-build-plan`, `/logic-wiring`, or `/uat --variant-evaluation`.
-- Do not route to `/logic-wiring` before the prototype build-plan slice exists and includes the approved `ui_experiment_id`, unless the user explicitly accepts an untracked ad hoc bypass.
+- Do not skip the review evidence gate before handing off to `$logic-wiring`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan`.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell before the target skill.
 
 ## Alignment Page

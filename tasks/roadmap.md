@@ -2,6 +2,29 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - build-ui-screens Prototype-Plan Handoff 2026-07-05
+
+### Goal
+
+Update `build-ui-screens` so it does not recommend direct `logic-wiring` when the required prototype build plan is missing, then refresh generated and project runtime copies.
+
+### Plan
+
+- [ ] Inspect current `build-ui-screens` mirrors, generated copies, task docs, and dirty worktree state.
+- [ ] Archive both active mirrors at `v0.4`, bump active `SKILL.md` files to `v0.5`, and update changelogs.
+- [ ] Rewrite `## Next Work` and routing wording so missing prototype build plans route to `user-flow-map --prototype-build-plan`, while direct `logic-wiring` requires a plan item with the approved `ui_experiment_id` or an explicit user-accepted untracked ad hoc bypass.
+- [ ] Refresh generated/runtime skill copies, including the active pair-app runtime copies through the supported refresh path.
+- [ ] Run routing, archive, generated bundle, package, and pair-app sanity checks.
+- [ ] Record verification in `tasks/todo.md`, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- Active Codex and Claude `build-ui-screens` mirrors no longer emit unconditional direct `logic-wiring` as the default next step.
+- Both mirrors default to `$user-flow-map --prototype-build-plan [topic]` or `/user-flow-map --prototype-build-plan [topic]` when no valid prototype build plan exists.
+- Direct `logic-wiring` remains allowed only when a `design/**/prototype-build-plan-*.md` exists and references the approved `ui_experiment_id`, or when the user explicitly accepts an untracked ad hoc bypass.
+- `archive/v0.4/SKILL.md` exists for both mirrors, active versions are `v0.5`, and generated/runtime copies match.
+- Pair-app runtime copies contain the corrected handoff and its missing prototype build plan still routes to build-plan synthesis.
+
 ## Historical Implementation - publish-canary Command 2026-07-05
 
 ### Goal

@@ -2,7 +2,7 @@
 name: build-ui-screens
 description: Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.
 type: execution
-version: v0.4
+version: v0.5
 required_conventions: [alignment-page, design-tree-loop]
 argument-hint: "[approved-ui-experiment]"
 context_intake: scoped
@@ -58,13 +58,26 @@ When using a project-native route instead of `experiments/`, record the exact ro
 
 ## Next Work
 
-After the screens exist and the build ledger is written, hand off to wiring:
+After the screens exist and the build ledger is written, choose the next route from filesystem state:
 
-- `$logic-wiring` to make the built screens clickable and state-backed (the default next step; advances `build_ledger[]` entries from `minimum-ui-reached` to `wired`).
-- `$user-flow-map --prototype-build-plan [topic]` when approved UI experiments are ready to become prototype build-plan items.
+- `$user-flow-map --prototype-build-plan [topic]` is the default next step when no valid prototype build plan exists. Use this when `design/**/prototype-build-plan-*.md` is missing, or when present build-plan artifacts do not include the approved `ui_experiment_id` for the UI experiment just built.
+- `$logic-wiring [topic]` may be recommended only when `design/**/prototype-build-plan-*.md` exists and includes the approved `ui_experiment_id` as a build item. This makes the built screens clickable and state-backed by advancing the matching build item and `build_ledger[]` entries from `minimum-ui-reached` to `wired`.
+- `$logic-wiring [topic]` may also be used as an explicit untracked ad hoc bypass only when the user knowingly accepts skipping the prototype build-plan ledger for this run. Name that bypass in the handoff and do not imply it is the tracked default.
 - `$uat --variant-evaluation` when the screens themselves are being used as the evaluated variant artifact.
 
-**Recommended next command:** `$logic-wiring`.
+**Recommended next command:** `$user-flow-map --prototype-build-plan [topic]`.
+
+If a valid prototype build-plan item already references the approved `ui_experiment_id`, the terminal handoff may instead recommend the resolved `$logic-wiring [topic]` or `$logic-wiring [topic] --variant N` command for that item.
+
+## Invoke With YAML
+
+Emit `agent_routing` only after resolving prototype-build-plan state:
+
+- Missing or invalid build plan: `approved_next_skill: "$user-flow-map --prototype-build-plan [topic]"`.
+- Valid build plan with the approved `ui_experiment_id`: set `approved_next_skill` to the resolved wiring command for the matching item, such as `$logic-wiring [topic]` or `$logic-wiring [topic] --variant N`.
+- Explicit user-accepted untracked ad hoc bypass: set `approved_next_skill` to the resolved wiring command and include `routing_note: "untracked ad hoc bypass accepted by user; no prototype build-plan item exists"`.
+
+Do not emit an unconditional wiring value in `approved_next_skill` from this skill.
 
 Do not route to production planning, roadmap work, or durable infrastructure until experiment review evidence explicitly promotes the branch.
 
@@ -76,7 +89,8 @@ Do not route to production planning, roadmap work, or durable infrastructure unt
 - Use progressive reveal; do not expose dense secondary controls before the primary task path reads.
 - Do not wire clickable navigation, state transitions, or runnable logic — that is `$logic-wiring`'s job.
 - Do not build production infrastructure, external account integrations, deployment automation, or durable storage.
-- Do not skip the review evidence gate before handing off to `$logic-wiring`, `$uat --variant-evaluation`, or `$user-flow-map --prototype-build-plan`.
+- Do not skip the review evidence gate before handing off to `$user-flow-map --prototype-build-plan`, `$logic-wiring`, or `$uat --variant-evaluation`.
+- Do not route to `$logic-wiring` before the prototype build-plan slice exists and includes the approved `ui_experiment_id`, unless the user explicitly accepts an untracked ad hoc bypass.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, recommend `npx skillpacks install <pack-name>` from the project shell before the target skill.
 
 ## Alignment Page

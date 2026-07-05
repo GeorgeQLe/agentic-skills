@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "7eaca944b27d9e079382615228d061be3e82c634",
-  "generated_at": "2026-07-05T02:25:33.572Z",
-  "source_fingerprint": "ee7c75e721a2ce375bef2a39fbb783d660859ea45e177603ad26bc9761379517",
+  "source_commit": "15f39976b77cdf795025e93585d10f04fcebdc5e",
+  "generated_at": "2026-07-05T20:20:31.940Z",
+  "source_fingerprint": "1b1fdb871dee60d238411cfd28812973bc85f041b52429786d53668ec1966f00",
   "source_count": 451,
   "skill_count": 407,
   "pack_count": 42,
@@ -901,7 +901,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.22",
+      "version": "v0.23",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -1344,7 +1344,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.22",
+      "version": "v0.23",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -8002,7 +8002,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8438,7 +8438,7 @@
       "type": "execution",
       "contextIntake": "scoped",
       "visualTier": "prototype",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"

@@ -2,9 +2,9 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.19"
+    "version": "0.1.20"
   },
-  "source_fingerprint": "1d4b1ea8d09885bdc94ad9bbc488f603a3e48093744c408b9e9487f1c1b42e50",
+  "source_fingerprint": "f47f7322b4d691d0d31faa0c131fe8559e6b006011cdf740ec34a0ec11896a65",
   "packs": [
     {
       "name": "agent-bridge",
@@ -8590,7 +8590,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8599,12 +8599,13 @@
       ],
       "path": "packs/product-design/claude/build-ui-screens/SKILL.md",
       "installable": true,
-      "content_sha256": "ec51e598e6e4fc433b275ac5e9e2f4a1a1a5243c42032a52d638c9f448ded216",
+      "content_sha256": "39cbdd1d8006308c6ce4d5e007dc34d5d453199fa1ad892aad9867f9805e47d5",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/build-ui-screens",
       "deck_memberships": []
@@ -9096,7 +9097,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9105,12 +9106,13 @@
       ],
       "path": "packs/product-design/codex/build-ui-screens/SKILL.md",
       "installable": true,
-      "content_sha256": "c7650460adf27dc36f56a0ee2709725077452c8c4dd5b80cded5fe19a917c4bd",
+      "content_sha256": "fb77cd3b90bae125a84e862508a3d6a151a0505ddadc0057ceee19b9128602c6",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$build-ui-screens",
       "deck_memberships": []
