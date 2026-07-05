@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-04 - Deprecated product-design alias cleanup
+
+- Archived the active `prototype`, `create-ui-experiment`, and `consolidate-variations` alias skill directories for both Claude and Codex under `archive/deprecated-skills/2026-07-product-design-aliases/`.
+- Removed those aliases from active `packs/product-design` discovery while preserving replacements: `logic-wiring`, `build-ui-screens`, and `consolidate-prototypes`.
+- Extended `skillpacks cleanup` / `uninstall-global` to remove managed project-local installed copies of the deprecated aliases from discovered `.claude/skills` and `.codex/skills` roots, with dry-run previews and unmanaged directory preservation.
+- Updated active product-design routing/docs, generated design-tree bundles, package manifest data, and skills catalog exports.
+- Verification passed: package Node tests 190/190, focused product-design layer1 tests 21/21, package manifest check, catalog export check, strict skill archive audit, task-doc audit, `skillpacks:verify`, and diff hygiene. A broader layer1 command still exposed pre-existing out-of-scope failures in `product-path-manifest` and `skills-showcase-pack-coverage`.
+- Commit: `f5d1fcd8d Archive product-design aliases and cleanup installs`, pushed to `master`.
+
 ## 2026-07-02 - Dev-docs task reconciliation
 
 - `$reconcile-dev-docs fix tasks`: reconciled task routing surfaces after recent completed work left a verified implementation under active `Current Implementation` headings.

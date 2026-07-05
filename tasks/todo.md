@@ -1,52 +1,6 @@
-## Current Implementation - Deprecated Product-Design Alias Cleanup 2026-07-04
+# Current Task
 
-Project: `agentic-skills`.
-
-### Goal
-
-Archive deprecated product-design alias skills out of active discovery and extend `skillpacks cleanup` so managed project-local installs of those aliases are removed safely.
-
-### Plan
-
-- [x] Archive active alias skill directories for Claude and Codex under `archive/deprecated-skills/2026-07-product-design-aliases/`.
-- [x] Remove active `prototype`, `create-ui-experiment`, and `consolidate-variations` source directories from `packs/product-design`.
-- [x] Extend `packages/skillpacks/src/cli/lifecycle.mjs` cleanup to remove managed project-local deprecated alias installs and preserve unmanaged directories.
-- [x] Update package lifecycle tests, product-design route tests, and manifest/catalog expectations for replacement skills only.
-- [x] Regenerate package manifest/catalog exports if source discovery changes.
-- [x] Run focused verification and record results.
-
-### Acceptance Criteria
-
-- `packs/product-design/**` no longer exposes active alias skill directories.
-- Generated manifest/catalog exports omit deprecated aliases and retain `build-ui-screens`, `logic-wiring`, and `consolidate-prototypes`.
-- `cleanup` and `uninstall-global` remove managed installed alias copies under discovered project `.claude/skills` and `.codex/skills` roots, including dry-run previews.
-- Unmanaged directories with those names are left untouched.
-- Existing global cleanup, BIP cleanup, and base reinstall behavior remains intact.
-
-## Review
-
-Implemented:
-
-- Archived the deprecated product-design alias skill dirs under `archive/deprecated-skills/2026-07-product-design-aliases/product-design/{claude,codex}/`.
-- Removed active `prototype`, `create-ui-experiment`, and `consolidate-variations` discovery from `packs/product-design`.
-- Extended `skillpacks cleanup` / `uninstall-global` to remove managed project-local installs of those aliases from discovered project roots, with dry-run output and unmanaged directory preservation.
-- Updated active routing/docs and generated design-tree bundles to use `build-ui-screens`, `logic-wiring`, and `consolidate-prototypes`.
-- Regenerated package manifest and skills catalog exports.
-
-Verified:
-
-- `npm --workspace packages/skillpacks run test:node` passed: 190 tests.
-- `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts` passed: 21 tests.
-- `npm --workspace packages/skillpacks run build:manifest:check` passed.
-- `npm run exports:check` passed.
-- `bash scripts/skill-archive-audit.sh --strict` passed: 407 skills, 0 violations.
-- `node scripts/audit-task-docs.mjs` passed: 0 failures, 0 warnings.
-- `npm run skillpacks:verify` passed.
-- `git diff --check` and `git diff --cached --check` passed.
-
-Noted but left out of scope:
-
-- The broader command `pnpm --dir tests exec vitest run --project layer1 layer1/product-design-flow-tree.test.ts layer1/skills-showcase-pack-coverage.test.ts layer1/product-path-manifest.test.ts` failed in existing broader coverage: `product-path-manifest` expects product-path scope language in `brainstorm-inspirations`, and `skills-showcase-pack-coverage` expects `packs/base/PACK.md` in generated pack data. The focused product-design route test passed.
+No active executable task. The deprecated product-design alias cleanup shipped on 2026-07-04.
 
 # Historical Task State
 

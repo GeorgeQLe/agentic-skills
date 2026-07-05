@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Deprecated Product-Design Alias Cleanup 2026-07-04
+## Historical Implementation - Deprecated Product-Design Alias Cleanup 2026-07-04
 
 ### Goal
 
