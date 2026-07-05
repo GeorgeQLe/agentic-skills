@@ -25,6 +25,33 @@ Update `build-ui-screens` so it does not recommend direct `logic-wiring` when th
 - `archive/v0.4/SKILL.md` exists for both mirrors, active versions are `v0.5`, and generated/runtime copies match.
 - Pair-app runtime copies contain the corrected handoff and its missing prototype build plan still routes to build-plan synthesis.
 
+## Historical Implementation - Clarify Stable vs Canary Package Language 2026-07-05
+
+### Goal
+
+Clarify public release wording so `skillpacks@latest` remains the normal install channel and `skillpacks@experimental` is clearly a canary prerelease channel for testing unproven package behavior.
+
+### Plan
+
+- [x] Inspect current public docs and `publish-canary` helper output for ambiguous experimental-channel examples.
+- [x] Add prominent canary-channel warning language to `scripts/publish-canary-steps.sh`.
+- [x] Replace `experimental-skill` placeholder examples with `<pack-or-skill>` and add stable/default install examples.
+- [x] Refresh stale README wording that said the canary lane did not exist yet.
+- [x] Run the requested helper, text, shell syntax, task-doc, and diff hygiene checks.
+
+### Acceptance Criteria
+
+- `@experimental` is described as a canary prerelease channel for testing only.
+- Stable/default examples use plain `npx skillpacks ...` or `npx skillpacks@latest ...`.
+- Canary/testing-only examples use `npx skillpacks@experimental ...`.
+- Public docs no longer use `experimental-skill` as an example placeholder.
+
+### Review
+
+Updated `scripts/publish-canary-steps.sh`, `docs/release-runbook.md`, `docs/skillpacks-npm-distribution.md`, and `README.md` to distinguish normal `latest` installs from canary `experimental` installs. The change is wording-only; publish behavior and CLI command semantics are unchanged.
+
+Verification passed for canary helper output, targeted text checks, shell syntax, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - publish-canary Command 2026-07-05
 
 ### Goal

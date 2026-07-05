@@ -29,7 +29,7 @@ Publication status:
 - Each release also publishes `@glexcorp/gskp` as a scoped alias from the same built artifact and version.
 - Both packages expose both binaries: `skillpacks` and `gskp`.
 - The public verification targets are `npx skillpacks@latest list`, `npx @glexcorp/gskp@latest list`, temp-project `install code-quality`, temp-project `install quality-sweep`, temp-project `install-deck game-afps`, and the git-checkout `scripts/pack.sh list` path.
-- Stable releases publish both package names under the npm `latest` dist-tag. Canary releases publish both package names under an explicit non-`latest` dist-tag such as `experimental` and use prerelease semver such as `0.1.20-experimental.0`.
+- Stable releases publish both package names under the npm `latest` dist-tag. Canary releases publish both package names under an explicit non-`latest` dist-tag such as `experimental` and use prerelease semver such as `0.1.20-experimental.0`. The `@experimental` package channel is for canary testing only; normal installs use plain `npx skillpacks ...` or `npx skillpacks@latest ...`.
 
 ## Product Shape
 
@@ -85,11 +85,18 @@ npx @glexcorp/gskp init
 npx @glexcorp/gskp install business-research
 ```
 
-Canary examples use the same dist-tag for both package names:
+Stable/default package examples use `latest` or omit the dist-tag:
 
 ```bash
-npx skillpacks@experimental install experimental-skill
-npx @glexcorp/gskp@experimental install experimental-skill
+npx skillpacks@latest install <pack-or-skill>
+npx @glexcorp/gskp@latest install <pack-or-skill>
+```
+
+Canary/testing-only examples use the same `experimental` dist-tag for both package names:
+
+```bash
+npx skillpacks@experimental install <pack-or-skill>
+npx @glexcorp/gskp@experimental install <pack-or-skill>
 ```
 
 ## Design Principles
@@ -124,6 +131,7 @@ Release guardrails:
 - `skillpacks` and `@glexcorp/gskp` must be staged, published, and verified at the same version and same npm dist-tag.
 - Semver prerelease versions must not publish to `latest`.
 - `latest` publishes must use stable semver versions.
+- `@experimental` is a canary prerelease package channel for testing unproven package behavior, not a normal install channel.
 - Stable versions may publish to a non-`latest` tag only when the maintainer explicitly passes `--tag <tag>`.
 - Partial-publish recovery must preserve the intended tag, for example `./publish.sh --current --tag experimental` for a canary recovery.
 

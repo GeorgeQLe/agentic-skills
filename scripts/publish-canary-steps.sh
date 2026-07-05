@@ -17,6 +17,11 @@ fi
 cat <<EOF
 Canary publishing steps — skillpacks + @glexcorp/gskp
 =====================================================
+WARNING: @experimental is a canary prerelease package channel for testing only.
+It may contain unproven package behavior and should not be used for normal
+installs. Normal users should use plain 'npx skillpacks ...' or
+'npx skillpacks@latest ...'.
+
 Both packages publish TOGETHER at the same prerelease version from one staged
 artifact. Canary releases use the npm dist-tag "experimental" and never move
 "latest". Canonical source of truth: docs/release-runbook.md
@@ -55,8 +60,12 @@ Check current canary tags with:
 5. Post-publish verification
    npm view skillpacks dist-tags.experimental
    npm view @glexcorp/gskp dist-tags.experimental    # must match skillpacks
+   # Stable/default install examples:
+   npx skillpacks@latest install <pack-or-skill>
+   npx @glexcorp/gskp@latest install <pack-or-skill>
+   # Canary/testing-only install examples:
    npx skillpacks@experimental list
-   npx skillpacks@experimental install experimental-skill
+   npx skillpacks@experimental install <pack-or-skill>
    npx @glexcorp/gskp@experimental list
 
 Recovery (skillpacks canary published but @glexcorp/gskp failed)

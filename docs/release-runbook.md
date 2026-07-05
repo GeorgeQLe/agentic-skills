@@ -78,11 +78,20 @@ Use npm dist-tags for canary releases. The default canary tag is `experimental`,
 
 This publishes versions like `0.1.20-experimental.0` for both package names under `dist-tags.experimental`. It does not move `latest`.
 
-User-facing canary usage:
+`@experimental` is a canary prerelease package channel for testing only. It may contain unproven package behavior and should not be used for normal installs. Normal users should use plain `npx skillpacks ...` or `npx skillpacks@latest ...`.
+
+Stable/default install examples:
 
 ```bash
-npx skillpacks@experimental install experimental-skill
-npx @glexcorp/gskp@experimental install experimental-skill
+npx skillpacks@latest install <pack-or-skill>
+npx @glexcorp/gskp@latest install <pack-or-skill>
+```
+
+Canary/testing-only install examples:
+
+```bash
+npx skillpacks@experimental install <pack-or-skill>
+npx @glexcorp/gskp@experimental install <pack-or-skill>
 ```
 
 After a successful canary publish, commit, tag, and push the prerelease source state:
@@ -106,7 +115,7 @@ Both commands must print the same prerelease version. Then run canary smoke chec
 
 ```bash
 npx skillpacks@experimental list
-npx skillpacks@experimental install experimental-skill
+npx skillpacks@experimental install <pack-or-skill>
 npx @glexcorp/gskp@experimental list
 ```
 

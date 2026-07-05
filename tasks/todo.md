@@ -44,6 +44,29 @@ Verified:
 
 # Historical Task State
 
+## Review - Clarify Stable vs Canary Package Language 2026-07-05
+
+### Goal
+
+Clarify public release wording so `skillpacks@latest` remains the normal install channel and `skillpacks@experimental` is clearly a canary prerelease channel for testing unproven package behavior.
+
+### Review
+
+Implemented:
+
+- Added a prominent `@experimental` warning near the top of `scripts/publish-canary-steps.sh`.
+- Replaced `experimental-skill` placeholder examples with `<pack-or-skill>`.
+- Updated `docs/release-runbook.md`, `docs/skillpacks-npm-distribution.md`, and `README.md` to contrast stable/default installs with canary/testing-only installs.
+- Left `docs/QUICKSTART.md` and `docs/scripts-reference.md` unchanged because they do not mention the experimental package channel.
+
+Verified:
+
+- `bash scripts/publish-canary-steps.sh` printed the stable/default versus canary/testing-only distinction.
+- `rg "experimental-skill|until that lane exists|skillpacks@experimental" README.md docs scripts/publish-canary-steps.sh` found no `experimental-skill` or stale lane-existence wording; remaining hits are intentional `skillpacks@experimental` examples.
+- `bash -n scripts/publish-canary-steps.sh scripts/publish-steps.sh` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+
 ## Review - publish-canary Command 2026-07-05
 
 ### Goal
