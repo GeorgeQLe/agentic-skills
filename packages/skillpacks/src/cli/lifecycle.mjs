@@ -46,7 +46,19 @@ const DEPRECATED_ALIAS_REPLACEMENTS = new Map([
   ['create-ui-experiment', 'build-ui-screens'],
   ['consolidate-variations', 'consolidate-prototypes']
 ]);
-const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set(['v0.5', 'v0.6', 'v0.7', 'v0.8', 'v0.9', 'v0.10', 'v0.11']);
+const KNOWN_PROVISION_AGENTIC_CONFIG_VERSIONS = new Set([
+  'v0.5',
+  'v0.6',
+  'v0.7',
+  'v0.8',
+  'v0.9',
+  'v0.10',
+  'v0.11',
+  'v0.12',
+  'v0.13',
+  'v0.14',
+  'v0.15'
+]);
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(moduleDir, '..', '..');
 const checkoutRoot = resolve(packageRoot, '..', '..');

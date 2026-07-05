@@ -7575,3 +7575,24 @@ Broaden the legacy `uninstall-global` cleanup path into a clearer `cleanup` comm
 - [x] `npx skillpacks uninstall-global` still works as a deprecated alias.
 - [x] Dry-run mode reports intended global and BIP cleanup without changing files.
 - [x] Docs describe cleanup as the path for deprecated artifacts and reserve experimental features for canary/pre-release packages.
+
+## Current Plan - Fix Dangling Shipping Contract Pointers
+
+### Goal
+
+Seed the shared shipping contract into canonical `provision-agentic-config` blocks so downstream `CLAUDE.md` and `AGENTS.md` files can resolve skill stubs that say `Follow the shared shipping contract convention in CLAUDE.md`.
+
+### Plan
+
+- [x] Inspect current provision skill variants, root shipping contract wording, lifecycle tests, archives, and generated package scripts.
+- [x] Archive and bump both `provision-agentic-config` skill variants.
+- [x] Add `### Shipping Contract Convention` to the canonical Claude and AGENTS provision blocks.
+- [x] Add lifecycle coverage that generated `CLAUDE.md` and `AGENTS.md` contain the shared shipping contract pointer and rules.
+- [x] Refresh generated package artifacts.
+- [x] Run focused verification and record results.
+
+### Acceptance Criteria
+
+- [x] Canonical extracted `CLAUDE.md` and `AGENTS.md` blocks contain the shipping contract heading, pointer text, next-step routing, commit/push, clean tracked tree, and safety-exception rules.
+- [x] Active skill stubs can continue to reference `Follow the shared shipping contract convention in CLAUDE.md`.
+- [x] Package manifest output reflects the bumped provision skill metadata.

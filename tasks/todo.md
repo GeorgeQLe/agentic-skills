@@ -919,3 +919,37 @@ Verified:
 - `npm --workspace packages/skillpacks run test:node` passed after serialization: 187 tests.
 - `npm --workspace packages/skillpacks run build:check` passed.
 - `git diff --check` passed.
+
+## Current Plan - Fix Dangling Shipping Contract Pointers
+
+### Goal
+
+Make provisioned agent docs self-sufficient for shared shipping contract references without rewriting every per-skill stub.
+
+### Plan
+
+- [x] Inspect current provision skill variants, root shipping contract wording, lifecycle tests, archives, and generated package scripts.
+- [x] Archive and bump both `provision-agentic-config` skill variants.
+- [x] Add `### Shipping Contract Convention` to the canonical Claude and AGENTS provision blocks.
+- [x] Add lifecycle coverage that generated `CLAUDE.md` and `AGENTS.md` contain the shared shipping contract pointer and rules.
+- [x] Refresh generated package artifacts.
+- [x] Run focused verification and record results.
+
+### Safety Boundary
+
+- Preserve unrelated untracked prompt-history work unless it is intentionally included in this shipping boundary.
+- Do not run `npx skillpacks install`, `npx skillpacks init`, or other install/package commands to obtain skills in this source repo.
+- Do not create or edit GitHub Actions.
+
+### Review
+
+Verified:
+
+- `node --test packages/skillpacks/test/lifecycle.test.mjs` passed: 66 tests.
+- `npm --prefix packages/skillpacks run build:check` passed; manifest check and package staging boundary both passed for 407 skills.
+- `scripts/validate-skills-catalog-export.sh` passed after staging regenerated export artifacts.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 407 skills checked, 0 violations.
+- `git diff --cached --check` passed.
+- Targeted extraction check passed: both Claude and Codex `provision-agentic-config` skills expose two canonical provision blocks, and every block contains the shipping contract heading, pointer text, next-step routing, commit/push, clean tracked tree, and safety-exception rules.
+- Targeted active-stub search found 352 active `SKILL.md` files still referencing `Follow the shared shipping contract convention in CLAUDE.md`.
+- `packages/skillpacks/dist/skillpacks-manifest.json` now reports `provision-agentic-config` at Claude `v0.14` and Codex `v0.15`.

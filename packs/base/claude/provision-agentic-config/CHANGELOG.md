@@ -1,5 +1,10 @@
 # provision-agentic-config Changelog
 
+## v0.14 - 2026-07-05
+
+- Added the shared shipping contract convention to the provisioned `CLAUDE.md` and `AGENTS.md` blocks so downstream skill stubs can resolve `Follow the shared shipping contract convention in CLAUDE.md`.
+- Bumped provision block markers to `v0.14`.
+
 ## v0.13 - 2026-06-14
 
 - Added `Revision Hygiene` to the provisioned Workflow Orchestration blocks so feedback-driven edits converge on the requested final artifact instead of repeating rejected framing. Bumped block comment to v0.13.

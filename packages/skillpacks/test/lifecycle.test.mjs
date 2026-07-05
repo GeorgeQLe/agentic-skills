@@ -324,6 +324,19 @@ function provisionDoc(fileName, options = {}) {
   ].join('\n');
 }
 
+function assertProvisionedShippingContract(doc, fileName) {
+  assert.match(doc, /### Shipping Contract Convention/, `${fileName} should include shipping contract heading`);
+  assert.match(
+    doc,
+    /Follow the shared shipping contract convention/,
+    `${fileName} should define the shared shipping contract pointer`
+  );
+  assert.match(doc, /Default next-step routing/, `${fileName} should include next-step routing`);
+  assert.match(doc, /committing and pushing all intended changes/, `${fileName} should include commit and push rule`);
+  assert.match(doc, /Do not leave tracked changes or unpushed commits behind/, `${fileName} should include clean tracked tree rule`);
+  assert.match(doc, /does not override stricter safety rules/, `${fileName} should include safety exceptions`);
+}
+
 function writeAgentDocs(projectRoot, options = {}) {
   writeFileSync(
     join(projectRoot, 'AGENTS.md'),
@@ -1726,6 +1739,8 @@ describe('Node lifecycle commands', () => {
     assert.doesNotMatch(claude, /legacy generated line/);
     assert.match(agents, /npx skillpacks install <pack-or-skill>/);
     assert.match(claude, /npx skillpacks install <pack-or-skill>/);
+    assertProvisionedShippingContract(agents, 'AGENTS.md');
+    assertProvisionedShippingContract(claude, 'CLAUDE.md');
     assert.deepEqual(
       backupFiles(dir).map((file) => file.replace(/\.\d{8}T\d{6}Z\.bak$/, '.TIMESTAMP.bak')),
       ['AGENTS.md.TIMESTAMP.bak', 'CLAUDE.md.TIMESTAMP.bak']

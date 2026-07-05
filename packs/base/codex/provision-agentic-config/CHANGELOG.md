@@ -1,5 +1,10 @@
 # provision-agentic-config Changelog
 
+## v0.15 - 2026-07-05
+
+- Added the shared shipping contract convention to the provisioned `CLAUDE.md` and `AGENTS.md` blocks so downstream skill stubs can resolve `Follow the shared shipping contract convention in CLAUDE.md`.
+- Bumped provision block markers to `v0.15`.
+
 ## v0.14 - 2026-07-02
 
 - Corrected the Codex skill process text to refer to `$sync` when describing stale provisioning detection.

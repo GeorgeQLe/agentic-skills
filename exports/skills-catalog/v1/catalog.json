@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "6af5171558b3ca95c11b8190e6cc64f6b26cc071",
-  "generated_at": "2026-07-04T23:42:01.781Z",
-  "source_fingerprint": "33c4afb32ccda366515b30a7368cc13b3e6a598cb3d8866efe69691c79936c77",
+  "source_commit": "7eaca944b27d9e079382615228d061be3e82c634",
+  "generated_at": "2026-07-05T02:25:33.572Z",
+  "source_fingerprint": "ee7c75e721a2ce375bef2a39fbb783d660859ea45e177603ad26bc9761379517",
   "source_count": 451,
   "skill_count": 407,
   "pack_count": 42,
@@ -956,7 +956,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.13",
+      "version": "v0.14",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1399,7 +1399,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [
         "alignment-page"
       ],

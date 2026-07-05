@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.15
+version: v0.14
 required_conventions: [alignment-page]
 ---
 
@@ -28,12 +28,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.15 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.13 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.15 -->
+<!-- provision-agentic-config v0.13 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -108,15 +108,6 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
-### Shipping Contract Convention
-
-When a skill says "Follow the shared shipping contract convention", apply these rules:
-
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
-- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
-- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
-
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
@@ -167,7 +158,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.15 -->
+<!-- provision-agentic-config v0.13 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -235,15 +226,6 @@ fi
 - When bumping a version, archive the current SKILL.md to `archive/<old-version>/SKILL.md` in the same commit
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
-
-### Shipping Contract Convention
-
-When a skill says "Follow the shared shipping contract convention", apply these rules:
-
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
-- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
-- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
 
 ### Alignment Page Convention
 - The alignment-page convention is shared through the packaged convention resolver: source checkouts load `docs/alignment-page-convention.md`, packaged installs load `assets/alignment-page-convention.md`, and older installed skills may fall back to a sibling `ALIGNMENT-PAGE.md` if present.

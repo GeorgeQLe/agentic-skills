@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.19"
   },
-  "source_fingerprint": "cd61f0faee0bdcbd0b38f34e90ebcf2062b8b60c07f7c992bf58711cab0718e1",
+  "source_fingerprint": "4da461de5febc9cc4f6aef1156fa6f3b5272a89d845e7c0a2574e39209869717",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1594,7 +1594,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.13",
+      "version": "v0.14",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1602,13 +1602,14 @@
       ],
       "path": "packs/base/claude/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "c6537c6f447940e0e080da36505e37e276bb808f5cb04b39ff7f38fc40e07f57",
+      "content_sha256": "3017617b0d62e86442e3f1c56e176e49f1979bc455551e1f8144dee2f6ecddba",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
         "v0.11",
         "v0.12",
+        "v0.13",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1992,7 +1993,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.14",
+      "version": "v0.15",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2000,7 +2001,7 @@
       ],
       "path": "packs/base/codex/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "e55cbf95935c65bacb903177380657fd4629f9255f778449cdad7aa1e6e1abaf",
+      "content_sha256": "690cc24d9437f9c917edaaaa904989fa1b64b85a886c23c26d661b9c6abe604b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2008,6 +2009,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
