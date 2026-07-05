@@ -9,6 +9,8 @@ BUILD_DIR="$PACKAGE_DIR/build"
 DRY_RUN=0
 USE_CURRENT=0
 ALLOW_DIRTY_TREE=0
+DIST_TAG=latest
+PREID=""
 TARGET=""
 TMP_DIRS=()
 RESTORE_DIR=""
@@ -28,10 +30,15 @@ Usage:
   ./publish.sh --allow-dirty-tree patch
   ./publish.sh --dry-run --allow-dirty-tree patch
   ./publish.sh --dry-run --current
+  ./publish.sh --tag experimental --preid experimental prerelease
 
 Publishes both npm packages from the same built artifact:
   - skillpacks
   - @glexcorp/gskp
+
+Stable releases publish to the npm latest dist-tag by default. Canary or
+experimental prereleases must use an explicit non-latest tag, for example:
+  ./publish.sh --tag experimental --preid experimental prerelease
 
 By default, tracked working tree changes block publishing. Use
 --allow-dirty-tree only when every tracked dirty path is outside the package
@@ -53,6 +60,27 @@ package_published() {
   local package_name=$1
   local version=$2
   npm view "${package_name}@${version}" version >/dev/null 2>&1
+}
+
+dist_tag_points_to_version() {
+  local package_name=$1
+  local dist_tag=$2
+  local version=$3
+  local actual
+
+  if ! actual=$(npm view "$package_name" "dist-tags.$dist_tag" --json 2>/dev/null); then
+    return 1
+  fi
+
+  actual=${actual//$'\n'/}
+  actual=${actual#\"}
+  actual=${actual%\"}
+  [[ "$actual" == "$version" ]]
+}
+
+is_prerelease_version() {
+  local version=$1
+  [[ "$version" == *-* ]]
 }
 
 tracked_changes_allowed_for_current_recovery() {
@@ -197,9 +225,15 @@ kill_process_tree() {
 
 run_version_bump() {
   local timeout_seconds=${SKILLPACKS_PUBLISH_VERSION_TIMEOUT_SECONDS:-20}
-  printf '+ npm --workspace packages/skillpacks version %q --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update\n' "$TARGET"
+  local version_args=("$TARGET")
+  if [[ -n "$PREID" ]]; then
+    version_args+=(--preid "$PREID")
+  fi
+  printf '+ npm --workspace packages/skillpacks version'
+  printf ' %q' "${version_args[@]}"
+  printf ' --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update\n'
 
-  npm --workspace packages/skillpacks version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update &
+  npm --workspace packages/skillpacks version "${version_args[@]}" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update &
   local pid=$!
   local start
   start=$(date +%s)
@@ -238,13 +272,17 @@ run_version_bump() {
 
 compute_target_version() {
   local version_dir
+  local version_args=("$TARGET")
+  if [[ -n "$PREID" ]]; then
+    version_args+=(--preid "$PREID")
+  fi
   version_dir=$(mktemp -d /tmp/skillpacks-version-XXXXXX)
   TMP_DIRS+=("$version_dir")
   cp "$PACKAGE_JSON" "$version_dir/package.json"
 
   (
     cd "$version_dir"
-    npm version "$TARGET" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update >/dev/null
+    npm version "${version_args[@]}" --no-git-tag-version --ignore-scripts --no-commit-hooks --no-workspaces-update >/dev/null
   )
 
   node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$version_dir/package.json"
@@ -364,6 +402,16 @@ while [[ $# -gt 0 ]]; do
       ALLOW_DIRTY_TREE=1
       shift
       ;;
+    --tag)
+      [[ $# -ge 2 ]] || fail "--tag requires a dist-tag value."
+      DIST_TAG="$2"
+      shift 2
+      ;;
+    --preid)
+      [[ $# -ge 2 ]] || fail "--preid requires an identifier value."
+      PREID="$2"
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -388,6 +436,13 @@ if [[ "$USE_CURRENT" == "1" && -n "$TARGET" ]]; then
   fail "--current cannot be combined with a version target."
 fi
 
+if [[ -z "$DIST_TAG" ]]; then
+  fail "--tag cannot be empty."
+fi
+if [[ "$DIST_TAG" == *"@"* || "$DIST_TAG" == *"/"* || "$DIST_TAG" == *":"* || "$DIST_TAG" =~ [[:space:]] ]]; then
+  fail "--tag must be a simple npm dist-tag, got '$DIST_TAG'."
+fi
+
 if [[ "$USE_CURRENT" != "1" && -z "$TARGET" ]]; then
   usage >&2
   fail "Missing version target."
@@ -395,7 +450,7 @@ fi
 
 if [[ "$USE_CURRENT" != "1" ]]; then
   case "$TARGET" in
-    major|minor|patch|premajor|preminor|prepatch|prerelease|[0-9]*.[0-9]*.[0-9]*)
+    major|minor|patch|premajor|preminor|prepatch|prerelease|[0-9]*.[0-9]*.[0-9]*|[0-9]*.[0-9]*.[0-9]*-*)
       ;;
     *)
       fail "Unsupported version target '$TARGET'. Use patch, minor, major, or an explicit x.y.z version."
@@ -449,7 +504,11 @@ if [[ "$USE_CURRENT" == "1" ]]; then
     fail "Package version $VERSION does not match manifest version $MANIFEST_VERSION."
   fi
 
-  log "Using current packages/skillpacks version $VERSION for partial-publish recovery"
+  if [[ "$DIST_TAG" == "latest" ]] && is_prerelease_version "$VERSION"; then
+    fail "Refusing to publish prerelease version $VERSION to the npm latest dist-tag. Use --tag <non-latest>."
+  fi
+
+  log "Using current packages/skillpacks version $VERSION for partial-publish recovery on dist-tag $DIST_TAG"
   SKILLPACKS_ALREADY_PUBLISHED=0
   GSKP_ALREADY_PUBLISHED=0
   if package_published skillpacks "$VERSION"; then
@@ -461,6 +520,12 @@ if [[ "$USE_CURRENT" == "1" ]]; then
 
   if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "1" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
     RECOVERY_BOTH_PUBLISHED=1
+  fi
+  if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "1" ]] && ! dist_tag_points_to_version skillpacks "$DIST_TAG" "$VERSION"; then
+    fail "skillpacks@$VERSION exists, but skillpacks dist-tag '$DIST_TAG' does not point to $VERSION. Fix npm dist-tag state before --current recovery."
+  fi
+  if [[ "$GSKP_ALREADY_PUBLISHED" == "1" ]] && ! dist_tag_points_to_version @glexcorp/gskp "$DIST_TAG" "$VERSION"; then
+    fail "@glexcorp/gskp@$VERSION exists, but @glexcorp/gskp dist-tag '$DIST_TAG' does not point to $VERSION. Fix npm dist-tag state before --current recovery."
   fi
   if [[ "$SKILLPACKS_ALREADY_PUBLISHED" == "0" && "$GSKP_ALREADY_PUBLISHED" == "1" ]]; then
     fail "Inconsistent registry state: @glexcorp/gskp@$VERSION is published but skillpacks@$VERSION is missing."
@@ -478,6 +543,10 @@ if [[ "$USE_CURRENT" == "1" ]]; then
   fi
 else
   VERSION=$(compute_target_version)
+  if [[ "$DIST_TAG" == "latest" ]] && is_prerelease_version "$VERSION"; then
+    fail "Refusing to publish prerelease version $VERSION to the npm latest dist-tag. Use --tag <non-latest>."
+  fi
+
   log "Running pre-bump npm auth preflight for skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
   run_pre_mutation_auth_preflight skillpacks "$VERSION"
   run_pre_mutation_auth_preflight @glexcorp/gskp "$VERSION"
@@ -583,10 +652,10 @@ if [[ "$DRY_RUN" == "1" ]]; then
     log "Recovery dry run: skipping skillpacks@$VERSION and @glexcorp/gskp@$VERSION because both are already published."
   elif [[ "$USE_CURRENT" == "1" && "$CURRENT_SOURCE_RELEASE" != "1" ]]; then
     log "Recovery dry run: skipping skillpacks@$VERSION because it is already published."
-    run npm publish "$GSKP_STAGE" --access public --dry-run
+    run npm publish "$GSKP_STAGE" --access public --tag "$DIST_TAG" --dry-run
   else
-    run npm publish "$SKILLPACKS_STAGE" --dry-run
-    run npm publish "$GSKP_STAGE" --access public --dry-run
+    run npm publish "$SKILLPACKS_STAGE" --tag "$DIST_TAG" --dry-run
+    run npm publish "$GSKP_STAGE" --access public --tag "$DIST_TAG" --dry-run
   fi
   log "Dry run complete; skipped published-package verification."
   exit 0
@@ -604,7 +673,8 @@ Release prerequisite reminder:
   - Confirm npm login: npm whoami --registry https://registry.npmjs.org/
   - Expected publisher: ${SKILLPACKS_NPM_PUBLISHER:-glexcorp}
   - Publishing both packages at version: $VERSION
-  - If skillpacks publishes but @glexcorp/gskp fails, fix npm auth/access and rerun: ./publish.sh --current
+  - npm dist-tag: $DIST_TAG
+  - If skillpacks publishes but @glexcorp/gskp fails, fix npm auth/access and rerun: ./publish.sh --current --tag $DIST_TAG
 EOF
 fi
 
@@ -613,18 +683,18 @@ if [[ "$RECOVERY_BOTH_PUBLISHED" == "1" ]]; then
 elif [[ "$USE_CURRENT" == "1" && "$CURRENT_SOURCE_RELEASE" != "1" ]]; then
   log "Recovery publish: skipping skillpacks@$VERSION because it is already published."
   PUBLISH_STARTED=1
-  run npm publish "$GSKP_STAGE" --access public
+  run npm publish "$GSKP_STAGE" --access public --tag "$DIST_TAG"
 else
-  run npm publish "$SKILLPACKS_STAGE"
+  run npm publish "$SKILLPACKS_STAGE" --tag "$DIST_TAG"
   PUBLISH_STARTED=1
-  run npm publish "$GSKP_STAGE" --access public
+  run npm publish "$GSKP_STAGE" --access public --tag "$DIST_TAG"
 fi
 
 log "Verifying published packages"
-run env SKILLPACKS_PACKAGE_NAME=skillpacks SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_NPM_SPEC="skillpacks@$VERSION" npm run skillpacks:verify-published
-run env SKILLPACKS_PACKAGE_NAME=@glexcorp/gskp SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_NPM_SPEC="@glexcorp/gskp@$VERSION" npm run skillpacks:verify-published
+run env SKILLPACKS_PACKAGE_NAME=skillpacks SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_EXPECTED_DIST_TAG="$DIST_TAG" SKILLPACKS_NPM_SPEC="skillpacks@$DIST_TAG" npm run skillpacks:verify-published
+run env SKILLPACKS_PACKAGE_NAME=@glexcorp/gskp SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_EXPECTED_DIST_TAG="$DIST_TAG" SKILLPACKS_NPM_SPEC="@glexcorp/gskp@$DIST_TAG" npm run skillpacks:verify-published
 
-log "Published skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
+log "Published skillpacks@$VERSION and @glexcorp/gskp@$VERSION with dist-tag $DIST_TAG"
 cat <<EOF
 Post-publish source-state requirement:
   1. Ensure packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json are committed at version $VERSION.

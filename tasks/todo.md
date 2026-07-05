@@ -1,8 +1,50 @@
 # Current Task
 
-No active executable task. The deprecated product-design alias cleanup shipped on 2026-07-04.
+No active executable task. The skillpacks canary release lane shipped on 2026-07-05.
 
 # Historical Task State
+
+## Review - skillpacks Canary Release Lane 2026-07-05
+
+### Goal
+
+Add an npm canary/prerelease lane for `skillpacks` and `@glexcorp/gskp` that publishes both package names in lockstep under an explicit non-`latest` dist-tag, defaulting user-facing canary usage to `experimental` while preserving stable `latest` release behavior.
+
+### Plan
+
+- [x] Extend `publish.sh` with `--tag <dist-tag>` and `--preid <identifier>` options, keeping `latest` as the default tag for stable releases.
+- [x] Add release-channel guardrails so prerelease versions cannot publish to `latest`, stable `latest` publishes cannot carry prerelease versions, and both package names always share version and dist-tag.
+- [x] Preserve `--current` partial-publish recovery while reusing the intended dist-tag and publishing only the missing package.
+- [x] Add focused publish-script tests for canary prerelease publishing, guardrail failures, stable non-`latest` opt-in, dry-run behavior, and canary `--current` recovery.
+- [x] Update `docs/release-runbook.md`, `docs/skillpacks-npm-distribution.md`, and `CHANGELOG.md` with canary release commands, validation, and publishing rules.
+- [x] Run focused and package-level verification, record the review, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- `./publish.sh --tag experimental --preid experimental prerelease` stages versions such as `0.1.20-experimental.0` and publishes both package names with `--tag experimental`.
+- `./publish.sh patch` and other stable release commands continue to publish to `latest` unchanged.
+- `./publish.sh` rejects prerelease + `latest` and rejects any `latest` publish whose staged version is a prerelease.
+- `--current --tag experimental` recovers a partial canary publish using the experimental dist-tag and only publishes the missing package.
+- Docs explain canary usage via `npx skillpacks@experimental ...` and `npx @glexcorp/gskp@experimental ...`, plus dist-tag parity verification.
+
+### Review
+
+Implemented:
+
+- Added `--tag` and `--preid` handling to `publish.sh`, with `latest` as the stable default and `--tag experimental --preid experimental prerelease` as the canary path.
+- Published-package verification is now dist-tag aware through `SKILLPACKS_EXPECTED_DIST_TAG`.
+- `--current` recovery preserves the requested dist-tag and rejects existing-package registry states where the requested tag does not point at the recovered version.
+- Release docs and changelog now document canary publish, validation, recovery, and GA follow-up rules.
+
+Verified:
+
+- `node --test packages/skillpacks/test/publish-recovery.test.mjs` passed: 22 tests.
+- `node --test packages/skillpacks/test/prepublish-auth-check.test.mjs` passed: 11 tests.
+- `node --test packages/skillpacks/test/verify-published-package.test.mjs` passed: 5 tests.
+- `npm --workspace packages/skillpacks run test:node` passed: 197 tests.
+- `npm run skillpacks:verify` passed.
+- `node scripts/audit-task-docs.mjs` passed: 0 failures, 0 warnings.
+- `git diff --check` passed.
 
 ## Review - Investigate Permission Gate 2026-07-04
 

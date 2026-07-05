@@ -29,6 +29,7 @@ Publication status:
 - Each release also publishes `@glexcorp/gskp` as a scoped alias from the same built artifact and version.
 - Both packages expose both binaries: `skillpacks` and `gskp`.
 - The public verification targets are `npx skillpacks@latest list`, `npx @glexcorp/gskp@latest list`, temp-project `install code-quality`, temp-project `install quality-sweep`, temp-project `install-deck game-afps`, and the git-checkout `scripts/pack.sh list` path.
+- Stable releases publish both package names under the npm `latest` dist-tag. Canary releases publish both package names under an explicit non-`latest` dist-tag such as `experimental` and use prerelease semver such as `0.1.20-experimental.0`.
 
 ## Product Shape
 
@@ -84,6 +85,13 @@ npx @glexcorp/gskp init
 npx @glexcorp/gskp install business-research
 ```
 
+Canary examples use the same dist-tag for both package names:
+
+```bash
+npx skillpacks@experimental install experimental-skill
+npx @glexcorp/gskp@experimental install experimental-skill
+```
+
 ## Design Principles
 
 1. Preserve `SKILL.md` as the source format.
@@ -94,6 +102,41 @@ npx @glexcorp/gskp install business-research
 6. Add a generated manifest early so later COA B/C migration does not require inventing metadata twice.
 7. Model decks as package-list and registry-tag metadata from the start, even while the first package ships as a monolith.
 8. Avoid GitHub Actions; publishing remains an explicit local or agent-run command unless separately requested.
+
+## Publishing Rules
+
+Stable release commands keep publishing to `latest`:
+
+```bash
+./publish.sh --dry-run patch
+./publish.sh patch
+```
+
+Canary release commands must use a non-`latest` dist-tag and prerelease identifier:
+
+```bash
+./publish.sh --dry-run --tag experimental --preid experimental prerelease
+./publish.sh --tag experimental --preid experimental prerelease
+```
+
+Release guardrails:
+
+- `skillpacks` and `@glexcorp/gskp` must be staged, published, and verified at the same version and same npm dist-tag.
+- Semver prerelease versions must not publish to `latest`.
+- `latest` publishes must use stable semver versions.
+- Stable versions may publish to a non-`latest` tag only when the maintainer explicitly passes `--tag <tag>`.
+- Partial-publish recovery must preserve the intended tag, for example `./publish.sh --current --tag experimental` for a canary recovery.
+
+Canary validation checks the tag directly:
+
+```bash
+npm view skillpacks dist-tags.experimental
+npm view @glexcorp/gskp dist-tags.experimental
+npx skillpacks@experimental list
+npx @glexcorp/gskp@experimental list
+```
+
+GA promotion after canary confidence is a new stable release through `./publish.sh patch`; do not move the canary tarball to `latest`.
 
 ## Package Architecture
 

@@ -55,12 +55,13 @@ version_for_count() {
   fi
 }
 
-if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == "version" && "$4" == "license" && "$5" == "dist-tags.latest" ]]; then
+if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == "version" && "$4" == "license" && "$5" == dist-tags.* ]]; then
   count=$(read_count)
   count=$((count + 1))
   printf '%s\\n' "$count" > "$count_file"
   current_version=$(version_for_count "$count")
-  printf '{"version":"%s","license":"MIT","dist-tags.latest":"%s"}\\n' "$current_version" "$current_version"
+  tag_key="$5"
+  printf '{"version":"%s","license":"MIT","%s":"%s"}\\n' "$current_version" "$tag_key" "$current_version"
   exit 0
 fi
 
@@ -240,7 +241,8 @@ function runVerifier({
   attempts = "3",
   npxPropagationFailures = 0,
   npxCliFailures = 0,
-  npxFailCommand = "list"
+  npxFailCommand = "list",
+  distTag = "latest"
 }) {
   const mock = makeMockBin();
   const expectedVersion = "9.9.9";
@@ -254,7 +256,8 @@ function runVerifier({
       SKILLPACKS_PACKAGE_NAME: "skillpacks",
       SKILLPACKS_EXPECTED_VERSION: expectedVersion,
       SKILLPACKS_EXPECTED_LICENSE: "MIT",
-      SKILLPACKS_NPM_SPEC: `skillpacks@${expectedVersion}`,
+      SKILLPACKS_EXPECTED_DIST_TAG: distTag,
+      SKILLPACKS_NPM_SPEC: `skillpacks@${distTag}`,
       SKILLPACKS_KEEP_TMP: "0",
       SKILLPACKS_VERIFY_PUBLISHED_ATTEMPTS: attempts,
       SKILLPACKS_VERIFY_PUBLISHED_DELAY_SECONDS: "0",
@@ -294,6 +297,15 @@ test("published-package verification retries stale npm metadata before smoke tes
   assert.equal(result.npxCalls.split("\n").filter(Boolean)[0], "list");
 });
 
+test("published-package verification checks a non-latest dist-tag when requested", () => {
+  const result = runVerifier({ distTag: "experimental" });
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /ok metadata: skillpacks@experimental=9\.9\.9, license=MIT/);
+  assert.match(result.npmCalls, /^view skillpacks version license dist-tags\.experimental/m);
+  assert.match(result.npxArgCalls, /--package skillpacks@experimental/);
+});
+
 test("published-package verification fails after bounded stale metadata retries", () => {
   const result = runVerifier({ staleAttempts: 99, attempts: "2" });
 
@@ -313,7 +325,7 @@ test("published-package verification retries npx propagation failures during smo
   });
 
   assert.equal(result.status, 0, result.output);
-  assert.match(result.output, /published package smoke command hit npm propagation error for skillpacks@9\.9\.9 \(attempt 1\/3\)/);
+  assert.match(result.output, /published package smoke command hit npm propagation error for skillpacks@latest \(attempt 1\/3\)/);
   assert.match(result.output, /ETARGET/);
   assert.match(result.output, /Published package smoke verification passed/);
   assert.match(result.npxArgCalls, /--prefer-online/);

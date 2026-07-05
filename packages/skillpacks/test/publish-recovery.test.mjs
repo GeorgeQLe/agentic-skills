@@ -12,6 +12,7 @@ const manifestJsonPath = path.join(repoRoot, "packages/skillpacks/dist/skillpack
 const packageVersion = JSON.parse(
   readFileSync(packageJsonPath, "utf8")
 ).version;
+const nextPatchVersion = packageVersion.replace(/^(\d+)\.(\d+)\.(\d+)(?:-.+)?$/, (_, major, minor, patch) => `${major}.${minor}.${Number(patch) + 1}`);
 
 function makeMockBin() {
   const tempDir = mkdtempSync(path.join(tmpdir(), "skillpacks-publish-mock-"));
@@ -133,18 +134,32 @@ if [[ "$1" == "view" && "$3" == "version" ]]; then
   exit 1
 fi
 
+if [[ "$1" == "view" && "$3" == dist-tags.* ]]; then
+  package_name="$2"
+  if [[ "$package_name" == "skillpacks" && "\${NPM_MOCK_SKILLPACKS_EXISTS:-0}" == "1" ]]; then
+    printf '"%s"\\n' "\${NPM_MOCK_SKILLPACKS_TAG_VERSION:-${packageVersion}}"
+    exit 0
+  fi
+  if [[ "$package_name" == "@glexcorp/gskp" && "\${NPM_MOCK_GSKP_EXISTS:-0}" == "1" ]]; then
+    printf '"%s"\\n' "\${NPM_MOCK_GSKP_TAG_VERSION:-${packageVersion}}"
+    exit 0
+  fi
+  printf 'npm error code E404\\n' >&2
+  exit 1
+fi
+
 if [[ "$1" == "view" && "$3" == "maintainers" ]]; then
   printf '[{"name":"glexcorp","email":"george@leexperimental.com"}]\\n'
   exit 0
 fi
 
 if [[ "$1" == "version" ]]; then
-  node -e 'const fs = require("fs"); const path = require("path"); const target = process.argv[1]; const packagePath = path.join(process.cwd(), "package.json"); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split(".").map(Number); parts[2] += 1; next = parts.join("."); } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "$2"
+  node -e 'const fs = require("fs"); const path = require("path"); const args = process.argv.slice(1); const target = args[0]; const preidIndex = args.indexOf("--preid"); const preid = preidIndex === -1 ? "0" : args[preidIndex + 1]; const packagePath = path.join(process.cwd(), "package.json"); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split("-")[0].split(".").map(Number); parts[2] += 1; next = parts.join("."); } else if (target === "prerelease") { const [base, prerelease] = pkg.version.split("-"); if (prerelease && prerelease.startsWith(preid + ".")) { const number = Number(prerelease.slice(preid.length + 1)) + 1; next = base + "-" + preid + "." + number; } else { const parts = base.split(".").map(Number); parts[2] += 1; next = parts.join(".") + "-" + preid + ".0"; } } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "\${@:2}"
   exit 0
 fi
 
 if [[ "$1" == "--workspace" && "$2" == "packages/skillpacks" && "$3" == "version" ]]; then
-  node -e 'const fs = require("fs"); const [packagePath, target] = process.argv.slice(1); const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split(".").map(Number); parts[2] += 1; next = parts.join("."); } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "${packageJsonPath}" "$4"
+  node -e 'const fs = require("fs"); const [packagePath, ...args] = process.argv.slice(1); const target = args[0]; const preidIndex = args.indexOf("--preid"); const preid = preidIndex === -1 ? "0" : args[preidIndex + 1]; const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8")); let next = target; if (target === "patch") { const parts = pkg.version.split("-")[0].split(".").map(Number); parts[2] += 1; next = parts.join("."); } else if (target === "prerelease") { const [base, prerelease] = pkg.version.split("-"); if (prerelease && prerelease.startsWith(preid + ".")) { const number = Number(prerelease.slice(preid.length + 1)) + 1; next = base + "-" + preid + "." + number; } else { const parts = base.split(".").map(Number); parts[2] += 1; next = parts.join(".") + "-" + preid + ".0"; } } pkg.version = next; fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2) + "\\n"); console.log("v" + next);' "${packageJsonPath}" "\${@:4}"
   exit 0
 fi
 
@@ -352,6 +367,64 @@ test("unknown publish flags are rejected", () => {
   assert.doesNotMatch(result.calls, /^publish /m);
 });
 
+test("canary prerelease publishes both packages with the experimental dist-tag", () => {
+  const result = runPublish(["--tag", "experimental", "--preid", "experimental", "prerelease"]);
+  const canaryVersion = `${nextPatchVersion}-experimental.0`;
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, new RegExp(`Publishing both packages at version: ${canaryVersion.replaceAll(".", "\\.")}`));
+  assert.match(result.output, /npm dist-tag: experimental/);
+  assert.equal(publishCalls.length, 2, result.calls);
+  assert.match(publishCalls[0], /publish .* --tag experimental$/);
+  assert.match(publishCalls[1], /publish .* --access public --tag experimental$/);
+  assert.match(result.calls, /^run skillpacks:verify-published$/m);
+  assert.match(result.registry.join("\n"), new RegExp(`skillpacks@${canaryVersion.replaceAll(".", "\\.")}`));
+  assert.match(result.registry.join("\n"), new RegExp(`@glexcorp/gskp@${canaryVersion.replaceAll(".", "\\.")}`));
+});
+
+test("canary dry-run uses experimental dist-tag and skips published verification", () => {
+  const result = runPublish(["--dry-run", "--tag", "experimental", "--preid", "experimental", "prerelease"]);
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(result.status, 0, result.output);
+  assert.equal(publishCalls.length, 2, result.calls);
+  assert.match(publishCalls[0], /--tag experimental --dry-run$/);
+  assert.match(publishCalls[1], /--access public --tag experimental --dry-run$/);
+  assert.match(result.output, /Dry run complete; skipped published-package verification/);
+  assert.doesNotMatch(result.calls, /^run skillpacks:verify-published$/m);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("prerelease versions cannot publish to latest", () => {
+  const result = runPublish(["--preid", "experimental", "prerelease"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /Refusing to publish prerelease version .* to the npm latest dist-tag/);
+  assert.doesNotMatch(result.calls, /^--workspace packages\/skillpacks version /m);
+  assert.doesNotMatch(result.calls, /^publish /m);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+});
+
+test("stable version can publish to an explicitly requested non-latest dist-tag", () => {
+  const result = runPublish(["--tag", "experimental", "patch"]);
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /npm dist-tag: experimental/);
+  assert.equal(publishCalls.length, 2, result.calls);
+  assert.match(publishCalls[0], /--tag experimental$/);
+  assert.match(publishCalls[1], /--access public --tag experimental$/);
+});
+
 test("real publish auth preflight failure restores source metadata before first publish", () => {
   const result = runPublishPatch({ NPM_MOCK_WHOAMI_RC: "1" });
 
@@ -465,7 +538,33 @@ test("--current recovery publishes only the scoped alias when skillpacks exists 
     .filter((line) => line.startsWith("publish "));
 
   assert.equal(publishCalls.length, 1, result.calls);
-  assert.match(publishCalls[0], /--access public --dry-run/);
+  assert.match(publishCalls[0], /--access public --tag latest --dry-run/);
+});
+
+test("--current recovery reuses an experimental dist-tag for a partial canary publish", () => {
+  const result = runPublish(["--dry-run", "--current", "--tag", "experimental"], {
+    NPM_MOCK_SKILLPACKS_EXISTS: "1"
+  });
+
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /dist-tag experimental/);
+  const publishCalls = result.calls
+    .split("\n")
+    .filter((line) => line.startsWith("publish "));
+
+  assert.equal(publishCalls.length, 1, result.calls);
+  assert.match(publishCalls[0], /--access public --tag experimental --dry-run/);
+});
+
+test("--current recovery rejects when the existing package is not on the intended dist-tag", () => {
+  const result = runPublish(["--dry-run", "--current", "--tag", "experimental"], {
+    NPM_MOCK_SKILLPACKS_EXISTS: "1",
+    NPM_MOCK_SKILLPACKS_TAG_VERSION: "0.0.0"
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.output, /skillpacks dist-tag 'experimental' does not point to/);
+  assert.doesNotMatch(result.calls, /^publish /m);
 });
 
 test("--current recovery verifies when both packages are already published", () => {

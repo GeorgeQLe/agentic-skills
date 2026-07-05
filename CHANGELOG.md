@@ -12,7 +12,8 @@ Keep this file updated before every npm package publish.
 
 - Added `skillpacks cleanup` as the preferred command for deprecated skillpacks state cleanup; `uninstall-global` remains as a compatibility alias.
 - Extended cleanup to remove Build-In-Public project config keys (`alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed`) from discovered projects while preserving unrelated alignment settings.
-- Documented that future experimental package behavior must use a canary/pre-release lane before release on the npm `latest` channel; the current publish script remains latest-oriented until that lane is added.
+- Added a canary npm release lane to `publish.sh` with explicit `--tag` and `--preid` options, prerelease/latest guardrails, tag-aware `--current` recovery, and tag-aware published-package verification for both `skillpacks` and `@glexcorp/gskp`.
+- Documented experimental package usage through `skillpacks@experimental` and `@glexcorp/gskp@experimental`, plus dist-tag parity validation.
 
 ## [0.1.20] - 2026-07-02
 
