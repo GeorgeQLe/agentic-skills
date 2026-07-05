@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-05 - ship-end closeout for build-ui-screens prototype-plan handoff
+
+- Wrapped the already-shipped `build-ui-screens` prototype-plan handoff session.
+- Reconciled the active roadmap checklist with the completed and verified state already recorded in `tasks/todo.md`.
+- Reset `tasks/todo.md` to an explicit no-active-task state after confirming no executable follow-up was promoted.
+- Captured the visible `$ship-end` invocation under `prompts/ship-end/`.
+- No source-code changes were made in this closeout; validation was limited to task-doc and diff hygiene checks.
+
 ## 2026-07-04 - Deprecated product-design alias cleanup
 
 - Archived the active `prototype`, `create-ui-experiment`, and `consolidate-variations` alias skill directories for both Claude and Codex under `archive/deprecated-skills/2026-07-product-design-aliases/`.

@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - build-ui-screens Prototype-Plan Handoff 2026-07-05
+## Historical Implementation - build-ui-screens Prototype-Plan Handoff 2026-07-05
 
 ### Goal
 
@@ -10,12 +10,12 @@ Update `build-ui-screens` so it does not recommend direct `logic-wiring` when th
 
 ### Plan
 
-- [ ] Inspect current `build-ui-screens` mirrors, generated copies, task docs, and dirty worktree state.
-- [ ] Archive both active mirrors at `v0.4`, bump active `SKILL.md` files to `v0.5`, and update changelogs.
-- [ ] Rewrite `## Next Work` and routing wording so missing prototype build plans route to `user-flow-map --prototype-build-plan`, while direct `logic-wiring` requires a plan item with the approved `ui_experiment_id` or an explicit user-accepted untracked ad hoc bypass.
-- [ ] Refresh generated/runtime skill copies, including the active pair-app runtime copies through the supported refresh path.
-- [ ] Run routing, archive, generated bundle, package, and pair-app sanity checks.
-- [ ] Record verification in `tasks/todo.md`, then commit and push intended changes.
+- [x] Inspect current `build-ui-screens` mirrors, generated copies, task docs, and dirty worktree state.
+- [x] Archive both active mirrors at `v0.4`, bump active `SKILL.md` files to `v0.5`, and update changelogs.
+- [x] Rewrite `## Next Work` and routing wording so missing prototype build plans route to `user-flow-map --prototype-build-plan`, while direct `logic-wiring` requires a plan item with the approved `ui_experiment_id` or an explicit user-accepted untracked ad hoc bypass.
+- [x] Refresh generated/runtime skill copies, including the active pair-app runtime copies through the supported refresh path.
+- [x] Run routing, archive, generated bundle, package, and pair-app sanity checks.
+- [x] Record verification in `tasks/todo.md`, then commit and push intended changes.
 
 ### Acceptance Criteria
 

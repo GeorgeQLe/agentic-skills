@@ -1,46 +1,10 @@
 # Current Task
 
-## Current Implementation - build-ui-screens Prototype-Plan Handoff 2026-07-05
+## No Active Task - 2026-07-05
 
-### Goal
+The `build-ui-screens` prototype-plan handoff is complete and shipped. No executable task is currently promoted in this repo.
 
-Update `build-ui-screens` so it routes to prototype build-plan synthesis before `logic-wiring` unless a valid build plan already exists for the approved UI experiment.
-
-### Plan
-
-- [x] Inspect current `build-ui-screens` mirrors, generated copies, task docs, and dirty worktree state.
-- [x] Archive both active mirrors at `v0.4`, bump active versions to `v0.5`, and update changelogs.
-- [x] Rewrite `## Next Work` and routing wording for Codex and Claude mirrors.
-- [x] Refresh generated/runtime skill copies, including pair-app runtime copies through the supported path.
-- [x] Run routing, archive, generated bundle, package, and pair-app checks.
-- [x] Record review, commit, and push intended changes.
-
-### Acceptance Criteria
-
-- Missing prototype build plans route to `user-flow-map --prototype-build-plan`.
-- Direct `logic-wiring` is recommended only when `design/**/prototype-build-plan-*.md` exists and includes the approved `ui_experiment_id`, or when the user explicitly accepts an untracked ad hoc bypass.
-- Active source, generated runtime copies, and pair-app copies agree.
-
-### Review
-
-Implemented:
-
-- Archived both `build-ui-screens` mirrors at `v0.4` and bumped active Codex/Claude mirrors to `v0.5`.
-- Rewrote `## Next Work` so missing or invalid prototype build plans route to `user-flow-map --prototype-build-plan`, while `logic-wiring` requires a build-plan item containing the approved `ui_experiment_id` or an explicit untracked ad hoc bypass accepted by the user.
-- Added `agent_routing` guidance that prevents unconditional wiring payloads from `build-ui-screens`.
-- Refreshed pair-app managed skill copies from this source checkout; both pair-app copies now show `version: v0.5`.
-- Regenerated package manifest and skills catalog exports from the staged source index.
-
-Verified:
-
-- Active source and pair-app runtime copies have no direct `Recommended next command` or generated-YAML pattern that unconditionally routes to `logic-wiring`.
-- Pair-app still has no `design/pair-dating/prototype-build-plan-pair-dating.md`, so the corrected next command is `$user-flow-map --prototype-build-plan pair-dating`.
-- `bash scripts/skill-archive-audit.sh --strict` passed.
-- `npm --workspace packages/skillpacks run build:manifest:check` passed.
-- `npm run exports:check` passed.
-- `npm run skillpacks:verify` passed.
-- `node scripts/audit-task-docs.mjs` passed.
-- `git diff --check` passed.
+Next work should be promoted deliberately from roadmap, recurring advisory review, or a new user request.
 
 # Historical Task State
 
