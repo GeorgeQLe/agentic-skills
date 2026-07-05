@@ -107,6 +107,8 @@ Then start the deliberate pipeline with `$devtool-workflow` by default. Use `$de
 npx skillpacks install-deck business-afps
 ```
 
+After install, the default first workflow is customer discovery. In Codex, start with `$customer-discovery research/{slug}` when the product path is known; in Claude, start with `/customer-discovery research/{slug}`.
+
 Add packs progressively as the product matures:
 
 ```bash

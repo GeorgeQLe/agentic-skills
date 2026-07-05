@@ -1,8 +1,37 @@
 # Current Task
 
-No active executable task. The skillpacks canary release lane shipped on 2026-07-05.
+No active executable task. The idea-scope-brief deck post-install routing fix shipped on 2026-07-05.
 
 # Historical Task State
+
+## Review - idea-scope-brief Deck Post-Install Routing 2026-07-05
+
+### Goal
+
+Fix `idea-scope-brief` so high-confidence deck recommendations keep deck installation as the sole primary command while also giving the user the exact first post-install workflow command, including the scoped product path when available.
+
+### Review
+
+Implemented:
+
+- Archived both `idea-scope-brief` mirrors at `v0.22` and bumped the active Codex and Claude mirrors to `v0.23`.
+- Updated Deck Fit Handoff, Customer Discovery Readiness, and Next Steps contracts so high-confidence deck install stays primary while a copy-pasteable `After install, start with: ...` line is required as secondary context.
+- Documented Business AFPS customer discovery as the default first workflow after install.
+- Added focused layer1 coverage for primary install routing and mirror-specific post-install customer-discovery syntax.
+- Captured the visible investigation prompt under `prompts/investigate/`.
+
+Verified:
+
+- `scripts/pack.sh refresh` passed.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/idea-scope-brief-approval-ordering.test.ts` passed: 4 tests.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/idea-scope-brief-deck-post-install-routing.test.ts` passed: 2 tests.
+- `pnpm --dir tests exec vitest run --project layer1 layer1/global-customer-discovery-routing.test.ts` passed: 4 tests.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm run exports:check` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed: 407 skills, 0 violations.
+- `npm run skillpacks:verify` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
 
 ## Review - skillpacks Canary Release Lane 2026-07-05
 

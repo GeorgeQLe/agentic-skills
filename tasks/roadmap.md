@@ -2,6 +2,37 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - idea-scope-brief Deck Post-Install Routing 2026-07-05
+
+### Goal
+
+Fix `idea-scope-brief` so high-confidence deck recommendations keep deck installation as the sole primary command while also giving the user the exact first post-install workflow command, including the scoped product path when available.
+
+### Plan
+
+- [x] Inspect current `idea-scope-brief` mirrors, deck docs, changelogs, and routing tests.
+- [x] Capture the visible investigation prompt under `prompts/investigate/`.
+- [x] Archive the current Codex and Claude `idea-scope-brief` skills and bump active versions to `v0.23`.
+- [x] Update both mirrors so high-confidence deck handoffs require copy-pasteable post-install command lines as secondary context.
+- [x] Update Business AFPS deck docs to name customer discovery as the default first workflow after install.
+- [x] Add focused layer1 routing coverage for both mirror syntaxes.
+- [x] Refresh generated bundles and run targeted verification.
+- [x] Record review, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- `npx skillpacks install-deck <deck>` remains the single primary command for high-confidence canonical deck handoffs.
+- Codex handoffs require `After install, start with: $customer-discovery [research/{slug}]` when customer discovery is first and a product path is available.
+- Claude handoffs require `After install, start with: /customer-discovery [research/{slug}]` under the same conditions.
+- Business AFPS docs identify customer discovery as the default post-install first workflow.
+- Archives, changelogs, generated runtime copies, and focused tests are current.
+
+### Review
+
+Updated `idea-scope-brief` so high-confidence deck handoffs keep `npx skillpacks install-deck <deck>` as the sole primary command and require a secondary copy-pasteable `After install, start with: ...` route with the scoped product path when available. Business AFPS docs now identify customer discovery as the default first workflow after install. Added focused layer1 coverage and refreshed package/runtime metadata.
+
+Verification passed for `scripts/pack.sh refresh`, focused layer1 tests, manifest/catalog freshness, archive audit, package verification, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - skillpacks Canary Release Lane 2026-07-05
 
 ### Goal

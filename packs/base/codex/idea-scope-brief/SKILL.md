@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.22
+version: v0.23
 required_conventions: [alignment-page, interrogation-page]
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
@@ -107,6 +107,7 @@ During the Idea Assumptions Manifest and final idea brief, add a compact `Deck F
    - For canonical decks, the primary install command is `npx skillpacks install-deck <deck>`.
    - For customized saved decks, do not use `install-deck` unless they preserve a canonical slug as described above. Use the saved `install_command` / `install` when present, or explicit package-install guidance such as `npx skillpacks install <pack...>` when the saved entry lists packs.
    - After a deck recommendation exists, keep downstream skill routing as secondary context only. For example, after `business-afps` installs the `business-research` pack, name the likely first post-install skill (`$customer-discovery`, `$devtool-positioning`, `$ord-scan`, `$vard-scan`, or `$game-audience`) without making it the primary command.
+   - When high-confidence deck installation is the primary command, include a copy-pasteable secondary post-install line: `After install, start with: $customer-discovery [research/{slug}]`. Replace `$customer-discovery` with the exact likely first post-install skill for non-business decks, and include the scoped product path argument when a non-archived `research/{slug}` product path is available.
 
 4. **Interrogate until concept-ready (adaptive rounds 2..N)**
    - Build adaptive follow-up interrogation rounds (`interrogation/idea-scope-brief-r{N}-{branch}.html`) seeded by the prior round's compiled answers, each with at least one open input (`data-open-input`) and its own answer sidecar.
@@ -170,9 +171,9 @@ The idea brief must include:
 - `## Deck Fit Handoff`
 - `## Next Steps`
 
-The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute. If a high-confidence Deck Fit Handoff exists, explain that deck installation is the primary next command and customer discovery or other first workflow skills are secondary post-install context.
+The `## Customer Discovery Readiness` section must state whether the concept is ready for `$customer-discovery`, what inputs `$customer-discovery` should use, and which assumptions should be tested first. If a scoped product path is active, name it as the `$customer-discovery` argument, such as `$customer-discovery research/{slug}`. If a Market Structure Handoff exists, include the apparent sides and value exchange as explicit inputs for `$customer-discovery` to validate or refute. If a high-confidence Deck Fit Handoff exists, explain that deck installation is the primary next command and customer discovery or other first workflow skills are secondary post-install context; still name the exact first post-install skill and scoped path argument when available.
 
-The `## Deck Fit Handoff` section must state the best candidate deck, whether it came from saved repo config or canonical fallback metadata, the confidence level, the domain/tempo signals, the install command, and the likely first post-install skill. If no deck has high confidence, state the strongest candidates and why fallback routing is safer.
+The `## Deck Fit Handoff` section must state the best candidate deck, whether it came from saved repo config or canonical fallback metadata, the confidence level, the domain/tempo signals, the install command, and the likely first post-install skill. When confidence is high, include the exact secondary line `After install, start with: $customer-discovery [research/{slug}]`, replacing the skill and scoped path as needed. If no deck has high confidence, state the strongest candidates and why fallback routing is safer.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
@@ -184,7 +185,7 @@ The `## Next Steps` section must recommend exactly one primary command:
 - If no deck has high confidence and the concept already has customer-discovery/market evidence but needs journey, onboarding, conversion, or retention planning: `npx skillpacks install customer-lifecycle` from the project shell.
 - If no deck has high confidence and project type is unclear: `scripts/pack.sh recommend`.
 
-When a deck primary command is available, downstream research, discovery, or first-workflow skill routing must appear only as secondary context, not as the primary command.
+When a deck primary command is available, downstream research, discovery, or first-workflow skill routing must appear only as secondary context, not as the primary command. For high-confidence deck installs, include exactly one copy-pasteable secondary post-install command line after the primary command, formatted as `After install, start with: $customer-discovery [research/{slug}]` for Codex business/customer-discovery routes when the product path is known.
 
 Include 1-3 other options only when they are materially useful.
 

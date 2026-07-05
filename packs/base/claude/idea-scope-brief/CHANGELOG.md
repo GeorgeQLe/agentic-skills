@@ -1,5 +1,10 @@
 # idea-scope-brief Changelog
 
+## v0.23 - 2026-07-05
+
+- Require high-confidence Deck Fit Handoffs to keep deck installation as the sole primary command while also printing a copy-pasteable secondary post-install command with the first workflow skill and scoped product path when available.
+- Clarified customer-discovery readiness so business deck installs name the exact `/customer-discovery research/{slug}` route when a product path is active.
+
 ## v0.22 - 2026-07-02
 
 - Updated the allowed BIP Suggestion Gate to treat `alignment.build_in_public: false` as an explicit project opt-out and to generate the post-confirmation BIP page at `alignment/bip/idea-scope-brief.html`.
