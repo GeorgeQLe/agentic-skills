@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, lstatSync, existsSync } from "node:fs";
+import { mkdtempSync, readFileSync, lstatSync, existsSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -12,6 +12,23 @@ function runBash(script: string): string {
     cwd: REPO_ROOT,
     encoding: "utf8",
   });
+}
+
+function installedPaths(root: string): string[] {
+  const paths: string[] = [];
+
+  function visit(dir: string, prefix = ""): void {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
+      paths.push(relativePath);
+      if (entry.isDirectory()) {
+        visit(join(dir, entry.name), relativePath);
+      }
+    }
+  }
+
+  visit(root);
+  return paths.sort();
 }
 
 describe("managed skill installs", () => {
@@ -36,6 +53,28 @@ describe("managed skill installs", () => {
     expect(lstatSync(join(target, "agents")).isSymbolicLink()).toBe(false);
     expect(readFileSync(join(target, "SKILL.md"), "utf8")).toContain("name: demo");
     expect(existsSync(join(target, "archive"))).toBe(false);
+  });
+
+  it("excludes nested framework archives from managed directory copies", () => {
+    const root = mkdtempSync(join(tmpdir(), "agentic-skills-nested-archive-install-"));
+    const source = join(root, "source");
+    const target = join(root, "target");
+
+    runBash(`
+      set -euo pipefail
+      mkdir -p "${source}/frameworks/category-design/archive/v0.0" "${source}/frameworks/category-design/.notes"
+      printf '%s\\n' '---' 'name: positioning' 'description: Positioning skill' 'version: v0.1' '---' > "${source}/SKILL.md"
+      printf '%s\\n' '---' 'name: category-design' 'description: Category design framework' 'version: v0.1' '---' > "${source}/frameworks/category-design/SKILL.md"
+      printf 'old\\n' > "${source}/frameworks/category-design/archive/v0.0/SKILL.md"
+      printf 'keep\\n' > "${source}/frameworks/category-design/.notes/context.md"
+      source "${SKILL_LINKS}"
+      sync_skill_install "${source}" "${target}"
+    `);
+
+    const paths = installedPaths(target);
+    expect(paths).toContain("frameworks/category-design/SKILL.md");
+    expect(paths).toContain("frameworks/category-design/.notes/context.md");
+    expect(paths.some((path) => path.split("/").includes("archive"))).toBe(false);
   });
 
   it("keeps pinned archive installs as symlinks", () => {

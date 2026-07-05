@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-05 - Recursive copy exclusions must match hash and package installers
+
+- A source-checkout refresh path skipped only a top-level `archive` entry before `cp -R`, while hashing and Node lifecycle installs excluded `archive/` recursively.
+- Rule: when an install path computes freshness over a filtered tree, the copy implementation must use the same recursive exclusion semantics as the hash and package lifecycle code.
+- Add regression fixtures with nested framework subskills, not only top-level skill archives, whenever changing installer copy boundaries.
+
 ## 2026-07-02 - Compiled YAML should be the only review-gate routing artifact
 
 - The user clarified that Pattern A review-pending handoffs should not add a separate `## Invoke With YAML` command block now that compiled page YAML includes the continuation command.

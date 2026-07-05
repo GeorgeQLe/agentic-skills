@@ -987,15 +987,23 @@ describe('Node lifecycle commands', () => {
     await runSkillpacks(dir, ['install', 'business-research']);
 
     for (const tool of ['claude', 'codex']) {
-      const files = installedSkillFiles(dir, tool, 'customer-discovery');
-      assert.equal(files.includes('frameworks/five-rings/SKILL.md'), true);
-      assert.equal(files.includes('frameworks/pmf-engine/SKILL.md'), true);
-      assert.equal(files.includes('frameworks/w3-hypothesis/SKILL.md'), true);
-      assert.equal(files.some((file) => file.split('/').includes('archive')), false);
+      const discoveryFiles = installedSkillFiles(dir, tool, 'customer-discovery');
+      assert.equal(discoveryFiles.includes('frameworks/five-rings/SKILL.md'), true);
+      assert.equal(discoveryFiles.includes('frameworks/pmf-engine/SKILL.md'), true);
+      assert.equal(discoveryFiles.includes('frameworks/w3-hypothesis/SKILL.md'), true);
+      assert.equal(discoveryFiles.some((file) => file.split('/').includes('archive')), false);
       assert.equal(existsSync(join(skillPath(dir, tool, 'customer-discovery'), 'frameworks/five-rings/archive/v0.0/SKILL.md')), false);
       assert.equal(existsSync(skillPath(dir, tool, 'five-rings')), false);
       assert.equal(existsSync(skillPath(dir, tool, 'pmf-engine')), false);
       assert.equal(existsSync(skillPath(dir, tool, 'w3-hypothesis')), false);
+
+      const positioningFiles = installedSkillFiles(dir, tool, 'positioning');
+      assert.equal(positioningFiles.includes('frameworks/category-design/SKILL.md'), true);
+      assert.equal(positioningFiles.includes('frameworks/jtbd-positioning/SKILL.md'), true);
+      assert.equal(positioningFiles.includes('frameworks/obviously-awesome/SKILL.md'), true);
+      assert.equal(positioningFiles.some((file) => file.split('/').includes('archive')), false);
+      assert.equal(existsSync(join(skillPath(dir, tool, 'positioning'), 'frameworks/category-design/archive/v0.0/SKILL.md')), false);
+      assert.equal(existsSync(skillPath(dir, tool, 'category-design')), false);
     }
   });
 

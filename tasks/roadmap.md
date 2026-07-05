@@ -2,6 +2,35 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fix Nested Archived Skill Copies In Source-Checkout Installs 2026-07-05
+
+### Goal
+
+Fix the source-checkout shell install path so latest managed skill installs never copy nested `archive/` directories from framework subskills, then refresh the reported `vectorfit-redux` install.
+
+### Plan
+
+- [x] Capture the visible prompt under `prompts/investigate/`.
+- [x] Inspect `scripts/skill-links.sh`, focused shell installer tests, and package lifecycle coverage.
+- [x] Patch `sync_skill_install` copy behavior to exclude `archive/` directories at every depth while preserving pinned archive symlinks.
+- [x] Add shell installer coverage for nested framework archives and lifecycle coverage for `positioning/frameworks/category-design`.
+- [x] Run focused and package verification.
+- [x] Refresh `/Users/georgele/projects/web/dev/vectorfit-redux` with the fixed source-checkout installer and verify no nested archives remain.
+- [x] Record review, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- Latest managed installs skip any directory named `archive` at every depth.
+- Pinned `archive/<version>` installs remain symlinks.
+- `business-research` installs include active framework `SKILL.md` files but no nested framework archives under `customer-discovery` or `positioning`.
+- The reported `vectorfit-redux` repo has no nested `positioning/frameworks/*/archive` paths under `.codex/skills` or `.claude/skills`, and no top-level `category-design` skill install.
+
+### Review
+
+Updated `scripts/skill-links.sh` so source-checkout latest managed installs recursively skip nested `archive/` directories while retaining active framework subskills and pinned archive symlinks. Added focused shell installer coverage and lifecycle coverage for `business-research` `positioning/frameworks/category-design`, refreshed the reported `vectorfit-redux` install, and regenerated the stale package manifest metadata required by package gates.
+
+Verification passed for focused layer1 tests, package lifecycle tests, `build:check`, `skillpacks:verify`, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - idea-scope-brief Deck Post-Install Routing 2026-07-05
 
 ### Goal

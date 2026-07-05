@@ -1,8 +1,33 @@
 # Current Task
 
-No active executable task. The idea-scope-brief deck post-install routing fix shipped on 2026-07-05.
+No active executable task. The nested archived skill copy fix shipped on 2026-07-05.
 
 # Historical Task State
+
+## Review - Fix Nested Archived Skill Copies In Source-Checkout Installs 2026-07-05
+
+### Goal
+
+Fix the source-checkout shell install path so latest managed skill installs never copy nested `archive/` directories from framework subskills, then refresh the reported `vectorfit-redux` install.
+
+### Review
+
+Implemented:
+
+- Updated `scripts/skill-links.sh` so latest managed source-checkout installs copy recursively while excluding any directory named `archive` and the managed marker at every depth.
+- Preserved pinned archive installs as symlinks by leaving the existing `archive/<version>` branch unchanged.
+- Added focused shell installer coverage for nested framework archives and extended package lifecycle coverage for `positioning/frameworks/category-design`.
+- Refreshed `/Users/georgele/projects/web/dev/vectorfit-redux`; no nested `positioning/frameworks/*/archive` directories remain under `.codex/skills` or `.claude/skills`, and no top-level `category-design` skill exists.
+- Refreshed stale `packages/skillpacks/dist/skillpacks-manifest.json` metadata for the prior `idea-scope-brief` version change so package gates pass.
+
+Verified:
+
+- `pnpm --dir tests exec vitest run --project layer1 layer1/skill-links-install.test.ts` passed: 3 tests.
+- `node --test packages/skillpacks/test/lifecycle.test.mjs` passed: 66 tests.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `npm run skillpacks:verify` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
 
 ## Review - idea-scope-brief Deck Post-Install Routing 2026-07-05
 

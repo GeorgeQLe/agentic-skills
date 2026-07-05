@@ -117,6 +117,25 @@ sync_skill_link() {
   return 0
 }
 
+copy_skill_install_entries() {
+  local source="$1"
+  local target="$2"
+  local entry name
+
+  mkdir -p "$target"
+  for entry in "$source"/* "$source"/.[!.]* "$source"/..?*; do
+    [[ -e "$entry" || -L "$entry" ]] || continue
+    name="$(basename "$entry")"
+    [[ "$name" == "archive" || "$name" == "$SKILL_LINK_MARKER" ]] && continue
+
+    if [[ -d "$entry" && ! -L "$entry" ]]; then
+      copy_skill_install_entries "$entry" "$target/$name"
+    else
+      cp -R "$entry" "$target/$name"
+    fi
+  done
+}
+
 sync_skill_install() {
   local source="$1"
   local target="$2"
@@ -148,13 +167,7 @@ sync_skill_install() {
     printf 'source_sha=%s\n' "$source_sha"
   } > "$target/$SKILL_LINK_MARKER"
 
-  local entry name
-  for entry in "$source"/* "$source"/.[!.]* "$source"/..?*; do
-    [[ -e "$entry" || -L "$entry" ]] || continue
-    name="$(basename "$entry")"
-    [[ "$name" == "archive" ]] && continue
-    cp -R "$entry" "$target/$name"
-  done
+  copy_skill_install_entries "$source" "$target"
 
   return 0
 }
