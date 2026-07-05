@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-05 - New shell commands must be installed before handoff
+
+- I added and pushed a `publish-canary` wrapper definition in `sync.md`, but did not install the wrapper into the user's current `~/.local/bin` before saying the command was ready.
+- Rule: when creating a user-facing shell command that depends on a generated PATH wrapper, run or simulate the installer and then verify `command -v <name>` in the current environment before handoff.
+- If the wrapper is installed by `/sync`, either run the relevant sync block immediately or explicitly tell the user that `/sync` is required before the command will resolve.
+
 ## 2026-07-05 - Recursive copy exclusions must match hash and package installers
 
 - A source-checkout refresh path skipped only a top-level `archive` entry before `cp -R`, while hashing and Node lifecycle installs excluded `archive/` recursively.
