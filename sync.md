@@ -10,30 +10,38 @@ Inside this monorepo, invoke the workspace bin directly. Bare `npx skillpacks re
 node packages/skillpacks/bin/skillpacks.mjs refresh
 ```
 
-Make `publish-skills` runnable as `! publish-skills` inside the Claude Code CLI. The CLI's
+Make `publish-skills` and `publish-canary` runnable as `! publish-skills` / `! publish-canary` inside the Claude Code CLI. The CLI's
 `!` runs a shell that does **not** source the user's shell startup files (`~/.zshrc`/`~/.zshenv`),
 so a shell alias or function is never seen — the only thing it resolves is an executable on the
-inherited `PATH`. So install a small wrapper named `publish-skills` (it `exec`s this clone's
-`scripts/publish-steps.sh` by absolute path — a symlink would break the script's own
-path-resolution) into `~/.local/bin`, which is the conventional user bin on `PATH`. Idempotent
-(rewritten each sync). If `~/.local/bin` is not on `PATH`, it warns so the user can add it.
+inherited `PATH`. So install small wrappers (each `exec`s this clone's script by absolute path
+— a symlink would break the scripts' own path-resolution) into `~/.local/bin`, which is the
+conventional user bin on `PATH`. Idempotent (rewritten each sync). If `~/.local/bin` is not on
+`PATH`, it warns so the user can add it.
 
 ```sh
-SCRIPT="$(pwd)/scripts/publish-steps.sh"
 BIN_DIR="$HOME/.local/bin"
-BIN="$BIN_DIR/publish-skills"
-if [ -f "$SCRIPT" ]; then
-  mkdir -p "$BIN_DIR"
-  printf '#!/usr/bin/env bash\n# agentic-skills: publish-skills -> release steps (managed by sync.md)\nexec "%s" "$@"\n' "$SCRIPT" > "$BIN"
-  chmod +x "$BIN"
-  echo "installed publish-skills -> $SCRIPT at $BIN"
-  case ":$PATH:" in
-    *":$BIN_DIR:"*) : ;;
-    *) echo "WARNING: $BIN_DIR is not on PATH — add it (e.g. in ~/.zshenv) so '! publish-skills' resolves" ;;
-  esac
-else
-  echo "skipped publish-skills install: $SCRIPT not found"
-fi
+for entry in \
+  "publish-skills|scripts/publish-steps.sh|release steps" \
+  "publish-canary|scripts/publish-canary-steps.sh|canary release steps"
+do
+  COMMAND_NAME="${entry%%|*}"
+  rest="${entry#*|}"
+  SCRIPT="$(pwd)/${rest%%|*}"
+  DESCRIPTION="${rest#*|}"
+  BIN="$BIN_DIR/$COMMAND_NAME"
+  if [ -f "$SCRIPT" ]; then
+    mkdir -p "$BIN_DIR"
+    printf '#!/usr/bin/env bash\n# agentic-skills: %s -> %s (managed by sync.md)\nexec "%s" "$@"\n' "$COMMAND_NAME" "$DESCRIPTION" "$SCRIPT" > "$BIN"
+    chmod +x "$BIN"
+    echo "installed $COMMAND_NAME -> $SCRIPT at $BIN"
+  else
+    echo "skipped $COMMAND_NAME install: $SCRIPT not found"
+  fi
+done
+case ":$PATH:" in
+  *":$BIN_DIR:"*) : ;;
+  *) echo "WARNING: $BIN_DIR is not on PATH — add it (e.g. in ~/.zshenv) so '! publish-skills' and '! publish-canary' resolve" ;;
+esac
 ```
 
 ## Notifications

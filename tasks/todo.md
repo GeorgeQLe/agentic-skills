@@ -1,8 +1,30 @@
 # Current Task
 
-No active executable task. The nested archived skill copy fix shipped on 2026-07-05.
+No active executable task. The publish-canary command helper shipped on 2026-07-05.
 
 # Historical Task State
+
+## Review - publish-canary Command 2026-07-05
+
+### Goal
+
+Create a `publish-canary` command that mirrors the existing `publish-skills` command but prints the canary/experimental npm release lane.
+
+### Review
+
+Implemented:
+
+- Added executable `scripts/publish-canary-steps.sh` with canary auth, gates, dry-run, publish, commit/tag/push, dist-tag validation, smoke checks, recovery, and GA follow-up steps.
+- Updated `sync.md` so `/sync` installs both `publish-skills` and `publish-canary` wrappers into `~/.local/bin`.
+- Updated `CHANGELOG.md` with the new post-sync command helper.
+
+Verified:
+
+- `bash -n scripts/publish-steps.sh scripts/publish-canary-steps.sh` passed.
+- `bash scripts/publish-canary-steps.sh` printed the canary release checklist with local staged version `0.1.19`.
+- Temporary wrapper-install simulation passed for `publish-skills` and `publish-canary`.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
 
 ## Review - Fix Nested Archived Skill Copies In Source-Checkout Installs 2026-07-05
 

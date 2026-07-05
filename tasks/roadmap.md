@@ -2,6 +2,31 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - publish-canary Command 2026-07-05
+
+### Goal
+
+Create a `publish-canary` command that mirrors the existing `publish-skills` command but prints the canary/experimental npm release lane.
+
+### Plan
+
+- [x] Inspect the existing `publish-skills` wrapper and release runbook canary flow.
+- [x] Add a canary-specific publishing steps script.
+- [x] Update `sync.md` so `/sync` installs `publish-canary` onto `~/.local/bin`.
+- [x] Run targeted verification and record the review.
+
+### Acceptance Criteria
+
+- `bash scripts/publish-canary-steps.sh` prints canary release gates, dry-run, publish, dist-tag validation, smoke checks, and recovery commands.
+- `sync.md` installs `~/.local/bin/publish-canary` alongside `publish-skills`.
+- Existing `publish-skills` behavior remains unchanged.
+
+### Review
+
+Added executable `scripts/publish-canary-steps.sh` and updated `sync.md` to install `publish-canary` alongside `publish-skills` during `/sync`. The stable helper remains unchanged, while the new canary helper prints the experimental prerelease lane, tag validation, smoke checks, recovery, and GA follow-up commands. Updated the changelog for the release-process helper.
+
+Verification passed for shell syntax, canary helper output, temporary wrapper-install simulation, task-doc audit, and diff hygiene.
+
 ## Historical Implementation - Fix Nested Archived Skill Copies In Source-Checkout Installs 2026-07-05
 
 ### Goal
