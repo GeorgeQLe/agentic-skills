@@ -1,41 +1,49 @@
 # Current Task
 
-## Current Implementation - Enterprise ICP Interrogation Upgrade
+## Current Implementation - Release Lane Alignment Briefing
+
+### Goal
+
+Create an alignment briefing that evaluates how to keep canary and general-release edits from mixing across future skill, convention, and package changes.
+
+### Plan
+
+- [x] Inspect existing alignment page conventions and index structure.
+- [x] Create a review-state alignment briefing with COAs and recommendation.
+- [x] Add the briefing to `alignment/index.html`.
+- [x] Update task docs with verification results.
+- [x] Run alignment/task-doc/diff verification.
+
+### Acceptance Criteria
+
+- [x] The briefing frames the problem beyond interrogation upgrades.
+- [x] It compares practical COAs, including whether separate canary/general directories are needed.
+- [x] It recommends a standardized release-lane contract plus audit enforcement.
+- [x] It keeps canary behavior separated from general-release source edits by default.
+- [x] The active alignment index links the briefing.
+
+### Verification
+
+- [x] `node scripts/audit-alignment-pages.mjs`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] `node scripts/open-html-page.mjs alignment/release-lane-change-boundary.html --browser auto`
+
+### Review
+
+Created `alignment/release-lane-change-boundary.html` as a review-state alignment briefing for canary versus general-release change boundaries. The page compares task metadata, lane contract plus audit, canary overlays, and separate source trees, and recommends the release-lane contract plus audit gate while keeping one canonical skill tree by default.
+
+Updated `alignment/index.html` under QA/meta and corrected the visible index count/date to match the active-page audit.
+
+Verification passed for alignment-page audit, task-doc audit, diff hygiene, and the HTML opener.
+
+# Historical Task State
+
+## Review - Enterprise ICP Interrogation Upgrade 2026-07-06
 
 ### Goal
 
 Upgrade `enterprise-icp` in both Claude and Codex mirrors so it participates in the shared `interrogation-page` workflow while preserving existing alignment-page behavior.
-
-### Plan
-
-- [x] Work from current `master` with a clean worktree.
-- [x] Archive both current `enterprise-icp` mirrors before editing.
-- [x] Add `interrogation-page` to both mirrors' `required_conventions`.
-- [x] Add a Stage 0 interrogation gate before Stage 1 scope approval.
-- [x] Register `enterprise-icp` in the interrogation generator and layer1 contract.
-- [x] Run full verification and fix any failures.
-- [x] Commit and push intended changes on `master`.
-
-### Acceptance Criteria
-
-- [x] Both mirrors declare `required_conventions: [alignment-page, interrogation-page]`.
-- [x] Both mirrors require `interrogation/enterprise-icp-r{N}-{branch}.html` before Stage 1.
-- [x] The Stage 0 gate covers enterprise stakeholder roles, buying stages, deal-killers, onboarding complexity, requirements delta, champion risk, procurement reality, land-and-expand signals, segmentation, source gaps, and unknowns.
-- [x] Both mirrors have archive snapshots, bumped versions, and changelog entries.
-- [x] The interrogation generator and layer1 registry include both mirrors and expect 48 participating stubs.
-
-### Verification
-
-- [x] `node scripts/upgrade-interrogation-page.mjs --check`
-- [x] `node scripts/upgrade-alignment-page.mjs --check`
-- [x] `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`
-- [x] `bash scripts/skill-archive-audit.sh --strict`
-- [x] `bash scripts/skill-mirror-parity-audit.sh`
-- [x] `npm --workspace packages/skillpacks run build:manifest:check`
-- [x] `npm run exports:check`
-- [x] `npm --workspace packages/skillpacks run build:check`
-- [x] `node scripts/audit-task-docs.mjs`
-- [x] `git diff --check`
 
 ### Review
 
@@ -44,8 +52,6 @@ Upgraded both `enterprise-icp` mirrors from `v0.10` to `v0.12` with `interrogati
 Archived both pre-upgrade `SKILL.md` files to `archive/v0.10/`, added matching changelog entries, registered `enterprise-icp` in the interrogation generator and layer1 contract, and refreshed skills catalog export artifacts.
 
 Verification passed through interrogation/alignment generator checks, targeted layer1 Vitest, strict archive audit, mirror parity audit, package manifest/export/build checks, task-doc audit, and diff hygiene.
-
-# Historical Task State
 
 ## Review - Competitive Analysis Interrogation Upgrade 2026-07-05
 

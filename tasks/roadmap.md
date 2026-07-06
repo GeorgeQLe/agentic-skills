@@ -2,42 +2,48 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Enterprise ICP Interrogation Upgrade
+## Current Implementation - Release Lane Alignment Briefing
+
+### Goal
+
+Create an alignment briefing that evaluates how to keep canary and general-release edits from mixing across future skill, convention, and package changes.
+
+### Plan
+
+- [x] Inspect existing alignment page conventions and index structure.
+- [x] Create a review-state alignment briefing with COAs and recommendation.
+- [x] Add the briefing to `alignment/index.html`.
+- [x] Update task docs with verification results.
+- [x] Run alignment/task-doc/diff verification.
+
+### Acceptance Criteria
+
+- The briefing frames the problem beyond interrogation upgrades.
+- It compares practical COAs, including whether separate canary/general directories are needed.
+- It recommends a standardized release-lane contract plus audit enforcement.
+- It keeps canary behavior separated from general-release source edits by default.
+- The active alignment index links the briefing.
+
+### Verification
+
+- `node scripts/audit-alignment-pages.mjs` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+- `node scripts/open-html-page.mjs alignment/release-lane-change-boundary.html --browser auto` opened the local briefing.
+
+### Review
+
+Created `alignment/release-lane-change-boundary.html` as a review-state alignment briefing for canary versus general-release change boundaries. The page compares task metadata, lane contract plus audit, canary overlays, and separate source trees, and recommends the release-lane contract plus audit gate while keeping one canonical skill tree by default.
+
+Updated `alignment/index.html` under QA/meta and corrected the visible index count/date to match the active-page audit.
+
+Verification passed for alignment-page audit, task-doc audit, diff hygiene, and the HTML opener.
+
+## Historical Implementation - Enterprise ICP Interrogation Upgrade
 
 ### Goal
 
 Upgrade `enterprise-icp` in both Claude and Codex mirrors so it participates in the shared `interrogation-page` workflow while preserving existing alignment-page behavior.
-
-### Plan
-
-- [x] Work from current `master` with a clean worktree.
-- [x] Archive both current `enterprise-icp` mirrors before editing.
-- [x] Add `interrogation-page` to both mirrors' `required_conventions`.
-- [x] Add a Stage 0 interrogation gate before Stage 1 scope approval.
-- [x] Register `enterprise-icp` in the interrogation generator and layer1 contract.
-- [x] Run full verification and fix any failures.
-- [x] Commit and push intended changes on `master`.
-
-### Acceptance Criteria
-
-- Both mirrors declare `required_conventions: [alignment-page, interrogation-page]`.
-- Both mirrors require `interrogation/enterprise-icp-r{N}-{branch}.html` before Stage 1.
-- The Stage 0 gate covers enterprise stakeholder roles, buying stages, deal-killers, onboarding complexity, requirements delta, champion risk, procurement reality, land-and-expand signals, segmentation, source gaps, and unknowns.
-- Both mirrors have archive snapshots, bumped versions, and changelog entries.
-- The interrogation generator and layer1 registry include both mirrors and expect 48 participating stubs.
-
-### Verification
-
-- `node scripts/upgrade-interrogation-page.mjs --check` passed.
-- `node scripts/upgrade-alignment-page.mjs --check` passed.
-- `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts` passed.
-- `bash scripts/skill-archive-audit.sh --strict` passed.
-- `bash scripts/skill-mirror-parity-audit.sh` passed.
-- `npm --workspace packages/skillpacks run build:manifest:check` passed.
-- `npm run exports:check` passed.
-- `npm --workspace packages/skillpacks run build:check` passed.
-- `node scripts/audit-task-docs.mjs` passed.
-- `git diff --check` passed.
 
 ### Review
 
