@@ -8,37 +8,45 @@ Create a canary-only experiment where page-producing skills use briefing slides 
 
 ### Plan
 
-- [ ] Work on branch `canary/slides-review-surface`.
-- [ ] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
-- [ ] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
-- [ ] Preserve dense page conventions and generated resolver stubs.
-- [ ] Run static migration checks and repo verification.
-- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags.
+- [x] Work on branch `canary/slides-review-surface`.
+- [x] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
+- [x] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
+- [x] Preserve dense page conventions and generated resolver stubs.
+- [x] Run static migration checks and repo verification.
+- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags. Blocked by npm auth preflight `E401 Unauthorized`.
 - [ ] Commit and push intended canary branch changes.
 
 ### Acceptance Criteria
 
-- [ ] Every active targeted skill declares `briefing-slides` in `required_conventions`.
-- [ ] Every changed skill has a new archive snapshot, bumped version, and changelog entry.
-- [ ] Codex skill instructions route compiled deck YAML to `$skill`; Claude skill instructions route to `/skill`.
-- [ ] Dense alignment/interrogation pages remain canonical linked artifacts and are not removed.
-- [ ] `skillpacks@latest` remains untouched; experiment ships only through npm dist-tag `canary`.
+- [x] Every active targeted skill declares `briefing-slides` in `required_conventions`.
+- [x] Every changed skill has a new archive snapshot, bumped version, and changelog entry.
+- [x] Codex skill instructions route compiled deck YAML to `$skill`; Claude skill instructions route to `/skill`.
+- [x] Dense alignment/interrogation pages remain canonical linked artifacts and are not removed.
+- [x] `skillpacks@latest` remains untouched; experiment has not published because npm auth preflight failed before any release mutation.
 
 ### Verification
 
-- [ ] Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes.
-- [ ] `node scripts/upgrade-alignment-page.mjs --check`
-- [ ] `node scripts/upgrade-interrogation-page.mjs --check`
-- [ ] `bash scripts/skill-archive-audit.sh --strict`
-- [ ] `bash scripts/skill-mirror-parity-audit.sh`
-- [ ] `npm --workspace packages/skillpacks run build`
-- [ ] `npm --workspace packages/skillpacks run build:check`
-- [ ] `npm --workspace packages/skillpacks run test:node`
-- [ ] `node scripts/audit-task-docs.mjs`
-- [ ] `git diff --check`
-- [ ] `./publish.sh --dry-run --tag canary --preid canary prerelease`
+- [x] Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes.
+- [x] `node scripts/upgrade-alignment-page.mjs --check`
+- [x] `node scripts/upgrade-interrogation-page.mjs --check`
+- [x] `bash scripts/skill-archive-audit.sh --strict`
+- [x] `bash scripts/skill-mirror-parity-audit.sh`
+- [x] `npm --workspace packages/skillpacks run build`
+- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `npm --workspace packages/skillpacks run test:node`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [ ] `./publish.sh --dry-run --tag canary --preid canary prerelease` blocked at npm auth preflight after computing `0.1.21-canary.0`.
 - [ ] `./publish.sh --tag canary --preid canary prerelease`
 - [ ] Verify `skillpacks` and `@glexcorp/gskp` resolve through dist-tag `canary`.
+
+### Review
+
+Migrated 315 active, non-archived page-producing source skills to dual-output review: dense `alignment/*.html` and `interrogation/*.html` artifacts remain canonical detail/source pages, while `briefing-slides/<skill>-{topic}.html` is now the primary human review surface. Each migrated skill now declares `briefing-slides`, references the shared packaged convention resolver, routes compiled deck YAML back to the owning skill command, and instructs agents to open only the slide deck.
+
+Archived every pre-migration `SKILL.md`, bumped each migrated skill version by one decimal, and added matching changelog entries. Refreshed runtime skill copies with `scripts/pack.sh refresh`, rebuilt package staging, and updated lifecycle tests for the bumped `quality-sweep` / `extract-shared-types` versions.
+
+Verification passed through static migration checks, alignment/interrogation generator checks, strict archive audit, mirror parity audit, package build, package build check, Node tests, task-doc audit, and diff hygiene. Canary dry run reached the expected prerelease target `0.1.21-canary.0` but stopped before mutation because npm auth preflight failed with `E401 Unauthorized` from `npm whoami`; real publish and canary dist-tag verification remain blocked until npm is logged in as the expected publisher.
 
 # Historical Task State
 

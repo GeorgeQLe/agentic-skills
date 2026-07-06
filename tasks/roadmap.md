@@ -10,12 +10,12 @@ Create a canary-only experiment where page-producing skills use briefing slides 
 
 ### Plan
 
-- [ ] Work on branch `canary/slides-review-surface`.
-- [ ] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
-- [ ] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
-- [ ] Preserve dense page conventions and generated resolver stubs.
-- [ ] Run static migration checks and repo verification.
-- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags.
+- [x] Work on branch `canary/slides-review-surface`.
+- [x] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
+- [x] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
+- [x] Preserve dense page conventions and generated resolver stubs.
+- [x] Run static migration checks and repo verification.
+- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags. Blocked by npm auth preflight `E401 Unauthorized`.
 - [ ] Commit and push intended canary branch changes.
 
 ### Acceptance Criteria
@@ -24,23 +24,29 @@ Create a canary-only experiment where page-producing skills use briefing slides 
 - Every changed skill has a new archive snapshot, bumped version, and changelog entry.
 - Codex skill instructions route compiled deck YAML to `$skill`; Claude skill instructions route to `/skill`.
 - Dense alignment/interrogation pages remain canonical linked artifacts and are not removed.
-- `skillpacks@latest` remains untouched; experiment ships only through npm dist-tag `canary`.
+- `skillpacks@latest` remains untouched; canary publish has not completed because npm auth preflight failed before release mutation.
 
 ### Verification
 
-- Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes.
-- `node scripts/upgrade-alignment-page.mjs --check`
-- `node scripts/upgrade-interrogation-page.mjs --check`
-- `bash scripts/skill-archive-audit.sh --strict`
-- `bash scripts/skill-mirror-parity-audit.sh`
-- `npm --workspace packages/skillpacks run build`
-- `npm --workspace packages/skillpacks run build:check`
-- `npm --workspace packages/skillpacks run test:node`
-- `node scripts/audit-task-docs.mjs`
-- `git diff --check`
-- `./publish.sh --dry-run --tag canary --preid canary prerelease`
-- `./publish.sh --tag canary --preid canary prerelease`
-- Verify `skillpacks` and `@glexcorp/gskp` resolve through dist-tag `canary`.
+- Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes passed.
+- `node scripts/upgrade-alignment-page.mjs --check` passed.
+- `node scripts/upgrade-interrogation-page.mjs --check` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed.
+- `bash scripts/skill-mirror-parity-audit.sh` passed.
+- `npm --workspace packages/skillpacks run build` passed.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `npm --workspace packages/skillpacks run test:node` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+- `./publish.sh --dry-run --tag canary --preid canary prerelease` reached expected target `0.1.21-canary.0` and blocked at npm auth preflight.
+- `./publish.sh --tag canary --preid canary prerelease` blocked pending npm auth.
+- Verify `skillpacks` and `@glexcorp/gskp` resolve through dist-tag `canary` after publish.
+
+### Review
+
+Migrated 315 active page-producing skills to the canary slides-primary dual-output experiment. Dense alignment/interrogation pages remain canonical linked artifacts, while each skill now creates `briefing-slides/<skill>-{topic}.html` as the primary review UI and routes compiled deck YAML back to the owning Codex or Claude command.
+
+All source migration and repository verification checks passed. Canary release remains blocked before mutation because npm auth preflight returned `E401 Unauthorized` for the expected registry publisher.
 
 ## Historical Implementation - Resize Slide When Feedback Sidebar Opens
 
