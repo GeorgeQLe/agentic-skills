@@ -2,7 +2,53 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Interrogation and Alignment Upgrade Target Backlog
+## Current Implementation - Stage-Click And A/D Slide Navigation
+
+### Goal
+
+Add stage-click navigation and `A`/`D` slide hotkeys to the briefing-slides convention and the `create-briefing-slides` dogfood deck while preserving review controls.
+
+### Plan
+
+- [x] Archive the current dogfood deck before amendment.
+- [x] Update `docs/briefing-slides-convention.md` so required keyboard navigation includes `A` and `D`.
+- [x] Add a convention rule that clicking the empty deck stage around the visible slide advances to the next slide.
+- [x] Specify stage-click navigation must not hijack slide content, links, buttons, form controls, filmstrip, topbar, footer, or review inputs.
+- [x] Amend `briefing-slides/create-briefing-slides.html` with guarded `A`/`D` hotkeys and empty-stage click navigation.
+- [x] Update visible dogfood deck text to demonstrate click-stage and `A`/`D` navigation.
+- [x] Regenerate package staging through the skillpacks build.
+- [x] Run textual, behavioral, package, task-doc, diff, and opener verification.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- The convention names `ArrowLeft`, `ArrowRight`, `A`, `D`, `Home`, `End`, and `Space`.
+- The convention requires empty-stage click navigation and excludes interactive regions from click hijacking.
+- The dogfood deck supports `A`/`ArrowLeft` back and `D`/`ArrowRight`/`Space` forward.
+- Keyboard navigation ignores form-editing targets and modified key combinations.
+- Empty-stage clicks advance, while clicks inside `.slide-inner`, links, buttons, selects, textareas, filmstrip, footer controls, and review inputs do not stage-advance.
+- The deck visibly marks the click-stage and `A`/`D` navigation update.
+
+### Verification
+
+- Confirm convention names stage-click, `A`, and `D`.
+- Confirm deck JavaScript contains guarded key and click handlers.
+- Confirm no dense-reference embed tags are introduced.
+- Run `npm --workspace packages/skillpacks run build`.
+- Run `npm --workspace packages/skillpacks run build:check`.
+- Run `node scripts/audit-task-docs.mjs`.
+- Run `git diff --check`.
+- Run `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`.
+
+### Review
+
+Implemented the briefing-slides convention update for `A`/`D` hotkeys and empty-stage click navigation, including explicit guardrails for slide content, links, buttons, form controls, filmstrip controls, topbar, footer, and review inputs.
+
+Archived the previous dogfood deck to `docs/history/archive/2026-07-05/215911/briefing-slides/create-briefing-slides.html`, then amended `briefing-slides/create-briefing-slides.html` with a visible click-stage and `A`/`D` update marker, guarded keyboard handling, and empty-stage-only click handling.
+
+Verification passed for package regeneration, convention/deck text checks, no dense-reference embed tags in the deck, repo-local reference existence, browser-level navigation behavior, package build checks, diff hygiene, and opener status `opened`.
+
+## Historical Implementation - Interrogation and Alignment Upgrade Target Backlog
 
 ### Goal
 

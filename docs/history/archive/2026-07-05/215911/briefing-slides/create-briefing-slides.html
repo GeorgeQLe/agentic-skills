@@ -427,7 +427,7 @@
     <div class="brand">
       <span>Create Briefing Slides</span>
       <small id="slideCounter">Slide 1 / 8</small>
-      <span class="update-pill">Updated: click-stage + A/D navigation</span>
+      <span class="update-pill">Updated: fit-to-slide rule</span>
     </div>
     <div class="progress" aria-label="Deck progress"><span id="progressFill"></span></div>
   </header>
@@ -508,7 +508,7 @@
         <p class="eyebrow">Presentation</p>
         <h2>Behave like a deck, not a markdown dump.</h2>
         <div class="grid two">
-          <div class="card"><strong>Navigate</strong><ul><li>Previous / next</li><li>A/D, Arrow, Space, Home, End keys</li><li>Click empty stage to advance</li><li>Hash resume and filmstrip</li></ul></div>
+          <div class="card"><strong>Navigate</strong><ul><li>Previous / next</li><li>Arrow, Space, Home, End keys</li><li>Hash resume and filmstrip</li></ul></div>
           <div class="card"><strong>Orient</strong><ul><li>Slide counter</li><li>Progress track</li><li>One slide per printed page</li></ul></div>
         </div>
         <div class="chips"><a class="chip" href="../packs/base/codex/create-briefing-slides/SKILL.md">Presentation requirements</a></div>
@@ -633,41 +633,12 @@
     document.getElementById('prevSlide').addEventListener('click', () => showSlide(current - 1));
     document.getElementById('nextSlide').addEventListener('click', () => showSlide(current + 1));
 
-    function isFormEditingTarget(target) {
-      return target && (
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
-        target.isContentEditable
-      );
-    }
-
     document.addEventListener('keydown', (event) => {
-      if (isFormEditingTarget(event.target)) return;
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-
-      const key = event.key.toLowerCase();
-      if (key === 'arrowleft' || key === 'a') {
-        event.preventDefault();
-        showSlide(current - 1);
-      }
-      if (key === 'arrowright' || key === 'd' || event.key === ' ') {
-        event.preventDefault();
-        showSlide(current + 1);
-      }
-      if (key === 'home') {
-        event.preventDefault();
-        showSlide(0);
-      }
-      if (key === 'end') {
-        event.preventDefault();
-        showSlide(slides.length - 1);
-      }
-    });
-
-    document.querySelector('.deck').addEventListener('click', (event) => {
-      const activeSlide = event.target.closest('.slide.active');
-      if (!activeSlide && event.target !== event.currentTarget) return;
-      if (event.target.closest('.slide-inner')) return;
-      showSlide(current + 1);
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) return;
+      if (event.key === 'ArrowLeft') showSlide(current - 1);
+      if (event.key === 'ArrowRight' || event.key === ' ') showSlide(current + 1);
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
     });
 
     document.querySelectorAll('[data-feedback], [data-mark], [data-annotation]').forEach((control) => {

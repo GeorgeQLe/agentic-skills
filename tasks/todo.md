@@ -1,6 +1,55 @@
 # Current Task
 
-## Current Implementation - Interrogation and Alignment Upgrade Target Backlog
+## Current Implementation - Stage-Click And A/D Slide Navigation
+
+### Goal
+
+Add stage-click navigation and `A`/`D` slide hotkeys to the briefing-slides convention and the `create-briefing-slides` dogfood deck while preserving all existing review controls.
+
+### Plan
+
+- [x] Archive the current dogfood deck at `docs/history/archive/2026-07-05/215911/briefing-slides/create-briefing-slides.html`.
+- [x] Update the briefing-slides convention with `A`/`D` keyboard requirements and empty-stage click navigation.
+- [x] Amend the dogfood deck with guarded `A`/`D` hotkeys and empty-stage click navigation.
+- [x] Update visible deck text and update marker to mention click-stage and `A`/`D` navigation.
+- [x] Regenerate package staging with `npm --workspace packages/skillpacks run build`.
+- [x] Run required verification and behavioral checks.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [x] Convention names `ArrowLeft`, `ArrowRight`, `A`, `D`, `Home`, `End`, and `Space`.
+- [x] Convention requires clicking the empty deck stage around the visible slide to advance.
+- [x] Convention says stage-click navigation must not hijack clicks inside slide content, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs.
+- [x] Dogfood deck supports `A`/`ArrowLeft` back and `D`/`ArrowRight`/`Space` forward.
+- [x] Dogfood deck ignores navigation keys while focus is inside form-editing controls and ignores modified key combinations.
+- [x] Dogfood deck advances only when the empty `.deck`/active `.slide` stage outside `.slide-inner` is clicked.
+
+### Verification
+
+- [x] Text check: convention names stage-click, `A`, and `D`.
+- [x] Text check: deck JavaScript contains guarded key and click handlers.
+- [x] Text check: no dense-reference embed tags are introduced.
+- [x] Behavioral check: `A`/`ArrowLeft` go back, `D`/`ArrowRight`/`Space` advance.
+- [x] Behavioral check: clicking empty stage space advances.
+- [x] Behavioral check: clicking inside the slide, links, buttons, selects, textareas, filmstrip, and footer controls does not accidentally stage-advance.
+- [x] `npm --workspace packages/skillpacks run build`
+- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
+
+### Review
+
+Implemented the briefing-slides convention update for `A`/`D` hotkeys and empty-stage click navigation. The rule now explicitly protects slide content, links, buttons, form controls, filmstrip controls, topbar, footer, and review inputs from accidental stage-click advance.
+
+Archived the previous dogfood deck to `docs/history/archive/2026-07-05/215911/briefing-slides/create-briefing-slides.html`, then amended `briefing-slides/create-briefing-slides.html` with a visible `Updated: click-stage + A/D navigation` marker, presentation copy that names `A`/`D` and empty-stage clicks, guarded keyboard handling, and empty-stage-only click handling.
+
+Verified package regeneration, convention/deck text, no dense-reference embed tags in the deck, repo-local reference existence, browser-level navigation behavior, package build checks, diff hygiene, and opener status `opened`.
+
+# Historical Task State
+
+## Review - Interrogation and Alignment Upgrade Target Backlog 2026-07-05
 
 ### Goal
 
@@ -16,56 +65,56 @@ For every target below, handle the `claude` and `codex` mirrors together where b
 
 Business research:
 
-- [ ] `competitive-analysis`
-- [ ] `enterprise-icp`
-- [ ] `customer-feedback`
-- [ ] `lean-canvas`
-- [ ] `value-prop-canvas`
+- `competitive-analysis`
+- `enterprise-icp`
+- `customer-feedback`
+- `lean-canvas`
+- `value-prop-canvas`
 
 Customer lifecycle:
 
-- [ ] `journey-map`
+- `journey-map`
 
 Business growth:
 
-- [ ] `monetization`
-- [ ] `gtm`
-- [ ] `landing-copy`
-- [ ] `growth-model`
-- [ ] `hook-model`
-- [ ] `pmf-assessment`
+- `monetization`
+- `gtm`
+- `landing-copy`
+- `growth-model`
+- `hook-model`
+- `pmf-assessment`
 
 Business ops:
 
-- [ ] `platform-strategy`
+- `platform-strategy`
 
 Creator foundation:
 
-- [ ] `product-led-media-map`
-- [ ] `creator-positioning`
-- [ ] `content-programming`
+- `product-led-media-map`
+- `creator-positioning`
+- `content-programming`
 
 Game:
 
-- [ ] `game-audience`
-- [ ] `game-comparables`
-- [ ] `game-fantasy`
-- [ ] `game-genre-map`
-- [ ] `game-launch`
-- [ ] `game-store-page-test`
+- `game-audience`
+- `game-comparables`
+- `game-fantasy`
+- `game-genre-map`
+- `game-launch`
+- `game-store-page-test`
 
 YouTube ops:
 
-- [ ] `youtube-concept-research`
+- `youtube-concept-research`
 
 Product design:
 
-- [ ] `brainstorm-inspirations`
-- [ ] `take-inspiration`
+- `brainstorm-inspirations`
+- `take-inspiration`
 
 ORD:
 
-- [ ] `ord-align`
+- `ord-align`
 
 ### Acceptance Criteria
 
@@ -87,8 +136,6 @@ ORD:
 Implemented the tracking-only active backlog for 26 high-confidence target skills. The skill upgrade target checkboxes remain open intentionally; this step only promoted and verified the future-work list.
 
 Verified the active non-archived `SKILL.md` derivation, alignment/interrogation generator cleanliness, task-doc audit, and diff hygiene.
-
-# Historical Task State
 
 ## Review - Fit-To-Slide Briefing Deck Convention 2026-07-06
 

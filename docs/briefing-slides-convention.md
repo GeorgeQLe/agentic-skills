@@ -36,7 +36,9 @@ Required presentation controls:
 - Do not use hidden overflow, clipped containers, tiny text, or scroll traps as a substitute for making slide content fit.
 - Use compact visual structures, short labels, and per-element reference links or chips so slides summarize decisions while dense artifacts carry the detail.
 - Previous/next buttons.
-- Keyboard navigation: `ArrowLeft`, `ArrowRight`, `Home`, `End`, and `Space`.
+- Keyboard navigation: `ArrowLeft`, `ArrowRight`, `A`, `D`, `Home`, `End`, and `Space`.
+- Empty-stage click navigation: clicking the deck stage around the visible slide advances to the next slide.
+- Stage-click navigation must not hijack clicks inside the slide, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs.
 - Persistent slide counter and progress track.
 - Hash or local browser state so the current slide can be resumed or linked.
 - Agenda or filmstrip navigation when the deck has more than five slides.

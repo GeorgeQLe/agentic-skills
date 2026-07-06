@@ -6,6 +6,12 @@
 - Rule: briefing decks must keep authored slide content concise enough to fit the visible desktop and mobile review viewport without clipped text, hidden overflow, or slide-body scrolling.
 - Dense rationale, evidence, edge cases, and procedural detail belong in linked artifacts; slides should use short labels, compact structures, and reference chips for drill-down.
 
+## 2026-07-05 - Slide deck navigation needs mouse-stage and keyboard-letter parity
+
+- A briefing deck could satisfy arrow-key navigation while still feeling incomplete in presentation mode because empty-stage clicks and `A`/`D` keyboard navigation were missing.
+- Rule: when adding or reviewing briefing-slide navigation requirements, include both pointer and keyboard presentation affordances: `A`/`ArrowLeft` for previous, `D`/`ArrowRight`/`Space` for next, `Home`/`End` for bounds, and empty-stage clicks for forward navigation.
+- Stage-click handlers must be scoped to the empty deck stage only. They must not treat clicks inside slide content, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs as slide-advance intent.
+
 ## 2026-07-05 - New shell commands must be installed before handoff
 
 - I added and pushed a `publish-canary` wrapper definition in `sync.md`, but did not install the wrapper into the user's current `~/.local/bin` before saying the command was ready.
