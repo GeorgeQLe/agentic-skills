@@ -2,6 +2,32 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Dogfood Create Briefing Slides 2026-07-05
+
+### Goal
+
+Generate a self-contained briefing deck that explains the `create-briefing-slides` skill and the shared briefing-slides convention while using the deck-first, linked-reference workflow the skill prescribes.
+
+### Plan
+
+- [x] Capture the visible skill invocation under `prompts/create-briefing-slides/`.
+- [x] Create `briefing-slides/create-briefing-slides.html` with slide navigation, review controls, reference links, and YAML compilation.
+- [x] Verify deck text, repo-local reference links, diff hygiene, and opener behavior.
+- [x] Record review results in task docs, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- The only opened artifact is `briefing-slides/create-briefing-slides.html`.
+- The deck links, but does not embed or auto-open, `packs/base/codex/create-briefing-slides/SKILL.md`, `docs/briefing-slides-convention.md`, and `packs/base/codex/create-briefing-slides/agents/openai.yaml`.
+- The deck includes previous/next controls, keyboard navigation, slide counter/progress, print CSS, reference chips, gate controls, slide feedback, annotations, marking controls, YAML compiler, and clipboard fallback.
+- Verification confirms repo-local references exist and `git diff --check` passes.
+
+### Review
+
+Created `briefing-slides/create-briefing-slides.html` as a self-contained deck that explains the skill problem, artifact model, source/output rules, presentation behavior, review controls, YAML handoff contract, dogfood findings, and references. The deck links the skill source, shared convention, and OpenAI agent metadata as dense references without embedding them.
+
+Verification passed for required deck controls, repo-local reference existence, diff hygiene, task-doc audit after closeout, and source-checkout opener status `opened`.
+
 ## Historical Implementation - Briefing Slides Convention 2026-07-05
 
 ### Goal

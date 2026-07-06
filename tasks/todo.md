@@ -2,11 +2,32 @@
 
 ## No Active Task - 2026-07-05
 
-The briefing slides convention extraction is complete and ready to ship. No executable task is currently promoted in this repo.
-
-Next work should be promoted deliberately from roadmap, recurring advisory review, or a new user request.
+The `create-briefing-slides` dogfood deck is complete and ready to ship. No executable task is currently promoted in this repo.
 
 # Historical Task State
+
+## Review - Dogfood Create Briefing Slides 2026-07-05
+
+### Goal
+
+Generate `briefing-slides/create-briefing-slides.html` as the deck-first review surface for the `create-briefing-slides` skill and its shared convention.
+
+### Review
+
+Implemented:
+
+- Captured the visible invocation under `prompts/create-briefing-slides/`.
+- Created `briefing-slides/create-briefing-slides.html` with eight slides covering the skill problem, artifact model, source/output rules, presentation behavior, review controls, YAML handoff contract, dogfood findings, and references.
+- Linked `packs/base/codex/create-briefing-slides/SKILL.md`, `docs/briefing-slides-convention.md`, and `packs/base/codex/create-briefing-slides/agents/openai.yaml` as dense references without embedding or auto-opening them.
+- Included an inline gate question, slide feedback, annotations, marking controls, copy controls, Clipboard API fallback textarea, and final YAML compiler.
+
+Verified:
+
+- Textual inspection found previous/next controls, keyboard navigation, slide counter/progress indicator, reference links, gate controls, feedback/annotation/marking controls, YAML compiler, copy fallback, and print CSS.
+- All repo-local reference links exist.
+- No embedded dense-reference tags (`iframe`, `object`, or `embed`) are present.
+- `git diff --check` passed.
+- `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto` reported `opened`.
 
 ## Review - Briefing Slides Convention 2026-07-05
 
