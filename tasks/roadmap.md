@@ -2,34 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Release Lane Alignment Briefing
+## Current Implementation - Release Lane Briefing Slides
+
+### Goal
+
+Create a briefing slide deck for the release-lane change-boundary COAs, linked to the dense alignment briefing, so the canary-vs-general-release standard can be reviewed as slides.
+
+### Plan
+
+- [x] Confirm the dense alignment briefing exists and is already pushed.
+- [x] Create `briefing-slides/release-lane-change-boundary.html`.
+- [x] Include slide navigation, references, gates, feedback, annotations, and compiled YAML.
+- [x] Verify deck source hooks, linked references, task docs, diff hygiene, and opener.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- The slide deck presents the problem, COAs, directory split answer, recommendation, implementation shape, and decision gates.
+- The dense alignment page remains canonical and is linked as a reference.
+- The deck has slide navigation and can resume by hash.
+- The deck supports slide-scoped feedback, marking, annotations, and final compiled YAML.
+- The deck is opened through the repo HTML opener.
+
+### Verification
+
+- Static source assertions for deck controls and YAML compiler passed.
+- Linked reference existence check passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+- `node scripts/open-html-page.mjs briefing-slides/release-lane-change-boundary.html --browser auto` opened the local deck.
+
+### Review
+
+Created `briefing-slides/release-lane-change-boundary.html` as the slide-first review surface for the release-lane COAs. The deck links to the dense alignment page, summarizes the problem and recommendation, answers the directory-split question, and includes decision gates plus a compiled YAML handoff.
+
+The deck includes previous/next controls, filmstrip navigation, keyboard and empty-stage navigation, hash resume, print CSS, slide-scoped feedback, marking, annotations, per-slide YAML, and final full-deck YAML.
+
+Static deck hooks, linked reference existence, task-doc audit, diff hygiene, and the HTML opener have passed.
+
+## Historical Implementation - Release Lane Alignment Briefing
 
 ### Goal
 
 Create an alignment briefing that evaluates how to keep canary and general-release edits from mixing across future skill, convention, and package changes.
-
-### Plan
-
-- [x] Inspect existing alignment page conventions and index structure.
-- [x] Create a review-state alignment briefing with COAs and recommendation.
-- [x] Add the briefing to `alignment/index.html`.
-- [x] Update task docs with verification results.
-- [x] Run alignment/task-doc/diff verification.
-
-### Acceptance Criteria
-
-- The briefing frames the problem beyond interrogation upgrades.
-- It compares practical COAs, including whether separate canary/general directories are needed.
-- It recommends a standardized release-lane contract plus audit enforcement.
-- It keeps canary behavior separated from general-release source edits by default.
-- The active alignment index links the briefing.
-
-### Verification
-
-- `node scripts/audit-alignment-pages.mjs` passed.
-- `node scripts/audit-task-docs.mjs` passed.
-- `git diff --check` passed.
-- `node scripts/open-html-page.mjs alignment/release-lane-change-boundary.html --browser auto` opened the local briefing.
 
 ### Review
 
