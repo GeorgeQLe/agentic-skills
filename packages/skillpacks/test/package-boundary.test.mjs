@@ -81,6 +81,10 @@ function builtManifest({ lane = 'stable', writeLaneManifest = false } = {}) {
   return JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'));
 }
 
+function builtText(relativePath) {
+  return readFileSync(resolve(packageRoot, 'build', relativePath), 'utf8');
+}
+
 function hasPathClass(paths, deniedPath) {
   return [...paths].some((filePath) => {
     return filePath === deniedPath || filePath.startsWith(`${deniedPath}/`);
@@ -156,6 +160,18 @@ describe('skillpacks npm publish target boundary', () => {
         hasPathClass(paths, canaryOnlyPath),
         false,
         `${canaryOnlyPath} should not be published in stable packages`
+      );
+    }
+
+    for (const [relativePath, forbiddenPattern] of [
+      ['package.json', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
+      ['scripts/skill-convention-registry.mjs', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
+      ['packs/base/PACK.md', /briefing-slides|create-briefing-slides|"release_lane": "canary"/]
+    ]) {
+      assert.doesNotMatch(
+        builtText(relativePath),
+        forbiddenPattern,
+        `${relativePath} should not publish canary metadata in stable packages`
       );
     }
 

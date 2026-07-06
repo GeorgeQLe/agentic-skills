@@ -180,6 +180,19 @@ function copyTrackedPrefixes(files, prefixes) {
   }
 }
 
+function deniedSkillRootsForLane(files) {
+  const deniedSkillRoots = new Set();
+  for (const file of activeSkillPaths(files)) {
+    const source = path.join(repoRoot, file);
+    if (!existsSync(source)) continue;
+    if (!releaseLaneAllowed(skillReleaseLaneFromText(readFileSync(source, "utf8")), packageLane)) {
+      deniedSkillRoots.add(path.posix.dirname(file));
+    }
+  }
+
+  return deniedSkillRoots;
+}
+
 function allowedPackageEntries(entries) {
   return entries.filter((entry) => {
     const registryEntry = Object.values(SKILL_CONVENTIONS).find(
@@ -190,14 +203,7 @@ function allowedPackageEntries(entries) {
 }
 
 function laneFilteredFiles(files) {
-  const deniedSkillRoots = new Set();
-  for (const file of activeSkillPaths(files)) {
-    const source = path.join(repoRoot, file);
-    if (!existsSync(source)) continue;
-    if (!releaseLaneAllowed(skillReleaseLaneFromText(readFileSync(source, "utf8")), packageLane)) {
-      deniedSkillRoots.add(path.posix.dirname(file));
-    }
-  }
+  const deniedSkillRoots = deniedSkillRootsForLane(files);
 
   return files.filter((file) => {
     for (const deniedRoot of deniedSkillRoots) {
@@ -205,6 +211,17 @@ function laneFilteredFiles(files) {
     }
     return true;
   });
+}
+
+function laneFilteredPackageFiles(files) {
+  const deniedAssets = new Set(
+    Object.values(SKILL_CONVENTIONS)
+      .filter((convention) => !releaseLaneAllowed(convention.release_lane, packageLane))
+      .map((convention) => convention.packageAsset)
+      .filter(Boolean)
+  );
+
+  return files.filter((file) => !deniedAssets.has(file));
 }
 
 function stagedPackageJson() {
@@ -234,8 +251,53 @@ function stagedPackageJson() {
       prepublishOnly: packageJson.scripts.prepublishOnly
     };
   }
+  if (Array.isArray(staged.files)) {
+    staged.files = laneFilteredPackageFiles(staged.files);
+  }
 
   return staged;
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function writeLaneFilteredConventionRegistry() {
+  const target = path.join(buildRoot, "scripts/skill-convention-registry.mjs");
+  let registrySource = readFileSync(target, "utf8");
+
+  for (const conventionId of conventionIdsDeniedForLane()) {
+    const conventionBlock = new RegExp(
+      `\\n  "${escapeRegExp(conventionId)}": \\{[\\s\\S]*?\\n  \\},`,
+      "g"
+    );
+    registrySource = registrySource.replace(conventionBlock, "");
+  }
+
+  writeFileSync(target, registrySource);
+}
+
+function conventionIdsDeniedForLane() {
+  return Object.entries(SKILL_CONVENTIONS)
+    .filter(([, convention]) => !releaseLaneAllowed(convention.release_lane, packageLane))
+    .map(([conventionId]) => conventionId);
+}
+
+function scrubDeniedSkillRowsFromPackMetadata(files) {
+  const deniedSkillNames = [...deniedSkillRootsForLane(files)].map((skillRoot) => path.posix.basename(skillRoot));
+  if (deniedSkillNames.length === 0) return;
+
+  const copiedPackManifests = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
+  for (const packManifestPath of copiedPackManifests) {
+    const target = path.join(buildRoot, packManifestPath);
+    if (!existsSync(target)) continue;
+    let packText = readFileSync(target, "utf8");
+    for (const skillName of deniedSkillNames) {
+      const skillRow = new RegExp(`^- \`${escapeRegExp(skillName)}\`:.*\\n?`, "gm");
+      packText = packText.replace(skillRow, "");
+    }
+    writeFileSync(target, packText);
+  }
 }
 
 function assertBuildBoundary() {
@@ -301,6 +363,8 @@ function buildPackage() {
   for (const entry of allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane)) {
     copyEntry(entry);
   }
+  scrubDeniedSkillRowsFromPackMetadata(files);
+  writeLaneFilteredConventionRegistry();
 
   writeFileSync(
     path.join(buildRoot, "package.json"),
