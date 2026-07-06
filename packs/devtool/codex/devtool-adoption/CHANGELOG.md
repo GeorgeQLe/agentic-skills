@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-07-05
+
+- Added stage-zero interrogation-page gating before staged devtool research and declared the shared interrogation-page convention.
+
 ## v0.8 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

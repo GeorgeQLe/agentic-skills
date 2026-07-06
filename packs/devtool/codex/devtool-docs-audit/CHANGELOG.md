@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-05
+
+- Refactored the docs audit into the staged devtool research workflow with stage-zero interrogation, scope approval, non-canonical working packets, artifact review, and confirmed canonical writes.
+
 ## v0.2 - 2026-06-14
 
 - Restored the missing local `## Next-Skill Routing` section referenced by the output contract.

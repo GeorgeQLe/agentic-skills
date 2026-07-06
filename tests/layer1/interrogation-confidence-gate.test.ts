@@ -30,7 +30,29 @@ const participatingSkillDirs = [
   "packs/product-design/codex/ui-interview",
   "packs/product-design/codex/user-flow-map",
   "packs/product-design/codex/ux-variations",
+  "packs/devtool/claude/devtool-workflow",
+  "packs/devtool/claude/devtool-user-map",
+  "packs/devtool/claude/devtool-integration-map",
+  "packs/devtool/claude/devtool-dx-journey",
+  "packs/devtool/claude/devtool-adoption",
+  "packs/devtool/claude/devtool-positioning",
+  "packs/devtool/claude/devtool-monetization",
+  "packs/devtool/claude/devtool-docs-audit",
+  "packs/devtool/codex/devtool-workflow",
+  "packs/devtool/codex/devtool-user-map",
+  "packs/devtool/codex/devtool-integration-map",
+  "packs/devtool/codex/devtool-dx-journey",
+  "packs/devtool/codex/devtool-adoption",
+  "packs/devtool/codex/devtool-positioning",
+  "packs/devtool/codex/devtool-monetization",
+  "packs/devtool/codex/devtool-docs-audit",
 ];
+
+const devtoolResearchSkillDirs = participatingSkillDirs.filter(
+  (dir) => dir.includes("/devtool/") && !dir.endsWith("/devtool-workflow"),
+);
+
+const devtoolWorkflowSkillDirs = participatingSkillDirs.filter((dir) => dir.endsWith("/devtool-workflow"));
 
 describe("interrogation confidence-gate contract", () => {
   it("the canonical convention treats open answers as evidence to validate before downstream use", () => {
@@ -89,6 +111,35 @@ describe("interrogation confidence-gate contract", () => {
     const result = spawnSync(process.execPath, [GENERATOR, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Shared resolver stubs: 20 ownable, exact");
+    expect(result.stdout).toContain("Shared resolver stubs: 36 ownable, exact");
   });
+
+  for (const dir of devtoolResearchSkillDirs) {
+    it(`${dir}/SKILL.md runs staged devtool research behind interrogation and alignment gates`, () => {
+      const text = readFileSync(join(REPO_ROOT, dir, "SKILL.md"), "utf8");
+      expect(text).toContain("required_conventions: [alignment-page, interrogation-page]");
+      expect(text).toContain("Stage 0 - Interrogation");
+      expect(text).toContain("Unless a valid upstream `devtool-workflow` handoff already covers");
+      expect(text).toContain("Consume the compiled interrogation YAML before Stage 1");
+      expect(text).toContain("Stage 1 - Scope discovery and approval");
+      expect(text).toContain("Stage 2 - Research and artifact review");
+      expect(text).toContain("write only a non-canonical working packet");
+      expect(text).toContain("Stage 3 - Finalize approved artifacts");
+      expect(text).toContain("convert the alignment page to `confirmed`");
+    });
+  }
+
+  for (const dir of devtoolWorkflowSkillDirs) {
+    it(`${dir}/SKILL.md routes devtool AFPS only after compiled approval YAML`, () => {
+      const text = readFileSync(join(REPO_ROOT, dir, "SKILL.md"), "utf8");
+      expect(text).toContain("required_conventions: [alignment-page, interrogation-page]");
+      expect(text).toContain("devtool AFPS scope/router orchestrator");
+      expect(text).toContain("does not route to downstream devtool skills until");
+      expect(text).toContain("compiled YAML");
+      expect(text).toContain("Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language before approval YAML is consumed");
+      expect(text).toContain("Only after approved compiled YAML");
+      expect(text).toContain("convert the alignment page to `confirmed`");
+      expect(text).toContain("Recommended next skill: <command>` only after that approval");
+    });
+  }
 });

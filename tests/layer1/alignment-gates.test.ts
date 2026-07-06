@@ -42,8 +42,6 @@ const optionalAlignmentSkills = [
   "packs/business-ops/codex/product-line/SKILL.md",
   "packs/context-transfer/claude/handoff/SKILL.md",
   "packs/context-transfer/codex/handoff/SKILL.md",
-  "packs/devtool/claude/devtool-workflow/SKILL.md",
-  "packs/devtool/codex/devtool-workflow/SKILL.md",
   "packs/docs-health/claude/reconcile-dev-docs/SKILL.md",
   "packs/docs-health/codex/reconcile-dev-docs/SKILL.md",
   "packs/game/claude/game-roadmap/SKILL.md",
@@ -1063,7 +1061,7 @@ describe("alignment page gate contract", () => {
 
     for (const [path, command] of cases) {
       const content = read(path);
-      expect(content, `${path} version bump`).toContain("version: v0.2");
+      expect(content, `${path} version bump`).toContain("version: v0.3");
       expect(content, `${path} review page path`).toContain("review `alignment/<skill-name>-<topic>.html`");
       expect(content, `${path} local feedback compile`).toContain("local `Compile Feedback YAML` under a section");
       expect(content, `${path} bottom compile responses`).toContain("bottom `Compile Responses`");

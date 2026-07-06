@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-05
+
+- Refactored the skill into the staged devtool research workflow with stage-zero interrogation, scope approval, non-canonical working packets, artifact review, and confirmed canonical writes.
+
 ## v0.4 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.
