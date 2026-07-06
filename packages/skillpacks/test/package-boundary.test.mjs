@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
@@ -11,6 +11,7 @@ import {
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '../..');
+const manifestPath = resolve(packageRoot, 'dist/skillpacks-manifest.json');
 const socialAssetPaths = [
   'assets/social/bluesky-convention.md',
   'assets/social/founder-devtool-video-prompts-convention.md',
@@ -28,10 +29,14 @@ const socialAssetPaths = [
   'assets/social/youtube-shorts-convention.md'
 ];
 
-function run(command, args) {
+function run(command, args, { env = {} } = {}) {
   const result = spawnSync(command, args, {
     cwd: packageRoot,
     encoding: 'utf8',
+    env: {
+      ...process.env,
+      ...env
+    },
     maxBuffer: 64 * 1024 * 1024
   });
 
@@ -43,8 +48,25 @@ function run(command, args) {
   return result.stdout;
 }
 
-function packedPaths() {
-  run(process.execPath, ['scripts/build-package.mjs', '--check']);
+function generatedManifestForLane(lane) {
+  const stdout = run(process.execPath, ['scripts/build-skillpacks-manifest.mjs', '--print'], {
+    env: { SKILLPACKS_PACKAGE_LANE: lane }
+  });
+  return `${JSON.stringify(JSON.parse(stdout), null, 2)}\n`;
+}
+
+function packedPaths({ lane = 'stable', writeLaneManifest = false } = {}) {
+  const originalManifest = readFileSync(manifestPath, 'utf8');
+  try {
+    if (writeLaneManifest) {
+      writeFileSync(manifestPath, generatedManifestForLane(lane));
+    }
+    run(process.execPath, ['scripts/build-package.mjs', '--check'], {
+      env: { SKILLPACKS_PACKAGE_LANE: lane }
+    });
+  } finally {
+    writeFileSync(manifestPath, originalManifest);
+  }
   const stdout = run('npm', ['pack', './build', '--dry-run', '--json', '--silent']);
   const [packument] = JSON.parse(stdout);
 
@@ -52,6 +74,11 @@ function packedPaths() {
   return new Set(
     packument.files.map((file) => file.path.replace(/^package\//, ''))
   );
+}
+
+function builtManifest({ lane = 'stable', writeLaneManifest = false } = {}) {
+  packedPaths({ lane, writeLaneManifest });
+  return JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'));
 }
 
 function hasPathClass(paths, deniedPath) {
@@ -119,7 +146,21 @@ describe('skillpacks npm publish target boundary', () => {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published`);
     }
 
+    for (const canaryOnlyPath of [
+      'assets/briefing-slides-convention.md',
+      'assets/skillpacks-docs/briefing-slides-convention.md',
+      'packs/base/claude/create-briefing-slides',
+      'packs/base/codex/create-briefing-slides'
+    ]) {
+      assert.equal(
+        hasPathClass(paths, canaryOnlyPath),
+        false,
+        `${canaryOnlyPath} should not be published in stable packages`
+      );
+    }
+
     for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
+      if (convention.release_lane === 'canary') continue;
       if (convention.generatorScript) {
         assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
       }
@@ -127,8 +168,35 @@ describe('skillpacks npm publish target boundary', () => {
     }
 
     for (const entry of managedConventionDocEntries(repoRoot)) {
+      if (entry.canonicalDoc === 'docs/briefing-slides-convention.md') continue;
       assert.equal(paths.has(entry.packageAsset), true, `${entry.packageAsset} should be published`);
     }
+  });
+
+  it('includes briefing-slide skills and assets in canary package staging', () => {
+    const paths = packedPaths({ lane: 'canary', writeLaneManifest: true });
+
+    for (const requiredPath of [
+      'assets/briefing-slides-convention.md',
+      'assets/skillpacks-docs/briefing-slides-convention.md',
+      'packs/base/claude/create-briefing-slides/SKILL.md',
+      'packs/base/codex/create-briefing-slides/SKILL.md'
+    ]) {
+      assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published in canary packages`);
+    }
+  });
+
+  it('keeps package manifests inside their selected release lane', () => {
+    const stableManifest = builtManifest();
+    const canaryManifest = builtManifest({ lane: 'canary', writeLaneManifest: true });
+
+    assert.equal(stableManifest.package.release_lane, 'stable');
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(canaryManifest.package.release_lane, 'canary');
+    assert.equal(
+      canaryManifest.skills.filter((skill) => skill.name === 'create-briefing-slides').length,
+      2
+    );
   });
 
   it('registers social conventions as static package assets for BIP guidance', () => {

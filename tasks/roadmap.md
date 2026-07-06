@@ -2,47 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - UAT Click-By-Click Checklist Instructions
+## Current Implementation - Stable Package Boundary For Canary-Only Briefing Slides
 
 ### Goal
 
-Update UAT-related skills in the prototype design workflow so generated UAT artifacts give users click-by-click or surface-appropriate checklist instructions they can work through directly.
+Add an explicit package release-lane filter so canary-only briefing-slide skills and convention assets can remain on `master` without entering stable npm releases.
 
 ### Plan
 
-- [x] Identify active UAT skill mirrors and related guided walkthrough mirrors.
-- [x] Archive current skill versions before behavior changes.
-- [x] Update UAT plan and variant-evaluation formats to include click-by-click/checklist tester scripts.
-- [x] Update UAT guide output to use checklist substeps and explicit completion checkpoints.
-- [x] Refresh runtime skill copies and run targeted verification.
-- [x] Commit and push intended changes on `master`.
+- [x] Add shared release-lane filtering for manifest generation and package staging.
+- [x] Mark `create-briefing-slides` mirrors and the `briefing-slides` convention asset as canary-only.
+- [x] Make stable package builds exclude canary-only skills, package entries, and convention assets by default.
+- [x] Make canary prerelease publishes use the canary package lane.
+- [x] Add manifest, package-boundary, and publish tests for stable/canary behavior.
+- [x] Run package, export, task-doc, and diff verification.
 
 ### Acceptance Criteria
 
-- [x] `uat` journey plans require surface-appropriate step checklists, not vague task sequences.
-- [x] `uat --variant-evaluation` requires per-variant walkthrough checklists and completion/evidence boxes.
-- [x] `uat-guide` emits checklist substeps a human can check off while executing the journey.
-- [x] Claude and Codex mirrors remain aligned where agent syntax differs.
-- [x] Version archives and changelogs are updated for every changed skill.
+- [x] Stable manifests omit `create-briefing-slides`.
+- [x] Canary-lane manifests include both Claude and Codex `create-briefing-slides` entries.
+- [x] Stable package staging and dry-run pack output omit briefing-slide skill directories and `assets/briefing-slides-convention.md`.
+- [x] Canary package staging includes briefing-slide skill directories and asset.
+- [x] `./publish.sh patch` uses the stable package lane.
+- [x] `./publish.sh --tag experimental --preid experimental prerelease` uses the canary package lane.
 
 ### Verification
 
-- `scripts/pack.sh refresh` passed.
-- `bash scripts/skill-archive-audit.sh --strict` passed.
-- `bash scripts/skill-mirror-parity-audit.sh` passed.
-- Targeted `rg` assertions for checklist contract terms passed.
-- `npm --workspace packages/skillpacks run build:manifest:check` passed.
-- `npm run exports:check` passed.
+- `npm --workspace packages/skillpacks run test:node` passed.
+- `npm run skillpacks:verify` passed.
+- `npm run exports:check` passed after regenerating public skills-catalog export artifacts.
 - `node scripts/audit-task-docs.mjs` passed.
 - `git diff --check` passed.
+- `git diff --cached --check` passed.
+- Targeted stable/canary manifest and stable build boundary assertions passed.
 
 ### Review
 
-Updated `uat` in both Codex and Claude mirrors from `v0.16` to `v0.17`. UAT plans now require surface-appropriate tester checklists for each journey, and variant-evaluation artifacts now require shared and per-variant walkthrough checklists with evidence capture points.
+Added `SKILLPACKS_PACKAGE_LANE` support with default `stable` behavior and `canary` behavior that includes stable plus canary-only skills and assets. The stable generated manifest now records `release_lane: stable`, omits `create-briefing-slides`, and rejects skills that require canary-only conventions.
 
-Updated `uat-guide` in both Codex and Claude mirrors from `v0.5` to `v0.6`. Guided output now uses Markdown checkboxes for executable tester actions, including checkpoint observation and evidence capture items.
+Marked both `create-briefing-slides` mirrors and the `briefing-slides` convention registry entry as `release_lane: canary`. Stable package staging omits the briefing-slide skill directories plus `assets/briefing-slides-convention.md` and its managed-doc copy; canary staging includes them.
 
-Archived the prior skill contracts, updated changelogs, refreshed generated package metadata, and verified archive, mirror, catalog, task-doc, and diff hygiene checks.
+Updated `publish.sh` so normal patch publishes build with the stable lane, while `--tag experimental --preid experimental prerelease` builds with the canary lane. Prerelease publishes without the canary lane are rejected, and `latest` staged manifests are checked for canary skill entries before publish.
+
+Regenerated the stable package manifest and public skills-catalog export artifacts. Verification passed for package node tests, package verification, export freshness, task-doc audit, diff hygiene, and targeted stable/canary package-boundary assertions.
 
 ## Historical Implementation - Release Lane Briefing Slides
 

@@ -1,10 +1,29 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(
   readFileSync(new URL('../dist/skillpacks-manifest.json', import.meta.url), 'utf8')
 );
+
+function generatedManifestForLane(lane) {
+  const result = spawnSync(process.execPath, ['scripts/build-skillpacks-manifest.mjs', '--print'], {
+    cwd: packageRoot,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      SKILLPACKS_PACKAGE_LANE: lane
+    },
+    maxBuffer: 64 * 1024 * 1024
+  });
+
+  assert.equal(result.status, 0, [result.stdout, result.stderr].filter(Boolean).join('\n'));
+  return JSON.parse(result.stdout);
+}
 
 function deckByName(name) {
   return manifest.decks.find((deck) => deck.name === name);
@@ -112,5 +131,35 @@ describe('skillpacks manifest deck metadata', () => {
 
     assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'interrogation-page']);
     assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'design-tree-loop', 'interrogation-page']);
+  });
+
+  it('omits canary-only briefing-slide skills from the stable manifest', () => {
+    const stableManifest = generatedManifestForLane('stable');
+
+    assert.equal(stableManifest.package.release_lane, 'stable');
+    assert.equal(
+      stableManifest.skills.find((skill) => skill.path === 'packs/base/codex/create-briefing-slides/SKILL.md'),
+      undefined
+    );
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(
+      stableManifest.skills.some((skill) => skill.required_conventions.includes('briefing-slides')),
+      false,
+      'stable manifest should not include skills requiring canary-only conventions'
+    );
+  });
+
+  it('includes both create-briefing-slides mirrors in the canary manifest', () => {
+    const canaryManifest = generatedManifestForLane('canary');
+    const briefingSkills = canaryManifest.skills
+      .filter((skill) => skill.name === 'create-briefing-slides')
+      .map((skill) => [skill.platform, skill.release_lane, skill.path])
+      .sort();
+
+    assert.equal(canaryManifest.package.release_lane, 'canary');
+    assert.deepEqual(briefingSkills, [
+      ['claude', 'canary', 'packs/base/claude/create-briefing-slides/SKILL.md'],
+      ['codex', 'canary', 'packs/base/codex/create-briefing-slides/SKILL.md']
+    ]);
   });
 });

@@ -2,9 +2,10 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.20"
+    "version": "0.1.20",
+    "release_lane": "stable"
   },
-  "source_fingerprint": "289c2635b95368b9070a7a99eb3cd13799ec9a925d20562705ccf9c12baada5e",
+  "source_fingerprint": "111c4127f7d31c0c91c5d690f782879b1801757b835126f7901d78ab8a6bec0a",
   "packs": [
     {
       "name": "agent-bridge",
@@ -804,6 +805,7 @@
       "pack": "agent-bridge",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -825,6 +827,7 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -850,6 +853,7 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.14",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -884,6 +888,7 @@
       "pack": "agent-work-admin",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -905,6 +910,7 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -931,6 +937,7 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.14",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -965,6 +972,7 @@
       "pack": "agent-work-admin",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -986,6 +994,7 @@
       "pack": "agentic-skills-bench",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1010,6 +1019,7 @@
       "pack": "agentic-skills-bench",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1035,6 +1045,7 @@
       "pack": "agentic-skills-bench",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1059,6 +1070,7 @@
       "pack": "agentic-skills-bench",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1084,6 +1096,7 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1101,6 +1114,7 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1118,6 +1132,7 @@
       "pack": "alignment-loop",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1140,6 +1155,7 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1157,6 +1173,7 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1174,6 +1191,7 @@
       "pack": "alignment-loop",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1196,6 +1214,7 @@
       "pack": "alignment-page-admin",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1217,6 +1236,7 @@
       "pack": "alignment-page-admin",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1238,6 +1258,7 @@
       "pack": "alignment-page-admin",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1259,6 +1280,7 @@
       "pack": "alignment-page-admin",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1280,6 +1302,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1309,6 +1332,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1326,6 +1350,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1343,6 +1368,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1360,6 +1386,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1377,6 +1404,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1394,6 +1422,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1415,6 +1444,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1432,6 +1462,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1449,6 +1480,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1478,6 +1510,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1495,31 +1528,13 @@
       "deck_memberships": []
     },
     {
-      "id": "base-claude-create-briefing-slides",
-      "name": "create-briefing-slides",
-      "scope": "base",
-      "pack": null,
-      "platform": "claude",
-      "version": "v0.0",
-      "deprecated": false,
-      "replaced_by": null,
-      "required_conventions": [
-        "briefing-slides"
-      ],
-      "path": "packs/base/claude/create-briefing-slides/SKILL.md",
-      "installable": true,
-      "content_sha256": "6b7f443497a4181e500d11d5330593f631558256311d9022a06f6df40bc11332",
-      "archive_versions": [],
-      "command": "/create-briefing-slides",
-      "deck_memberships": []
-    },
-    {
       "id": "base-claude-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
       "pack": null,
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1541,6 +1556,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.23",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1585,6 +1601,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1615,6 +1632,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.14",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1649,6 +1667,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1671,6 +1690,7 @@
       "pack": null,
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1699,6 +1719,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1728,6 +1749,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1745,6 +1767,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1762,6 +1785,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1779,6 +1803,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1796,6 +1821,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1813,6 +1839,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1834,6 +1861,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1851,6 +1879,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1868,6 +1897,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -1897,6 +1927,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1914,31 +1945,13 @@
       "deck_memberships": []
     },
     {
-      "id": "base-codex-create-briefing-slides",
-      "name": "create-briefing-slides",
-      "scope": "base",
-      "pack": null,
-      "platform": "codex",
-      "version": "v0.0",
-      "deprecated": false,
-      "replaced_by": null,
-      "required_conventions": [
-        "briefing-slides"
-      ],
-      "path": "packs/base/codex/create-briefing-slides/SKILL.md",
-      "installable": true,
-      "content_sha256": "304194c520b961f5e98bfab637e1a14200e7236e91cd242a920f48281daddb77",
-      "archive_versions": [],
-      "command": "$create-briefing-slides",
-      "deck_memberships": []
-    },
-    {
       "id": "base-codex-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
       "pack": null,
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -1960,6 +1973,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.23",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2004,6 +2018,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -2034,6 +2049,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.15",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2069,6 +2085,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2091,6 +2108,7 @@
       "pack": null,
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -2119,6 +2137,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2148,6 +2167,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2179,6 +2199,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2213,6 +2234,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2244,6 +2266,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2275,6 +2298,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2302,6 +2326,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2336,6 +2361,7 @@
       "pack": "business-growth",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2368,6 +2394,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2397,6 +2424,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2428,6 +2456,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2462,6 +2491,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2493,6 +2523,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2524,6 +2555,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2551,6 +2583,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2585,6 +2618,7 @@
       "pack": "business-growth",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2617,6 +2651,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2641,6 +2676,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2668,6 +2704,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2694,6 +2731,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2720,6 +2758,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2752,6 +2791,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2785,6 +2825,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2813,6 +2854,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2846,6 +2888,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2872,6 +2915,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2899,6 +2943,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2925,6 +2970,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2951,6 +2997,7 @@
       "pack": "business-ops",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -2978,6 +3025,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3002,6 +3050,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3029,6 +3078,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3055,6 +3105,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3081,6 +3132,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3113,6 +3165,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3146,6 +3199,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3174,6 +3228,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3207,6 +3262,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3233,6 +3289,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3260,6 +3317,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3286,6 +3344,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3312,6 +3371,7 @@
       "pack": "business-ops",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3339,6 +3399,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3373,6 +3434,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3407,6 +3469,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3441,6 +3504,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3475,6 +3539,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.29",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3527,6 +3592,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3559,6 +3625,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3591,6 +3658,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3623,6 +3691,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3655,6 +3724,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3687,6 +3757,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3719,6 +3790,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v1.19",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3773,6 +3845,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3804,6 +3877,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3838,6 +3912,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3871,6 +3946,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3906,6 +3982,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3941,6 +4018,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -3976,6 +4054,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4011,6 +4090,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4046,6 +4126,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.27",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4096,6 +4177,7 @@
       "pack": "business-research",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4129,6 +4211,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4163,6 +4246,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4197,6 +4281,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4231,6 +4316,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4265,6 +4351,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.29",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4317,6 +4404,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4349,6 +4437,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4381,6 +4470,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4413,6 +4503,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4445,6 +4536,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4477,6 +4569,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4509,6 +4602,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v1.19",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4563,6 +4657,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4594,6 +4689,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4628,6 +4724,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4661,6 +4758,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4696,6 +4794,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4731,6 +4830,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4766,6 +4866,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4801,6 +4902,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4836,6 +4938,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.27",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4886,6 +4989,7 @@
       "pack": "business-research",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -4919,6 +5023,7 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -4940,6 +5045,7 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -4961,6 +5067,7 @@
       "pack": "code-debug",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -4980,6 +5087,7 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -5001,6 +5109,7 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -5022,6 +5131,7 @@
       "pack": "code-debug",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -5041,6 +5151,7 @@
       "pack": "code-maintenance",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5062,6 +5173,7 @@
       "pack": "code-maintenance",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -5081,6 +5193,7 @@
       "pack": "code-maintenance",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5102,6 +5215,7 @@
       "pack": "code-maintenance",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -5121,6 +5235,7 @@
       "pack": "code-quality",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5142,6 +5257,7 @@
       "pack": "code-quality",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5163,6 +5279,7 @@
       "pack": "code-quality",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5184,6 +5301,7 @@
       "pack": "code-quality",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5205,6 +5323,7 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5226,6 +5345,7 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5247,6 +5367,7 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5268,6 +5389,7 @@
       "pack": "code-review",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5289,6 +5411,7 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5310,6 +5433,7 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5331,6 +5455,7 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5352,6 +5477,7 @@
       "pack": "code-review",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5373,6 +5499,7 @@
       "pack": "context-transfer",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5395,6 +5522,7 @@
       "pack": "context-transfer",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5417,6 +5545,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5442,6 +5571,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5469,6 +5599,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5496,6 +5627,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5523,6 +5655,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5550,6 +5683,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5575,6 +5709,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5600,6 +5735,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5621,6 +5757,7 @@
       "pack": "creator-foundation",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5643,6 +5780,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5668,6 +5806,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5695,6 +5834,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5722,6 +5862,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5749,6 +5890,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5776,6 +5918,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5801,6 +5944,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5826,6 +5970,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5847,6 +5992,7 @@
       "pack": "creator-foundation",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5869,6 +6015,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5896,6 +6043,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5923,6 +6071,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5955,6 +6104,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -5987,6 +6137,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6019,6 +6170,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6051,6 +6203,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6083,6 +6236,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.26",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6131,6 +6285,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6158,6 +6313,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6185,6 +6341,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6212,6 +6369,7 @@
       "pack": "customer-lifecycle",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6239,6 +6397,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6266,6 +6425,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6293,6 +6453,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6325,6 +6486,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6357,6 +6519,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6389,6 +6552,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6421,6 +6585,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6453,6 +6618,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.26",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6501,6 +6667,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6528,6 +6695,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6555,6 +6723,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6582,6 +6751,7 @@
       "pack": "customer-lifecycle",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6609,6 +6779,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6641,6 +6812,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6667,6 +6839,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6695,6 +6868,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6723,6 +6897,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6755,6 +6930,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6787,6 +6963,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6819,6 +6996,7 @@
       "pack": "devtool",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6846,6 +7024,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6878,6 +7057,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6904,6 +7084,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6932,6 +7113,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6960,6 +7142,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -6992,6 +7175,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7024,6 +7208,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7056,6 +7241,7 @@
       "pack": "devtool",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7083,6 +7269,7 @@
       "pack": "docs-health",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7102,6 +7289,7 @@
       "pack": "docs-health",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7125,6 +7313,7 @@
       "pack": "docs-health",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7142,6 +7331,7 @@
       "pack": "docs-health",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7165,6 +7355,7 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7189,6 +7380,7 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7222,6 +7414,7 @@
       "pack": "exec-loop",
       "platform": "claude",
       "version": "v0.10",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7250,6 +7443,7 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7274,6 +7468,7 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.14",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7308,6 +7503,7 @@
       "pack": "exec-loop",
       "platform": "codex",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7338,6 +7534,7 @@
       "pack": "exec-profile",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7355,6 +7552,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7382,6 +7580,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7409,6 +7608,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7433,6 +7633,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7460,6 +7661,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7487,6 +7689,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7514,6 +7717,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7538,6 +7742,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7562,6 +7767,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7588,6 +7794,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7615,6 +7822,7 @@
       "pack": "game",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7640,6 +7848,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7667,6 +7876,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7694,6 +7904,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7718,6 +7929,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7745,6 +7957,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7772,6 +7985,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7799,6 +8013,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7823,6 +8038,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7847,6 +8063,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7873,6 +8090,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7900,6 +8118,7 @@
       "pack": "game",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -7925,6 +8144,7 @@
       "pack": "gitops",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7944,6 +8164,7 @@
       "pack": "gitops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7968,6 +8189,7 @@
       "pack": "gitops",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -7987,6 +8209,7 @@
       "pack": "gitops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8011,6 +8234,7 @@
       "pack": "guided-walkthrough",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8029,7 +8253,8 @@
       "scope": "pack",
       "pack": "guided-walkthrough",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8037,13 +8262,14 @@
       ],
       "path": "packs/guided-walkthrough/claude/uat-guide/SKILL.md",
       "installable": true,
-      "content_sha256": "8470f5ccfb3944a4fcab205d04d6693e294ba3bca935a674b5ac88c8272a4752",
+      "content_sha256": "31309417d7119ef0e142c525ea3fbcbfb4ab5d828c05bf201b75921ed5c50ba3",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/uat-guide",
       "deck_memberships": []
@@ -8055,6 +8281,7 @@
       "pack": "guided-walkthrough",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8073,7 +8300,8 @@
       "scope": "pack",
       "pack": "guided-walkthrough",
       "platform": "codex",
-      "version": "v0.5",
+      "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8081,13 +8309,14 @@
       ],
       "path": "packs/guided-walkthrough/codex/uat-guide/SKILL.md",
       "installable": true,
-      "content_sha256": "5a3f142a3a91cbbfece5f3459dcad3ba74877c1418a482e1a8227b993585b57f",
+      "content_sha256": "135243c4e57b5948732a097e1447007ded368b415cb508537b916506a1708e8e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$uat-guide",
       "deck_memberships": []
@@ -8099,6 +8328,7 @@
       "pack": "interrogation-page-admin",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8119,6 +8349,7 @@
       "pack": "interrogation-page-admin",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8139,6 +8370,7 @@
       "pack": "knowledge-check",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8156,6 +8388,7 @@
       "pack": "knowledge-check",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8173,6 +8406,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8192,6 +8426,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8211,6 +8446,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8230,6 +8466,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8249,6 +8486,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8271,6 +8509,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8288,6 +8527,7 @@
       "pack": "monorepo",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8309,6 +8549,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8328,6 +8569,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8347,6 +8589,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8366,6 +8609,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8385,6 +8629,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8408,6 +8653,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8425,6 +8671,7 @@
       "pack": "monorepo",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8446,6 +8693,7 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8470,6 +8718,7 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8494,6 +8743,7 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8518,6 +8768,7 @@
       "pack": "ord",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8539,6 +8790,7 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8563,6 +8815,7 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8587,6 +8840,7 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8611,6 +8865,7 @@
       "pack": "ord",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -8632,6 +8887,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8657,6 +8913,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8685,6 +8942,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8711,6 +8969,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.22",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8755,6 +9014,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8779,6 +9039,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8800,6 +9061,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.8",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8828,6 +9090,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8848,6 +9111,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.25",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8894,6 +9158,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.19",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8935,6 +9200,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.12",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8969,6 +9235,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -8989,6 +9256,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.32",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9043,6 +9311,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v1.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9084,6 +9353,7 @@
       "pack": "product-design",
       "platform": "claude",
       "version": "v0.33",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9139,6 +9409,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9164,6 +9435,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.7",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9192,6 +9464,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.5",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9218,6 +9491,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.22",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9262,6 +9536,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9286,6 +9561,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9307,6 +9583,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.8",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9335,6 +9612,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9355,6 +9633,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.25",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9401,6 +9680,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.19",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9442,6 +9722,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.13",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9477,6 +9758,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9497,6 +9779,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.32",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9551,6 +9834,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v1.9",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9592,6 +9876,7 @@
       "pack": "product-design",
       "platform": "codex",
       "version": "v0.34",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9648,6 +9933,7 @@
       "pack": "product-testing",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9671,7 +9957,8 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "claude",
-      "version": "v0.16",
+      "version": "v0.17",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9680,7 +9967,7 @@
       ],
       "path": "packs/product-testing/claude/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "d5675fe2341b48b78040bd372101183d2e8d8b4ed5b047db2af3bd26ac638869",
+      "content_sha256": "95c40016af5a1459efc6cacf4c72d185b169299a29a932697914ba31691341f6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9690,6 +9977,7 @@
         "v0.13",
         "v0.14",
         "v0.15",
+        "v0.16",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -9709,6 +9997,7 @@
       "pack": "product-testing",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9732,7 +10021,8 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "codex",
-      "version": "v0.16",
+      "version": "v0.17",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9741,7 +10031,7 @@
       ],
       "path": "packs/product-testing/codex/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "f71397b10fe00342e0d2f49f7a766a0e4797e734c1e30f6a4654d6eb913d9d03",
+      "content_sha256": "cfa81da334e135080404bebbf19a3dc26be6569906a4a477d4ba7d9795914b70",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -9751,6 +10041,7 @@
         "v0.13",
         "v0.14",
         "v0.15",
+        "v0.16",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -9770,6 +10061,7 @@
       "pack": "project-fleet",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9791,6 +10083,7 @@
       "pack": "project-fleet",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9812,6 +10105,7 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9833,6 +10127,7 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9854,6 +10149,7 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9875,6 +10171,7 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9896,6 +10193,7 @@
       "pack": "project-fleet",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -9913,6 +10211,7 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9935,6 +10234,7 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -9952,6 +10252,7 @@
       "pack": "release-ops",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9974,6 +10275,7 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -9996,6 +10298,7 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10013,6 +10316,7 @@
       "pack": "release-ops",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10035,6 +10339,7 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10057,6 +10362,7 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10079,6 +10385,7 @@
       "pack": "remotion",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10105,6 +10412,7 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10127,6 +10435,7 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10149,6 +10458,7 @@
       "pack": "remotion",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10175,6 +10485,7 @@
       "pack": "repo-maintenance",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10199,6 +10510,7 @@
       "pack": "repo-maintenance",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10216,6 +10528,7 @@
       "pack": "repo-maintenance",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10240,6 +10553,7 @@
       "pack": "repo-maintenance",
       "platform": "codex",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10257,6 +10571,7 @@
       "pack": "report-gen",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10279,6 +10594,7 @@
       "pack": "report-gen",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10301,6 +10617,7 @@
       "pack": "research-admin",
       "platform": "claude",
       "version": "v0.20",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10341,6 +10658,7 @@
       "pack": "research-admin",
       "platform": "codex",
       "version": "v0.20",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10381,6 +10699,7 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.8",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10409,6 +10728,7 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10432,6 +10752,7 @@
       "pack": "session-analytics",
       "platform": "claude",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10461,6 +10782,7 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.8",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10489,6 +10811,7 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10512,6 +10835,7 @@
       "pack": "session-analytics",
       "platform": "codex",
       "version": "v0.11",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10541,6 +10865,7 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10562,6 +10887,7 @@
       "pack": "skill-dev",
       "platform": "claude",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10585,6 +10911,7 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10606,6 +10933,7 @@
       "pack": "skill-dev",
       "platform": "codex",
       "version": "v0.3",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10629,6 +10957,7 @@
       "pack": "teardown",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10650,6 +10979,7 @@
       "pack": "teardown",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10676,6 +11006,7 @@
       "pack": "teardown",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10697,6 +11028,7 @@
       "pack": "teardown",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10723,6 +11055,7 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.0",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10742,6 +11075,7 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10766,6 +11100,7 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10787,6 +11122,7 @@
       "pack": "vard",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10808,6 +11144,7 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10829,6 +11166,7 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.2",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10853,6 +11191,7 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10874,6 +11213,7 @@
       "pack": "vard",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -10895,6 +11235,7 @@
       "pack": "website-polish",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10916,6 +11257,7 @@
       "pack": "website-polish",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10937,6 +11279,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10963,6 +11306,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -10989,6 +11333,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11015,6 +11360,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11041,6 +11387,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11067,6 +11414,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11088,6 +11436,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11114,6 +11463,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11135,6 +11485,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11161,6 +11512,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11187,6 +11539,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11213,6 +11566,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11239,6 +11593,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11265,6 +11620,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11291,6 +11647,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11315,6 +11672,7 @@
       "pack": "youtube-ops",
       "platform": "claude",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
@@ -11337,6 +11695,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11363,6 +11722,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11389,6 +11749,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11415,6 +11776,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11441,6 +11803,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11467,6 +11830,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11488,6 +11852,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11514,6 +11879,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.1",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11535,6 +11901,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11561,6 +11928,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11587,6 +11955,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11613,6 +11982,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11639,6 +12009,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11665,6 +12036,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.6",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11691,6 +12063,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
@@ -11715,6 +12088,7 @@
       "pack": "youtube-ops",
       "platform": "codex",
       "version": "v0.4",
+      "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],

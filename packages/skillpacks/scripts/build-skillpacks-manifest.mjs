@@ -17,6 +17,12 @@ import {
   readTextFromIndex,
   unique
 } from "../../../scripts/catalog/index.mjs";
+import {
+  isConventionAllowed,
+  packageLaneFromEnv,
+  releaseLaneAllowed,
+  skillReleaseLaneFromIndex
+} from "./release-lane.mjs";
 
 // The committed manifest must be a pure function of the git index (what the
 // committing session is staging), so a concurrent session's unstaged edits on
@@ -29,13 +35,19 @@ const repoRoot = path.resolve(packageRoot, "../..");
 const manifestRelativePath = "packages/skillpacks/dist/skillpacks-manifest.json";
 const manifestPath = path.join(repoRoot, manifestRelativePath);
 const checkMode = process.argv.includes("--check");
+const printMode = process.argv.includes("--print");
+const packageLane = packageLaneFromEnv();
 
-const allowedArgs = new Set(["--check"]);
+const allowedArgs = new Set(["--check", "--print"]);
 for (const arg of process.argv.slice(2)) {
   if (!allowedArgs.has(arg)) {
-    console.error(`Unknown argument '${arg}'. Usage: node packages/skillpacks/scripts/build-skillpacks-manifest.mjs [--check]`);
+    console.error(`Unknown argument '${arg}'. Usage: node packages/skillpacks/scripts/build-skillpacks-manifest.mjs [--check|--print]`);
     process.exit(1);
   }
+}
+if (checkMode && printMode) {
+  console.error("Use only one of --check or --print.");
+  process.exit(1);
 }
 
 const deckDefinitions = [
@@ -311,6 +323,7 @@ function isInstallableSkill(skill) {
 function buildSkills(skills, files) {
   return skills
     .map((skill) => {
+      const releaseLane = skillReleaseLaneFromIndex(repoRoot, skill.path);
       return {
         id: skill.id,
         name: skill.name,
@@ -318,6 +331,7 @@ function buildSkills(skills, files) {
         pack: skill.pack,
         platform: skill.platform,
         version: skill.version,
+        release_lane: releaseLane,
         ...skillDeprecation(skill.path),
         required_conventions: skill.requiredConventions,
         path: skill.path,
@@ -333,13 +347,22 @@ function buildSkills(skills, files) {
 
 function buildManifest() {
   const files = gitFiles(repoRoot);
-  const archivePaths = files.filter((file) => /\/archive\/[^/]+\/SKILL\.md$/.test(file));
+  const laneSkillPaths = activeSkillPaths(files).filter((skillPath) => {
+    return releaseLaneAllowed(skillReleaseLaneFromIndex(repoRoot, skillPath), packageLane);
+  });
+  const laneSkillPathSet = new Set(laneSkillPaths);
+  const archivePaths = files.filter((file) => {
+    if (!/\/archive\/[^/]+\/SKILL\.md$/.test(file)) return false;
+    const activePath = file.replace(/\/archive\/[^/]+\/SKILL\.md$/, "/SKILL.md");
+    return laneSkillPathSet.has(activePath);
+  });
   const manifestSources = unique([
-    ...activeSkillPaths(files),
+    ...laneSkillPaths,
     ...packManifestPaths(files),
     "docs/decks.md",
     "packages/skillpacks/package.json",
     "packages/skillpacks/scripts/build-skillpacks-manifest.mjs",
+    "packages/skillpacks/scripts/release-lane.mjs",
     "scripts/catalog/index.mjs",
     "scripts/skill-convention-registry.mjs"
   ]);
@@ -348,14 +371,16 @@ function buildManifest() {
   // `git cat-file` spawn rather than one per file.
   prefetchIndex(repoRoot, unique([...manifestSources, ...archivePaths]));
 
-  const skills = listSkills(repoRoot, files, MANIFEST_SOURCE);
+  const laneFiles = files.filter((file) => !activeSkillPaths(files).includes(file) || laneSkillPathSet.has(file));
+  const skills = listSkills(repoRoot, laneFiles, MANIFEST_SOURCE);
   const packageJson = readPackageJson();
 
   const manifest = {
     schema_version: 1,
     package: {
       name: packageJson.name,
-      version: packageJson.version
+      version: packageJson.version,
+      release_lane: packageLane
     },
     source_fingerprint: fileFingerprint(repoRoot, manifestSources, MANIFEST_SOURCE),
     packs: buildPacks(files, skills),
@@ -393,6 +418,11 @@ function validateManifest(manifest) {
     }
     if (!skill.version) {
       errors.push(`active skill lacks version: ${skill.path}`);
+    }
+    for (const conventionId of skill.required_conventions) {
+      if (!isConventionAllowed(conventionId, manifest.package.release_lane)) {
+        errors.push(`stable manifest includes ${skill.path}, which requires canary-only convention '${conventionId}'`);
+      }
     }
   }
 
@@ -440,6 +470,11 @@ function stableJson(value) {
 
 function writeOrCheckManifest() {
   const generated = stableJson(buildManifest());
+
+  if (printMode) {
+    process.stdout.write(generated);
+    return;
+  }
 
   if (checkMode) {
     if (!existsSync(manifestPath)) {

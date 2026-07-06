@@ -21,6 +21,7 @@ export const SKILL_CONVENTIONS = {
   "briefing-slides": {
     canonicalDoc: "docs/briefing-slides-convention.md",
     packageAsset: "assets/briefing-slides-convention.md",
+    release_lane: "canary",
     resolver: "shared-doc-or-asset",
   },
   "design-tree-loop": {
