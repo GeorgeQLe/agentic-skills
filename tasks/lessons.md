@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-06 - Briefing slides are canary-lane until promoted
+
+- A release-split answer classified `create-briefing-slides`, briefing-slide convention assets, and briefing-slide UX work as general-release content even though the user clarified they are canary.
+- Rule: until an explicit promotion task lands, classify briefing slides, `create-briefing-slides`, briefing-slide conventions, and related review-surface UX as canary-lane content, even when those files currently live on `master` and would be included in a canary package snapshot.
+- General-release changelogs should exclude or clearly defer briefing-slide behavior unless the task is specifically promoting that behavior to stable.
+
 ## 2026-07-06 - Keep canary-only conventions out of general release fixes
 
 - A general-release interrogation upgrade inherited `briefing-slides` from a canary experiment handoff, which would have promoted canary-only behavior into normal skill metadata.
