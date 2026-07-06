@@ -1,46 +1,105 @@
 # Current Task
 
-## Current Implementation - Briefing Slide Gate Status Markers
+## Current Implementation - Competitive Analysis Interrogation Upgrade
 
 ### Goal
 
-Add bottom filmstrip markers that show whether a slide has unanswered or completed gate questions, and make the selected filmstrip background black with white text so green completion borders remain legible.
+Upgrade `competitive-analysis` and its active framework subskills so the parent orchestrator and framework mirrors participate in the shared `interrogation-page` workflow alongside `alignment-page`.
 
 ### Plan
 
-- [x] Archive the current dogfood deck at `docs/history/archive/2026-07-05/223809/briefing-slides/create-briefing-slides.html`.
-- [x] Add filmstrip gate-status classes derived from each slide's `data-gate` controls.
-- [x] Update gate status whenever a gate answer changes.
-- [x] Style unanswered gate slides with a red border and completed gate slides with a green border.
-- [x] Style the selected filmstrip button with a black background and white text.
-- [x] Run behavioral and repo verification.
+- [x] Archive current `competitive-analysis` parent mirrors and four framework subskill mirrors before editing.
+- [x] Bump parent mirrors to `v0.29` and framework mirrors to `v0.11`.
+- [x] Add `interrogation-page` to parent and framework `required_conventions`.
+- [x] Add parent State G stage-zero interrogation before State E framework selection.
+- [x] Clarify inherited interrogation plus multi-select approval satisfies inline framework pre-research gates.
+- [x] Register the parent and framework subskills in the interrogation generator/test contract.
+- [x] Run full verification and fix any failures.
 - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- [x] Slides with gate questions have a visible bottom filmstrip marker.
-- [x] Unanswered gate slides use a red marker/border.
-- [x] Completed gate slides use a green marker/border.
-- [x] The active filmstrip item uses black background and white text, not the previous green selected background.
-- [x] Existing filmstrip navigation and slide gate controls still work.
+- [x] Both parent mirrors declare `required_conventions: [alignment-page, interrogation-page]`.
+- [x] Both parent mirrors run stage-zero interrogation before framework selection on cold start.
+- [x] Both mirrors of `porter-five-forces`, `swot`, `strategic-group-map`, and `feature-pricing-matrix` declare `interrogation-page`.
+- [x] Framework mirrors keep parent-owned routing and output paths unchanged.
+- [x] Interrogation generator/test registry includes all five skills and expects 46 participating stubs.
 
 ### Verification
 
-- [x] Text check: deck has gate-marker CSS and gate-status JavaScript.
-- [x] Behavioral check: slide 4 starts as unanswered/red.
-- [x] Behavioral check: selecting a gate answer changes slide 4 to complete/green.
-- [x] Behavioral check: the active filmstrip background remains black with white text.
+- [x] `node scripts/upgrade-interrogation-page.mjs --check`
+- [x] `node scripts/upgrade-alignment-page.mjs --check`
+- [x] `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`
+- [x] `bash scripts/skill-archive-audit.sh --strict`
+- [x] `bash scripts/skill-mirror-parity-audit.sh`
+- [x] `npm --workspace packages/skillpacks run build:manifest:check`
+- [x] `npm run exports:check`
+- [x] `npm --workspace packages/skillpacks run build:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
 
 ### Review
 
-Added gate-status markers to the dogfood deck's bottom filmstrip. Slides with gate questions now receive a persistent marker: red border for unanswered gates and green border once the gate has an answer.
+Upgraded both `competitive-analysis` mirrors from `v0.28` to `v0.29` with `interrogation-page` in `required_conventions`, a State G stage-zero interrogation gate before State E framework selection, and an explicit requirement that compiled interrogation YAML be consumed before multi-select approval.
 
-Changed the active filmstrip button to use a black background with white text, so selected-state styling no longer conflicts with green completion borders. The filmstrip status updates immediately when a gate answer changes.
+Upgraded both mirrors of `porter-five-forces`, `swot`, `strategic-group-map`, and `feature-pricing-matrix` from `v0.10` to `v0.11`. Each framework now declares `interrogation-page`, has a generated `INTERROGATION-PAGE.md`, and clarifies that parent interrogation plus approved multi-select scope satisfies the inline pre-research context gate without direct child invocation.
 
-Verification passed for deck text hooks, browser-level gate-marker behavior, task-doc audit, diff hygiene, and opener status `opened`.
+Updated the interrogation generator and layer1 registry for the five new participating skills, including skill-specific interview-area guidance and the 46-stub contract. Verification passed through generator checks, targeted layer1 test, archive audit, mirror parity audit, package manifest/export/build checks, and initial diff hygiene.
+
+### Backlog Status
+
+Business research:
+
+- [x] `competitive-analysis`
+- [ ] `enterprise-icp`
+- [ ] `customer-feedback`
+- [ ] `lean-canvas`
+- [ ] `value-prop-canvas`
+
+Customer lifecycle:
+
+- [ ] `journey-map`
+
+Business growth:
+
+- [ ] `monetization`
+- [ ] `gtm`
+- [ ] `landing-copy`
+- [ ] `growth-model`
+- [ ] `hook-model`
+- [ ] `pmf-assessment`
+
+Business ops:
+
+- [ ] `platform-strategy`
+
+Creator foundation:
+
+- [ ] `product-led-media-map`
+- [ ] `creator-positioning`
+- [ ] `content-programming`
+
+Game:
+
+- [ ] `game-audience`
+- [ ] `game-comparables`
+- [ ] `game-fantasy`
+- [ ] `game-genre-map`
+- [ ] `game-launch`
+- [ ] `game-store-page-test`
+
+YouTube ops:
+
+- [ ] `youtube-concept-research`
+
+Product design:
+
+- [ ] `brainstorm-inspirations`
+- [ ] `take-inspiration`
+
+ORD:
+
+- [ ] `ord-align`
 
 # Historical Task State
 

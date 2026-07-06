@@ -2,8 +2,8 @@
 name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
 type: research
-version: v0.29
-required_conventions: [alignment-page, interrogation-page]
+version: v0.28
+required_conventions: [alignment-page]
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 context_intake: scoped
@@ -43,7 +43,6 @@ Do not include `Recommended next skill`, `Recommended next command`, or downstre
 
 Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
 
-0. **Stage 0 - Interrogation.** On cold start, before framework selection, run the shared interrogation-page loop and build `interrogation/competitive-analysis-r{N}-{branch}.html`. The interrogation must surface competitor set, market boundary, evidence coverage, pricing/feature evidence availability, strategic-axis assumptions, force/SWOT assumptions, source gaps, unknowns, and framework-selection implications. Do not build the framework multi-select alignment page until approved compiled interrogation YAML has been consumed and the confidence gate is satisfied.
 1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
 2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page so it renders the complete working-packet substance as structured HTML review UI: purpose-built sections, tables, matrices, gates, cards, and tier-appropriate charts or diagrams that preserve every packet section, finding, caveat, and decision detail without summary loss. Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI; do not make a `Full Preliminary Packet` or `Full Working Packet` raw Markdown dump, giant `<pre><code>` block, link-only view, or source-only view the primary review surface. Include the evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
 3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
@@ -133,8 +132,7 @@ On each invocation, after Product-Path Scope Resolution (step 0), resolve state:
 | **A — done** | canonical `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) exists | — | done; emit next-skill route (synthesis step) |
 | **B — synthesize** | run manifest exists, all selected intermediates exist, no canonical `competitive-analysis.md` (also forced by `--synthesize`) | **synthesis** (step 4) | synthesis `review` page |
 | **C — run framework** | run manifest exists, ≥1 selected framework pending | **run next pending framework inline at its research stage** (step 3) | that framework's findings `review` page |
-| **G — interrogation** | no run manifest, no canonical, and no approved interrogation handoff for this scope | **stage-zero interrogation** | interrogation page and confidence gate |
-| **E — build selection** | no run manifest, no canonical, and approved interrogation handoff exists | establish context from compiled interrogation YAML + mode detect → recommend frameworks → build multi-select page (steps 1–2) | multi-select `review` page |
+| **E — build selection** | no run manifest and no canonical (cold start) | establish context → mode detect → recommend frameworks → build multi-select page (steps 1–2) | multi-select `review` page |
 
 ### Re-entry Routing Guard
 
@@ -145,7 +143,7 @@ When a user re-invokes `$competitive-analysis`, treat existing progress as routi
 - Do not rerun State E, perform a status audit, do bookkeeping-only cleanup, route to `$exec`, or tell the user to invoke path-shaped framework commands.
 - Exception: if the user explicitly asks for status, re-scoping, queue cleanup, or synthesis, honor that explicit request instead of forcing State C.
 
-**Cold entry (state G, no state F).** This orchestrator uses `context_intake: scoped` plus the shared interrogation-page convention. A cold start (nothing on disk) resolves to **state G** first. Only after an approved interrogation completion handoff does the next run resolve to **state E** for framework multi-select scope approval; the interrogation answers fold into the E-session context instead of becoming a direct research approval.
+**Cold entry (no state F).** This orchestrator uses `context_intake: scoped` — there is **no deep-interview phase**. A cold start (nothing on disk) resolves directly to **state E**; the 1–3 light scope questions fold into the head of the E session.
 
 **Light vs heavy.** Recording the approved selection into the run manifest (state 0→C head), writing an already-reviewed framework intermediate, and archiving a consumed source are *light* — they fold into the head of the next heavy session. The heavy phase (one framework's research, synthesis) is the only thing isolated per session.
 
@@ -171,8 +169,6 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 ### 1. Establish Product Context
 
-Before building the framework multi-select page, consume the approved compiled interrogation YAML. Treat it as the required stage-zero handoff for competitor set, market boundary, source coverage, pricing/feature evidence, strategic-axis assumptions, force/SWOT assumptions, and open unknowns. If no completed interrogation handoff exists for this scope, return to State G instead of selecting frameworks.
-
 **Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
 **Concept-validation mode:** Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before building the multi-select page.
@@ -190,7 +186,7 @@ Recommend framework defaults based on context:
 
 Build the framework multi-select `review` alignment page: mode, product-path scope, context summary, selected/default frameworks, optional frameworks, which canonical sections each framework feeds, output paths, source coverage gaps, a loop explanation (the selected set is the scope-and-candidate approval gate; each selected framework is then run inline — one findings page per framework — and the run advances by re-invoking `$competitive-analysis`), and the approval gate.
 
-This multi-select approval **is** the Stage-1 scope approval for the whole selected set, but it is valid only after the parent interrogation completion handoff has been consumed. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
+This multi-select approval **is** the Stage-1 scope approval for the whole selected set. Stop for compiled YAML. Do **not** write the run manifest or run any framework in this session — that is state C.
 
 ### 3. State C — Run Next Pending Framework (inline)
 
@@ -199,7 +195,7 @@ This session consumes the approved multi-select YAML (state 0→C) or advances a
 1. **Write the run manifest** if it does not yet exist: `research/_working/competitive-analysis-run.yaml` (flat) or `research/{slug}/_working/competitive-analysis-run.yaml` (product-path), recording `selected_frameworks` with each framework's `slug` and canonical `intermediate` path. Include only frameworks the user selected.
 2. **If a prior framework's reviewed content was just approved** by the pasted YAML, write its canonical intermediate `research/competitive-analysis-{fw}.md` (or `research/{slug}/competitive-analysis-{fw}.md`) from the already-reviewed working packet, and archive that framework's working packet and superseded review page.
 
-Then run the **one heavy phase**: determine the next pending framework (first selected framework whose canonical intermediate does not yet exist), then **load and follow that framework subskill's `SKILL.md` inline, entering at its research stage (Stage 2)** — the parent interrogation completion handoff plus multi-select approval already satisfied the framework's pre-research context gate and Stage-1 scope gate, so perform the research, write its working packet, and build a single findings `review` page. Stop for that framework's compiled YAML.
+Then run the **one heavy phase**: determine the next pending framework (first selected framework whose canonical intermediate does not yet exist), then **load and follow that framework subskill's `SKILL.md` inline, entering at its research stage (Stage 2)** — the multi-select approval already satisfied the framework's Stage-1 scope gate, so perform the research, write its working packet, and build a single findings `review` page. Stop for that framework's compiled YAML.
 
 Framework intermediate paths (`research/{slug}/` in product-path mode): `research/competitive-analysis-porter-five-forces.md`, `research/competitive-analysis-swot.md`, `research/competitive-analysis-strategic-group-map.md`, `research/competitive-analysis-feature-pricing-matrix.md`.
 
@@ -290,10 +286,6 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Parent self-advances one phase per invocation** and follows the next pending framework's subskill inline (entering at its research stage). It records the selected framework set in the run manifest, runs each selected framework inline, and synthesizes; progress is the existence of canonical intermediates. The loop advances by re-invoking `$competitive-analysis` (fresh Codex session between sessions). Do not queue framework work in `tasks/todo.md` or hand it to `$exec`.
 - Framework subskills must not emit `Recommended next skill`, path-shaped child framework commands, execution-loop commands, or downstream commands. Inline framework handoffs use only the parent-owned `## Next Work` and command sections.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
-
-## Interrogation Page
-
-Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/competitive-analysis-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Alignment Page
 

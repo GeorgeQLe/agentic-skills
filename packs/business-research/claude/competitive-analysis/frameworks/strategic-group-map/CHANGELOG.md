@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.11 - 2026-07-06
+
+- Added the shared interrogation-page convention and generated bundle.
+- Clarified that when run inline by `competitive-analysis`, the parent interrogation handoff plus approved multi-select scope satisfies this framework's pre-research context gate while direct child invocation remains prohibited.
+
+
 ## v0.10 - 2026-07-02
 
 - Removed the separate review-pending `## Invoke With YAML` command block; compiled YAML now carries continuation via `command` and `agent_routing.command`, so terminal handoffs tell users to clear context and paste the compiled YAML directly.

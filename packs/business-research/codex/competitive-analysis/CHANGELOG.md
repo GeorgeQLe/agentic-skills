@@ -1,5 +1,11 @@
 # competitive-analysis changelog (codex)
 
+## v0.29 - 2026-07-06
+
+- Added the shared interrogation-page convention and generated bundle. Cold starts now run State G stage-zero interrogation before framework selection.
+- Required an approved interrogation completion handoff before the framework multi-select scope gate, and clarified that parent interrogation plus multi-select approval satisfies inline framework pre-research context gates.
+
+
 ## v0.28 - 2026-07-02
 
 - Removed the separate review-pending `## Invoke With YAML` command block; compiled YAML now carries continuation via `command` and `agent_routing.command`, so terminal handoffs tell users to clear context and paste the compiled YAML directly.

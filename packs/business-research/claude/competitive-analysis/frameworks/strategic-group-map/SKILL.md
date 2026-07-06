@@ -2,8 +2,8 @@
 name: strategic-group-map
 description: Strategic group map competitive analysis - cluster competitors by market axes and identify segment whitespace
 type: research
-version: v0.10
-required_conventions: [alignment-page]
+version: v0.11
+required_conventions: [alignment-page, interrogation-page]
 invocation: sub-skill
 parent: competitive-analysis
 ---
@@ -65,6 +65,7 @@ Do not include downstream routing language. While the framework findings page is
 
 Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
 
+0. **Stage 0 - Interrogation/context handoff.** When this framework is run inline by the parent `competitive-analysis` orchestrator, the parent's completed interrogation handoff plus approved multi-select framework scope satisfies this framework's pre-research context gate. Consume the inherited context and enter Stage 2; do not ask the user to invoke this framework directly or run a child-specific command. If this framework is invoked outside the parent loop, stop and route the user back to the parent orchestrator.
 1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
 2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page so it renders the complete working-packet substance as structured HTML review UI: purpose-built sections, tables, matrices, gates, cards, and tier-appropriate charts or diagrams that preserve every packet section, finding, caveat, and decision detail without summary loss. Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI; do not make a `Full Preliminary Packet` or `Full Working Packet` raw Markdown dump, giant `<pre><code>` block, link-only view, or source-only view the primary review surface. Include the evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
 3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
@@ -129,6 +130,10 @@ Use the parent `competitive-analysis` product-path scope when present. Otherwise
 - Do not force a 2x2 when the market needs a table or multiple maps; explain the limitation.
 - Competitor placement must cite evidence.
 - This is a sub-skill; do not emit downstream routing labels or command recommendations.
+
+## Interrogation Page
+
+Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/strategic-group-map-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Alignment Page
 
