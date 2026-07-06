@@ -216,7 +216,7 @@
       max-width: 54rem;
     }
 
-    .filmstrip button, .nav button, .copy-row button, .sidebar-actions button, .sidebar-close {
+    .filmstrip button, .nav button, .copy-row button {
       min-height: 2.35rem;
       border: 1px solid var(--rule);
       border-radius: 6px;
@@ -271,7 +271,7 @@
       gap: 0.5rem;
     }
 
-    .nav button, .copy-row button, .sidebar-actions button, .sidebar-close {
+    .nav button, .copy-row button {
       padding: 0 0.85rem;
     }
 
@@ -388,91 +388,6 @@
       margin-top: 0.85rem;
     }
 
-    .feedback-sidebar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 20;
-      width: min(27rem, 100vw);
-      height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      border-left: 1px solid var(--rule);
-      background: var(--panel);
-      box-shadow: -18px 0 42px rgba(21, 32, 38, 0.18);
-      transform: translateX(100%);
-      transition: transform 180ms ease;
-    }
-
-    .feedback-sidebar.open { transform: translateX(0); }
-
-    .sidebar-header {
-      display: flex;
-      align-items: start;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 1rem;
-      border-bottom: 1px solid var(--rule);
-      background: var(--soft);
-    }
-
-    .sidebar-header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    .sidebar-header h2 {
-      max-width: none;
-      margin-top: 0.25rem;
-      font-size: 1.35rem;
-      line-height: 1.16;
-    }
-
-    .sidebar-body {
-      min-height: 0;
-      overflow: auto;
-      padding: 1rem;
-    }
-
-    .sidebar-section {
-      display: grid;
-      gap: 0.7rem;
-      padding: 0 0 1rem;
-      border-bottom: 1px solid var(--rule);
-      margin-bottom: 1rem;
-    }
-
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-      border-bottom: 0;
-    }
-
-    .sidebar-section h3 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .sidebar-section label {
-      display: grid;
-      gap: 0.35rem;
-      color: var(--ink);
-      font-weight: 750;
-    }
-
-    .sidebar-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .sidebar-yaml {
-      max-height: 10rem;
-      margin: 0;
-      font-size: 0.76rem;
-    }
-
     @media (max-width: 820px) {
       body {
         display: block;
@@ -509,8 +424,6 @@
       .matrix div {
         border-right: 0;
       }
-
-      .feedback-sidebar { width: 100vw; }
     }
 
     @media print {
@@ -519,7 +432,7 @@
         background: #fff;
       }
 
-      .topbar, .controls, .filmstrip, .nav, .feedback-sidebar {
+      .topbar, .controls, .filmstrip, .nav {
         display: none !important;
       }
 
@@ -543,7 +456,7 @@
     <div class="brand">
       <span>Create Briefing Slides</span>
       <small id="slideCounter">Slide 1 / 8</small>
-      <span class="update-pill">Updated: bottom feedback sidebar</span>
+      <span class="update-pill">Updated: click-stage + A/D navigation</span>
     </div>
     <div class="progress" aria-label="Deck progress"><span id="progressFill"></span></div>
   </header>
@@ -634,11 +547,32 @@
     <section class="slide" data-title="Review Controls" id="slide-6">
       <div class="slide-inner">
         <p class="eyebrow">Review Controls</p>
-        <h2>Feedback opens from the bottom bar.</h2>
-        <div class="grid">
-          <div class="card"><strong>Slide-scoped</strong><p>The sidebar follows the active slide title and saved review state.</p></div>
-          <div class="card"><strong>Inline gates</strong><p>Approval questions stay inside their source slide, where context is visible.</p></div>
-          <div class="card"><strong>Local YAML</strong><p>Per-slide and all-feedback compilers sit next to feedback controls.</p></div>
+        <h2>Feedback stays on the slide.</h2>
+        <div class="review-panel" data-review-for="slide-6">
+          <label>Slide feedback
+            <select data-feedback="slide-6">
+              <option value="">No feedback selected</option>
+              <option value="emphasize">Emphasize</option>
+              <option value="revise">Revise</option>
+              <option value="needs-clarification">Needs clarification</option>
+            </select>
+          </label>
+          <label>Marking
+            <select data-mark="slide-6">
+              <option value="">Unmarked</option>
+              <option value="important">Important</option>
+              <option value="question">Question</option>
+              <option value="approved">Approved</option>
+              <option value="skip">Skip</option>
+            </select>
+          </label>
+          <label>Annotation
+            <textarea data-annotation="slide-6" placeholder="Add a note for this slide"></textarea>
+          </label>
+          <div class="copy-row">
+            <button type="button" data-copy-title="slide-6">Copy slide title</button>
+            <button type="button" data-copy-references>Copy references</button>
+          </div>
         </div>
         <div class="chips"><a class="chip" href="../docs/briefing-slides-convention.md">Review controls</a></div>
       </div>
@@ -679,66 +613,9 @@
     </section>
   </main>
 
-  <aside class="feedback-sidebar" id="feedbackSidebar" aria-label="Slide feedback sidebar" aria-hidden="true">
-    <div class="sidebar-header">
-      <div>
-        <p id="sidebarSlideMeta">Slide 1 / 8</p>
-        <h2 id="sidebarSlideTitle">What It Solves</h2>
-      </div>
-      <button type="button" class="sidebar-close" id="closeFeedback" aria-label="Close feedback sidebar">Close</button>
-    </div>
-    <div class="sidebar-body">
-      <section class="sidebar-section">
-        <h3>Slide Review</h3>
-        <label>Feedback
-          <select id="sidebarFeedback">
-            <option value="">No feedback selected</option>
-            <option value="emphasize">Emphasize</option>
-            <option value="revise">Revise</option>
-            <option value="needs-clarification">Needs clarification</option>
-          </select>
-        </label>
-        <label>Mark
-          <select id="sidebarMark">
-            <option value="">Unmarked</option>
-            <option value="important">Important</option>
-            <option value="question">Question</option>
-            <option value="approved">Approved</option>
-            <option value="skip">Skip</option>
-          </select>
-        </label>
-        <label>Annotation
-          <textarea id="sidebarAnnotation" placeholder="Add a note for this slide"></textarea>
-        </label>
-        <div class="sidebar-actions">
-          <button type="button" id="copySidebarTitle">Copy slide title</button>
-          <button type="button" id="copySidebarReferences">Copy references</button>
-        </div>
-      </section>
-      <section class="sidebar-section">
-        <h3>Slide YAML</h3>
-        <div class="sidebar-actions">
-          <button type="button" id="compileSlideYaml">Compile slide YAML</button>
-          <button type="button" id="copySlideYaml">Copy slide YAML</button>
-        </div>
-        <pre class="sidebar-yaml" id="slideYamlOutput" aria-live="polite"># Compile YAML for the active slide.</pre>
-      </section>
-      <section class="sidebar-section">
-        <h3>All Feedback YAML</h3>
-        <div class="sidebar-actions">
-          <button type="button" id="compileAllFeedbackYaml">Compile all feedback YAML</button>
-          <button type="button" id="copyAllFeedbackYaml">Copy all feedback YAML</button>
-        </div>
-        <pre class="sidebar-yaml" id="allFeedbackYamlOutput" aria-live="polite"># Compile review YAML from all deck controls.</pre>
-        <textarea class="fallback" id="sidebarCopyFallback" readonly aria-label="Sidebar copy fallback"></textarea>
-      </section>
-    </div>
-  </aside>
-
   <footer class="controls">
     <nav class="filmstrip" id="filmstrip" aria-label="Slide navigation"></nav>
     <div class="nav">
-      <button type="button" id="openFeedback" aria-label="Open feedback sidebar">Feedback</button>
       <button type="button" id="prevSlide" aria-label="Previous slide">Previous</button>
       <button type="button" id="nextSlide" aria-label="Next slide">Next</button>
     </div>
@@ -749,12 +626,6 @@
     const counter = document.getElementById('slideCounter');
     const progressFill = document.getElementById('progressFill');
     const filmstrip = document.getElementById('filmstrip');
-    const feedbackSidebar = document.getElementById('feedbackSidebar');
-    const sidebarFeedback = document.getElementById('sidebarFeedback');
-    const sidebarMark = document.getElementById('sidebarMark');
-    const sidebarAnnotation = document.getElementById('sidebarAnnotation');
-    const sidebarSlideMeta = document.getElementById('sidebarSlideMeta');
-    const sidebarSlideTitle = document.getElementById('sidebarSlideTitle');
     const references = [
       'packs/base/codex/create-briefing-slides/SKILL.md',
       'docs/briefing-slides-convention.md',
@@ -777,7 +648,6 @@
       Array.from(filmstrip.children).forEach((button, buttonIndex) => button.classList.toggle('active', buttonIndex === current));
       history.replaceState(null, '', `#slide-${current + 1}`);
       persist();
-      syncSidebar();
     }
 
     function gateStatusForSlide(slide) {
@@ -814,8 +684,6 @@
 
     document.getElementById('prevSlide').addEventListener('click', () => showSlide(current - 1));
     document.getElementById('nextSlide').addEventListener('click', () => showSlide(current + 1));
-    document.getElementById('openFeedback').addEventListener('click', () => openSidebar());
-    document.getElementById('closeFeedback').addEventListener('click', () => closeSidebar());
 
     function isFormEditingTarget(target) {
       return target && (
@@ -825,11 +693,6 @@
     }
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && feedbackSidebar.classList.contains('open')) {
-        event.preventDefault();
-        closeSidebar();
-        return;
-      }
       if (isFormEditingTarget(event.target)) return;
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
 
@@ -859,50 +722,17 @@
       showSlide(current + 1);
     });
 
-    function activeSlideId() {
-      return slides[current].id;
-    }
-
-    function activeSlideTitle() {
-      return slides[current].dataset.title || activeSlideId();
-    }
-
-    function stateForSlide(slideId) {
+    document.querySelectorAll('[data-feedback], [data-mark], [data-annotation]').forEach((control) => {
+      const type = control.dataset.feedback ? 'feedback' : control.dataset.mark ? 'mark' : 'annotation';
+      const slideId = control.dataset[type];
       state[slideId] = state[slideId] || {};
-      return state[slideId];
-    }
-
-    function syncSidebar() {
-      const slideId = activeSlideId();
-      const slideState = stateForSlide(slideId);
-      sidebarSlideMeta.textContent = `Slide ${current + 1} / ${slides.length}`;
-      sidebarSlideTitle.textContent = activeSlideTitle();
-      sidebarFeedback.value = slideState.feedback || '';
-      sidebarMark.value = slideState.mark || '';
-      sidebarAnnotation.value = slideState.annotation || '';
-    }
-
-    function openSidebar() {
-      syncSidebar();
-      feedbackSidebar.classList.add('open');
-      feedbackSidebar.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeSidebar() {
-      feedbackSidebar.classList.remove('open');
-      feedbackSidebar.setAttribute('aria-hidden', 'true');
-      document.getElementById('openFeedback').focus();
-    }
-
-    function updateActiveSlideReview(type, value) {
-      const slideState = stateForSlide(activeSlideId());
-      slideState[type] = value;
-      persist();
-    }
-
-    sidebarFeedback.addEventListener('input', () => updateActiveSlideReview('feedback', sidebarFeedback.value));
-    sidebarMark.addEventListener('input', () => updateActiveSlideReview('mark', sidebarMark.value));
-    sidebarAnnotation.addEventListener('input', () => updateActiveSlideReview('annotation', sidebarAnnotation.value));
+      if (state[slideId][type]) control.value = state[slideId][type];
+      control.addEventListener('input', () => {
+        state[slideId] = state[slideId] || {};
+        state[slideId][type] = control.value;
+        persist();
+      });
+    });
 
     document.querySelectorAll('[data-gate]').forEach((control) => {
       if (state.gates && state.gates[control.dataset.gate] === control.value) control.checked = true;
@@ -915,8 +745,7 @@
     });
 
     async function copyText(text) {
-      const sidebarFallback = document.getElementById('sidebarCopyFallback');
-      const fallback = feedbackSidebar.classList.contains('open') ? sidebarFallback : document.getElementById('copyFallback');
+      const fallback = document.getElementById('copyFallback');
       try {
         await navigator.clipboard.writeText(text);
         fallback.style.display = 'none';
@@ -932,59 +761,20 @@
       return JSON.stringify(String(value || ''));
     }
 
-    function gateAnswersForSlide(slide) {
-      const gates = state.gates || {};
-      const gateNames = Array.from(slide.querySelectorAll('[data-gate]'))
-        .map((control) => control.dataset.gate)
-        .filter(Boolean);
-      return Array.from(new Set(gateNames)).map((gateName) => ({
-        gate: gateName,
-        answer: gates[gateName] || ''
-      }));
-    }
-
-    function allGateAnswers() {
-      return slides.flatMap((slide) => gateAnswersForSlide(slide));
-    }
-
-    function compileSlideYaml() {
-      const slideId = activeSlideId();
-      const slideState = stateForSlide(slideId);
-      const gateEntries = gateAnswersForSlide(slides[current]);
-      const yaml = [
-        '# Invoke with: $create-briefing-slides',
-        'command: "$create-briefing-slides"',
-        'briefing_slides: briefing-slides/create-briefing-slides.html',
-        `slide: ${yamlQuote(slideId)}`,
-        `slide_title: ${yamlQuote(activeSlideTitle())}`,
-        'feedback:',
-        `  status: ${yamlQuote(slideState.feedback || '')}`,
-        `  mark: ${yamlQuote(slideState.mark || '')}`,
-        `  annotation: ${yamlQuote(slideState.annotation || '')}`,
-        'gate_answers:',
-        ...(gateEntries.length
-          ? gateEntries.map((entry) => `  ${entry.gate}: ${yamlQuote(entry.answer)}`)
-          : ['  []'])
-      ].join('\n');
-      document.getElementById('slideYamlOutput').textContent = yaml;
-      return yaml;
-    }
-
-    function buildFullDeckYaml() {
-      const gateEntries = allGateAnswers();
+    function compileYaml() {
+      const gateAnswer = state.gates && state.gates.artifact_model_clear ? state.gates.artifact_model_clear : '';
       const feedbackEntries = Object.entries(state)
         .filter(([slideId, value]) => slideId.startsWith('slide-') && value.feedback)
-        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    feedback: ${yamlQuote(value.feedback)}`);
+        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    feedback: ${yamlQuote(value.feedback)}`);
       const annotationEntries = Object.entries(state)
         .filter(([slideId, value]) => slideId.startsWith('slide-') && value.annotation)
-        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    note: ${yamlQuote(value.annotation)}`);
+        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    note: ${yamlQuote(value.annotation)}`);
       const markedEntries = Object.entries(state)
         .filter(([slideId, value]) => slideId.startsWith('slide-') && value.mark)
-        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    status: ${yamlQuote(value.mark)}`);
+        .map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    status: ${yamlQuote(value.mark)}`);
       const hasBlockingFeedback = Object.values(state).some((value) => value && ['revise', 'needs-clarification'].includes(value.feedback));
-      const unansweredRequired = gateEntries.filter((entry) => !entry.answer).map((entry) => entry.gate);
-      const approved = gateEntries.length > 0 && unansweredRequired.length === 0 && gateEntries.every((entry) => entry.answer === 'approve') && !hasBlockingFeedback;
-      return [
+      const approved = gateAnswer === 'approve' && !hasBlockingFeedback;
+      const yaml = [
         '# Invoke with: $create-briefing-slides',
         'command: "$create-briefing-slides"',
         'briefing_slides: briefing-slides/create-briefing-slides.html',
@@ -993,9 +783,7 @@
         'source_artifacts:',
         ...references.map((reference) => `  - ${reference}`),
         'gate_answers:',
-        ...(gateEntries.length
-          ? gateEntries.map((entry) => `  ${entry.gate}: ${yamlQuote(entry.answer)}`)
-          : ['  []']),
+        `  artifact_model_clear: ${yamlQuote(gateAnswer)}`,
         'slide_feedback:',
         ...(feedbackEntries.length ? feedbackEntries : ['  []']),
         'annotations:',
@@ -1003,31 +791,24 @@
         'marked_slides:',
         ...(markedEntries.length ? markedEntries : ['  []']),
         'unanswered_required_questions:',
-        ...(unansweredRequired.length ? unansweredRequired.map((gateName) => `  - ${gateName}`) : ['  []']),
+        ...(gateAnswer ? ['  []'] : ['  - artifact_model_clear']),
         `approval_status: ${approved ? 'ready-for-agent-review' : 'not-approved'}`
       ].join('\n');
-    }
-
-    function compileYaml() {
-      const yaml = buildFullDeckYaml();
       document.getElementById('yamlOutput').textContent = yaml;
-      return yaml;
-    }
-
-    function compileAllFeedbackYaml() {
-      const yaml = buildFullDeckYaml();
-      document.getElementById('allFeedbackYamlOutput').textContent = yaml;
       return yaml;
     }
 
     document.getElementById('compileYaml').addEventListener('click', compileYaml);
     document.getElementById('copyYaml').addEventListener('click', () => copyText(compileYaml()));
-    document.getElementById('compileSlideYaml').addEventListener('click', compileSlideYaml);
-    document.getElementById('copySlideYaml').addEventListener('click', () => copyText(compileSlideYaml()));
-    document.getElementById('compileAllFeedbackYaml').addEventListener('click', compileAllFeedbackYaml);
-    document.getElementById('copyAllFeedbackYaml').addEventListener('click', () => copyText(compileAllFeedbackYaml()));
-    document.getElementById('copySidebarTitle').addEventListener('click', () => copyText(activeSlideTitle()));
-    document.getElementById('copySidebarReferences').addEventListener('click', () => copyText(references.join('\n')));
+    document.querySelectorAll('[data-copy-title]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const slide = document.getElementById(button.dataset.copyTitle);
+        copyText(slide ? slide.dataset.title : '');
+      });
+    });
+    document.querySelectorAll('[data-copy-references]').forEach((button) => {
+      button.addEventListener('click', () => copyText(references.join('\n')));
+    });
 
     updateFilmstripGateStatus();
     showSlide(current);

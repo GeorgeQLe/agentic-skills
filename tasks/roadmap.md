@@ -103,6 +103,29 @@ ORD:
 
 - [ ] `ord-align`
 
+## Historical Implementation - Bottom-Bar Feedback Sidebar
+
+### Goal
+
+Add a slide-scoped feedback sidebar opened from the bottom bar, move slide feedback, mark, and annotation controls into it, preserve inline gate questions, and expose both per-slide and full-deck YAML compilers.
+
+### Plan
+
+- [x] Archive the current dogfood deck before amendment.
+- [x] Update the shared briefing-slides convention to allow slide-scoped bottom-bar feedback sidebars.
+- [x] Add bottom-bar `Feedback` control, right-side sidebar, close button, and Escape close behavior.
+- [x] Move slide feedback, mark, and annotation controls into the active-slide sidebar.
+- [x] Keep gate questions inline and preserve filmstrip gate markers.
+- [x] Add active-slide YAML and all-feedback YAML compilation/copy controls to the sidebar.
+- [x] Reuse one full-deck YAML builder for the sidebar all-feedback compiler and slide 8 compiler.
+- [x] Run text, interaction-harness, package, task-doc, diff, and opener verification.
+
+### Review
+
+Implemented the sidebar pattern in `briefing-slides/create-briefing-slides.html`, archived the prior tracked deck to `docs/history/archive/2026-07-05/224616/briefing-slides/create-briefing-slides.html`, and updated `docs/briefing-slides-convention.md` so slide-scoped bottom-bar feedback sidebars are explicitly allowed when gate questions remain inline.
+
+Verification passed for static hooks, script parsing, DOM-harness interaction checks, package build, package build check, task-doc audit, diff hygiene, and opener status `opened`.
+
 ## Historical Implementation - Stage-Click And A/D Slide Navigation
 
 ### Goal

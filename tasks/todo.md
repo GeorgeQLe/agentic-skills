@@ -103,6 +103,20 @@ ORD:
 
 # Historical Task State
 
+## Review - Bottom-Bar Feedback Sidebar 2026-07-05
+
+### Goal
+
+Add a slide-scoped feedback sidebar opened from the bottom bar while preserving inline gate questions and final-slide full-deck YAML handoff.
+
+### Review
+
+Implemented the bottom-bar `Feedback` button and right-side slide feedback sidebar in `briefing-slides/create-briefing-slides.html`. The sidebar tracks the active slide title, persists feedback/mark/annotation state in `localStorage`, closes via its close button or `Escape`, provides active-slide YAML, and provides all-feedback YAML using the same full-deck builder as slide 8.
+
+Updated `docs/briefing-slides-convention.md` to allow slide-scoped bottom-bar feedback sidebars when inline gate questions remain on slides. Archived the pre-amendment dogfood deck at `docs/history/archive/2026-07-05/224616/briefing-slides/create-briefing-slides.html`.
+
+Verified static source hooks, script parsing, DOM-harness interaction behavior, package build, package build check, task-doc audit, diff hygiene, and opener status `opened`.
+
 ## Review - Stage-Click And A/D Slide Navigation 2026-07-05
 
 ### Goal

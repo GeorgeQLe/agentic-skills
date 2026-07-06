@@ -78,6 +78,7 @@ Every deck must support review and feedback directly on the relevant slide.
 - Slide feedback controls must support at least `emphasize`, `revise`, `needs-clarification`, and freeform notes.
 - Marking controls must support per-slide statuses such as `important`, `question`, `approved`, or `skip`, stored in local browser state.
 - Annotation controls must allow per-slide notes that are included in compiled YAML.
+- A bottom-bar feedback sidebar is allowed when it is slide-scoped, updates to the active slide, preserves inline gate questions on their original slides, and keeps slide YAML plus all-feedback YAML controls near the feedback controls.
 - Copy controls must support copying the slide title, selected text where possible, references, and compiled YAML.
 - Clipboard writes must use the Clipboard API when available and fall back to selecting a read-only textarea.
 
@@ -85,7 +86,7 @@ Do not use sticky or fixed compile banners. Put compile controls in normal slide
 
 ## YAML Contract
 
-Provide local slide-feedback YAML near each slide's feedback controls and a final compile section on the last slide or an explicit response slide.
+Provide local slide-feedback YAML near each slide's feedback controls and a final compile section on the last slide or an explicit response slide. When a deck uses a slide-scoped feedback sidebar, the sidebar may hold the local slide YAML and all-feedback YAML controls, but the final full-deck compiler remains a valid redundant handoff surface.
 
 Every compiled YAML payload begins with:
 

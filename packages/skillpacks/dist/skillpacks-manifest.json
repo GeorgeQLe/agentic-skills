@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.20"
   },
-  "source_fingerprint": "a86476a54dd9a74e5f4c25b69f4345a0f8e49a8d7e52849da178a0780f1a6feb",
+  "source_fingerprint": "be9bf93aca2aed94ce0240970862340e8de2f316f10796841abd702ede9c311c",
   "packs": [
     {
       "name": "agent-bridge",
@@ -3338,18 +3338,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
       "installable": false,
-      "content_sha256": "c94dc425bf0be77e7bbf843271eb6821401f6acbd7ceb945a10b52713b2e66a5",
+      "content_sha256": "e21546d3fbe369cc92676145eab7a19baafa4abfb10866abcfd48cf8929bbee8",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3370,18 +3372,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "0a49267085139ec251c0b23d669da4501e4d4c0e1756a63aec267d5a67e37ed1",
+      "content_sha256": "c04116c4d3cddd32e0d6244ddeb9b3b2310c5f1e4c98d0c4a523dc19b2b69230",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3402,18 +3406,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
       "installable": false,
-      "content_sha256": "86fa6feb466a649faab5f1ccdbc697df7e890b89d42ec6d67164dbf742052954",
+      "content_sha256": "ec15952fd6f0f10c58b1516fea0a4020d3a2c2ccc6789eb3a9464cf4f41d5f22",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3434,18 +3440,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/frameworks/swot/SKILL.md",
       "installable": false,
-      "content_sha256": "fc3fb268e2494077411f5ee2da3c869fa975b9f6be0861be2f3b543acf16feac",
+      "content_sha256": "8382a4fd45402c45982d8de88c64af5c4f821a56a9f5f896b7e04673385edb23",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -3466,15 +3474,16 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.28",
+      "version": "v0.29",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "988fd33f834a5d2893c05773bd077848c1665986f4c17db0eb39d1befa83b3d3",
+      "content_sha256": "1599680e04b2a0dfd57b6c90df51cf68d8b5103b8ff178fb9660b3441e4e24cc",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -3497,6 +3506,7 @@
         "v0.25",
         "v0.26",
         "v0.27",
+        "v0.28",
         "v0.3",
         "v0.4",
         "v0.5",
@@ -4116,18 +4126,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix/SKILL.md",
       "installable": false,
-      "content_sha256": "c29ea31078d222c8cb4867702b66e4787336ea9960480a29bebe2fd3a16c604a",
+      "content_sha256": "2db7e7b8adf4a2b21f73d5c17868023df111b213326b887651fb5438f479b637",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4148,18 +4160,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/porter-five-forces/SKILL.md",
       "installable": false,
-      "content_sha256": "1f8519b5d4c66c901787a4a651ad72307b13bfc3bbfe76610f6cc161e6b15a8c",
+      "content_sha256": "e41489d0bb05da9bed8fd438960a64566c9fdc8967aee0066b3c11b9efa9f6a6",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4180,18 +4194,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map/SKILL.md",
       "installable": false,
-      "content_sha256": "c0d959e8201f4728605f456f45524cffbb8d9b5b08f23c7f66e44657dae2d66a",
+      "content_sha256": "df24ffce0b5c4023f08442b3c024d78cabf432a6704aacb80cf3dd2644d4ba3a",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4212,18 +4228,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.11",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/frameworks/swot/SKILL.md",
       "installable": false,
-      "content_sha256": "c9603568bd66cd9326a9fb3ad1264ff86948a8673cf8abc248548a1f0c95577c",
+      "content_sha256": "fb02801d83ab4b3f0f5f393b6adcf6d2d81ec201d9fcb4dbe0e89088a61447f4",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4244,15 +4262,16 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.28",
+      "version": "v0.29",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/competitive-analysis/SKILL.md",
       "installable": true,
-      "content_sha256": "62cc008cf322343d52830f52b8557b1c66c00f1717f608618f248de3d1711cbc",
+      "content_sha256": "0629316a8cfc5e9d487e317eca91b23b29ee0d19211c58d4aae02a215dd30837",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -4275,6 +4294,7 @@
         "v0.25",
         "v0.26",
         "v0.27",
+        "v0.28",
         "v0.3",
         "v0.4",
         "v0.5",
