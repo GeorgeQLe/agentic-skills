@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-07-06 - ship-end closeout for UAT checklist contract
+
+- Wrapped the already-completed UAT click-by-click checklist instruction update recorded in `tasks/todo.md` and `tasks/roadmap.md`.
+- Confirmed there were no unpushed commits and no source changes waiting to ship before this closeout.
+- Captured the visible `$ship-end` invocation under `prompts/ship-end/`.
+- No source-code changes were made in this closeout; validation is limited to task-doc and diff hygiene checks.
+
 ## 2026-07-05 - ship-end closeout for build-ui-screens prototype-plan handoff
 
 - Wrapped the already-shipped `build-ui-screens` prototype-plan handoff session.
