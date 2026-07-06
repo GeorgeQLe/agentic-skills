@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "cdfaa0a66ca88f81a0fe79acc964d21c254c48d7",
-  "generated_at": "2026-07-06T01:14:53.577Z",
-  "source_fingerprint": "1e681a2146492e5772ea77351290577e93f5cbbfb2ada24a26236025a46f3d3f",
+  "source_commit": "febc94044d2bdfe57198a147c2b8ec3d209e19ec",
+  "generated_at": "2026-07-06T03:53:05.957Z",
+  "source_fingerprint": "6f52cbe018eaa2dbb5ac423b5470f627ea5dff4f7b265c8bd34f5e25296ccecd",
   "source_count": 453,
   "skill_count": 409,
   "pack_count": 42,
@@ -2698,9 +2698,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2727,9 +2728,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2756,9 +2758,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2785,9 +2788,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2812,9 +2816,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.28",
+      "version": "v0.29",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: \\\"--synthesize\\\" | \\\"core\\\" | concept/category/competitors]",
       "platform": "claude",
@@ -3317,9 +3322,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3346,9 +3352,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3375,9 +3382,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3404,9 +3412,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3431,9 +3440,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.28",
+      "version": "v0.29",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: \\\"--synthesize\\\" | \\\"core\\\" | concept/category/competitors]",
       "platform": "codex",

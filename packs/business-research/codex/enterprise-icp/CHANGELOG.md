@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-06
+
+- Added the shared interrogation-page workflow as a Stage 0 gate before alignment-page scope approval.
+
 ## v0.10 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

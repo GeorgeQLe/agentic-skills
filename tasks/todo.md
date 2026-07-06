@@ -1,46 +1,49 @@
 # Current Task
 
-## Current Implementation - Resize Slide When Feedback Sidebar Opens
+## Current Implementation - Enterprise ICP Interrogation Upgrade
 
 ### Goal
 
-When the feedback sidebar opens on desktop/tablet widths, reserve the sidebar's width and scale the active slide so the full slide remains visible in the remaining left viewport. Keep the existing full-width overlay behavior on small/mobile viewports.
+Upgrade `enterprise-icp` in both Claude and Codex mirrors so it participates in the shared `interrogation-page` workflow while preserving existing alignment-page behavior.
 
 ### Plan
 
-- [x] Archive the current dogfood deck before amendment.
-- [x] Add an explicit sidebar-open body state and shared sidebar width variable.
-- [x] Reserve desktop/tablet space for the deck, topbar, and footer while the sidebar is open.
-- [x] Add active-slide fit recalculation on sidebar open/close, slide navigation, resize, and sidebar sync.
-- [x] Keep mobile sidebar behavior unchanged at the existing breakpoint.
-- [x] Verify static hooks, behavior-critical source paths, package builds, task docs, diff hygiene, and browser opener.
+- [x] Work from current `master` with a clean worktree.
+- [x] Archive both current `enterprise-icp` mirrors before editing.
+- [x] Add `interrogation-page` to both mirrors' `required_conventions`.
+- [x] Add a Stage 0 interrogation gate before Stage 1 scope approval.
+- [x] Register `enterprise-icp` in the interrogation generator and layer1 contract.
+- [x] Run full verification and fix any failures.
 - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- [x] Desktop/tablet sidebar open state no longer overlays the active slide.
-- [x] Active slide scales visually with `--slide-scale` while the sidebar is open and resets when closed.
-- [x] Slide navigation and browser resize recalculate the active slide scale.
-- [x] Mobile widths keep the full-width sidebar behavior without side-by-side slide scaling.
-- [x] Gate markers, inline gate controls, feedback persistence, and YAML compilation remain intact.
+- [x] Both mirrors declare `required_conventions: [alignment-page, interrogation-page]`.
+- [x] Both mirrors require `interrogation/enterprise-icp-r{N}-{branch}.html` before Stage 1.
+- [x] The Stage 0 gate covers enterprise stakeholder roles, buying stages, deal-killers, onboarding complexity, requirements delta, champion risk, procurement reality, land-and-expand signals, segmentation, source gaps, and unknowns.
+- [x] Both mirrors have archive snapshots, bumped versions, and changelog entries.
+- [x] The interrogation generator and layer1 registry include both mirrors and expect 48 participating stubs.
 
 ### Verification
 
-- [x] Confirm source contains sidebar open class, resize/fit function, resize listener, and shared sidebar width variable.
-- [x] Confirm existing sidebar open/close, Escape handling, YAML builders, and gate controls remain present.
-- [x] `npm --workspace packages/skillpacks run build`
+- [x] `node scripts/upgrade-interrogation-page.mjs --check`
+- [x] `node scripts/upgrade-alignment-page.mjs --check`
+- [x] `pnpm --dir tests exec vitest run --project layer1 layer1/interrogation-confidence-gate.test.ts`
+- [x] `bash scripts/skill-archive-audit.sh --strict`
+- [x] `bash scripts/skill-mirror-parity-audit.sh`
+- [x] `npm --workspace packages/skillpacks run build:manifest:check`
+- [x] `npm run exports:check`
 - [x] `npm --workspace packages/skillpacks run build:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
 
 ### Review
 
-Implemented desktop/tablet reserved-space behavior for the feedback sidebar in `briefing-slides/create-briefing-slides.html`. The deck now uses a shared `--feedback-sidebar-width`, toggles `body.feedback-sidebar-open`, reserves the sidebar width for the topbar, deck, and footer on non-mobile widths, and scales the active `.slide-inner` with `--slide-scale` while the sidebar is open.
+Upgraded both `enterprise-icp` mirrors from `v0.10` to `v0.12` with `interrogation-page` in `required_conventions`. Each mirror now has a Stage 0 interrogation gate before Stage 1 scope approval and a generated shared interrogation-page resolver stub plus sibling bundle.
 
-Added a scheduled slide-fit recalculation path for sidebar open/close, active slide sync, slide navigation, resize, and breakpoint changes. Mobile keeps the existing full-width sidebar overlay and disables side-by-side slide scaling.
+Archived both pre-upgrade `SKILL.md` files to `archive/v0.10/`, added matching changelog entries, registered `enterprise-icp` in the interrogation generator and layer1 contract, and refreshed skills catalog export artifacts.
 
-Archived the pre-amendment dogfood deck to `docs/history/archive/2026-07-05/225618/briefing-slides/create-briefing-slides.html`. Verification passed for static hooks, browser sanity checks, package build, package build check, task-doc audit, diff hygiene, and the local opener.
+Verification passed through interrogation/alignment generator checks, targeted layer1 Vitest, strict archive audit, mirror parity audit, package manifest/export/build checks, task-doc audit, and diff hygiene.
 
 # Historical Task State
 
@@ -95,7 +98,7 @@ Updated the interrogation generator and layer1 registry for the five new partici
 Business research:
 
 - `competitive-analysis` completed
-- `enterprise-icp`
+- `enterprise-icp` completed
 - `customer-feedback`
 - `lean-canvas`
 - `value-prop-canvas`

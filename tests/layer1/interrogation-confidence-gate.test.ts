@@ -18,6 +18,7 @@ const participatingSkillDirs = [
   "packs/business-research/claude/competitive-analysis/frameworks/strategic-group-map",
   "packs/business-research/claude/competitive-analysis/frameworks/swot",
   "packs/business-research/claude/customer-discovery",
+  "packs/business-research/claude/enterprise-icp",
   "packs/business-research/claude/positioning",
   "packs/business-research/codex/competitive-analysis",
   "packs/business-research/codex/competitive-analysis/frameworks/feature-pricing-matrix",
@@ -25,6 +26,7 @@ const participatingSkillDirs = [
   "packs/business-research/codex/competitive-analysis/frameworks/strategic-group-map",
   "packs/business-research/codex/competitive-analysis/frameworks/swot",
   "packs/business-research/codex/customer-discovery",
+  "packs/business-research/codex/enterprise-icp",
   "packs/business-research/codex/positioning",
   "packs/product-design/claude/brainstorm",
   "packs/product-design/codex/brainstorm",
@@ -121,7 +123,7 @@ describe("interrogation confidence-gate contract", () => {
     const result = spawnSync(process.execPath, [GENERATOR, "--check"], { encoding: "utf8" });
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Shared resolver stubs: 46 ownable, exact");
+    expect(result.stdout).toContain("Shared resolver stubs: 48 ownable, exact");
   });
 
   for (const dir of devtoolResearchSkillDirs) {

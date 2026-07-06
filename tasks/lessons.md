@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-06 - Keep canary-only conventions out of general release fixes
+
+- A general-release interrogation upgrade inherited `briefing-slides` from a canary experiment handoff, which would have promoted canary-only behavior into normal skill metadata.
+- Rule: when a task explicitly starts from `master` or says it is not a canary publish task, do not add canary-only conventions, artifacts, or routing even if a previous branch plan mentions them.
+- Before committing convention metadata, verify whether each convention belongs to the current release lane or only to an experiment branch.
+
 ## 2026-07-06 - Publish helpers need clear gate boundaries
 
 - A canary publish helper made post-publish git commands visually adjacent to dry-run gates, which could be misread when transcript UIs collapse or skim checklist output.
