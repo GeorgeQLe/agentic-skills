@@ -38,24 +38,27 @@ Check current canary tags with:
    # Other authorized account:
    # SKILLPACKS_NPM_PUBLISHER=<user> ./publish.sh --tag experimental --preid experimental prerelease
 
-2. Canary release gates (run before publishing)
+2. Pre-publish gates only
    npm --workspace packages/skillpacks run test:node
    npm run skillpacks:verify
    ./publish.sh --dry-run --tag experimental --preid experimental prerelease
    # Do NOT publish if: only one package would publish, staged versions differ,
    # the account can't publish both, either dry run fails, or the command would use latest.
+   # Stop here unless all gates pass; do not commit, tag, push, or publish during this step.
 
 3. Publish canary
    ./publish.sh --tag experimental --preid experimental prerelease
    # Publishes versions like 0.1.20-experimental.0 under dist-tags.experimental
    # for both package names. It does not move dist-tags.latest.
 
-4. Commit, tag, and push the prerelease source state
+4. After successful publish: commit, tag, and push source state
+   # <published-version> is the exact version printed by publish.sh, such as 0.1.21-experimental.0.
+   VERSION=<published-version>
    git add packages/skillpacks/package.json packages/skillpacks/dist/skillpacks-manifest.json
-   git commit -m "Release skillpacks <version>"
-   git tag skillpacks-v<version>
+   git commit -m "Release skillpacks \$VERSION"
+   git tag "skillpacks-v\$VERSION"
    git push
-   git push origin skillpacks-v<version>
+   git push origin "skillpacks-v\$VERSION"
 
 5. Post-publish verification
    npm view skillpacks dist-tags.experimental
