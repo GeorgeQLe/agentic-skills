@@ -1,8 +1,92 @@
 # Current Task
 
-## No Active Task - 2026-07-06
+## Current Implementation - Interrogation and Alignment Upgrade Target Backlog
 
-The fit-to-slide briefing deck convention update is complete and ready to ship. No executable task is currently promoted in this repo.
+### Goal
+
+Create the active backlog for high-confidence interrogation/alignment workflow upgrade targets. This task is tracking-only: it does not refactor any skill source, generated convention registry, package metadata, archive, or changelog files yet.
+
+### Target Policy
+
+High-confidence targets are active, non-archived deep/scoped staged research or interview skills that already use `alignment-page` workflows and do not yet declare or implement `interrogation-page`.
+
+### Targets
+
+For every target below, handle the `claude` and `codex` mirrors together where both exist. Parent orchestrator targets also carry their active framework subskills when those framework `SKILL.md` files match the same policy.
+
+Business research:
+
+- [ ] `competitive-analysis`
+- [ ] `enterprise-icp`
+- [ ] `customer-feedback`
+- [ ] `lean-canvas`
+- [ ] `value-prop-canvas`
+
+Customer lifecycle:
+
+- [ ] `journey-map`
+
+Business growth:
+
+- [ ] `monetization`
+- [ ] `gtm`
+- [ ] `landing-copy`
+- [ ] `growth-model`
+- [ ] `hook-model`
+- [ ] `pmf-assessment`
+
+Business ops:
+
+- [ ] `platform-strategy`
+
+Creator foundation:
+
+- [ ] `product-led-media-map`
+- [ ] `creator-positioning`
+- [ ] `content-programming`
+
+Game:
+
+- [ ] `game-audience`
+- [ ] `game-comparables`
+- [ ] `game-fantasy`
+- [ ] `game-genre-map`
+- [ ] `game-launch`
+- [ ] `game-store-page-test`
+
+YouTube ops:
+
+- [ ] `youtube-concept-research`
+
+Product design:
+
+- [ ] `brainstorm-inspirations`
+- [ ] `take-inspiration`
+
+ORD:
+
+- [ ] `ord-align`
+
+### Acceptance Criteria
+
+- [x] Target list is derived from active, non-archived `SKILL.md` files.
+- [x] Artifact-only skills are explicitly out of scope for this todo unless later promoted by audit.
+- [x] Actual refactors require version, archive, and changelog handling per skill versioning rules.
+- [x] Generator checks must stay clean after future upgrades.
+
+### Verification
+
+- [x] Re-run the target derivation search and confirm this todo list matches the high-confidence set.
+- [x] Run `node scripts/upgrade-alignment-page.mjs --check`.
+- [x] Run `node scripts/upgrade-interrogation-page.mjs --check`.
+- [x] Run `node scripts/audit-task-docs.mjs`.
+- [x] Run `git diff --check`.
+
+### Review
+
+Implemented the tracking-only active backlog for 26 high-confidence target skills. The skill upgrade target checkboxes remain open intentionally; this step only promoted and verified the future-work list.
+
+Verified the active non-archived `SKILL.md` derivation, alignment/interrogation generator cleanliness, task-doc audit, and diff hygiene.
 
 # Historical Task State
 

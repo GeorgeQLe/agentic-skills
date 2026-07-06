@@ -2,6 +2,90 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Interrogation and Alignment Upgrade Target Backlog
+
+### Goal
+
+Create the active backlog for high-confidence interrogation/alignment workflow upgrade targets without performing the skill upgrades yet.
+
+### Plan
+
+- [x] Promote the high-confidence target list into `tasks/todo.md` as the active task.
+- [x] Group targets by pack/domain for staged future execution.
+- [x] State that `claude` and `codex` mirrors must be upgraded together where both exist.
+- [x] Record scope boundaries so artifact-only skills, package metadata, archives, changelogs, and skill source refactors stay out of this tracking-only step.
+- [x] Run task-doc and generator verification, then commit and push the doc-only change.
+
+### High-Confidence Targets
+
+Business research:
+
+- `competitive-analysis`
+- `enterprise-icp`
+- `customer-feedback`
+- `lean-canvas`
+- `value-prop-canvas`
+
+Customer lifecycle:
+
+- `journey-map`
+
+Business growth:
+
+- `monetization`
+- `gtm`
+- `landing-copy`
+- `growth-model`
+- `hook-model`
+- `pmf-assessment`
+
+Business ops:
+
+- `platform-strategy`
+
+Creator foundation:
+
+- `product-led-media-map`
+- `creator-positioning`
+- `content-programming`
+
+Game:
+
+- `game-audience`
+- `game-comparables`
+- `game-fantasy`
+- `game-genre-map`
+- `game-launch`
+- `game-store-page-test`
+
+YouTube ops:
+
+- `youtube-concept-research`
+
+Product design:
+
+- `brainstorm-inspirations`
+- `take-inspiration`
+
+ORD:
+
+- `ord-align`
+
+### Acceptance Criteria
+
+- The target list is derived from active, non-archived `SKILL.md` files that use `alignment-page` but do not yet use `interrogation-page`.
+- Artifact-only skills are out of scope unless a later audit promotes them.
+- Future skill refactors handle both mirrors together where both exist and follow version, archive, and changelog rules.
+- Future upgrades keep `node scripts/upgrade-alignment-page.mjs --check` and `node scripts/upgrade-interrogation-page.mjs --check` clean.
+
+### Verification
+
+- Re-run the target derivation search used for the audit and confirm the todo list matches the high-confidence set.
+- Run `node scripts/upgrade-alignment-page.mjs --check`.
+- Run `node scripts/upgrade-interrogation-page.mjs --check`.
+- Run `node scripts/audit-task-docs.mjs`.
+- Run `git diff --check`.
+
 ## Historical Implementation - Fit-To-Slide Briefing Deck Convention 2026-07-06
 
 ### Goal
