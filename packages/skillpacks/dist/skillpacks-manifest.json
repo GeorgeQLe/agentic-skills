@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.20"
   },
-  "source_fingerprint": "f47f7322b4d691d0d31faa0c131fe8559e6b006011cdf740ec34a0ec11896a65",
+  "source_fingerprint": "893601b61b435af449fa529f1a67d1f6a90bdd8230771e1a918d512268badc97",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1495,6 +1495,23 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/claude/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "d8ff38937e07ab870bb3fc15ddbab83d1e6479b1a52b6faa6d8725953c16ee46",
+      "archive_versions": [],
+      "command": "/create-briefing-slides",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
@@ -1892,6 +1909,23 @@
         "v0.2"
       ],
       "command": "$create-alignment-page",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/codex/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "c8a37fee53d0cfcdc857b7db71c908a018da4c3e76b6f68eb8e3635e7aeb3ff3",
+      "archive_versions": [],
+      "command": "$create-briefing-slides",
       "deck_memberships": []
     },
     {

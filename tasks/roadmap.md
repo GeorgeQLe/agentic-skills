@@ -2,6 +2,34 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - create-briefing-slides Skill 2026-07-05
+
+### Goal
+
+Add a canary-ready base skill named `create-briefing-slides` that creates slide-first HTML briefing decks for interrogation and alignment review artifacts while preserving dense pages as linked references.
+
+### Plan
+
+- [x] Add mirrored Codex and Claude `create-briefing-slides` base skill source directories with version `v0.0`.
+- [x] Define the slide deck workflow: source artifact discovery, dense reference preservation, slide structure, navigation, feedback, gate-answer, annotation, copy, and browser-open behavior.
+- [x] Update base pack metadata so the new skill is discoverable in the packaged canary.
+- [x] Refresh generated package/catalog metadata when required.
+- [x] Run targeted validation, archive/version audits, manifest/catalog checks, and diff hygiene.
+
+### Acceptance Criteria
+
+- The skill creates `briefing-slides/<artifact-scope>.html` as the only page agents attempt to open.
+- Dense `alignment/*.html`, `interrogation/*.html`, markdown, reports, specs, and source documents remain canonical linked references and are not auto-opened by this skill.
+- Deck instructions require PowerPoint-like slide navigation, keyboard controls, progress state, reference links, gate questions, feedback YAML, copy fallback behavior, annotation/marking support, and printable/exportable slide content.
+- Codex and Claude mirrors differ only where invocation syntax requires `$create-briefing-slides` versus `/create-briefing-slides`.
+- Package metadata checks see the new skill.
+
+### Review
+
+Added the `create-briefing-slides` base skill for Codex and Claude. The skill creates self-contained HTML presentation decks under `briefing-slides/`, treats dense alignment/interrogation/source artifacts as linked references, and requires agents to open only the deck. It also defines slide navigation, review gates, feedback, annotation/marking, copy fallback, YAML routing, archive-before-replace, and verification behavior.
+
+Generated package/catalog metadata now includes the skill, and targeted source audits plus package verification passed.
+
 ## Historical Implementation - build-ui-screens Prototype-Plan Handoff 2026-07-05
 
 ### Goal

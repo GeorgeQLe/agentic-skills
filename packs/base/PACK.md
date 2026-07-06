@@ -11,3 +11,7 @@ Base skills live under `packs/base/{claude,codex}` so their source layout matche
 - `skillpacks init` installs all base skills and records `base_skills: true`;
 - exact base-skill installs record `enabled_skills[skill] = "base"`;
 - `packs/base` is not enabled through `enabled_packs`.
+
+## Skills
+
+- `create-briefing-slides`: Create slide-first HTML briefing decks for alignment/interrogation review material while keeping dense artifacts as linked references.

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Create Briefing Slides"
+  short_description: "Create slide-first review decks"
+  default_prompt: "Use $create-briefing-slides to turn this alignment or interrogation artifact into a visual HTML briefing deck."
+
+policy:
+  allow_implicit_invocation: true

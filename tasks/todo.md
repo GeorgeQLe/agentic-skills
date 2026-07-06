@@ -2,11 +2,38 @@
 
 ## No Active Task - 2026-07-05
 
-The `build-ui-screens` prototype-plan handoff is complete and shipped. No executable task is currently promoted in this repo.
+The `create-briefing-slides` canary-ready base skill is complete and ready to ship. No executable task is currently promoted in this repo.
 
 Next work should be promoted deliberately from roadmap, recurring advisory review, or a new user request.
 
 # Historical Task State
+
+## Review - create-briefing-slides Skill 2026-07-05
+
+### Goal
+
+Add a canary-ready base skill named `create-briefing-slides` that creates slide-first HTML briefing decks for interrogation and alignment review artifacts while preserving dense pages as linked references.
+
+### Review
+
+Implemented:
+
+- Added mirrored `packs/base/{codex,claude}/create-briefing-slides` source skills at `v0.0`.
+- Defined the slide-first artifact contract: `briefing-slides/*.html` output, dense references linked but not auto-opened, slide navigation, keyboard controls, per-slide feedback, gate answers, annotation/marking, copy fallback, YAML compilation, archive-before-replace, and open-only-deck behavior.
+- Added Codex `agents/openai.yaml` metadata.
+- Updated base pack metadata and regenerated package manifest plus catalog exports.
+- Captured the visible skill-creation prompt under `prompts/skill-creator/`.
+
+Verified:
+
+- `bash scripts/base-skill-version-parity-audit.sh` passed.
+- `bash scripts/skill-mirror-parity-audit.sh` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm run exports:check` passed.
+- `npm run skillpacks:verify` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check --cached` passed.
 
 ## Review - Clarify Stable vs Canary Package Language 2026-07-05
 
