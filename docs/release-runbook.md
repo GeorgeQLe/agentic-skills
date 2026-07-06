@@ -71,7 +71,7 @@ The script publishes `skillpacks` first, then `@glexcorp/gskp --access public`, 
 
 Use npm dist-tags for canary releases. The default canary tag is `experimental`, and the version should use the same prerelease identifier so the package version is visibly non-GA.
 
-Pre-publish gates only:
+### Pre-publish gates only: Verify, Then Stop
 
 ```bash
 npm --workspace packages/skillpacks run test:node
@@ -81,7 +81,7 @@ npm run skillpacks:verify
 
 Stop here unless all gates pass; do not commit, tag, push, or publish during the pre-publish gates.
 
-Publish canary:
+### Publish Canary: Run Only After All Gates Pass
 
 ```bash
 ./publish.sh --tag experimental --preid experimental prerelease
@@ -105,7 +105,9 @@ npx skillpacks@experimental install <pack-or-skill>
 npx @glexcorp/gskp@experimental install <pack-or-skill>
 ```
 
-After successful publish, commit, tag, and push the prerelease source state. Use the exact version printed by `publish.sh`, such as `0.1.21-experimental.0`:
+### POST-PUBLISH ONLY: Commit, Tag, and Push Source State
+
+Run these only after `./publish.sh` succeeds. Use the exact version printed by `publish.sh`, such as `0.1.21-experimental.0`:
 
 ```bash
 VERSION=<published-version>
@@ -115,6 +117,8 @@ git tag "skillpacks-v$VERSION"
 git push
 git push origin "skillpacks-v$VERSION"
 ```
+
+### Post-Publish Verification: Confirm Dist-Tags and Smoke Checks
 
 Validate the canary dist-tag parity:
 

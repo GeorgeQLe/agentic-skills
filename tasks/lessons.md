@@ -9,7 +9,7 @@
 ## 2026-07-06 - Publish helpers need clear gate boundaries
 
 - A canary publish helper made post-publish git commands visually adjacent to dry-run gates, which could be misread when transcript UIs collapse or skim checklist output.
-- Rule: helper checklists must visually separate dry-run/pre-publish gates from post-publish source-state commands.
+- Rule: helper checklists must visually separate dry-run/pre-publish gates from post-publish source-state commands in a way that survives transcript folding, not only when the output is fully expanded.
 - For release helpers, put commit, tag, push, and real publish instructions only after an explicit successful-publish boundary.
 
 ## 2026-07-06 - Briefing decks must fit the viewport
