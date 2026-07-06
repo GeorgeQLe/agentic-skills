@@ -1,6 +1,50 @@
 # Current Task
 
-## Current Implementation - Competitive Analysis Interrogation Upgrade
+## Current Implementation - Resize Slide When Feedback Sidebar Opens
+
+### Goal
+
+When the feedback sidebar opens on desktop/tablet widths, reserve the sidebar's width and scale the active slide so the full slide remains visible in the remaining left viewport. Keep the existing full-width overlay behavior on small/mobile viewports.
+
+### Plan
+
+- [x] Archive the current dogfood deck before amendment.
+- [x] Add an explicit sidebar-open body state and shared sidebar width variable.
+- [x] Reserve desktop/tablet space for the deck, topbar, and footer while the sidebar is open.
+- [x] Add active-slide fit recalculation on sidebar open/close, slide navigation, resize, and sidebar sync.
+- [x] Keep mobile sidebar behavior unchanged at the existing breakpoint.
+- [x] Verify static hooks, behavior-critical source paths, package builds, task docs, diff hygiene, and browser opener.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [x] Desktop/tablet sidebar open state no longer overlays the active slide.
+- [x] Active slide scales visually with `--slide-scale` while the sidebar is open and resets when closed.
+- [x] Slide navigation and browser resize recalculate the active slide scale.
+- [x] Mobile widths keep the full-width sidebar behavior without side-by-side slide scaling.
+- [x] Gate markers, inline gate controls, feedback persistence, and YAML compilation remain intact.
+
+### Verification
+
+- [x] Confirm source contains sidebar open class, resize/fit function, resize listener, and shared sidebar width variable.
+- [x] Confirm existing sidebar open/close, Escape handling, YAML builders, and gate controls remain present.
+- [x] `npm --workspace packages/skillpacks run build`
+- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
+
+### Review
+
+Implemented desktop/tablet reserved-space behavior for the feedback sidebar in `briefing-slides/create-briefing-slides.html`. The deck now uses a shared `--feedback-sidebar-width`, toggles `body.feedback-sidebar-open`, reserves the sidebar width for the topbar, deck, and footer on non-mobile widths, and scales the active `.slide-inner` with `--slide-scale` while the sidebar is open.
+
+Added a scheduled slide-fit recalculation path for sidebar open/close, active slide sync, slide navigation, resize, and breakpoint changes. Mobile keeps the existing full-width sidebar overlay and disables side-by-side slide scaling.
+
+Archived the pre-amendment dogfood deck to `docs/history/archive/2026-07-05/225618/briefing-slides/create-briefing-slides.html`. Verification passed for static hooks, browser sanity checks, package build, package build check, task-doc audit, diff hygiene, and the local opener.
+
+# Historical Task State
+
+## Review - Competitive Analysis Interrogation Upgrade 2026-07-05
 
 ### Goal
 
@@ -50,58 +94,56 @@ Updated the interrogation generator and layer1 registry for the five new partici
 
 Business research:
 
-- [x] `competitive-analysis`
-- [ ] `enterprise-icp`
-- [ ] `customer-feedback`
-- [ ] `lean-canvas`
-- [ ] `value-prop-canvas`
+- `competitive-analysis` completed
+- `enterprise-icp`
+- `customer-feedback`
+- `lean-canvas`
+- `value-prop-canvas`
 
 Customer lifecycle:
 
-- [ ] `journey-map`
+- `journey-map`
 
 Business growth:
 
-- [ ] `monetization`
-- [ ] `gtm`
-- [ ] `landing-copy`
-- [ ] `growth-model`
-- [ ] `hook-model`
-- [ ] `pmf-assessment`
+- `monetization`
+- `gtm`
+- `landing-copy`
+- `growth-model`
+- `hook-model`
+- `pmf-assessment`
 
 Business ops:
 
-- [ ] `platform-strategy`
+- `platform-strategy`
 
 Creator foundation:
 
-- [ ] `product-led-media-map`
-- [ ] `creator-positioning`
-- [ ] `content-programming`
+- `product-led-media-map`
+- `creator-positioning`
+- `content-programming`
 
 Game:
 
-- [ ] `game-audience`
-- [ ] `game-comparables`
-- [ ] `game-fantasy`
-- [ ] `game-genre-map`
-- [ ] `game-launch`
-- [ ] `game-store-page-test`
+- `game-audience`
+- `game-comparables`
+- `game-fantasy`
+- `game-genre-map`
+- `game-launch`
+- `game-store-page-test`
 
 YouTube ops:
 
-- [ ] `youtube-concept-research`
+- `youtube-concept-research`
 
 Product design:
 
-- [ ] `brainstorm-inspirations`
-- [ ] `take-inspiration`
+- `brainstorm-inspirations`
+- `take-inspiration`
 
 ORD:
 
-- [ ] `ord-align`
-
-# Historical Task State
+- `ord-align`
 
 ## Review - Bottom-Bar Feedback Sidebar 2026-07-05
 

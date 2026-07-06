@@ -2,7 +2,41 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Competitive Analysis Interrogation Upgrade
+## Current Implementation - Resize Slide When Feedback Sidebar Opens
+
+### Goal
+
+When the feedback sidebar opens on desktop/tablet widths, reserve the sidebar's width and scale the active slide so the full slide remains visible in the remaining left viewport. Keep the existing full-width overlay behavior on small/mobile viewports.
+
+### Plan
+
+- [x] Archive the current dogfood deck before amendment.
+- [x] Add an explicit sidebar-open body state and shared sidebar width variable.
+- [x] Reserve desktop/tablet space for the deck, topbar, and footer while the sidebar is open.
+- [x] Add active-slide fit recalculation on sidebar open/close, slide navigation, resize, and sidebar sync.
+- [x] Keep mobile sidebar behavior unchanged at the existing breakpoint.
+- [x] Verify static hooks, behavior-critical source paths, package builds, task docs, diff hygiene, and browser opener.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Desktop/tablet sidebar open state no longer overlays the active slide.
+- Active slide scales visually with `--slide-scale` while the sidebar is open and resets when closed.
+- Slide navigation and browser resize recalculate the active slide scale.
+- Mobile widths keep the full-width sidebar behavior without side-by-side slide scaling.
+- Gate markers, inline gate controls, feedback persistence, and YAML compilation remain intact.
+
+### Verification
+
+- Static source assertion passed for sidebar open class, resize/fit function, resize listener, shared sidebar width variable, YAML builder reuse, Escape handling, and gate controls.
+- Visual browser sanity passed for desktop sidebar-open reserved layout, sidebar navigation sync, Escape close, full-width restore, and filmstrip gate marker visibility.
+- `npm --workspace packages/skillpacks run build` passed.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+- `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto` opened the local deck.
+
+## Historical Implementation - Competitive Analysis Interrogation Upgrade
 
 ### Goal
 
