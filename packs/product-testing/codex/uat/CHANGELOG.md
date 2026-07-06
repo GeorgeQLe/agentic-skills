@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.17 - 2026-07-06
+
+- Required UAT plans to include click-by-click, command-by-command, request-by-request, or hybrid tester checklists for each journey.
+- Required variant-evaluation outputs to include shared and per-variant walkthrough checklists with explicit evidence capture points.
+
 ## v0.16 - 2026-07-02
 
 - Added mandatory handoff verification before variant-evaluation final routing, using flow-tree, UAT evaluation, and manual task artifacts as readiness sources.

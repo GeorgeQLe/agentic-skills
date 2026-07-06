@@ -2,35 +2,53 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Release Lane Briefing Slides
+## Current Implementation - UAT Click-By-Click Checklist Instructions
 
 ### Goal
 
-Create a briefing slide deck for the release-lane change-boundary COAs, linked to the dense alignment briefing, so the canary-vs-general-release standard can be reviewed as slides.
+Update UAT-related skills in the prototype design workflow so generated UAT artifacts give users click-by-click or surface-appropriate checklist instructions they can work through directly.
 
 ### Plan
 
-- [x] Confirm the dense alignment briefing exists and is already pushed.
-- [x] Create `briefing-slides/release-lane-change-boundary.html`.
-- [x] Include slide navigation, references, gates, feedback, annotations, and compiled YAML.
-- [x] Verify deck source hooks, linked references, task docs, diff hygiene, and opener.
+- [x] Identify active UAT skill mirrors and related guided walkthrough mirrors.
+- [x] Archive current skill versions before behavior changes.
+- [x] Update UAT plan and variant-evaluation formats to include click-by-click/checklist tester scripts.
+- [x] Update UAT guide output to use checklist substeps and explicit completion checkpoints.
+- [x] Refresh runtime skill copies and run targeted verification.
 - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- The slide deck presents the problem, COAs, directory split answer, recommendation, implementation shape, and decision gates.
-- The dense alignment page remains canonical and is linked as a reference.
-- The deck has slide navigation and can resume by hash.
-- The deck supports slide-scoped feedback, marking, annotations, and final compiled YAML.
-- The deck is opened through the repo HTML opener.
+- [x] `uat` journey plans require surface-appropriate step checklists, not vague task sequences.
+- [x] `uat --variant-evaluation` requires per-variant walkthrough checklists and completion/evidence boxes.
+- [x] `uat-guide` emits checklist substeps a human can check off while executing the journey.
+- [x] Claude and Codex mirrors remain aligned where agent syntax differs.
+- [x] Version archives and changelogs are updated for every changed skill.
 
 ### Verification
 
-- Static source assertions for deck controls and YAML compiler passed.
-- Linked reference existence check passed.
+- `scripts/pack.sh refresh` passed.
+- `bash scripts/skill-archive-audit.sh --strict` passed.
+- `bash scripts/skill-mirror-parity-audit.sh` passed.
+- Targeted `rg` assertions for checklist contract terms passed.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm run exports:check` passed.
 - `node scripts/audit-task-docs.mjs` passed.
 - `git diff --check` passed.
-- `node scripts/open-html-page.mjs briefing-slides/release-lane-change-boundary.html --browser auto` opened the local deck.
+
+### Review
+
+Updated `uat` in both Codex and Claude mirrors from `v0.16` to `v0.17`. UAT plans now require surface-appropriate tester checklists for each journey, and variant-evaluation artifacts now require shared and per-variant walkthrough checklists with evidence capture points.
+
+Updated `uat-guide` in both Codex and Claude mirrors from `v0.5` to `v0.6`. Guided output now uses Markdown checkboxes for executable tester actions, including checkpoint observation and evidence capture items.
+
+Archived the prior skill contracts, updated changelogs, refreshed generated package metadata, and verified archive, mirror, catalog, task-doc, and diff hygiene checks.
+
+## Historical Implementation - Release Lane Briefing Slides
+
+### Goal
+
+Create a briefing slide deck for the release-lane change-boundary COAs, linked to the dense alignment briefing, so the canary-vs-general-release standard can be reviewed as slides.
 
 ### Review
 
@@ -38,7 +56,7 @@ Created `briefing-slides/release-lane-change-boundary.html` as the slide-first r
 
 The deck includes previous/next controls, filmstrip navigation, keyboard and empty-stage navigation, hash resume, print CSS, slide-scoped feedback, marking, annotations, per-slide YAML, and final full-deck YAML.
 
-Static deck hooks, linked reference existence, task-doc audit, diff hygiene, and the HTML opener have passed.
+Static deck hooks, linked reference existence, task-doc audit, diff hygiene, and the HTML opener passed.
 
 ## Historical Implementation - Release Lane Alignment Briefing
 

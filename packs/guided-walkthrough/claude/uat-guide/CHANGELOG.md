@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-07-06
+
+- Changed generated UAT guide steps from plain numbered substeps to checkable tester actions with explicit checkpoint and evidence items.
+
 ## v0.5 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

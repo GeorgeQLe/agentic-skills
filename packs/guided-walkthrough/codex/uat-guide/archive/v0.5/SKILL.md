@@ -2,7 +2,7 @@
 name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
-version: v0.6
+version: v0.5
 required_conventions: [alignment-page]
 argument-hint: "[optional: journey number, journey name, or 'next']"
 visual_tier: prototype
@@ -16,7 +16,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `$uat-guide`.
 
-Expand a single UAT journey from `research/uat-plan.md` into detailed, step-by-step tester instructions. UAT planning (`$uat`) produces acceptance journeys and tester checklists; this skill turns each journey into a click-by-click, command-by-command, or request-by-request checklist that a tester unfamiliar with the product can follow without ambiguity.
+Expand a single UAT journey from `research/uat-plan.md` into detailed, step-by-step tester instructions. UAT planning (`$uat`) produces high-level task sequences ("sign up", "navigate to dashboard"); this skill turns each step into click-by-click, command-by-command, or request-by-request guidance that a tester unfamiliar with the product can follow without ambiguity.
 
 Do not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` from the product-testing pack.
 
@@ -52,11 +52,10 @@ Do not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` f
 
 6. **Expand task sequence**
    - For each step in the journey's task sequence, produce:
-     - **Checklist sub-steps** with exact UI elements to click, commands to run, or requests to make. Use project-specific values (URLs, routes, field names, env vars) drawn from codebase context.
+     - **Numbered sub-steps** with exact UI elements to click, commands to run, or requests to make. Use project-specific values (URLs, routes, field names, env vars) drawn from codebase context.
      - **Checkpoint** tied to the journey's acceptance criteria -- what the tester should observe to confirm the step succeeded.
      - **Evidence capture point** -- what to screenshot, copy, or record at this step.
      - **Gotchas** -- common mistakes, timing issues, or easy-to-miss details.
-   - Use Markdown checkboxes for every executable tester action so the user can work through the guide item by item.
    - Begin the guide with a **Preparation** section drawn from the journey's Setup field (accounts, data, environment, permissions needed before starting).
    - End the guide with a **Final verification** section drawn from the journey's acceptance criteria and expected success state.
 
@@ -88,10 +87,9 @@ Do not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` f
 
 #### Step 1: [Task sequence step name]
 
-- [ ] [Exact action -- click, type, run, send]
-- [ ] [Next action with specific UI element / command / request detail]
-- [ ] [Observe the checkpoint before moving on]
-- [ ] [Capture the named evidence]
+1. [Exact action -- click, type, run, send]
+2. [Next action with specific UI element / command / request detail]
+3. ...
 
 **Checkpoint**: [What the tester should see or verify]
 **Evidence**: [What to capture -- screenshot, output, response]
@@ -99,7 +97,7 @@ Do not generate UAT journeys. If no UAT plan exists, stop and recommend `$uat` f
 
 #### Step 2: [Task sequence step name]
 
-- [ ] ...
+1. ...
 
 ...
 

@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.20"
   },
-  "source_fingerprint": "be9bf93aca2aed94ce0240970862340e8de2f316f10796841abd702ede9c311c",
+  "source_fingerprint": "289c2635b95368b9070a7a99eb3cd13799ec9a925d20562705ccf9c12baada5e",
   "packs": [
     {
       "name": "agent-bridge",
@@ -3803,18 +3803,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "claude",
-      "version": "v0.10",
+      "version": "v0.12",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/claude/enterprise-icp/SKILL.md",
       "installable": true,
-      "content_sha256": "dc25acbd8efab65c2cd04858c1ecdd9de08e9271b2c9f3643b5985fe3ef6e671",
+      "content_sha256": "8e3af4644bf50bbc92c02b53ed3e34469f44bb52666c9e8526aea7c4c81c1890",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -4591,18 +4593,20 @@
       "scope": "pack",
       "pack": "business-research",
       "platform": "codex",
-      "version": "v0.10",
+      "version": "v0.12",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/business-research/codex/enterprise-icp/SKILL.md",
       "installable": true,
-      "content_sha256": "78b98d54a41c5ab79f1b667fb85f61eaf0943af9ef2ce22857928730c99be461",
+      "content_sha256": "5abb438365577db1d2bdc5dc46337eeaca9e2cd113457620f6b6b285f5dfd96d",
       "archive_versions": [
         "v0.0",
         "v0.1",
+        "v0.10",
         "v0.2",
         "v0.3",
         "v0.4",
