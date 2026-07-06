@@ -40,6 +40,7 @@
     "scripts/prepublish-auth-check.mjs",
     "assets/alignment-page-convention.md",
     "assets/interrogation-page-convention.md",
+    "assets/briefing-slides-convention.md",
     "assets/design-tree-loop-convention.md",
     "assets/templates/",
     "assets/social-post-convention.md",

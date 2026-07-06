@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "466d2ace15835ab27caef6e6a1237024152a9011",
-  "generated_at": "2026-07-06T00:56:42.272Z",
-  "source_fingerprint": "d03eefc9253afad87df02a59dacb2574c5aa792527b7f46475bd978762a0171e",
+  "source_commit": "cdfaa0a66ca88f81a0fe79acc964d21c254c48d7",
+  "generated_at": "2026-07-06T01:14:53.577Z",
+  "source_fingerprint": "1e681a2146492e5772ea77351290577e93f5cbbfb2ada24a26236025a46f3d3f",
   "source_count": 453,
   "skill_count": 409,
   "pack_count": 42,
@@ -874,7 +874,9 @@
       "contextIntake": null,
       "visualTier": null,
       "version": "v0.0",
-      "requiredConventions": [],
+      "requiredConventions": [
+        "briefing-slides"
+      ],
       "argumentHint": "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]",
       "platform": "claude",
       "command": "/create-briefing-slides",
@@ -1343,7 +1345,9 @@
       "contextIntake": null,
       "visualTier": null,
       "version": "v0.0",
-      "requiredConventions": [],
+      "requiredConventions": [
+        "briefing-slides"
+      ],
       "argumentHint": "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]",
       "platform": "codex",
       "command": "$create-briefing-slides",
@@ -5774,9 +5778,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5799,11 +5804,12 @@
       "title": "Devtool Docs Audit",
       "description": "Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths",
       "type": "review",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5827,11 +5833,12 @@
       "title": "Devtool Dx Journey",
       "description": "Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys",
       "type": "analysis",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5854,11 +5861,12 @@
       "title": "Devtool Integration Map",
       "description": "Use only for developer-facing products; map integrations, ecosystems, setup surfaces, and compatibility constraints",
       "type": "analysis",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5884,9 +5892,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5911,9 +5920,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5938,9 +5948,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5964,11 +5975,12 @@
       "title": "Devtool Workflow",
       "description": "Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products",
       "type": "planning",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -5993,9 +6005,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6018,11 +6031,12 @@
       "title": "Devtool Docs Audit",
       "description": "Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths",
       "type": "review",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6046,11 +6060,12 @@
       "title": "Devtool Dx Journey",
       "description": "Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys",
       "type": "analysis",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6073,11 +6088,12 @@
       "title": "Devtool Integration Map",
       "description": "Use only for developer-facing products; map integrations, ecosystems, setup surfaces, and compatibility constraints",
       "type": "analysis",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.4",
+      "version": "v0.5",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6103,9 +6119,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6130,9 +6147,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6157,9 +6175,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.8",
+      "version": "v0.9",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -6183,11 +6202,12 @@
       "title": "Devtool Workflow",
       "description": "Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products",
       "type": "planning",
-      "contextIntake": "artifact_only",
+      "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",

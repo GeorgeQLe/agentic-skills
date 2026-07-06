@@ -2,11 +2,35 @@
 
 ## No Active Task - 2026-07-05
 
-The `create-briefing-slides` canary-ready base skill is complete and ready to ship. No executable task is currently promoted in this repo.
+The briefing slides convention extraction is complete and ready to ship. No executable task is currently promoted in this repo.
 
 Next work should be promoted deliberately from roadmap, recurring advisory review, or a new user request.
 
 # Historical Task State
+
+## Review - Briefing Slides Convention 2026-07-05
+
+### Goal
+
+Extract the briefing slide deck standard into a shared convention document and make `create-briefing-slides` reference it like alignment and interrogation page skills reference their conventions.
+
+### Review
+
+Implemented:
+
+- Added canonical `docs/briefing-slides-convention.md`.
+- Registered `briefing-slides` in `scripts/skill-convention-registry.mjs`.
+- Packaged the convention as `assets/briefing-slides-convention.md`.
+- Updated both `create-briefing-slides` mirrors to declare `required_conventions: [briefing-slides]` and reference the shared resolver.
+- Regenerated package manifest and catalog exports.
+
+Verified:
+
+- `node scripts/skill-convention-bundle-audit.mjs` passed.
+- `bash scripts/skill-mirror-parity-audit.sh` passed.
+- `npm --workspace packages/skillpacks run build:manifest:check` passed.
+- `npm run exports:check` passed.
+- `npm --workspace packages/skillpacks run build:check` passed.
 
 ## Review - create-briefing-slides Skill 2026-07-05
 

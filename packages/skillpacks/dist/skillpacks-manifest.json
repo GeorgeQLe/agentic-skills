@@ -4,7 +4,7 @@
     "name": "skillpacks",
     "version": "0.1.20"
   },
-  "source_fingerprint": "893601b61b435af449fa529f1a67d1f6a90bdd8230771e1a918d512268badc97",
+  "source_fingerprint": "a86476a54dd9a74e5f4c25b69f4345a0f8e49a8d7e52849da178a0780f1a6feb",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1503,10 +1503,12 @@
       "version": "v0.0",
       "deprecated": false,
       "replaced_by": null,
-      "required_conventions": [],
+      "required_conventions": [
+        "briefing-slides"
+      ],
       "path": "packs/base/claude/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "d8ff38937e07ab870bb3fc15ddbab83d1e6479b1a52b6faa6d8725953c16ee46",
+      "content_sha256": "6b7f443497a4181e500d11d5330593f631558256311d9022a06f6df40bc11332",
       "archive_versions": [],
       "command": "/create-briefing-slides",
       "deck_memberships": []
@@ -1920,10 +1922,12 @@
       "version": "v0.0",
       "deprecated": false,
       "replaced_by": null,
-      "required_conventions": [],
+      "required_conventions": [
+        "briefing-slides"
+      ],
       "path": "packs/base/codex/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "c8a37fee53d0cfcdc857b7db71c908a018da4c3e76b6f68eb8e3635e7aeb3ff3",
+      "content_sha256": "304194c520b961f5e98bfab637e1a14200e7236e91cd242a920f48281daddb77",
       "archive_versions": [],
       "command": "$create-briefing-slides",
       "deck_memberships": []
@@ -6580,15 +6584,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-adoption/SKILL.md",
       "installable": true,
-      "content_sha256": "b4d49d0034d9a540077e422d7cdf9deb99e3b91f4046503c5dc05048df026a8e",
+      "content_sha256": "ddaa9f5766c94f25b60cb77b131a9007e3e22c236c3835bdf6cbaf213294cb26",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6597,7 +6602,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/devtool-adoption",
       "deck_memberships": [
@@ -6610,18 +6616,20 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-docs-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "7efe24d37316decfbe33e97b110f1f08cb9f0b9748f8d1191f36cec28cc146ad",
+      "content_sha256": "842ff0c5b6fa208a65d5c0295be9d7db31fa52b9f0108462a832555ae837a534",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/devtool-docs-audit",
       "deck_memberships": [
@@ -6634,20 +6642,22 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-dx-journey/SKILL.md",
       "installable": true,
-      "content_sha256": "20827737b46976c098dd347232fca6c18af6d42bce2e3227d9572073be4c8b85",
+      "content_sha256": "8020f23d0b2d7384b5bb78585f8c383040623882fda238fde63bd3d9a2699dae",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/devtool-dx-journey",
       "deck_memberships": [
@@ -6660,20 +6670,22 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-integration-map/SKILL.md",
       "installable": true,
-      "content_sha256": "752995b87ce71c906e7ac2198e65f497201c73890bcc62e6a2a7cf5b3e46c7c8",
+      "content_sha256": "53c323c5cf2b64740d054f7f7ea7d55dc5c53e6c9d311317fa0cfd7237f94c85",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "/devtool-integration-map",
       "deck_memberships": [
@@ -6686,15 +6698,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-monetization/SKILL.md",
       "installable": true,
-      "content_sha256": "1daf4ea1a678eaa5120ca926f79e629d6ef5ef20dc089e2fa7f48c39eb1a73e4",
+      "content_sha256": "09e1c42be0331378768e8daa8763a0a72c106b37867b5aa41893ea4d90f2019b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6703,7 +6716,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/devtool-monetization",
       "deck_memberships": [
@@ -6716,15 +6730,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "87b5f0355f72027270dcb1010f475b4fff4728115833f8b7e74d9a8bad703647",
+      "content_sha256": "2b3797574e3a5167ff468e561e42013a905f5e4ec1f546aef4821d3e7bbb5abd",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6733,7 +6748,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/devtool-positioning",
       "deck_memberships": [
@@ -6746,15 +6762,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-user-map/SKILL.md",
       "installable": true,
-      "content_sha256": "bba3acb4d6af9fb6d36b71547c02218e72126965e96a8e49380497135068febd",
+      "content_sha256": "c224cd0fd80d63c5dbb9b760608cd7a61c3fc864095a70a793b27b7616b8d5f4",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6763,7 +6780,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "/devtool-user-map",
       "deck_memberships": [
@@ -6776,19 +6794,21 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/claude/devtool-workflow/SKILL.md",
       "installable": true,
-      "content_sha256": "5b37187349a7bad556486209ec65bbd54d4aaad27523c530b37490a90dad693c",
+      "content_sha256": "a24115c9a0a050ea208e843fe6e74e86ae468e79344355641c7b0cd22dd4cac9",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/devtool-workflow",
       "deck_memberships": [
@@ -6801,15 +6821,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-adoption/SKILL.md",
       "installable": true,
-      "content_sha256": "0d652aac32a11a71e2ab77329ab832210551e332a7cb01c66bc6ebe1c39a2b1e",
+      "content_sha256": "1d73e7e849196c08d892bc78841937b064c91d934b3e3aec987bac9fa3043648",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6818,7 +6839,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$devtool-adoption",
       "deck_memberships": [
@@ -6831,18 +6853,20 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-docs-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "d3b5fa33cbe174002b591b28240d4ddec64bbb1e7e78acfd780faaa19a819ed9",
+      "content_sha256": "4cdf18091f17f3878e495d68c2b5961ddac151d592084620f26363c0da196da5",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$devtool-docs-audit",
       "deck_memberships": [
@@ -6855,20 +6879,22 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-dx-journey/SKILL.md",
       "installable": true,
-      "content_sha256": "b7849e9807162607ac7d132922e669e44a4432dbe1a4262ec192a69165a2961d",
+      "content_sha256": "7252215d43fa680400bda199ed7175f0d1299024a46ec03d3f4487cbcb1e8f2a",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$devtool-dx-journey",
       "deck_memberships": [
@@ -6881,20 +6907,22 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.4",
+      "version": "v0.5",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-integration-map/SKILL.md",
       "installable": true,
-      "content_sha256": "769702685144b44b22516100c0427d45d86c1cd34892001867a402816a4174fc",
+      "content_sha256": "f94ec7b3c4761b01f760b0de53c26d8bc79d1baaf45b12782376998ec45a8351",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
-        "v0.3"
+        "v0.3",
+        "v0.4"
       ],
       "command": "$devtool-integration-map",
       "deck_memberships": [
@@ -6907,15 +6935,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-monetization/SKILL.md",
       "installable": true,
-      "content_sha256": "e2722f371b0f998912719dec3ef2cea0a1e2b2ea6e103d978e7043c3d50fa332",
+      "content_sha256": "5822581a92afcfe02dc3a4c0e076268923a9424f0feb8dbc6ee1730023b2c676",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6924,7 +6953,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$devtool-monetization",
       "deck_memberships": [
@@ -6937,15 +6967,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-positioning/SKILL.md",
       "installable": true,
-      "content_sha256": "9ff7b656d622eb09958f7e24c88d11ebc32ac99c09b098ee91c8fe94108d42a2",
+      "content_sha256": "9d1529d267bb616b7a585e01134a52c52702a39420b16ce5658c43071ae8392d",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6954,7 +6985,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$devtool-positioning",
       "deck_memberships": [
@@ -6967,15 +6999,16 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.8",
+      "version": "v0.9",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-user-map/SKILL.md",
       "installable": true,
-      "content_sha256": "786928928d88be08ae7c3a22102b213e343d9b0ab57c97ae5fe070b574f9f203",
+      "content_sha256": "870e939d887e20d2045884e1aed80fd54cf4184ec5c2dc8ddc65b505b1ad73f7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -6984,7 +7017,8 @@
         "v0.4",
         "v0.5",
         "v0.6",
-        "v0.7"
+        "v0.7",
+        "v0.8"
       ],
       "command": "$devtool-user-map",
       "deck_memberships": [
@@ -6997,19 +7031,21 @@
       "scope": "pack",
       "pack": "devtool",
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "path": "packs/devtool/codex/devtool-workflow/SKILL.md",
       "installable": true,
-      "content_sha256": "e2dd44927834f9cdf50473bb3ee44ee4c38a7512c796e04d4f4b271e96e60e28",
+      "content_sha256": "64573a40ca656e16f7d73bf586852f7656fba70c0cd0a4245aa9a950aa42d333",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$devtool-workflow",
       "deck_memberships": [

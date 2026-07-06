@@ -2,6 +2,31 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Briefing Slides Convention 2026-07-05
+
+### Goal
+
+Extract the briefing slide deck standard into a shared convention document and make `create-briefing-slides` reference it like alignment and interrogation page skills reference their conventions.
+
+### Plan
+
+- [x] Add canonical `docs/briefing-slides-convention.md`.
+- [x] Register and package the `briefing-slides` convention.
+- [x] Update Codex and Claude `create-briefing-slides` mirrors to declare and reference the shared convention.
+- [x] Regenerate package/catalog metadata.
+- [x] Run targeted convention, manifest, export, package, task-doc, and diff checks.
+
+### Acceptance Criteria
+
+- `create-briefing-slides` no longer carries the full slide artifact contract inline.
+- `required_conventions: [briefing-slides]` is present in both mirrors.
+- Source checkouts can load `docs/briefing-slides-convention.md`; packaged installs include `assets/briefing-slides-convention.md`.
+- Package/catalog metadata includes the convention change.
+
+### Review
+
+Extracted the briefing slide deck standard into `docs/briefing-slides-convention.md`, registered it as the `briefing-slides` convention, and packaged it to `assets/briefing-slides-convention.md`. Both `create-briefing-slides` mirrors now declare `required_conventions: [briefing-slides]` and reference the shared resolver instead of carrying the full artifact contract inline. Package manifest and catalog exports were regenerated.
+
 ## Historical Implementation - create-briefing-slides Skill 2026-07-05
 
 ### Goal

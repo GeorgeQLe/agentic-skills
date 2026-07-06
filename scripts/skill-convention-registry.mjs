@@ -18,6 +18,11 @@ export const SKILL_CONVENTIONS = {
     checkCommand: ["node", "scripts/upgrade-interrogation-page.mjs", "--check"],
     resolver: "shared-doc-or-asset",
   },
+  "briefing-slides": {
+    canonicalDoc: "docs/briefing-slides-convention.md",
+    packageAsset: "assets/briefing-slides-convention.md",
+    resolver: "shared-doc-or-asset",
+  },
   "design-tree-loop": {
     canonicalDoc: "docs/design-tree-loop-convention.md",
     bundleFile: "DESIGN-TREE-LOOP.md",
