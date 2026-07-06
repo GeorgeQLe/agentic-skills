@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-06 - Briefing decks must fit the viewport
+
+- A dogfood briefing deck carried too much explanatory content directly on slides, making the deck compete with the dense references it was supposed to summarize.
+- Rule: briefing decks must keep authored slide content concise enough to fit the visible desktop and mobile review viewport without clipped text, hidden overflow, or slide-body scrolling.
+- Dense rationale, evidence, edge cases, and procedural detail belong in linked artifacts; slides should use short labels, compact structures, and reference chips for drill-down.
+
 ## 2026-07-05 - New shell commands must be installed before handoff
 
 - I added and pushed a `publish-canary` wrapper definition in `sync.md`, but did not install the wrapper into the user's current `~/.local/bin` before saying the command was ready.

@@ -32,6 +32,9 @@ Required presentation controls:
 - Full-screen slide-by-slide layout.
 - One primary idea per slide.
 - Strong visual hierarchy with concise slide notes instead of wall-of-text prose.
+- Authored slide content must intentionally fit within the visible slide area at normal desktop and mobile-sized review viewports.
+- Do not use hidden overflow, clipped containers, tiny text, or scroll traps as a substitute for making slide content fit.
+- Use compact visual structures, short labels, and per-element reference links or chips so slides summarize decisions while dense artifacts carry the detail.
 - Previous/next buttons.
 - Keyboard navigation: `ArrowLeft`, `ArrowRight`, `Home`, `End`, and `Space`.
 - Persistent slide counter and progress track.
@@ -41,6 +44,17 @@ Required presentation controls:
 - Print CSS that produces one slide per page.
 
 Use purpose-built visual structures where they clarify the material: decision cards, evidence matrices, comparison tables, canvases, workshop boards, scored options, risk/assumption registers, and compact charts. Avoid using the deck as a raw markdown dump.
+
+## Fit-To-Slide Content
+
+Slides are briefing surfaces, not dense artifacts. Author each slide so the content can be read without scrolling the slide body or discovering hidden overflow.
+
+- Keep headings short, labels compact, and body copy selective.
+- Prefer matrices, cards, chips, badges, charts, and concise lists over paragraphs of explanation.
+- Link relevant slide elements to `SKILL.md`, convention docs, source markdown, dense review pages, reports, specs, or metadata files for deeper detail.
+- Move dense rationale, evidence, edge cases, and procedural detail into linked artifacts instead of stuffing them into the slide.
+- A bounded code, YAML, or copy-fallback area may scroll internally only when it is the explicit tool surface for that slide and does not force the slide layout itself to overflow.
+- If a slide cannot fit without hiding content, split it into multiple slides or link the detail out.
 
 ## Deck Patterns
 
@@ -100,6 +114,7 @@ Before handoff:
 
 - Re-open the written deck textually and confirm it contains navigation controls, gate controls, feedback controls, YAML compiler, reference links, and print CSS.
 - Confirm every linked dense reference path exists when it is repo-local, or mark missing references visibly in the deck.
+- Verify authored slide content fits without incoherent overlap, clipped text, hidden overflow, or slide-body scrolling at a normal desktop viewport and a mobile-sized viewport. Internal scrolling is allowed only for explicit bounded tool surfaces such as YAML output or copy fallback controls.
 - Attempt to open only the deck with `npx skillpacks alignment pages open briefing-slides/<name>.html --browser auto`.
 - In this source checkout only, if the packaged CLI is unavailable, fall back to `node scripts/open-html-page.mjs briefing-slides/<name>.html --browser auto`.
 - Report opener status exactly as `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.

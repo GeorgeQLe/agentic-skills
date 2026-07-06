@@ -2,6 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Historical Implementation - Fit-To-Slide Briefing Deck Convention 2026-07-06
+
+### Goal
+
+Add an explicit fit-to-slide rule to the briefing-slides convention and amend the `create-briefing-slides` dogfood deck so it demonstrates concise, viewport-fitting slide content with linked dense references.
+
+### Plan
+
+- [x] Update the canonical briefing-slides convention with fit-to-slide authoring, linked-reference, and viewport overflow verification rules.
+- [x] Regenerate packaged convention assets through the package build path.
+- [x] Archive the current `briefing-slides/create-briefing-slides.html` deck before replacement.
+- [x] Amend the dogfood deck with concise slide content, reference chips, visible update marking, and no hidden-overflow substitute for content fitting.
+- [x] Update lessons and task review notes with the correction pattern and verification results.
+- [x] Run package, task-doc, diff, and deck inspections, including desktop and mobile viewport-fit checks when feasible.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- The convention requires authored slide content to fit the visible slide area without hidden overflow or walls of text.
+- The convention directs dense explanation into linked artifacts and requires reference links on relevant slide elements.
+- The convention verification includes desktop and mobile-sized viewport overflow checks.
+- The dogfood deck visibly notes the fit-to-slide update, keeps required review/navigation/YAML controls, and points to `SKILL.md`, the convention doc, and `openai.yaml`.
+- The previous dogfood deck exists under `docs/history/archive/YYYY-MM-DD/HHMMSS/briefing-slides/create-briefing-slides.html`.
+
+### Review
+
+Updated `docs/briefing-slides-convention.md` with explicit fit-to-slide authoring rules: authored slide content must fit normal desktop and mobile-sized review viewports, hidden overflow cannot substitute for fitting content, and dense rationale belongs in linked artifacts. Verification now requires viewport-fit checks for overlap, clipping, hidden overflow, and slide-body scrolling.
+
+Archived the prior dogfood deck to `docs/history/archive/2026-07-05/213310/briefing-slides/create-briefing-slides.html`, then amended `briefing-slides/create-briefing-slides.html` with a visible fit-to-slide update marker, a concise fit-rule slide, reduced slide text, reference chips for `SKILL.md`, the convention doc, and `openai.yaml`, and retained navigation, review controls, YAML compiler, print CSS, and copy fallback behavior.
+
+Verification passed for textual convention/deck checks, repo-local references, `npm --workspace packages/skillpacks run build`, `npm --workspace packages/skillpacks run build:check`, `node scripts/audit-task-docs.mjs`, `git diff --check`, Playwright screenshot inspection of representative desktop/mobile slides, and opener status `opened`.
+
 ## Historical Implementation - Dogfood Create Briefing Slides 2026-07-05
 
 ### Goal

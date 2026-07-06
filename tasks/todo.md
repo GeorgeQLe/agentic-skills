@@ -1,10 +1,38 @@
 # Current Task
 
-## No Active Task - 2026-07-05
+## No Active Task - 2026-07-06
 
-The `create-briefing-slides` dogfood deck is complete and ready to ship. No executable task is currently promoted in this repo.
+The fit-to-slide briefing deck convention update is complete and ready to ship. No executable task is currently promoted in this repo.
 
 # Historical Task State
+
+## Review - Fit-To-Slide Briefing Deck Convention 2026-07-06
+
+### Goal
+
+Add an explicit fit-to-slide rule to the briefing-slides convention and amend the `create-briefing-slides` dogfood deck to model concise, viewport-fitting slides that link out for detail.
+
+### Review
+
+Implemented:
+
+- Added `## Fit-To-Slide Content` to `docs/briefing-slides-convention.md`.
+- Required authored slide content to fit visible desktop and mobile-sized viewports without hidden overflow, clipped text, slide-body scrolling, or walls of text.
+- Directed dense rationale, evidence, edge cases, and procedural detail into linked artifacts with per-slide reference chips.
+- Archived the prior dogfood deck to `docs/history/archive/2026-07-05/213310/briefing-slides/create-briefing-slides.html`.
+- Amended `briefing-slides/create-briefing-slides.html` with a visible `Updated: fit-to-slide rule` marker, a concise fit-rule slide, shorter content, and retained links to `SKILL.md`, `docs/briefing-slides-convention.md`, and `openai.yaml`.
+- Updated `tasks/lessons.md` with the correction pattern.
+
+Verified:
+
+- `npm --workspace packages/skillpacks run build` passed and refreshed package staging.
+- `npm --workspace packages/skillpacks run build:check` passed.
+- `node scripts/audit-task-docs.mjs` passed.
+- `git diff --check` passed.
+- Textual inspection confirmed required navigation, keyboard controls, progress, print CSS, gate controls, feedback/annotation/marking controls, YAML compiler, copy fallback, reference chips, and no dense-reference embed tags.
+- Repo-local references and archive path exist.
+- Playwright screenshots of representative desktop and mobile slides showed fit-rule, review-controls, title, and compiler slides fitting without visible clipping or incoherent overlap.
+- `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto` reported `opened`.
 
 ## Review - Dogfood Create Briefing Slides 2026-07-05
 
