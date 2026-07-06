@@ -1,5 +1,9 @@
 # jtbd-needs changelog (codex)
 
+## v0.11 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/jtbd-needs-{topic}.html` is now the primary review surface and compiled YAML routes back to `$jtbd-needs`.
+
 ## v0.10 - 2026-07-02
 
 - Removed the separate review-pending `## Invoke With YAML` command block; compiled YAML now carries continuation via `command` and `agent_routing.command`, so terminal handoffs tell users to clear context and paste the compiled YAML directly.

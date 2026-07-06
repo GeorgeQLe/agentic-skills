@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/report-website-{topic}.html` is now the primary review surface and compiled YAML routes back to `$report-website`.
+
 ## v0.2 - 2026-06-29
 
 - Updated frontend target-selection guidance to avoid the removed in-repo Skills Showcase path and allow separate public report/showcase repositories.

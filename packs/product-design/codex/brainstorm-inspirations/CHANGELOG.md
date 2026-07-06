@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/brainstorm-inspirations-{topic}.html` is now the primary review surface and compiled YAML routes back to `$brainstorm-inspirations`.
+
 ## v0.4 - 2026-07-04
 
 - Hard-renamed active `design-inspirations` to `brainstorm-inspirations` and reframed the behavior from a single feeder brief to a survey-and-compare inspiration board for current design-tree flows, surfaces, UX branches, UI direction, visual language, and product class.

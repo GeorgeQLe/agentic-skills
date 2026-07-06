@@ -2,8 +2,8 @@
 name: take-inspiration
 description: Study one specific product or reference through an approved lens, synthesize it against the current design tree, and recommend owner-routed design actions
 type: research
-version: v0.0
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.1
+required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "<reference product/site/app/pattern> [optional: topic, surface, or lens]"
 context_intake: interview
 visual_tier: document
@@ -107,6 +107,16 @@ Stage 3 output is the approved canonical artifact at `design/take-inspiration-{t
 - Do not create new flow-tree schema fields for inspirations; use `source_artifacts[]`.
 - Do not use `research/.progress.yaml` for ordinary UX branch state.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/take-inspiration-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/take-inspiration`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/take-inspiration-{topic}-{reference}.html`.

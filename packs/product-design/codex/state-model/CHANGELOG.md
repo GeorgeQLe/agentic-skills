@@ -1,5 +1,9 @@
 # state-model changelog (codex)
 
+## v0.14 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/state-model-{topic}.html` is now the primary review surface and compiled YAML routes back to `$state-model`.
+
 ## v0.13 - 2026-07-02
 
 - Made chunked Progress Handoff routing YAML-only: the resolved repeated `$state-model` command now belongs in `agent_routing.command`, and handoffs must not also emit a separate freeform "Exact next command" line.

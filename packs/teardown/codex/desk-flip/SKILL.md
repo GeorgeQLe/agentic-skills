@@ -2,8 +2,8 @@
 name: desk-flip
 description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via $bootstrap-repo reset or new-repo bootstrap
 type: execution
-version: v0.6
-required_conventions: [alignment-page]
+version: v0.7
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<project-path>"
 ---
 
@@ -93,6 +93,16 @@ Desk-flipped: <project name>
 - Do not delete, archive, or rename anything in the old repo during desk-flip. Only the downstream `$bootstrap-repo --reset-existing` step may perform archival after the user chooses that route.
 - If the project has no specs, docs, or meaningful git history, produce the report anyway but note the thin evidence in each section.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/desk-flip-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$desk-flip`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/desk-flip-{topic}.html`.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/analyze-sessions-{topic}.html` is now the primary review surface and compiled YAML routes back to `/analyze-sessions`.
+
 ## v0.8 - 2026-07-03
 
 - Repointed the workflow-gap next route from the archived `targeted-skill-builder` to `session-triage`, which now owns verified fixes and emits a managing-layer handoff payload.

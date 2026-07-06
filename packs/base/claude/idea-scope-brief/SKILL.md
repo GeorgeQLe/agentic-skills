@@ -2,8 +2,8 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.23
-required_conventions: [alignment-page, interrogation-page]
+version: v0.24
+required_conventions: [alignment-page, briefing-slides, interrogation-page]
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 context_intake: deep
 ---
@@ -199,6 +199,16 @@ Follow the shared alignment-page convention via the packaged convention resolver
 - New files do not need archive snapshots. Before replacing an existing idea brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 - Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. Write only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/idea-scope-brief-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/idea-scope-brief`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Interrogation Page
 
 Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/idea-scope-brief-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).

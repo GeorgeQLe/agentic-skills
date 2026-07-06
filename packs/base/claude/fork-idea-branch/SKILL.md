@@ -2,8 +2,8 @@
 name: fork-idea-branch
 description: Split an idea or active research path into two or more new research product-path stubs after alignment approval; preserves the source path by default and archives it only when --archive is passed
 type: planning
-version: v0.1
-required_conventions: [alignment-page]
+version: v0.2
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[branch/product-path specs...] [--source <path-id>] [--from <skill>] [--archive] [--reuse <artifact-types>]"
 ---
 
@@ -159,6 +159,16 @@ Recommend sequential execution unless the user explicitly wants parallel researc
 - Uses manifest terminology `product_paths` and `active_paths`; treats branch as user-facing shorthand only.
 - Distinguishes itself from `/product-line fork`: `/product-line fork` adds one portfolio path, while this skill splits one idea/source into multiple reviewed `research/{slug}/` stubs with per-branch kickoff prompts.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/fork-idea-branch-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/fork-idea-branch`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/fork-idea-branch-{topic}.html`.

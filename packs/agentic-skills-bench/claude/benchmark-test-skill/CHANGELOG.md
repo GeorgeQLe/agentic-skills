@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/benchmark-test-skill-{topic}.html` is now the primary review surface and compiled YAML routes back to `/benchmark-test-skill`.
+
 ## v0.5 - 2026-07-03
 
 - Repointed benchmark coverage/failure/false-negative and unknown-skill routing off the archived `targeted-skill-builder`/`create-agentic-skill` to `session-triage` and `create-local-skill`/direct implementation.

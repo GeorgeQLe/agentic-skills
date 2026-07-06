@@ -1,5 +1,9 @@
 # user-flow-map changelog (claude)
 
+## v1.10 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/user-flow-map-{topic}.html` is now the primary review surface and compiled YAML routes back to `/user-flow-map`.
+
 ## v1.9 - 2026-07-01
 
 - Added the Platform Fit Workshop after surface/channel inventory and before prototype-build-plan synthesis.

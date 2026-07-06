@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/youtube-video-prelaunch-audit-{topic}.html` is now the primary review surface and compiled YAML routes back to `/youtube-video-prelaunch-audit`.
+
 ## v0.4 - 2026-06-28
 
 - Added persistent per-video URL ledger requirements under `research/youtube/data/`, including a per-video record and aggregate JSONL index for future YouTube skill context.

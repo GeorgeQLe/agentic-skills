@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/benchmark-agent-review-{topic}.html` is now the primary review surface and compiled YAML routes back to `/benchmark-agent-review`.
+
 ## v0.4 - 2026-07-03
 
 - Repointed the remediation next-command routing from the archived `targeted-skill-builder` to `session-triage`.

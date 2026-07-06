@@ -1,0 +1,68 @@
+---
+name: devtool-docs-audit
+description: Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths
+type: review
+version: v0.3
+required_conventions: [alignment-page, interrogation-page]
+context_intake: scoped
+---
+
+# Devtool Docs Audit
+
+Review developer documentation for adoption blockers.
+
+## Report-First Approval Gate
+
+Default to scope-first approval: before synthesized research, inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions in a `review` alignment page plus a concise conversation summary.
+
+Do not perform synthesized research, rank candidates, make recommendations, or write working packets or canonical deliverables until final compiled YAML approves the research scope. Minimal pre-approval discovery may identify available files, source categories, and open questions; label it as scope evidence, not findings.
+
+After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
+
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
+## Staged Research Workflow
+
+Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
+
+0. **Stage 0 - Interrogation.** Unless a valid upstream `devtool-workflow` handoff already covers the product identity, audience, evidence base, maturity, constraints, and route scope needed for this run, build the stage-zero interrogation page and loop until the confidence gate passes. Consume the compiled interrogation YAML before Stage 1; carry unresolved unknowns as research questions rather than assumptions.
+1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
+2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page so it renders the complete working-packet substance as structured HTML review UI: purpose-built sections, tables, matrices, gates, cards, and tier-appropriate charts or diagrams that preserve every packet section, finding, caveat, and decision detail without summary loss. Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI; do not make a `Full Preliminary Packet` or `Full Working Packet` raw Markdown dump, giant `<pre><code>` block, link-only view, or source-only view the primary review surface. Include the evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
+3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
+
+Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
+
+## Output
+
+Write or update `research/devtool-docs-audit.md` with a findings-first docs audit covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and missing proof artifacts. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
+
+## Interrogation Page
+
+Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/devtool-docs-audit-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
+
+## Alignment Page
+
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/devtool-docs-audit-{topic}.html`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+
+## Next-Skill Routing
+
+After writing or updating approved artifacts, recommend the next contextual action:
+
+1. If the alignment page is still in review or the user has not provided final compiled YAML, stop and ask for review of the HTML alignment page. Do not include downstream routing until approval YAML has been provided.
+2. If the audit identifies immediately actionable documentation or skill-contract cleanup and the user approves remediation, recommend the implementation route for the approved cleanup plan.
+3. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
+4. Otherwise, recommend `/research-roadmap` to confirm the devtool documentation queue is complete and identify any non-devtool follow-up.
+5. If `/research-roadmap` reports no queue, recommend `/roadmap` only when implementation planning is missing or stale.

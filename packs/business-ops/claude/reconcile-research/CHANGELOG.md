@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/reconcile-research-{topic}.html` is now the primary review surface and compiled YAML routes back to `/reconcile-research`.
+
 ## v0.11 - 2026-07-02
 
 - Added research-amend next-step routing for isolated low/medium reconciliation findings while preserving targeted reruns for conflict clusters and systemic drift.

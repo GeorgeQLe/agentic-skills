@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/monetization-{topic}.html` is now the primary review surface and compiled YAML routes back to `$monetization`.
+
 ## v0.12 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

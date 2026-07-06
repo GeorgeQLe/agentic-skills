@@ -974,7 +974,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'quality-sweep')), true);
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^managed_by=agentic-skills$/m);
-    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
+    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.2$/m);
     assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_sha=[a-f0-9]{64}$/m);
     assertManagedConventionDocsInstalled(dir);
     assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
@@ -1196,9 +1196,9 @@ describe('Node lifecycle commands', () => {
 
     const { stdout } = await runSkillpacks(dir, ['install', 'quality-sweep']);
 
-    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.1/);
-    assert.match(stdout, /Updated \.codex\/skills\/quality-sweep v0\.0 -> v0\.1/);
-    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
+    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.2/);
+    assert.match(stdout, /Updated \.codex\/skills\/quality-sweep v0\.0 -> v0\.2/);
+    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.2$/m);
     assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'quality-sweep': 'code-quality' });
   });
 
@@ -1223,8 +1223,8 @@ describe('Node lifecycle commands', () => {
     writeProjectConfig(updatedDir, config);
 
     const updated = await runSkillpacks(updatedDir, ['install', 'quality-sweep']);
-    assert.match(updated.stdout, /Updated \.claude\/skills\/quality-sweep v0\.1 -> v0\.0 \(pinned\)/);
-    assert.match(updated.stdout, /Updated \.codex\/skills\/quality-sweep v0\.1 -> v0\.0 \(pinned\)/);
+    assert.match(updated.stdout, /Updated \.claude\/skills\/quality-sweep v0\.2 -> v0\.0 \(pinned\)/);
+    assert.match(updated.stdout, /Updated \.codex\/skills\/quality-sweep v0\.2 -> v0\.0 \(pinned\)/);
   });
 
   it('keeps already-current managed installs quiet on reinstall', async () => {
@@ -1367,7 +1367,7 @@ describe('Node lifecycle commands', () => {
 
     const packageVersion = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).version;
     assert.equal(stdout.includes(`Refreshed project skills to skillpacks@${packageVersion}.`), true);
-    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.1/);
+    assert.match(stdout, /Updated \.claude\/skills\/quality-sweep v0\.0 -> v0\.2/);
     assert.match(stdout, /Installed \.codex\/skills\/devtool-adoption/);
     assert.equal(existsSync(skillPath(dir, 'claude', 'extract-shared-types')), true);
     assert.equal(existsSync(skillPath(dir, 'codex', 'devtool-adoption')), true);
@@ -1821,7 +1821,7 @@ describe('Node lifecycle commands', () => {
     assert.match(unpinned.stdout, /Unpinned quality-sweep \(reverted to latest\)/);
     assert.doesNotMatch(unpinned.stdout, / -> /);
     assert.equal(lstatSync(skillPath(dir, 'claude', 'quality-sweep')).isSymbolicLink(), false);
-    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.1$/m);
+    assert.match(marker(dir, 'claude', 'quality-sweep'), /^source_version=v0\.2$/m);
     assert.equal(Object.hasOwn(readProjectConfig(dir), 'pinned_versions'), false);
     assert.deepEqual(readProjectConfig(dir).notes, ['preserve me']);
   });
@@ -1962,8 +1962,8 @@ describe('Node multi-repo --all commands', () => {
 
     assert.match(stdout, /=== a ===/);
     assert.match(stdout, /Proposed: 3 install, 1 update, 1 remove\./);
-    assert.match(stdout, /install  \.claude\/skills\/extract-shared-types @ v0\.1/);
-    assert.match(stdout, /update   \.claude\/skills\/quality-sweep \(v0\.0 -> v0\.1\)/);
+    assert.match(stdout, /install  \.claude\/skills\/extract-shared-types @ v0\.2/);
+    assert.match(stdout, /update   \.claude\/skills\/quality-sweep \(v0\.0 -> v0\.2\)/);
     assert.match(stdout, /remove   \.codex\/skills\/orphan-skill \(pack not enabled\)/);
     assert.match(stdout, /=== b ===/);
     assert.match(stdout, /install  \.claude\/skills\/devtool-adoption/);

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.23 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/consolidate-prototypes-{topic}.html` is now the primary review surface and compiled YAML routes back to `$consolidate-prototypes`.
+
 ## v0.22 - 2026-07-02
 
 - Added mandatory Handoff Verification before consolidation proceeds or emits downstream routing.

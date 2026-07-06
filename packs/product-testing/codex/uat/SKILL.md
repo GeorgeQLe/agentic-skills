@@ -2,8 +2,8 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.16
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.17
+required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
 invocation: sub-skill
@@ -244,6 +244,16 @@ Use this item format in `tasks/manual-todo.md`:
 - Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
 - If no credible user journey, story, spec, or product surface can be found, stop and recommend `$customer-discovery`, `$journey-map`, or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/uat-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$uat`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/uat-{topic}.html`.

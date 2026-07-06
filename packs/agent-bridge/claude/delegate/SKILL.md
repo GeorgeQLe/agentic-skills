@@ -2,8 +2,8 @@
 name: delegate
 description: Live in-session delegation from Claude to Codex via the approval/delegation packet contract
 type: shipping
-version: v0.1
-required_conventions: [alignment-page]
+version: v0.2
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[target-skill] [--allow-dirty <glob>] [--inline-fallback]"
 ---
 
@@ -74,6 +74,16 @@ Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is 
 - **`mark-uncertain` is only valid from `approved`.** The helper rejects `draft`, `consumed`, `stale`, `superseded`, and `uncertain` source states.
 - **`codex` binary is a transport dependency.** Fall cleanly into pre-start-failure if missing; do not crash.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/delegate-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/delegate`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/delegate-{topic}.html`.

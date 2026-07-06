@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/afps-status-{topic}.html` is now the primary review surface and compiled YAML routes back to `/afps-status`.
+
 ## v0.9 - 2026-06-23
 
 - Lifecycle-gap routing now prefers the `/journey-map` orchestrator over child lifecycle skills. The next-route rule for missing journey/lifecycle/growth evidence routes to `/journey-map <product-path>` first whenever the canonical journey map is missing/stale/incomplete or any child detour (onboarding/conversion/retention/lifecycle-metrics/expansion) is being considered, and lets `journey-map` own inline child routing via its Optional Research Trigger Map. Direct child-skill routes are reserved for the case where a current journey map already exists and a single stage is explicitly scoped. Fixes a stale recommendation that routed to `/onboarding-map` instead of the parent orchestrator.

@@ -2,8 +2,8 @@
 name: competitive-analysis
 description: Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings
 type: research
-version: v0.29
-required_conventions: [alignment-page, interrogation-page]
+version: v0.30
+required_conventions: [alignment-page, briefing-slides, interrogation-page]
 argument-hint: "[optional: \"--synthesize\" | \"core\" | concept/category/competitors]"
 invocation: orchestrator
 context_intake: scoped
@@ -291,6 +291,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - Framework subskills must not emit `Recommended next skill`, path-shaped child framework commands, execution-loop commands, or downstream commands. Inline framework handoffs use only the parent-owned `## Next Work` and command sections.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/competitive-analysis-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$competitive-analysis`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Interrogation Page
 
 Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/competitive-analysis-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).

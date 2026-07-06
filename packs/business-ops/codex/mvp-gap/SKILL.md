@@ -2,8 +2,8 @@
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
-version: v0.10
-required_conventions: [alignment-page]
+version: v0.11
+required_conventions: [alignment-page, briefing-slides]
 context_intake: artifact_only
 visual_tier: visual
 ---
@@ -122,6 +122,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - Include `$user-flow-map <topic>` prompts for gaps lacking flow/design shape or full specs. Use `$ux-variations --layout-mode <topic>` only when flow and UI requirements already exist but layout alternatives are missing.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other contextual options.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/mvp-gap-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$mvp-gap`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/mvp-gap-{topic}.html`.

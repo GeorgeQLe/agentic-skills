@@ -2,8 +2,8 @@
 name: benchmark-agent-review
 description: Review persisted benchmark run outputs with one or more agent graders and report subjective ergonomic quality separately from deterministic benchmark scores
 type: analysis
-version: v0.4
-required_conventions: [alignment-page]
+version: v0.5
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 ---
 
@@ -99,6 +99,16 @@ Report:
 - **Next work:** the one definitive remediation selected from the remediation table, or no follow-up when all evaluated outputs are excellent and no meaningful issue remains.
 - **Recommended next command:** one command derived from that remediation, usually `/session-triage <skill> <specific output-quality gap>`, `/session-triage <benchmark setup or reviewed skill> <specific rubric gap>`, `/session-triage <skill> benchmark review`, or `/ship` only when no remediation is needed.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/benchmark-agent-review-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/benchmark-agent-review`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/benchmark-agent-review-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.

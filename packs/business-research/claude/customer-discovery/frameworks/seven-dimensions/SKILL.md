@@ -2,8 +2,8 @@
 name: seven-dimensions
 description: Lincoln Murphy 7 Dimensions of ICP — score ICP candidates on Readiness, Willingness, Ability, Success Potential, Acquisition Efficiency, Ascension Potential, and Advocacy Potential for composite fitness scoring
 type: research
-version: v0.10
-required_conventions: [alignment-page]
+version: v0.11
+required_conventions: [alignment-page, briefing-slides]
 invocation: sub-skill
 parent: customer-discovery
 ---
@@ -414,6 +414,16 @@ Present dimension analyses, composite fitness scoring, and cross-candidate compa
 - Do not overwrite existing output without asking the user first.
 - This is a child framework skill in the `customer-discovery` Research Session Loop. Do not emit cross-skill or downstream routing from framework stops, and do not recommend execution-loop commands or path-shaped child framework invocations. Inline framework handoff sections must name only the parent command `/customer-discovery`.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/seven-dimensions-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/seven-dimensions`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/seven-dimensions-{topic}.html`.

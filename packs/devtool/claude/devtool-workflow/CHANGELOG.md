@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/devtool-workflow-{topic}.html` is now the primary review surface and compiled YAML routes back to `/devtool-workflow`.
+
 ## v0.4 - 2026-07-05
 
 - Refactored the workflow router into an interrogation- and alignment-gated devtool AFPS scope orchestrator that emits downstream routes only after compiled YAML approval.

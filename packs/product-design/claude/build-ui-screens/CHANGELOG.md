@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/build-ui-screens-{topic}.html` is now the primary review surface and compiled YAML routes back to `/build-ui-screens`.
+
 ## v0.5 - 2026-07-05
 
 - Changed the post-screen handoff so missing or invalid prototype build plans route to `/user-flow-map --prototype-build-plan [topic]` by default.

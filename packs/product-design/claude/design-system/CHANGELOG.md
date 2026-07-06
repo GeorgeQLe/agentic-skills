@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/design-system-{topic}.html` is now the primary review surface and compiled YAML routes back to `/design-system`.
+
 ## v0.4 - 2026-06-22
 
 - Updated consolidation-source references to use `/consolidate-prototypes` as the primary consolidated-MVP producer.

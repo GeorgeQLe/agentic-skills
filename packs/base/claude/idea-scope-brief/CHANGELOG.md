@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.24 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/idea-scope-brief-{topic}.html` is now the primary review surface and compiled YAML routes back to `/idea-scope-brief`.
+
 ## v0.23 - 2026-07-05
 
 - Require high-confidence Deck Fit Handoffs to keep deck installation as the sole primary command while also printing a copy-pasteable secondary post-install command with the first workflow skill and scoped product path when available.

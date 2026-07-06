@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/skill-interview-{topic}.html` is now the primary review surface and compiled YAML routes back to `/skill-interview`.
+
 ## v0.3 - 2026-07-03
 
 - Removed routing to the archived `create-agentic-skill` and `targeted-skill-builder`; briefs now route to `create-local-skill`, direct implementation in the agentic-skills repo, or `session-triage` for existing-skill fixes.

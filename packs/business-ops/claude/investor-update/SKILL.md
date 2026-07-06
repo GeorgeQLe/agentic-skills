@@ -2,8 +2,8 @@
 name: investor-update
 description: Generate structured monthly stakeholder update from current research state, metrics, roadmap, and feedback
 type: analysis
-version: v0.4
-required_conventions: [alignment-page]
+version: v0.5
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: month e.g. \"March 2026\"]"
 context_intake: artifact_only
 visual_tier: visual
@@ -168,6 +168,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **No fabrication.** Only include metrics that have real data behind them. If a metric isn't tracked yet, omit it rather than estimate.
 - **Standard format.** Stick to the YC/First Round format — investors expect this structure.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/investor-update-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/investor-update`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/investor-update-{topic}.html`.

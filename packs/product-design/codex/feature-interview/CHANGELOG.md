@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/feature-interview-{topic}.html` is now the primary review surface and compiled YAML routes back to `$feature-interview`.
+
 ## v0.8 - 2026-07-04
 
 - Updated the medium-complexity mini-prototype route from archived `$prototype` to `$logic-wiring`.

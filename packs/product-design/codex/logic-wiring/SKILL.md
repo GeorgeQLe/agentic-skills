@@ -2,8 +2,8 @@
 name: logic-wiring
 description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
-version: v0.25
-required_conventions: [alignment-page, design-tree-loop]
+version: v0.26
+required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype
 ---
@@ -271,6 +271,16 @@ Run Handoff Verification immediately before emitting this payload. Emit the `age
 - Do not choose a winning variation or recommend consolidation. That is the user's decision after UAT evaluation.
 - Do not modify specs, research documents, or task files. Only create files in the `prototypes/` directory and update the prototype build-plan/flow-tree status ledger.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/logic-wiring-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$logic-wiring`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/logic-wiring-{topic}.html`.

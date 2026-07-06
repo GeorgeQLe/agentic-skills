@@ -2,8 +2,8 @@
 name: devtool-monetization
 description: Use only for developer-facing products; design pricing, packaging, limits, open-source strategy, and team conversion
 type: research
-version: v0.9
-required_conventions: [alignment-page, interrogation-page]
+version: v0.10
+required_conventions: [alignment-page, briefing-slides, interrogation-page]
 context_intake: scoped
 visual_tier: visual
 ---
@@ -64,6 +64,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
 - Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/devtool-monetization-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$devtool-monetization`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Interrogation Page
 
 Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/devtool-monetization-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).

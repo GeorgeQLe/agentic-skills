@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/plan-phase-{topic}.html` is now the primary review surface and compiled YAML routes back to `$plan-phase`.
+
 ## v0.6 - 2026-07-02
 
 - Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex approved task artifact routes.

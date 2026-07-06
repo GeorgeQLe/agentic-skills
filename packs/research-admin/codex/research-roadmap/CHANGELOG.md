@@ -1,5 +1,9 @@
 # research-roadmap changelog (codex)
 
+## v0.21 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/research-roadmap-{topic}.html` is now the primary review surface and compiled YAML routes back to `$research-roadmap`.
+
 ## v0.20 - 2026-07-02
 
 - Added research-amend routing for bounded low/medium post-canonical research corrections while preserving high/systemic rerun routing.

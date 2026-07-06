@@ -1,6 +1,48 @@
 # Current Task
 
-## Current Implementation - Resize Slide When Feedback Sidebar Opens
+## Current Implementation - Canary Slides Review Surface
+
+### Goal
+
+Create a canary-only experiment where page-producing skills use briefing slides as the primary human review surface while preserving dense `alignment/*.html` and `interrogation/*.html` pages as linked source/context artifacts.
+
+### Plan
+
+- [ ] Work on branch `canary/slides-review-surface`.
+- [ ] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
+- [ ] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
+- [ ] Preserve dense page conventions and generated resolver stubs.
+- [ ] Run static migration checks and repo verification.
+- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags.
+- [ ] Commit and push intended canary branch changes.
+
+### Acceptance Criteria
+
+- [ ] Every active targeted skill declares `briefing-slides` in `required_conventions`.
+- [ ] Every changed skill has a new archive snapshot, bumped version, and changelog entry.
+- [ ] Codex skill instructions route compiled deck YAML to `$skill`; Claude skill instructions route to `/skill`.
+- [ ] Dense alignment/interrogation pages remain canonical linked artifacts and are not removed.
+- [ ] `skillpacks@latest` remains untouched; experiment ships only through npm dist-tag `canary`.
+
+### Verification
+
+- [ ] Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes.
+- [ ] `node scripts/upgrade-alignment-page.mjs --check`
+- [ ] `node scripts/upgrade-interrogation-page.mjs --check`
+- [ ] `bash scripts/skill-archive-audit.sh --strict`
+- [ ] `bash scripts/skill-mirror-parity-audit.sh`
+- [ ] `npm --workspace packages/skillpacks run build`
+- [ ] `npm --workspace packages/skillpacks run build:check`
+- [ ] `npm --workspace packages/skillpacks run test:node`
+- [ ] `node scripts/audit-task-docs.mjs`
+- [ ] `git diff --check`
+- [ ] `./publish.sh --dry-run --tag canary --preid canary prerelease`
+- [ ] `./publish.sh --tag canary --preid canary prerelease`
+- [ ] Verify `skillpacks` and `@glexcorp/gskp` resolve through dist-tag `canary`.
+
+# Historical Task State
+
+## Review - Resize Slide When Feedback Sidebar Opens 2026-07-05
 
 ### Goal
 
@@ -41,8 +83,6 @@ Implemented desktop/tablet reserved-space behavior for the feedback sidebar in `
 Added a scheduled slide-fit recalculation path for sidebar open/close, active slide sync, slide navigation, resize, and breakpoint changes. Mobile keeps the existing full-width sidebar overlay and disables side-by-side slide scaling.
 
 Archived the pre-amendment dogfood deck to `docs/history/archive/2026-07-05/225618/briefing-slides/create-briefing-slides.html`. Verification passed for static hooks, browser sanity checks, package build, package build check, task-doc audit, diff hygiene, and the local opener.
-
-# Historical Task State
 
 ## Review - Competitive Analysis Interrogation Upgrade 2026-07-05
 

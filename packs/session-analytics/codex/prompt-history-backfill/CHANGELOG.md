@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/prompt-history-backfill-{topic}.html` is now the primary review surface and compiled YAML routes back to `$prompt-history-backfill`.
+
 ## v0.3 - 2026-07-03
 
 - Updated the legacy `skill-creator` slug mapping since `create-agentic-skill` is archived (now maps to `create-local-skill`).

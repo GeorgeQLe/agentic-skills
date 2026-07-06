@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.15 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/provision-agentic-config-{topic}.html` is now the primary review surface and compiled YAML routes back to `/provision-agentic-config`.
+
 ## v0.14 - 2026-07-05
 
 - Added the shared shipping contract convention to the provisioned `CLAUDE.md` and `AGENTS.md` blocks so downstream skill stubs can resolve `Follow the shared shipping contract convention in CLAUDE.md`.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.33 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/ui-interview-{topic}.html` is now the primary review surface and compiled YAML routes back to `/ui-interview`.
+
 ## v0.32 - 2026-07-04
 
 - Updated the direct-build guard to name `/logic-wiring` instead of the archived `/prototype` alias.

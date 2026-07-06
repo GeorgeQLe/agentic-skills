@@ -2,8 +2,8 @@
 name: state-model
 description: Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work
 type: planning
-version: v0.13
-required_conventions: [alignment-page, design-tree-loop, interrogation-page]
+version: v0.14
+required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, user-flow, or feature] [--synthesize] [--no-chunk]"
 context_intake: scoped
 visual_tier: visual
@@ -240,6 +240,16 @@ Same envelope as `design/flow-tree.schema.json` (`schema_version`, `topic`, `mod
 - `contracts[]` — `kind: command|query`; request/response/error shapes, **logical only**.
 - Every element carries `flow_bindings[]: {flow_node_ref, access: reads|writes|triggers|displays|transitions}`. Bindings live in the model-tree only and are never duplicated into the flow tree.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/state-model-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$state-model`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Interrogation Page
 
 Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/state-model-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).

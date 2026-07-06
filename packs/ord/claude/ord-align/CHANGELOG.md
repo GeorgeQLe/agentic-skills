@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/ord-align-{topic}.html` is now the primary review surface and compiled YAML routes back to `/ord-align`.
+
 ## v0.2 - 2026-06-16
 
 - Clarified that downstream routing is emitted only after approved `ord-align` artifacts have been written or updated.

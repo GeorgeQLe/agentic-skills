@@ -1,5 +1,9 @@
 # competitive-analysis changelog (codex)
 
+## v0.30 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/competitive-analysis-{topic}.html` is now the primary review surface and compiled YAML routes back to `$competitive-analysis`.
+
 ## v0.29 - 2026-07-06
 
 - Added the shared interrogation-page convention and generated bundle. Cold starts now run State G stage-zero interrogation before framework selection.

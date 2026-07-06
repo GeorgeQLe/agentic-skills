@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/expansion-map-{topic}.html` is now the primary review surface and compiled YAML routes back to `/expansion-map`.
+
 ## v0.5 - 2026-06-12
 
 - Standardized active pack and skill install guidance on `npx skillpacks install <pack-or-skill>` instead of agent-native `/pack install` or `$pack install` recommendations.

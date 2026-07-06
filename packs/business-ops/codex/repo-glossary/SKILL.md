@@ -2,8 +2,8 @@
 name: repo-glossary
 description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, shadows, inheritance gaps, and cross-path divergences across research docs
 type: research
-version: v0.4
-required_conventions: [alignment-page]
+version: v0.5
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"tooling\", \"business\", \"workflow\"]"
 ---
 
@@ -245,6 +245,16 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Respect write-forward.** Terms added by research skills during their alignment flow have `status: confirmed`. Do not downgrade confirmed terms to `proposed` during audit.
 - **Hierarchy consistency.** A scoped glossary entry with `status: confirmed-override` is an acknowledged shadow — do not re-flag it as a conflict in future audits. When promoting or reconciling terms, ensure the parent and scoped glossaries remain consistent.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/repo-glossary-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `$repo-glossary`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/repo-glossary-{topic}.html`.

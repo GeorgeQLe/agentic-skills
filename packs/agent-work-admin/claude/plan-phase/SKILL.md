@@ -2,8 +2,8 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.5
-required_conventions: [alignment-page]
+version: v0.6
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[phase-number] [--no-tdd]"
 invocation: sub-skill
 parent: exec
@@ -376,6 +376,16 @@ Rules:
 - Recurring obligations MUST NOT appear in `tasks/todo.md` by default — they go in `tasks/recurring-todo.md` unless a due run is current execution work.
 - Do NOT put plans in `CLAUDE.md` or `docs/plan.md`.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/plan-phase-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/plan-phase`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/plan-phase-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.

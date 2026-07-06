@@ -2,8 +2,8 @@
 name: youtube-video-prelaunch-audit
 description: Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, YouTube Test and Compare title/thumbnail launch sets, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy
 type: research
-version: v0.4
-required_conventions: [alignment-page]
+version: v0.5
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]"
 context_intake: artifact_only
 ---
@@ -317,6 +317,16 @@ Default recommendation: `/youtube-description-optimizer` when the main remaining
 
 Before recommending `/youtube-format-research`, verify the `remotion` pack is enabled in `.agents/project.json.enabled_packs`. If it is missing, recommend `npx skillpacks install remotion` first.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/youtube-video-prelaunch-audit-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/youtube-video-prelaunch-audit`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/youtube-video-prelaunch-audit-{topic}.html`.

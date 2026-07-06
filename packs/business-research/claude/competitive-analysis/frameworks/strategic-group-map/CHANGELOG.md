@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/strategic-group-map-{topic}.html` is now the primary review surface and compiled YAML routes back to `/strategic-group-map`.
+
 ## v0.11 - 2026-07-06
 
 - Added the shared interrogation-page convention and generated bundle.

@@ -2,8 +2,8 @@
 name: skill-inventory
 description: Inventory downstream repository Claude and Codex skill installs from a control-repo manifest, classify managed local skill-copy drift against canonical agentic-skills sources, and produce report-only Markdown or JSON guidance without refreshing, deleting, or mutating downstream repos.
 type: ops
-version: v0.1
-required_conventions: [alignment-page]
+version: v0.2
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[--manifest <path>] [--repo <path>] [--format markdown|json]"
 ---
 
@@ -77,6 +77,16 @@ Use the exact categories emitted by `skill_install_status`:
 
 If no local paths are found, the scanner must fail non-destructively and print a manifest template with a `Local Path` column.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/skill-inventory-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/skill-inventory`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Alignment Page
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/skill-inventory-{topic}.html`. By default, report results inline and write only this skill's normal durable artifacts; create an alignment page only when explicitly requested or when a concrete clarification/review need cannot be handled cleanly inline.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.10 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/devtool-user-map-{topic}.html` is now the primary review surface and compiled YAML routes back to `/devtool-user-map`.
+
 ## v0.9 - 2026-07-05
 
 - Added stage-zero interrogation-page gating before staged devtool research and declared the shared interrogation-page convention.

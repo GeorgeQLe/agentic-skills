@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/game-core-loop-{topic}.html` is now the primary review surface and compiled YAML routes back to `/game-core-loop`.
+
 ## v0.2 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

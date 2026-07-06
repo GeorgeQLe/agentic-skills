@@ -2,8 +2,8 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.8
-required_conventions: [alignment-page]
+version: v0.9
+required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 context_intake: deep
 ---
@@ -148,3 +148,13 @@ Follow the shared alignment-page convention via the packaged convention resolver
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/feature-interview-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/feature-interview`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.

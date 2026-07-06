@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/devtool-docs-audit-{topic}.html` is now the primary review surface and compiled YAML routes back to `/devtool-docs-audit`.
+
 ## v0.3 - 2026-07-05
 
 - Refactored the docs audit into the staged devtool research workflow with stage-zero interrogation, scope approval, non-canonical working packets, artifact review, and confirmed canonical writes.

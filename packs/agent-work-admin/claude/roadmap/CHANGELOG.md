@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/roadmap-{topic}.html` is now the primary review surface and compiled YAML routes back to `/roadmap`.
+
 ## v0.14 - 2026-07-02
 
 - Normalized Claude next-step routing fallback wording so imported Codex dollar routes become Claude `/...` commands unless an explicit cross-agent handoff is required.

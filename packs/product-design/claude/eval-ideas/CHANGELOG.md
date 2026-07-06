@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/eval-ideas-{topic}.html` is now the primary review surface and compiled YAML routes back to `/eval-ideas`.
+
 ## v0.1 - 2026-06-26
 
 - Aligned the **Product-Path Scope Resolution** section to the canonical research-skill contract (`tests/layer1/product-path-manifest.test.ts`): write back `active_paths` on manifest updates, recognize legacy `status: abandoned` archived paths and refuse to write scoped outputs there, exclude the full `archived`/`abandoned`/`deferred`/`revisit_candidate`/`promoted` set plus any `scope_path` under `research/_archive/`, and name flat `research/` single-product mode explicitly. Behavior-only fix to return layer1 to green; no change to the loop, gate, or consolidation flow.

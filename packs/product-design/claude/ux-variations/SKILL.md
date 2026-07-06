@@ -2,8 +2,8 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.33
-required_conventions: [alignment-page, design-tree-loop, interrogation-page]
+version: v0.34
+required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec] [--layout-mode] [--no-chunk]"
 context_intake: scoped
 visual_tier: prototype
@@ -245,6 +245,16 @@ Emit the `agent_routing` payload with the exact resolved next-invocation command
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
 
+
+## Briefing Slides Review Surface
+
+Follow the shared briefing-slides convention via the packaged convention resolver. When this skill creates or amends a dense review artifact, keep building and updating the dense `alignment/*.html` and/or `interrogation/*.html` pages exactly as this skill already requires. Also build or update `briefing-slides/ux-variations-{topic}.html` as the primary human review UI.
+
+Treat the briefing slide deck as the artifact to open for review. Link the dense pages, source documents, and any other context artifacts from slide reference chips or other clickable slide elements so reviewers can drill into detail without losing the slide-first review flow.
+
+The compiled deck YAML must route back to `/ux-variations`. Include the dense review pages and source artifacts in `reference_pages` / `source_artifacts`, preserve unanswered gates and slide feedback, and only mark the deck ready when the slide gates are approved.
+
+After artifact creation or amendment, attempt to open only the briefing slide deck. Do not auto-open the linked dense pages.
 ## Interrogation Page
 
 Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/ux-variations-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).

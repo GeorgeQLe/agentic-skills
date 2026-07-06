@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.20 - 2026-07-06
+
+- Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/spec-interview-{topic}.html` is now the primary review surface and compiled YAML routes back to `$spec-interview`.
+
 ## v0.19 - 2026-07-01
 
 - Required AFPS graduation platform strategy when Platform Fit Workshop or platform-probe evidence exists.
