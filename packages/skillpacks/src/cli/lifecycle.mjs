@@ -24,10 +24,8 @@ import {
 import {
   discoverProjectRoots,
   inferProjectType,
-  planBuildInPublicMode,
   printProjectStatus,
   readProjectConfig,
-  setBuildInPublicMode,
   writeProjectConfig,
   withProjectLock
 } from './project-config.mjs';
@@ -2480,78 +2478,6 @@ export async function runAcrossProjects({
   }
 
   return failed > 0 || flagged > 0 ? 1 : 0;
-}
-
-function printBuildInPublicDryRunProjectPlan(plan) {
-  console.log(`  ${plan.action}`);
-  if (plan.normalizationChanged) {
-    console.log('  would also normalize project metadata');
-  }
-}
-
-export async function setBuildInPublicModeAll({
-  mode,
-  rootDir = process.cwd(),
-  dryRun = false
-} = {}) {
-  if (!['on', 'off', 'unset'].includes(mode || '')) {
-    throw new Error('set-bip requires a mode: on, off, or unset');
-  }
-
-  if (dryRun) {
-    const roots = discoverProjectRoots(rootDir);
-
-    if (roots.length === 0) {
-      console.log(`No projects with .agents/project.json found under ${rootDir}`);
-      return 0;
-    }
-
-    const projectPlans = [];
-    const failures = [];
-
-    for (const root of roots) {
-      const rel = relative(rootDir, root) || '.';
-      console.log('');
-      console.log(`=== ${rel} ===`);
-      try {
-        const plan = planBuildInPublicMode(mode, root);
-        printBuildInPublicDryRunProjectPlan(plan);
-        projectPlans.push({ rel, plan });
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.log(`  failed: ${message}`);
-        failures.push({ rel, message });
-      }
-    }
-
-    const safe = failures.length === 0;
-
-    console.log('');
-    console.log(`Summary (set-bip ${mode} --all --dry-run): ${roots.length} project(s) scanned.`);
-    for (const project of projectPlans) {
-      console.log(`  ${project.rel}: ${project.plan.action}`);
-    }
-    if (failures.length > 0) {
-      console.log('  Failures:');
-      for (const failure of failures) {
-        console.log(`    ${failure.rel}: ${failure.message}`);
-      }
-      console.log(`  Unsafe reasons: ${failures.length} project(s) failed dry-run planning.`);
-    }
-    console.log(`Safe to run: ${safe ? 'yes' : 'no'}`);
-    if (safe) {
-      console.log(`Recommended command: skillpacks set-bip ${mode} --all`);
-    }
-
-    return safe ? 0 : 1;
-  }
-
-  return runAcrossProjects({
-    rootDir,
-    label: `set-bip ${mode} --all`,
-    run: (root) => setBuildInPublicMode(mode, root),
-    summarizeFailures: true
-  });
 }
 
 export async function refreshAllProjects({

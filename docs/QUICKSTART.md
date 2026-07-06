@@ -6,7 +6,7 @@ Get from clone to a working skill in under 5 minutes.
 
 - **Node.js 18+** for the `gskp` npm CLI and package build
 - **bash** shell (macOS, Linux, or WSL on Windows) for `scripts/pack.sh` and remaining shell-backed `gskp` commands
-- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, `set-update-mode`, `set-bip`, and `set-bip-platforms` do not require `jq`
+- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 

@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-06 - Release-lane convention agent-review handoff",
     "2026-07-06 - ship-end closeout for UAT checklist contract",
     "2026-07-05 - ship-end closeout for build-ui-screens prototype-plan handoff",
     "2026-07-04 - Deprecated product-design alias cleanup",
     "2026-07-02 - Dev-docs task reconciliation",
     "2026-07-02 - Research Amend routing integration",
     "2026-07-02 - Research Amend workflow routing inspection",
-    "2026-07-02 - Research Amend base skill",
-    "2026-07-02 - Base pack nesting migration"
+    "2026-07-02 - Research Amend base skill"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

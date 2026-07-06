@@ -199,7 +199,7 @@ describe('skillpacks npm publish target boundary', () => {
     );
   });
 
-  it('registers social conventions as static package assets for BIP guidance', () => {
+  it('registers social conventions as static package assets without BIP runtime guidance', () => {
     assert.deepEqual(
       Object.keys(SKILL_CONVENTIONS).filter((id) => id.startsWith('social-')).sort(),
       ['social-ledger', 'social-post', 'social-video-content']
@@ -218,39 +218,21 @@ describe('skillpacks npm publish target boundary', () => {
     assert.equal(SKILL_CONVENTIONS['social-video-content'].generatorScript, undefined);
 
     const alignmentConvention = readFileSync(resolve(repoRoot, 'docs/alignment-page-convention.md'), 'utf8');
-    assert.match(alignmentConvention, /alignment\/bip\/\{skill-name\}\.html/);
-    assert.match(alignmentConvention, /post-confirmation/);
-    assert.match(alignmentConvention, /prioritization metadata/);
-    assert.match(alignmentConvention, /alignment\.bip_platforms/);
-    assert.match(alignmentConvention, /set-bip-platforms <platform\.\.\.>/);
-    assert.match(alignmentConvention, /Do not treat `alignment\.bip_platforms` as a channel filter/);
-    assert.match(alignmentConvention, /every bundled channel/);
+    assert.doesNotMatch(alignmentConvention, /alignment\/bip/);
+    assert.doesNotMatch(alignmentConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.doesNotMatch(alignmentConvention, /Stage 2 has a required halfway review step/);
-    assert.match(alignmentConvention, /docs\/social-post-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-post-convention\.md/);
-    assert.match(alignmentConvention, /docs\/social-video-content-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-video-content-convention\.md/);
-    assert.match(alignmentConvention, /docs\/social\//);
-    assert.match(alignmentConvention, /assets\/social\//);
-    assert.match(alignmentConvention, /loaded convention path/);
-    assert.match(alignmentConvention, /platform_aligned/);
-    assert.match(alignmentConvention, /creator_inspired/);
 
     const socialPostConvention = readFileSync(resolve(repoRoot, 'docs/social-post-convention.md'), 'utf8');
     assert.match(socialPostConvention, /docs\/social\/linkedin-post-convention\.md/);
     assert.match(socialPostConvention, /assets\/social\/linkedin-post-convention\.md/);
-    assert.match(socialPostConvention, /BIP mode is active/);
-    assert.match(socialPostConvention, /load every bundled channel file/);
-    assert.match(socialPostConvention, /alignment\.bip_platforms.*prioritization metadata/);
+    assert.doesNotMatch(socialPostConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.match(socialPostConvention, /loaded_channel_convention/);
     assert.doesNotMatch(socialPostConvention, /^### LinkedIn$/m);
 
     const socialVideoConvention = readFileSync(resolve(repoRoot, 'docs/social-video-content-convention.md'), 'utf8');
     assert.match(socialVideoConvention, /docs\/social\/youtube-shorts-convention\.md/);
     assert.match(socialVideoConvention, /assets\/social\/youtube-shorts-convention\.md/);
-    assert.match(socialVideoConvention, /BIP mode is active/);
-    assert.match(socialVideoConvention, /load every bundled channel and prompt-family file/);
-    assert.match(socialVideoConvention, /alignment\.bip_platforms.*prioritization metadata/);
+    assert.doesNotMatch(socialVideoConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.match(socialVideoConvention, /loaded_channel_convention/);
     assert.doesNotMatch(socialVideoConvention, /^### YouTube Long-Form$/m);
 
@@ -276,11 +258,6 @@ describe('skillpacks npm publish target boundary', () => {
     assert.match(xPostConvention, /Post Plus Replies Pattern/);
     assert.match(xPostConvention, /6eorge\.com\/brain/);
 
-    // Alignment BIP guidance teaches ledger scope, account, and post-confirmation review fields.
-    assert.match(alignmentConvention, /docs\/social-ledger-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-ledger-convention\.md/);
-    assert.match(alignmentConvention, /ledger storage scope/);
-    assert.match(alignmentConvention, /claim-safety notes/);
-    assert.match(alignmentConvention, /publish precheck/);
+    assert.doesNotMatch(ledgerConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
   });
 });

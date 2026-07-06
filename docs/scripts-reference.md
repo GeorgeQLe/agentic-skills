@@ -26,8 +26,6 @@ Compact command index for all scripts in this repository.
 | `scripts/pack.sh unpin <skill>` | Return a pinned skill to track-latest |
 | `scripts/pack.sh set-mode <mode>` | Set agent mode: `claude-only`, `codex-only`, `hybrid`, or `unset` |
 | `scripts/pack.sh set-update-mode <mode>` | Set drift update mode: `warn`, `auto`, or `unset` |
-| `scripts/pack.sh set-bip <mode>` | Set build-in-public alignment default: `on`, `off`, or `unset` |
-| `scripts/pack.sh set-bip-platforms <platform...>` | Set project-level build-in-public priority platform list, or use `unset` to clear it |
 | `scripts/pack.sh list-packs` | Internal: print enabled packs (used by Codex `$exec` routing) |
 
 ## Mode & Handoff

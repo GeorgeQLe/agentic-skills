@@ -4,11 +4,11 @@ Research date: 2026-06-25.
 Canonical package asset: `assets/social-video-content-convention.md`.
 Channel docs directory: `docs/social/` in a source checkout, `assets/social/` in a packaged install.
 
-This is the thin router and shared contract for build-in-public and alignment-producing agents that draft source-safe video ideas, outlines, hooks, and scripts. Load this file first. In ordinary channel-selected drafting, load only the selected channel or prompt docs from `docs/social/` or `assets/social/`. In Build-In-Public mode (`set-bip on`, explicit `--bip`, or `.agents/project.json alignment.build_in_public: true`), load every bundled video channel and prompt-family convention listed below so the BIP page can rank exhaustive candidates; use `alignment.bip_platforms` only as optional prioritization metadata, not as a filter. This convention covers ideation and scripting guidance only; it does not authorize auto-publishing, video production, scraping, uploading, or account operations.
+This is the thin router and shared contract for alignment-producing agents that draft source-safe video ideas, outlines, hooks, and scripts. Load this file first. Load only the selected channel or prompt docs from `docs/social/` or `assets/social/`. This convention covers ideation and scripting guidance only; it does not authorize auto-publishing, video production, scraping, uploading, or account operations.
 
 ## Routing Rule
 
-Do not load every social video convention by default for ordinary video drafting. After the user selects target channels or prompt families, load only the matching files. When BIP mode is active, load every bundled channel and prompt-family file in this table, then label saved `alignment.bip_platforms` as priority channels while still generating candidates for the rest:
+Do not load every social video convention by default. After the user selects target channels or prompt families, load only the matching files:
 
 | Target channel or prompt family | Source checkout doc | Packaged asset |
 | --- | --- | --- |
@@ -19,7 +19,7 @@ Do not load every social video convention by default for ordinary video drafting
 | LinkedIn video | `docs/social/linkedin-video-convention.md` | `assets/social/linkedin-video-convention.md` |
 | Founder/devtool reusable video prompts | `docs/social/founder-devtool-video-prompts-convention.md` | `assets/social/founder-devtool-video-prompts-convention.md` |
 
-If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk. BIP mode should stay exhaustive across the bundled channel and prompt-family list and should not use unsupported channels unless the user explicitly asks for them.
+If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk.
 
 ## Rules Vs Norms
 
@@ -83,7 +83,7 @@ Every video concept must include:
 - Include "what not to show" notes for every demo concept.
 - Do not promise a follow-up video, launch, benchmark, or feature unless the user approves the commitment.
 
-## BIP Page Output Shape
+## Review Output Shape
 
 When an alignment page uses this convention, render video ideas with these fields:
 
@@ -106,4 +106,4 @@ When an alignment page uses this convention, render video ideas with these field
 - `loaded_channel_convention`
 - `user_decision`: `approve`, `revise`, `reject`, or `not-now`
 
-Final YAML from the BIP page should preserve selected video ideas, rejected ideas, user edits, mode decisions, target channel decisions, loaded convention paths, and publish-readiness checks. Approval of a video idea is not approval to publish; it only authorizes the producing skill to record the approved BIP content decisions and continue the alignment flow.
+Final YAML should preserve selected video ideas, rejected ideas, user edits, mode decisions, target channel decisions, loaded convention paths, and publish-readiness checks. Approval of a video idea is not approval to publish; it only authorizes the producing skill to record the approved content decisions and continue the alignment flow.

@@ -1,48 +1,50 @@
 # Current Task
 
-## Current Implementation - Stable Package Boundary For Canary-Only Briefing Slides
+## Current Implementation - Archive And Remove Build-In-Public Runtime Behavior
 
 ### Goal
 
-Add an explicit package release-lane filter so canary-only briefing-slide skills and convention assets can remain on `master` without entering stable npm releases.
+Remove Build-In-Public from active stable behavior before general release while preserving stale-config cleanup for existing projects.
 
 ### Plan
 
-- [x] Add shared release-lane filtering for manifest generation and package staging.
-- [x] Mark `create-briefing-slides` mirrors and the `briefing-slides` convention asset as canary-only.
-- [x] Make stable package builds exclude canary-only skills, package entries, and convention assets by default.
-- [x] Make canary prerelease publishes use the canary package lane.
-- [x] Add manifest, package-boundary, and publish tests for stable/canary behavior.
-- [x] Run package, export, task-doc, and diff verification.
+- [x] Archive and bump Claude/Codex `idea-scope-brief`, `ship`, and `ship-end` before editing.
+- [x] Remove BIP suggestion/output behavior from active skill contracts.
+- [x] Remove BIP mode/page-generation instructions from the alignment-page convention and regenerate bundles.
+- [x] Deprecate `set-bip`, `set-bip-platforms`, and `set-bip-prompt` command paths while keeping cleanup of stale config keys.
+- [x] Update README, package docs, generated manifests, exports, and active tests.
+- [x] Run release verification and fix regressions.
 
 ### Acceptance Criteria
 
-- [x] Stable manifests omit `create-briefing-slides`.
-- [x] Canary-lane manifests include both Claude and Codex `create-briefing-slides` entries.
-- [x] Stable package staging and dry-run pack output omit briefing-slide skill directories and `assets/briefing-slides-convention.md`.
-- [x] Canary package staging includes briefing-slide skill directories and asset.
-- [x] `./publish.sh patch` uses the stable package lane.
-- [x] `./publish.sh --tag experimental --preid experimental prerelease` uses the canary package lane.
+- [x] No active skill suggests, enables, or generates Build-In-Public output.
+- [x] Generated active alignment-page bundles no longer mention BIP runtime behavior.
+- [x] BIP configuration commands fail with a clear deprecation message and do not mutate project config.
+- [x] Cleanup still removes stale `alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed` keys.
+- [x] Active stable docs describe BIP as removed/deprecated only where cleanup guidance is needed.
 
 ### Verification
 
+- [x] `scripts/pack.sh refresh`
+- [x] `node scripts/upgrade-alignment-page.mjs --check`
+- [x] `bash scripts/skill-archive-audit.sh --strict`
+- [x] `bash scripts/skill-mirror-parity-audit.sh`
 - [x] `npm --workspace packages/skillpacks run test:node`
 - [x] `npm run skillpacks:verify`
 - [x] `npm run exports:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] `git diff --cached --check`
-- [x] Targeted stable/canary manifest and stable build boundary assertions
+- [x] Focused no-active-BIP reference assertions
 
 ### Review
 
-Added `SKILLPACKS_PACKAGE_LANE` support with default `stable` behavior and `canary` behavior that includes stable plus canary-only skills and assets. The stable generated manifest now records `release_lane: stable`, omits `create-briefing-slides`, and rejects skills that require canary-only conventions.
+Archived and bumped both Claude/Codex mirrors for `idea-scope-brief`, `ship`, and `ship-end`, then removed BIP suggestion gates, BIP output boundaries, BIP post-generation, and the BIP-only `social-ledger` runtime requirement. Active `ALIGNMENT-PAGE.md` bundles were regenerated from the canonical alignment-page convention, including the legacy `brainstorm` bundle-only edge case.
 
-Marked both `create-briefing-slides` mirrors and the `briefing-slides` convention registry entry as `release_lane: canary`. Stable package staging omits the briefing-slide skill directories plus `assets/briefing-slides-convention.md` and its managed-doc copy; canary staging includes them.
+Deprecated `set-bip`, `set-bip-platforms`, and `set-bip-prompt` in both the Node CLI and `scripts/pack.sh`; they now fail with cleanup guidance and do not mutate config. Cleanup still removes stale `alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed` keys.
 
-Updated `publish.sh` so normal patch publishes build with the stable lane, while `--tag experimental --preid experimental prerelease` builds with the canary lane. Prerelease publishes without the canary lane are rejected, and `latest` staged manifests are checked for canary skill entries before publish.
+Updated README/package docs, social router docs, package-boundary/project-config/layer1 tests, generated package manifest output, and skills catalog export proof. Removed the active index entry for the old BIP suggestion page so the active alignment-page audit no longer treats it as current runtime output.
 
-Regenerated the stable package manifest and public skills-catalog export artifacts. Verification passed for package node tests, package verification, export freshness, task-doc audit, diff hygiene, and targeted stable/canary package-boundary assertions.
+Verification passed: targeted Vitest BIP/alignment/social tests, `npm --workspace packages/skillpacks run test:node`, `scripts/pack.sh refresh`, `node scripts/upgrade-alignment-page.mjs --check`, `bash scripts/skill-archive-audit.sh --strict`, `bash scripts/skill-mirror-parity-audit.sh`, `node scripts/audit-alignment-pages.mjs`, `npm run skillpacks:verify`, `npm run exports:check`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
 
 # Historical Task State
 

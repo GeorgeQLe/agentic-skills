@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.24 - 2026-07-06
+
+- Removed Build-In-Public runtime behavior: the skill no longer asks the BIP Suggestion Gate, enables BIP, accepts `--bip` as an output path, or generates `alignment/bip/idea-scope-brief.html`.
+
 ## v0.23 - 2026-07-05
 
 - Require high-confidence Deck Fit Handoffs to keep deck installation as the sole primary command while also printing a copy-pasteable secondary post-install command with the first workflow skill and scoped product path when available.

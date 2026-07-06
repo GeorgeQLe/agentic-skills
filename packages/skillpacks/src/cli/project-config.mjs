@@ -15,12 +15,7 @@ const LOCK_MAX_ATTEMPTS = Number.parseInt(process.env.PACK_LOCK_MAX_ATTEMPTS || 
 const LOCK_SLEEP_SECONDS = Number.parseFloat(process.env.PACK_LOCK_SLEEP_SECONDS || '0.1');
 const VALID_AGENT_MODES = new Set(['claude-only', 'codex-only', 'hybrid']);
 const VALID_UPDATE_MODES = new Set(['warn', 'auto', 'unset']);
-const VALID_BIP_MODES = new Set(['on', 'off', 'unset']);
-const VALID_BIP_PROMPT_ACTIONS = new Set(['dismiss', 'reset']);
-
-function isPlainObject(value) {
-  return value && typeof value === 'object' && !Array.isArray(value);
-}
+const BUILD_IN_PUBLIC_REMOVED_MESSAGE = 'Build-In-Public has been removed. Run skillpacks cleanup to remove stale alignment.build_in_public, alignment.bip_platforms, and alignment.bip_prompt_dismissed config.';
 
 export function projectFilePath(projectRoot = process.cwd()) {
   return join(projectRoot, '.agents', 'project.json');
@@ -253,165 +248,16 @@ function normalizedProjectConfig(projectRoot) {
   return config;
 }
 
-function cloneConfig(config) {
-  return JSON.parse(JSON.stringify(config));
+function throwBuildInPublicRemoved() {
+  throw new Error(BUILD_IN_PUBLIC_REMOVED_MESSAGE);
 }
 
-function validateBuildInPublicMode(mode) {
-  if (!VALID_BIP_MODES.has(mode || '')) {
-    throw new Error('set-bip requires a mode: on, off, or unset');
-  }
+export function buildInPublicRemovedMessage() {
+  return BUILD_IN_PUBLIC_REMOVED_MESSAGE;
 }
 
-function applyBuildInPublicMode(config, mode) {
-  if (mode === 'unset') {
-    if (isPlainObject(config.alignment)) {
-      delete config.alignment.build_in_public;
-      if (Object.keys(config.alignment).length === 0) {
-        delete config.alignment;
-      }
-    } else {
-      delete config.alignment;
-    }
-    return config;
-  }
-
-  const existing = isPlainObject(config.alignment) ? config.alignment : {};
-  config.alignment = { ...existing, build_in_public: mode === 'on' };
-  return config;
-}
-
-function normalizeBipPlatform(platform) {
-  const normalized = String(platform || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-');
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(normalized)) {
-    throw new Error(
-      `Invalid BIP platform '${platform}'. Use platform slugs such as linkedin, x, bluesky, reddit, youtube-shorts, or instagram-reels`
-    );
-  }
-  if (normalized === 'unset') {
-    throw new Error('set-bip-platforms unset cannot be combined with platform names');
-  }
-  return normalized;
-}
-
-function normalizeBipPlatforms(platforms) {
-  if (!Array.isArray(platforms) || platforms.length === 0) {
-    throw new Error('set-bip-platforms requires one or more platforms, or unset');
-  }
-  if (platforms[0] === 'unset') {
-    if (platforms.length > 1) {
-      throw new Error('set-bip-platforms unset cannot be combined with platform names');
-    }
-    return { action: 'unset', platforms: [] };
-  }
-
-  const seen = new Set();
-  const normalized = [];
-  for (const platform of platforms) {
-    const value = normalizeBipPlatform(platform);
-    if (seen.has(value)) {
-      continue;
-    }
-    seen.add(value);
-    normalized.push(value);
-  }
-  return { action: 'set', platforms: normalized };
-}
-
-function applyBuildInPublicPlatforms(config, platformArgs) {
-  const { action, platforms } = normalizeBipPlatforms(platformArgs);
-  if (action === 'unset') {
-    if (isPlainObject(config.alignment)) {
-      delete config.alignment.bip_platforms;
-      if (Object.keys(config.alignment).length === 0) {
-        delete config.alignment;
-      }
-    } else {
-      delete config.alignment;
-    }
-    return { config, action, platforms };
-  }
-
-  const existing = isPlainObject(config.alignment) ? config.alignment : {};
-  config.alignment = { ...existing, bip_platforms: platforms };
-  return { config, action, platforms };
-}
-
-function existingBuildInPublicState(config) {
-  if (isPlainObject(config?.alignment)) {
-    if (Object.hasOwn(config.alignment, 'build_in_public')) {
-      return {
-        kind: 'present',
-        value: config.alignment.build_in_public,
-        siblingCount: Object.keys(config.alignment).filter((key) => key !== 'build_in_public').length
-      };
-    }
-    return { kind: 'missing' };
-  }
-
-  if (config && Object.hasOwn(config, 'alignment')) {
-    return { kind: 'non-object' };
-  }
-
-  return { kind: 'missing' };
-}
-
-function formatBuildInPublicValue(value) {
-  if (value === true) {
-    return 'on';
-  }
-  if (value === false) {
-    return 'off';
-  }
-  return JSON.stringify(value);
-}
-
-function describeBuildInPublicPlan(mode, config) {
-  const state = existingBuildInPublicState(config);
-
-  if (mode === 'unset') {
-    if (state.kind === 'present') {
-      return state.siblingCount === 0
-        ? 'would remove alignment.build_in_public and empty alignment object'
-        : 'would remove alignment.build_in_public';
-    }
-    if (state.kind === 'non-object') {
-      return 'would remove non-object alignment field';
-    }
-    return 'already unset';
-  }
-
-  if (state.kind === 'present') {
-    const desired = mode === 'on';
-    if (state.value === desired) {
-      return `already ${mode}`;
-    }
-    return `would change alignment.build_in_public from ${formatBuildInPublicValue(state.value)} to ${mode}`;
-  }
-
-  if (state.kind === 'non-object') {
-    return `would replace non-object alignment field and set alignment.build_in_public to ${mode}`;
-  }
-
-  return `would set alignment.build_in_public to ${mode}`;
-}
-
-export function planBuildInPublicMode(mode, projectRoot = process.cwd()) {
-  validateBuildInPublicMode(mode);
-
-  const originalConfig = readProjectConfig(projectRoot) || {};
-  const targetOnlyConfig = applyBuildInPublicMode(cloneConfig(originalConfig), mode);
-  const plannedConfig = applyBuildInPublicMode(normalizedProjectConfig(projectRoot), mode);
-
-  return {
-    mode,
-    action: describeBuildInPublicPlan(mode, originalConfig),
-    normalizationChanged: JSON.stringify(targetOnlyConfig) !== JSON.stringify(plannedConfig)
-  };
+export function planBuildInPublicMode() {
+  throwBuildInPublicRemoved();
 }
 
 function enabledSkillsEntries(config) {
@@ -528,57 +374,19 @@ export async function setUpdateMode(mode, projectRoot = process.cwd()) {
 }
 
 export async function setBuildInPublicMode(mode, projectRoot = process.cwd()) {
-  validateBuildInPublicMode(mode);
-
-  return withProjectLock(projectRoot, `set-bip ${mode}`, async () => {
-    const config = normalizedProjectConfig(projectRoot);
-    applyBuildInPublicMode(config, mode);
-    writeProjectConfig(projectRoot, config);
-    console.log(`Set alignment.build_in_public to ${mode}`);
-    return 0;
-  });
+  void mode;
+  void projectRoot;
+  throwBuildInPublicRemoved();
 }
 
 export async function setBipPromptDismissed(action, projectRoot = process.cwd()) {
-  if (!VALID_BIP_PROMPT_ACTIONS.has(action || '')) {
-    throw new Error('set-bip-prompt requires an action: dismiss or reset');
-  }
-
-  return withProjectLock(projectRoot, `set-bip-prompt ${action}`, async () => {
-    const config = normalizedProjectConfig(projectRoot);
-    if (action === 'reset') {
-      if (config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)) {
-        delete config.alignment.bip_prompt_dismissed;
-        if (Object.keys(config.alignment).length === 0) {
-          delete config.alignment;
-        }
-      } else {
-        delete config.alignment;
-      }
-    } else {
-      const existing = config.alignment && typeof config.alignment === 'object' && !Array.isArray(config.alignment)
-        ? config.alignment
-        : {};
-      config.alignment = { ...existing, bip_prompt_dismissed: true };
-    }
-    writeProjectConfig(projectRoot, config);
-    console.log(`Set alignment.bip_prompt_dismissed to ${action}`);
-    return 0;
-  });
+  void action;
+  void projectRoot;
+  throwBuildInPublicRemoved();
 }
 
 export async function setBuildInPublicPlatforms(platformArgs, projectRoot = process.cwd()) {
-  normalizeBipPlatforms(platformArgs);
-
-  return withProjectLock(projectRoot, `set-bip-platforms ${platformArgs.join(' ')}`, async () => {
-    const config = normalizedProjectConfig(projectRoot);
-    const result = applyBuildInPublicPlatforms(config, platformArgs);
-    writeProjectConfig(projectRoot, result.config);
-    if (result.action === 'unset') {
-      console.log('Set alignment.bip_platforms to unset');
-    } else {
-      console.log(`Set alignment.bip_platforms to ${result.platforms.join(', ')}`);
-    }
-    return 0;
-  });
+  void platformArgs;
+  void projectRoot;
+  throwBuildInPublicRemoved();
 }

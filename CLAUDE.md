@@ -181,23 +181,3 @@ Research-producing skills maintain a shared project glossary at `research/glossa
 ### Cross-Pack Routing
 
 When a skill recommends another skill from a different pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `npx skillpacks install <pack-name>` as the prerequisite in the recommendation.
-
-### BIP Suggestion Gate
-
-Build-In-Public (BIP) mode generates source-safe social posts from alignment pages and shipped work. BIP is non-blocking output behavior everywhere except `idea-scope-brief`, which is the only skill allowed to ask a BIP gate question during product kickoff. Outside `idea-scope-brief`, BIP must never be a blocker, required approval gate, required review step, or downstream-routing prerequisite.
-
-The gate runs after `idea-scope-brief` has read `.agents/project.json`:
-
-1. If `alignment.build_in_public === true` → BIP already on, skip only the enablement prompt and continue the skill's enabled-BIP behavior after canonical artifacts are approved and written.
-2. Else if `alignment.build_in_public === false` → BIP explicitly off, skip enablement and BIP output.
-3. Else if `alignment.bip_prompt_dismissed === true` → already asked, skip enablement and BIP output.
-4. Else ask once, concisely: explain that BIP generates source-safe social posts from alignment pages / shipped work, and ask whether to enable it for this project.
-   - **Yes:** run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent) so a later `set-bip off` won't re-trigger the prompt. Enabling schedules post-confirmation BIP output with no separate post offer or approval page. Do not publish externally or write social-ledger records without later explicit approval.
-   - **No:** run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
-5. Never block the skill's primary work on this gate.
-
-All other skills may generate BIP output only when BIP is already enabled (`alignment.build_in_public === true`) or the user explicitly invokes BIP for that run and the project has not explicitly disabled it (`alignment.build_in_public !== false`). That output is read-only help/review content only: draft exhaustive phase-aware, source-safe BIP post candidate batches for every bundled channel, or explain why no safe public angle exists, and write the batch to the single HTML BIP page `alignment/bip/{skill-name}.html` (archived before replacement, included in `alignment/index.html` as BIP review/help content, and opened per the alignment-page convention) instead of rendering candidates inline in the terminal; use saved `alignment.bip_platforms` only as priority/ranking metadata, not as a channel filter. Draft from a fresh-audience brief so posts define necessary context, expand jargon, and explain public significance. Do not report only that BIP was skipped. Do not publish externally or write social-ledger records without later explicit approval.
-
-`ship` and `ship-end` may ask a one-time BIP enablement question only as terminal output after shipping/wrap-up reporting, and only when `.agents/project.json.alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed !== true`. They must treat `alignment.build_in_public === false` as an explicit opt-out: do not ask and do not generate BIP. BIP page generation, BIP page review, and any BIP-related next action must never block shipping, wrap-up, commit/push, deploy reporting, or next-work routing.
-
-The suppression flag `alignment.bip_prompt_dismissed` is distinct from the on/off mode and is written by `set-bip-prompt dismiss|reset` (mirrors `set-bip`).
