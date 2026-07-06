@@ -2,7 +2,47 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Stage-Click And A/D Slide Navigation
+## Current Implementation - Briefing Slide Gate Status Markers
+
+### Goal
+
+Add bottom filmstrip markers that show whether a slide has unanswered or completed gate questions, and make the selected filmstrip background black with white text so green completion borders remain legible.
+
+### Plan
+
+- [x] Archive the current dogfood deck before amendment.
+- [x] Add filmstrip gate-status classes derived from each slide's `data-gate` controls.
+- [x] Update gate status whenever a gate answer changes.
+- [x] Style unanswered gate slides with a red border and completed gate slides with a green border.
+- [x] Style the selected filmstrip button with a black background and white text.
+- [x] Run behavioral and repo verification.
+- [x] Commit and push intended changes on `master`.
+
+### Acceptance Criteria
+
+- Slides with gate questions have a visible bottom filmstrip marker.
+- Unanswered gate slides use a red marker/border.
+- Completed gate slides use a green marker/border.
+- The active filmstrip item uses black background and white text, not the previous green selected background.
+- Existing filmstrip navigation and slide gate controls still work.
+
+### Verification
+
+- Confirm the deck has gate-marker CSS and gate-status JavaScript.
+- Confirm browser behavior: slide 4 starts as unanswered/red, selecting a gate answer changes it to complete/green, and the active slide background remains black with white text.
+- Run `node scripts/audit-task-docs.mjs`.
+- Run `git diff --check`.
+- Run `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`.
+
+### Review
+
+Added gate-status markers to the dogfood deck's bottom filmstrip. Slides with gate questions now receive a persistent marker: red border for unanswered gates and green border once the gate has an answer.
+
+Changed the active filmstrip button to use a black background with white text, so selected-state styling no longer conflicts with green completion borders. The filmstrip status updates immediately when a gate answer changes.
+
+Verification passed for deck text hooks, browser-level gate-marker behavior, task-doc audit, diff hygiene, and opener status `opened`.
+
+## Historical Implementation - Stage-Click And A/D Slide Navigation
 
 ### Goal
 

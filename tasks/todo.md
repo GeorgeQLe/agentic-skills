@@ -1,43 +1,54 @@
 # Current Task
 
-## Current Implementation - Stage-Click And A/D Slide Navigation
+## Current Implementation - Briefing Slide Gate Status Markers
 
 ### Goal
 
-Add stage-click navigation and `A`/`D` slide hotkeys to the briefing-slides convention and the `create-briefing-slides` dogfood deck while preserving all existing review controls.
+Add bottom filmstrip markers that show whether a slide has unanswered or completed gate questions, and make the selected filmstrip background black with white text so green completion borders remain legible.
 
 ### Plan
 
-- [x] Archive the current dogfood deck at `docs/history/archive/2026-07-05/215911/briefing-slides/create-briefing-slides.html`.
-- [x] Update the briefing-slides convention with `A`/`D` keyboard requirements and empty-stage click navigation.
-- [x] Amend the dogfood deck with guarded `A`/`D` hotkeys and empty-stage click navigation.
-- [x] Update visible deck text and update marker to mention click-stage and `A`/`D` navigation.
-- [x] Regenerate package staging with `npm --workspace packages/skillpacks run build`.
-- [x] Run required verification and behavioral checks.
+- [x] Archive the current dogfood deck at `docs/history/archive/2026-07-05/223809/briefing-slides/create-briefing-slides.html`.
+- [x] Add filmstrip gate-status classes derived from each slide's `data-gate` controls.
+- [x] Update gate status whenever a gate answer changes.
+- [x] Style unanswered gate slides with a red border and completed gate slides with a green border.
+- [x] Style the selected filmstrip button with a black background and white text.
+- [x] Run behavioral and repo verification.
 - [x] Commit and push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- [x] Convention names `ArrowLeft`, `ArrowRight`, `A`, `D`, `Home`, `End`, and `Space`.
-- [x] Convention requires clicking the empty deck stage around the visible slide to advance.
-- [x] Convention says stage-click navigation must not hijack clicks inside slide content, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs.
-- [x] Dogfood deck supports `A`/`ArrowLeft` back and `D`/`ArrowRight`/`Space` forward.
-- [x] Dogfood deck ignores navigation keys while focus is inside form-editing controls and ignores modified key combinations.
-- [x] Dogfood deck advances only when the empty `.deck`/active `.slide` stage outside `.slide-inner` is clicked.
+- [x] Slides with gate questions have a visible bottom filmstrip marker.
+- [x] Unanswered gate slides use a red marker/border.
+- [x] Completed gate slides use a green marker/border.
+- [x] The active filmstrip item uses black background and white text, not the previous green selected background.
+- [x] Existing filmstrip navigation and slide gate controls still work.
 
 ### Verification
 
-- [x] Text check: convention names stage-click, `A`, and `D`.
-- [x] Text check: deck JavaScript contains guarded key and click handlers.
-- [x] Text check: no dense-reference embed tags are introduced.
-- [x] Behavioral check: `A`/`ArrowLeft` go back, `D`/`ArrowRight`/`Space` advance.
-- [x] Behavioral check: clicking empty stage space advances.
-- [x] Behavioral check: clicking inside the slide, links, buttons, selects, textareas, filmstrip, and footer controls does not accidentally stage-advance.
-- [x] `npm --workspace packages/skillpacks run build`
-- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] Text check: deck has gate-marker CSS and gate-status JavaScript.
+- [x] Behavioral check: slide 4 starts as unanswered/red.
+- [x] Behavioral check: selecting a gate answer changes slide 4 to complete/green.
+- [x] Behavioral check: the active filmstrip background remains black with white text.
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
 - [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
+
+### Review
+
+Added gate-status markers to the dogfood deck's bottom filmstrip. Slides with gate questions now receive a persistent marker: red border for unanswered gates and green border once the gate has an answer.
+
+Changed the active filmstrip button to use a black background with white text, so selected-state styling no longer conflicts with green completion borders. The filmstrip status updates immediately when a gate answer changes.
+
+Verification passed for deck text hooks, browser-level gate-marker behavior, task-doc audit, diff hygiene, and opener status `opened`.
+
+# Historical Task State
+
+## Review - Stage-Click And A/D Slide Navigation 2026-07-05
+
+### Goal
+
+Add stage-click navigation and `A`/`D` slide hotkeys to the briefing-slides convention and the `create-briefing-slides` dogfood deck while preserving all existing review controls.
 
 ### Review
 
@@ -46,8 +57,6 @@ Implemented the briefing-slides convention update for `A`/`D` hotkeys and empty-
 Archived the previous dogfood deck to `docs/history/archive/2026-07-05/215911/briefing-slides/create-briefing-slides.html`, then amended `briefing-slides/create-briefing-slides.html` with a visible `Updated: click-stage + A/D navigation` marker, presentation copy that names `A`/`D` and empty-stage clicks, guarded keyboard handling, and empty-stage-only click handling.
 
 Verified package regeneration, convention/deck text, no dense-reference embed tags in the deck, repo-local reference existence, browser-level navigation behavior, package build checks, diff hygiene, and opener status `opened`.
-
-# Historical Task State
 
 ## Review - Interrogation and Alignment Upgrade Target Backlog 2026-07-05
 

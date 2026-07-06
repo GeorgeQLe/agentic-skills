@@ -12,6 +12,11 @@
 - Rule: when adding or reviewing briefing-slide navigation requirements, include both pointer and keyboard presentation affordances: `A`/`ArrowLeft` for previous, `D`/`ArrowRight`/`Space` for next, `Home`/`End` for bounds, and empty-stage clicks for forward navigation.
 - Stage-click handlers must be scoped to the empty deck stage only. They must not treat clicks inside slide content, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs as slide-advance intent.
 
+## 2026-07-05 - Gate slides need status visible in deck navigation
+
+- A briefing deck with inline gate questions did not expose gate completion status in the bottom slide navigation, so reviewers could miss unanswered gates while moving through slides.
+- Rule: when a deck has per-slide gate questions, mirror the gate status in the persistent navigation affordance. Use distinct incomplete and complete states, and make active selection styling neutral enough that status colors remain legible.
+
 ## 2026-07-05 - New shell commands must be installed before handoff
 
 - I added and pushed a `publish-canary` wrapper definition in `sync.md`, but did not install the wrapper into the user's current `~/.local/bin` before saying the command was ready.

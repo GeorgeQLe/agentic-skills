@@ -229,41 +229,12 @@
 
     .filmstrip button {
       width: 2.35rem;
-      position: relative;
-      border-width: 2px;
     }
 
     .filmstrip button.active {
-      background: #111827;
+      background: var(--accent);
       color: #fff;
-      border-color: #111827;
-    }
-
-    .filmstrip button.has-gate::after {
-      content: "";
-      position: absolute;
-      right: 0.28rem;
-      bottom: 0.24rem;
-      width: 0.42rem;
-      height: 0.42rem;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .filmstrip button.gate-unanswered {
-      border-color: #dc2626;
-    }
-
-    .filmstrip button.gate-complete {
-      border-color: #16a34a;
-    }
-
-    .filmstrip button.active.gate-unanswered {
-      border-color: #dc2626;
-    }
-
-    .filmstrip button.active.gate-complete {
-      border-color: #16a34a;
+      border-color: var(--accent);
     }
 
     .nav {
@@ -650,29 +621,6 @@
       persist();
     }
 
-    function gateStatusForSlide(slide) {
-      const gateNames = Array.from(slide.querySelectorAll('[data-gate]'))
-        .map((control) => control.dataset.gate)
-        .filter(Boolean);
-      const uniqueGateNames = Array.from(new Set(gateNames));
-      if (!uniqueGateNames.length) return '';
-      const gates = state.gates || {};
-      return uniqueGateNames.every((gateName) => Boolean(gates[gateName])) ? 'complete' : 'unanswered';
-    }
-
-    function updateFilmstripGateStatus() {
-      Array.from(filmstrip.children).forEach((button, index) => {
-        const status = gateStatusForSlide(slides[index]);
-        button.classList.toggle('has-gate', Boolean(status));
-        button.classList.toggle('gate-unanswered', status === 'unanswered');
-        button.classList.toggle('gate-complete', status === 'complete');
-        if (status) {
-          button.title = `${slides[index].dataset.title} - gate ${status}`;
-          button.setAttribute('aria-label', `Slide ${index + 1}: ${slides[index].dataset.title}; gate ${status}`);
-        }
-      });
-    }
-
     slides.forEach((slide, index) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -740,7 +688,6 @@
         state.gates = state.gates || {};
         state.gates[control.dataset.gate] = control.value;
         persist();
-        updateFilmstripGateStatus();
       });
     });
 
@@ -810,7 +757,6 @@
       button.addEventListener('click', () => copyText(references.join('\n')));
     });
 
-    updateFilmstripGateStatus();
     showSlide(current);
   </script>
 </body>
