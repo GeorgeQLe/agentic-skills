@@ -17,7 +17,7 @@ Remove agreed deprecated, superseded, and conflicting surfaces from active disco
 - [x] Add or update routing notes for consolidation candidates without deleting them.
 - [x] Regenerate package/catalog artifacts and review diffs.
 - [x] Run targeted tests and validation gates.
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ### Acceptance Criteria
 
