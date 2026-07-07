@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cp, mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -27,8 +28,21 @@ import {
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(packageRoot, "../..");
 const buildRoot = path.join(packageRoot, "build");
-const checkMode = process.argv.includes("--check");
+const args = process.argv.slice(2);
+const checkMode = args.includes("--check");
+const useDistManifest = args.includes("--use-dist-manifest");
 const packageLane = packageLaneFromEnv();
+const copyConcurrency = Number.parseInt(process.env.SKILLPACKS_BUILD_COPY_CONCURRENCY || "32", 10);
+
+const allowedArgs = new Set(["--check", "--use-dist-manifest"]);
+for (const arg of args) {
+  if (!allowedArgs.has(arg)) {
+    console.error(
+      `Unknown argument '${arg}'. Usage: node packages/skillpacks/scripts/build-package.mjs [--check] [--use-dist-manifest]`
+    );
+    process.exit(1);
+  }
+}
 
 const packageOwnedEntries = [
   { fromRoot: packageRoot, from: "bin", to: "bin" },
@@ -161,38 +175,48 @@ function pathAllowedForLane(relativePath) {
   return true;
 }
 
-function copyEntry({ fromRoot, from, to }) {
+async function copyEntry({ fromRoot, from, to }) {
   const source = path.join(fromRoot, from);
   const target = path.join(buildRoot, to);
   if (!existsSync(source)) {
     throw new Error(`Missing package source: ${path.relative(repoRoot, source)}`);
   }
 
-  mkdirSync(path.dirname(target), { recursive: true });
-  const stats = statSync(source);
-  if (stats.isDirectory()) {
-    cpSync(source, target, {
-      recursive: true,
-      preserveTimestamps: true,
-      dereference: false
-    });
-    return;
-  }
-
-  cpSync(source, target, {
+  await mkdir(path.dirname(target), { recursive: true });
+  const stats = await stat(source);
+  await cp(source, target, {
+    recursive: stats.isDirectory(),
     preserveTimestamps: true,
     dereference: false
   });
 }
 
-function copyTrackedPrefixes(files, prefixes) {
+async function runLimited(items, worker) {
+  if (items.length === 0) return;
+
+  const workerCount = Math.min(Math.max(copyConcurrency, 1), items.length);
+  let nextIndex = 0;
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (nextIndex < items.length) {
+        const item = items[nextIndex];
+        nextIndex += 1;
+        await worker(item);
+      }
+    })
+  );
+}
+
+async function copyEntries(entries) {
+  await runLimited(entries, copyEntry);
+}
+
+async function copyTrackedPrefixes(files, prefixes) {
   const trackedFiles = files.filter((relativePath) => {
     return prefixes.some((prefix) => relativePath === prefix || relativePath.startsWith(`${prefix}/`));
   });
 
-  for (const relativePath of trackedFiles) {
-    copyEntry({ fromRoot: repoRoot, from: relativePath, to: relativePath });
-  }
+  await copyEntries(trackedFiles.map((relativePath) => ({ fromRoot: repoRoot, from: relativePath, to: relativePath })));
 }
 
 function deniedSkillRootsForLane(files) {
@@ -295,28 +319,36 @@ function writeLaneFilteredConventionRegistry() {
   writeFileSync(target, registrySource);
 }
 
-function writeStagedManifest() {
-  const result = spawnSync(
-    process.execPath,
-    [path.join(packageRoot, "scripts/build-skillpacks-manifest.mjs"), "--print"],
-    {
-      cwd: repoRoot,
-      encoding: "utf8",
-      env: process.env,
-      maxBuffer: 64 * 1024 * 1024
+function readStagedManifest() {
+  if (useDistManifest) {
+    const manifestPath = path.join(packageRoot, "dist/skillpacks-manifest.json");
+    if (!existsSync(manifestPath)) {
+      throw new Error("Cannot stage from dist manifest because packages/skillpacks/dist/skillpacks-manifest.json is missing.");
     }
-  );
-  if (result.status !== 0) {
-    throw new Error(
-      [
-        "Failed to generate package manifest for staging.",
-        result.stdout,
-        result.stderr
-      ].filter(Boolean).join("\n")
-    );
+    return JSON.parse(readFileSync(manifestPath, "utf8"));
   }
 
-  const manifest = JSON.parse(result.stdout);
+  const result = spawnSync(process.execPath, [path.join(packageRoot, "scripts/build-skillpacks-manifest.mjs"), "--print"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    env: process.env,
+    maxBuffer: 64 * 1024 * 1024
+  });
+  if (result.status === 0) {
+    return JSON.parse(result.stdout);
+  }
+
+  throw new Error(
+    [
+      "Failed to generate package manifest for staging.",
+      result.stdout,
+      result.stderr
+    ].filter(Boolean).join("\n")
+  );
+}
+
+function writeStagedManifest() {
+  const manifest = readStagedManifest();
   if ((manifest.package?.release_lane || "stable") !== packageLane) {
     throw new Error(
       `Generated package manifest lane ${manifest.package?.release_lane || "stable"} !== ${packageLane}`
@@ -384,7 +416,7 @@ function assertExportBoundary(beforeFingerprint) {
   }
 }
 
-function buildPackage() {
+async function buildPackage() {
   const exportFingerprint = fileFingerprint(repoRoot, publicExportPaths);
   const files = gitFiles(repoRoot);
   const laneFiles = laneFilteredFiles(files);
@@ -408,16 +440,12 @@ function buildPackage() {
   rmSync(buildRoot, { recursive: true, force: true });
   mkdirSync(buildRoot, { recursive: true });
 
-  for (const entry of packageOwnedEntries) {
-    copyEntry(entry);
-  }
-  copyTrackedPrefixes(laneFiles, ["packs"]);
-  for (const entry of allowedPackageEntries(repoOwnedEntries)) {
-    copyEntry(entry);
-  }
-  for (const entry of allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane)) {
-    copyEntry(entry);
-  }
+  await Promise.all([
+    copyEntries(packageOwnedEntries),
+    copyTrackedPrefixes(laneFiles, ["packs"]),
+    copyEntries(allowedPackageEntries(repoOwnedEntries)),
+    copyEntries(allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane))
+  ]);
   for (const relativePath of canaryOnlyPackagePaths) {
     if (!pathAllowedForLane(relativePath)) {
       rmSync(path.join(buildRoot, relativePath), { recursive: true, force: true });
@@ -445,7 +473,7 @@ function buildPackage() {
 }
 
 try {
-  buildPackage();
+  await buildPackage();
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);

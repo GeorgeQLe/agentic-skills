@@ -2,39 +2,51 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Visible UAT Skill
+## Current Implementation - Package Build Optimization
+
+### Goal
+
+Reduce npm package publish/build verification time by removing redundant package-staging work and parallelizing independent package build copies without changing published package contents.
+
+### Plan
+
+- [x] Profile package build and publish verification scripts to identify duplicated or serial work.
+- [x] Add an npm-script fast path that stages from the already built or checked dist manifest.
+- [x] Parallelize independent package staging copies with bounded concurrency while preserving direct standalone staging behavior.
+- [x] Run focused and full package verification, task-doc audit, diff hygiene, then commit and push intended changes.
+
+### Acceptance Criteria
+
+- [x] `npm --workspace packages/skillpacks run build` still generates the manifest before staging.
+- [x] `npm --workspace packages/skillpacks run build:check` still checks the manifest before staging.
+- [x] Direct `node packages/skillpacks/scripts/build-package.mjs --check` remains self-contained and regenerates the staged manifest.
+- [x] The optimized npm path avoids a second manifest-generation pass during package staging.
+- [x] Package boundary tests cover staging from an already generated dist manifest.
+
+### Verification
+
+- [x] Baseline timing: `node packages/skillpacks/scripts/build-package.mjs --check`
+- [x] Optimized timing: `SKILLPACKS_PACKAGE_LANE=canary node packages/skillpacks/scripts/build-package.mjs --check --use-dist-manifest`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:manifest:check`
+- [x] `node --test packages/skillpacks/test/package-boundary.test.mjs`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `npm --workspace packages/skillpacks run test:node`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+Updated `packages/skillpacks` build scripts so the normal npm `build` and `build:check` flows reuse the dist manifest that was just generated or checked instead of making `build-package.mjs` regenerate it. Direct `node packages/skillpacks/scripts/build-package.mjs --check` remains self-contained for package-boundary tests and ad hoc verification.
+
+Converted package staging copies to bounded async copy work with `SKILLPACKS_BUILD_COPY_CONCURRENCY` defaulting to 32. Baseline direct staging improved from about 14.2s before the change to about 11.1s with parallel copies. The optimized dist-manifest staging path completed in about 1.2s in the current canary lane, and full canary `build:check` completed in about 13.4s.
+
+Added package-boundary coverage for staging from an already generated dist manifest. Verification passed for canary manifest check, focused package-boundary tests, canary build check, full `npm --workspace packages/skillpacks run test:node` with 206 passing tests, task-doc audit, and diff whitespace.
+
+## Historical Implementation - Visible UAT Skill
 
 ### Goal
 
 Create a new `visible-uat` skill in the product-testing pack for deterministic visible UAT execution against local desktop, web, and app surfaces. Keep it distinct from the existing `uat` skill, which remains a human-run UAT plan generator.
-
-### Plan
-
-- [x] Add source skill mirrors under `packs/product-testing/{claude,codex}/visible-uat/` with `version: v0.0`, matching changelogs, and pack metadata.
-- [x] Build package artifacts and refresh runtime mirrors from source.
-- [x] Run required text checks, mirror/version verification, task-doc audit, diff hygiene, commit, and push.
-
-### Acceptance Criteria
-
-- [x] The skill requires reading project instructions and UAT scope before launching anything.
-- [x] The skill requires detecting launch/test/smoke hooks and safe setup APIs.
-- [x] Transient setup scripts are limited to `/tmp`; app source changes are prohibited unless the user changes the task to implementation.
-- [x] Visible interactions start from the visible UI state tool and prefer accessibility-tree element actions.
-- [x] Reports are written under `docs/testing/` unless a stronger convention exists, with complete PASS/FAIL/BLOCKED data.
-- [x] Automated checks are labeled supplemental and run only after visible UAT.
-- [x] Processes started for UAT are stopped before handoff.
-- [x] The current `uat` human-run contract remains intact.
-
-### Verification
-
-- [x] `rg -n "visible-uat|Computer Use|/tmp|docs/testing|manual-gated|automated checks" packs/product-testing/{claude,codex}/visible-uat/SKILL.md`
-- [x] `rg -n "Do not run or operate the product" packs/product-testing/{claude,codex}/uat/SKILL.md`
-- [x] Manual contract check: `visible-uat` is execution; `uat` remains planning.
-- [x] Refreshed mirror/version check.
-- [x] `npm run skillpacks:build`
-- [x] `scripts/pack.sh refresh`
-- [x] `node scripts/audit-task-docs.mjs`
-- [x] `git diff --check`
 
 ### Review
 

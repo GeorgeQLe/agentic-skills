@@ -54,8 +54,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run build:manifest && node scripts/build-package.mjs",
-    "build:check": "node ../../scripts/skill-convention-bundle-audit.mjs && npm run build:manifest:check && node scripts/build-package.mjs --check",
+    "build": "npm run build:manifest && node scripts/build-package.mjs --use-dist-manifest",
+    "build:check": "node ../../scripts/skill-convention-bundle-audit.mjs && npm run build:manifest:check && node scripts/build-package.mjs --check --use-dist-manifest",
     "build:manifest": "node scripts/build-skillpacks-manifest.mjs",
     "build:manifest:check": "node scripts/build-skillpacks-manifest.mjs --check",
     "pack:dry-run": "npm pack ./build --dry-run --json --silent",

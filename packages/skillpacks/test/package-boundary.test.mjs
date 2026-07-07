@@ -55,13 +55,17 @@ function generatedManifestForLane(lane) {
   return `${JSON.stringify(JSON.parse(stdout), null, 2)}\n`;
 }
 
-function packedPaths({ lane = 'stable', writeLaneManifest = false } = {}) {
+function packedPaths({ lane = 'stable', writeLaneManifest = false, useDistManifest = false } = {}) {
   const originalManifest = readFileSync(manifestPath, 'utf8');
   try {
     if (writeLaneManifest) {
       writeFileSync(manifestPath, generatedManifestForLane(lane));
     }
-    run(process.execPath, ['scripts/build-package.mjs', '--check'], {
+    run(process.execPath, [
+      'scripts/build-package.mjs',
+      '--check',
+      ...(useDistManifest ? ['--use-dist-manifest'] : [])
+    ], {
       env: { SKILLPACKS_PACKAGE_LANE: lane }
     });
   } finally {
@@ -200,6 +204,18 @@ describe('skillpacks npm publish target boundary', () => {
     ]) {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published in canary packages`);
     }
+  });
+
+  it('can stage from an already generated dist manifest', () => {
+    const paths = packedPaths({
+      lane: 'canary',
+      writeLaneManifest: true,
+      useDistManifest: true
+    });
+
+    assert.equal(paths.has('dist/skillpacks-manifest.json'), true);
+    assert.equal(paths.has('assets/templates/briefing-slides.html'), true);
+    assert.equal(paths.has('packs/base/codex/create-briefing-slides/SKILL.md'), true);
   });
 
   it('keeps package manifests inside their selected release lane', () => {
