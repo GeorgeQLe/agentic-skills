@@ -2,51 +2,46 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Archive And Remove Build-In-Public Runtime Behavior
+## Current Implementation - Cleanup Scope Flags
 
 ### Goal
 
-Remove Build-In-Public from active stable behavior before general release while preserving stale-config cleanup for existing projects.
+Add explicit cleanup scope flags so `cleanup --all` spells the current recursive project cleanup scope and `cleanup --global` scans user-home projects plus legacy user-home skill roots, while plain `cleanup` remains backward compatible.
 
 ### Plan
 
-- [x] Archive and bump Claude/Codex `idea-scope-brief`, `ship`, and `ship-end` before editing.
-- [x] Remove BIP suggestion/output behavior from active skill contracts.
-- [x] Remove BIP mode/page-generation instructions from the alignment-page convention and regenerate bundles.
-- [x] Deprecate `set-bip`, `set-bip-platforms`, and `set-bip-prompt` command paths while keeping cleanup of stale config keys.
-- [x] Update README, package docs, generated manifests, exports, and active tests.
-- [x] Run release verification and fix regressions.
+- [x] Update CLI help and parser for `cleanup [--all|--global] [--reinstall-base] [--dry-run]`.
+- [x] Treat `--all` as the current default recursive cleanup from the command cwd.
+- [x] Treat `--global` as user-home cleanup scope for project config cleanup, deprecated alias cleanup, and optional base-skill reinstall migration.
+- [x] Reject `cleanup --all --global` with a clear error.
+- [x] Keep `uninstall-global` as a compatibility alias while routing docs toward `cleanup --global`.
+- [x] Add focused parser, lifecycle, and compatibility coverage.
+- [x] Run focused and package-level verification.
 
 ### Acceptance Criteria
 
-- [x] No active skill suggests, enables, or generates Build-In-Public output.
-- [x] Generated active alignment-page bundles no longer mention BIP runtime behavior.
-- [x] BIP configuration commands fail with a clear deprecation message and do not mutate project config.
-- [x] Cleanup still removes stale `alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed` keys.
-- [x] Active stable docs describe BIP as removed/deprecated only where cleanup guidance is needed.
+- [x] `cleanup`, `cleanup --all`, and `cleanup --all --dry-run` scan projects from the command cwd.
+- [x] `cleanup --global --dry-run` scans projects under the fake/user home, not the command cwd, and still previews legacy user-home skill removals.
+- [x] `cleanup --global --reinstall-base` uses the user-home project scan root for migration.
+- [x] `cleanup --all --global` is rejected.
+- [x] Help text, compatibility docs, and tests document `cleanup --global` as the replacement for device-wide `uninstall-global` usage.
 
 ### Verification
 
-- [x] `scripts/pack.sh refresh`
-- [x] `node scripts/upgrade-alignment-page.mjs --check`
-- [x] `bash scripts/skill-archive-audit.sh --strict`
-- [x] `bash scripts/skill-mirror-parity-audit.sh`
+- [x] `node --test packages/skillpacks/test/lifecycle.test.mjs packages/skillpacks/test/project-config.test.mjs packages/skillpacks/test/compatibility.test.mjs`
 - [x] `npm --workspace packages/skillpacks run test:node`
-- [x] `npm run skillpacks:verify`
-- [x] `npm run exports:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] Focused no-active-BIP reference assertions
 
 ### Review
 
-Archived and bumped both Claude/Codex mirrors for `idea-scope-brief`, `ship`, and `ship-end`, then removed BIP suggestion gates, BIP output boundaries, BIP post-generation, and the BIP-only `social-ledger` runtime requirement. Active `ALIGNMENT-PAGE.md` bundles were regenerated from the canonical alignment-page convention, including the legacy `brainstorm` bundle-only edge case.
+Added `--all` and `--global` cleanup scope parsing. Plain `cleanup` remains current-directory recursive cleanup, `cleanup --all` is its explicit spelling, `cleanup --global` scans projects under the user home while still removing legacy user-home base skill roots, and `cleanup --all --global` is rejected.
 
-Deprecated `set-bip`, `set-bip-platforms`, and `set-bip-prompt` in both the Node CLI and `scripts/pack.sh`; they now fail with cleanup guidance and do not mutate config. Cleanup still removes stale `alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed` keys.
+Updated lifecycle labels, refresh warnings, help text, README, quickstart, scripts reference, skillpack distribution docs, pack docs, and skills reference to route device/user-home cleanup toward `cleanup --global`. `uninstall-global` remains as a compatibility alias for the user-home scope.
 
-Updated README/package docs, social router docs, package-boundary/project-config/layer1 tests, generated package manifest output, and skills catalog export proof. Removed the active index entry for the old BIP suggestion page so the active alignment-page audit no longer treats it as current runtime output.
+Added focused coverage for explicit `--all`, `--global --dry-run`, `--global --reinstall-base --dry-run`, flag ordering with `--reinstall-base`, incompatible scope rejection, and compatibility/help docs.
 
-Verification passed: targeted Vitest BIP/alignment/social tests, `npm --workspace packages/skillpacks run test:node`, `scripts/pack.sh refresh`, `node scripts/upgrade-alignment-page.mjs --check`, `bash scripts/skill-archive-audit.sh --strict`, `bash scripts/skill-mirror-parity-audit.sh`, `node scripts/audit-alignment-pages.mjs`, `npm run skillpacks:verify`, `npm run exports:check`, `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+Verification passed: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check.
 
 ## Historical Implementation - Release Lane Briefing Slides
 

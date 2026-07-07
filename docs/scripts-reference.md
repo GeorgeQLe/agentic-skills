@@ -7,7 +7,7 @@ Compact command index for all scripts in this repository.
 | Command | Description |
 | --- | --- |
 | `npx skillpacks init` | Install managed base skill directories into the current project's local `.claude/skills/` and `.codex/skills/` roots and record `base_skills: true` in `.agents/project.json` |
-| `npx skillpacks cleanup [--dry-run]` | Remove or preview deprecated skillpacks state: legacy skillpacks-owned base installs under `~/.claude/skills` / `~/.codex/skills` and BIP config in discovered projects |
+| `npx skillpacks cleanup [--all\|--global] [--dry-run]` | Remove or preview deprecated skillpacks state: stale BIP config below the current directory by default, or legacy user-home base installs plus projects below the user home with `--global` |
 | `npx skillpacks pin ship v0.0` | Pin a project-local base skill to an archived version |
 
 ## Project Packs
@@ -56,7 +56,7 @@ Compact command index for all scripts in this repository.
 | `npx skillpacks doctor` | Check project-local base skill drift |
 | `npx skillpacks refresh` | Re-copy project-local managed base skills, clearing drift |
 | `npx skillpacks pin <skill> <version>` | Pin a project-local base skill to an archived version |
-| `npx skillpacks cleanup [--dry-run]` | Remove or preview deprecated skillpacks state, including legacy skillpacks-owned base installs and BIP config |
+| `npx skillpacks cleanup [--all\|--global] [--dry-run]` | Remove or preview deprecated skillpacks state; use `--global` for legacy user-home base installs |
 
 ## Testing & Benchmarks
 

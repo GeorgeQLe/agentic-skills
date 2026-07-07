@@ -15,7 +15,7 @@ Installs only:
 
 It does not install domain packs as base skills.
 
-`npx skillpacks init` installs these base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Base skills are project-local only — there is no user-home (global) base install. To clean up deprecated skillpacks state, including legacy user-home base installs and stale BIP config, run `npx skillpacks cleanup`; add `--dry-run` to preview the cleanup first.
+`npx skillpacks init` installs these base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots, records `base_skills: true` in `.agents/project.json`, and keeps them refreshable with `npx skillpacks refresh`. Base skills are project-local only — there is no user-home (global) base install. To clean up deprecated user-home skillpacks state, run `npx skillpacks cleanup --global`; add `--dry-run` to preview the cleanup first. Plain `npx skillpacks cleanup` removes stale BIP config from projects below the current directory.
 
 ## Project Pack Commands
 

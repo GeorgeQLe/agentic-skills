@@ -91,7 +91,7 @@ scripts/pack.sh status
 
 `npx skillpacks install <name>` accepts either a pack name or a skill name from the packaged manifest. Node-owned npm commands preserve `.agents/project.json` fields without requiring `jq`; source-checkout `scripts/pack.sh` write commands still use `jq` for structured JSON edits.
 
-`doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below. Build-In-Public runtime behavior has been removed; run `npx skillpacks cleanup` to remove stale BIP project config keys from existing projects.
+`doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below. Build-In-Public runtime behavior has been removed; run `npx skillpacks cleanup` to remove stale BIP project config keys from projects below the current directory, or `npx skillpacks cleanup --global` to scan below the user home.
 
 The npm CLI can install canonical decks from manifest metadata: `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`. Deck materialization still uses the packaged shell backend in this phase, so it requires `bash` and `jq`.
 

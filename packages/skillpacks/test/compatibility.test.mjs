@@ -17,7 +17,7 @@ const expectedMatrix = new Map([
   ['set-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['set-update-mode <mode>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['init', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
-  ['cleanup [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['cleanup [--all|--global] [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['uninstall-global [--reinstall-base] [--dry-run]', { owner: 'Node-owned compatibility alias', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
@@ -59,17 +59,20 @@ function readCompatibilityMatrix() {
     if (!line.startsWith('| `')) {
       continue;
     }
+    const commandMatch = line.match(/^\| `([^`]+)` \| /);
+    assert.ok(commandMatch, `could not parse command cell: ${line}`);
+    const command = commandMatch[1].replaceAll('\\|', '|');
     const cells = line
+      .slice(commandMatch[0].length)
       .split('|')
-      .slice(1, -1)
+      .slice(0, -1)
       .map((cell) => cell.trim());
-    const command = cells[0].replaceAll('`', '');
     rows.set(command, {
-      owner: cells[1],
-      backend: cells[2],
-      bash: cells[3],
-      jq: cells[4],
-      notes: cells[5]
+      owner: cells[0],
+      backend: cells[1],
+      bash: cells[2],
+      jq: cells[3],
+      notes: cells[4]
     });
   }
   return rows;
@@ -116,8 +119,8 @@ describe('skillpacks compatibility matrix', () => {
     );
     assert.match(
       cliSource,
-      /if \(command === 'cleanup' \|\| command === 'uninstall-global'\) \{[\s\S]*--reinstall-base[\s\S]*--dry-run[\s\S]*return uninstallGlobal\(\{/,
-      'cleanup should be a Node-owned command that cleans deprecated state and supports reinstall-base dry runs'
+      /if \(command === 'cleanup' \|\| command === 'uninstall-global'\) \{[\s\S]*--all[\s\S]*--global[\s\S]*--reinstall-base[\s\S]*--dry-run[\s\S]*return uninstallGlobal\(\{/,
+      'cleanup should be a Node-owned command that cleans deprecated state and supports scoped reinstall-base dry runs'
     );
     assert.doesNotMatch(
       cliSource,

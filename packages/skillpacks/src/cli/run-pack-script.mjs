@@ -1,5 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -759,10 +760,10 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  cleanup [--reinstall-base] [--dry-run]
-                               Remove deprecated skillpacks state: legacy globals and BIP config
+  cleanup [--all|--global] [--reinstall-base] [--dry-run]
+                               Remove deprecated state below cwd, or user-home state with --global
   uninstall-global [--reinstall-base] [--dry-run]
-                               Deprecated alias for cleanup
+                               Deprecated alias for cleanup --global
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   refresh --all [--dry-run]    Refresh every project under the current directory
@@ -869,7 +870,17 @@ export async function runSkillpacksCli(args) {
     const commandName = command;
     let reinstallBase = false;
     let dryRun = false;
+    let allScope = false;
+    let globalScope = command === 'uninstall-global';
     for (const arg of rest) {
+      if (arg === '--all') {
+        allScope = true;
+        continue;
+      }
+      if (arg === '--global') {
+        globalScope = true;
+        continue;
+      }
       if (arg === '--reinstall-base') {
         reinstallBase = true;
         continue;
@@ -883,10 +894,15 @@ export async function runSkillpacksCli(args) {
       }
       throw new Error(`${commandName}: unexpected argument '${arg}'`);
     }
+    if (allScope && globalScope) {
+      throw new Error(`${commandName}: --all and --global cannot be used together`);
+    }
+    const rootDir = globalScope ? homedir() : process.cwd();
     return uninstallGlobal({
       manifest: reinstallBase ? readManifest() : null,
       reinstallBase,
-      rootDir: process.cwd(),
+      rootDir,
+      cleanupScope: globalScope ? 'global' : allScope ? 'all' : 'default',
       dryRun
     });
   }

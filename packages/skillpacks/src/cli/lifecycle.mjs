@@ -595,8 +595,8 @@ function printGlobalRepoSkillWarning(installs, homeRoot = homedir()) {
   for (const install of installs) {
     console.log(`  ${install.rel}`);
   }
-  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks cleanup');
-  console.log('To clean up and enable project-local base skills below the current directory: npx skillpacks cleanup --reinstall-base');
+  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks cleanup --global');
+  console.log('To clean up and enable project-local base skills below your home directory: npx skillpacks cleanup --global --reinstall-base');
 }
 
 function comparePathStrings(left, right) {
@@ -1778,9 +1778,19 @@ export async function uninstallGlobal({
   manifest = null,
   reinstallBase = false,
   rootDir = process.cwd(),
+  cleanupScope = 'default',
   dryRun = false
 } = {}) {
-  const commandLabel = reinstallBase ? 'cleanup --reinstall-base' : 'cleanup';
+  const commandParts = ['cleanup'];
+  if (cleanupScope === 'global') {
+    commandParts.push('--global');
+  } else if (cleanupScope === 'all') {
+    commandParts.push('--all');
+  }
+  if (reinstallBase) {
+    commandParts.push('--reinstall-base');
+  }
+  const commandLabel = commandParts.join(' ');
   const installs = globalRepoSkillInstalls(homeRoot);
   let removed = installs.length;
 
@@ -1823,12 +1833,13 @@ export async function uninstallGlobal({
 
   const roots = discoverProjectRoots(rootDir);
   if (roots.length === 0) {
+    const initTargetLabel = cleanupScope === 'global' ? 'user-home scan root' : 'current directory';
     if (dryRun) {
-      console.log(`No projects with .agents/project.json found under ${rootDir}. Would initialize current directory with base skills.`);
+      console.log(`No projects with .agents/project.json found under ${rootDir}. Would initialize ${initTargetLabel} with base skills.`);
       console.log(`Dry run. Would initialize project base skills to ${manifestPackageLabel(manifest)}.`);
       return 0;
     }
-    console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing current directory.`);
+    console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing ${initTargetLabel}.`);
     return initProject({ manifest, projectRoot: rootDir });
   }
 
@@ -2561,7 +2572,7 @@ export async function refreshAllProjects({
         console.log(
           `    - Found ${globalInstalls.length} legacy user-home skillpacks install(s) under ${homeRoot}.`
         );
-        console.log('      Cleanup: npx skillpacks cleanup');
+        console.log('      Cleanup: npx skillpacks cleanup --global');
       }
       if (failures.length > 0) {
         console.log(`    - ${failures.length} project(s) failed dry-run planning; see Failures above.`);

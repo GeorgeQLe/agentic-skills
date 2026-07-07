@@ -240,9 +240,9 @@ describe('Node project config commands', () => {
 
     const output = await runSkillpacks(dir, ['help']);
 
-    assert.match(output, /cleanup \[--reinstall-base\] \[--dry-run\]/);
+    assert.match(output, /cleanup \[--all\|--global\] \[--reinstall-base\] \[--dry-run\]/);
     assert.match(output, /uninstall-global \[--reinstall-base\] \[--dry-run\]/);
-    assert.match(output, /Deprecated alias for cleanup/);
+    assert.match(output, /Deprecated alias for cleanup --global/);
     assert.doesNotMatch(output, /set-bip <mode>/);
     assert.doesNotMatch(output, /set-bip-platforms/);
     assert.doesNotMatch(output, /set-bip-prompt/);
