@@ -2,7 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.15
+version: v0.14
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 

@@ -2,7 +2,7 @@
 name: hygiene
 description: Audit project structure for convention violations, missing files, template drift, and cross-platform sync gaps; optionally auto-fix
 type: analysis
-version: v0.1
+version: v0.0
 argument-hint: "[audit|fix] [skills|tasks|docs|codex|all]"
 ---
 

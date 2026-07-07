@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.16 - 2026-07-07
+
+- Aligned the Claude skill version with the mirrored Codex skill so shared Claude/Codex skills carry matching version metadata.
+
 ## v0.15 - 2026-07-06
 
 - Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/provision-agentic-config-{topic}.html` is now the primary review surface and compiled YAML routes back to `/provision-agentic-config`.

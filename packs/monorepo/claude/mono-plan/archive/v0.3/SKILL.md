@@ -2,7 +2,7 @@
 name: mono-plan
 description: Detect monorepo structure, identify shared chokepoints, and generate safe parallel lane specs aligned to package boundaries
 type: planning
-version: v0.4
+version: v0.3
 release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<phase-number> [optional: path to roadmap if not tasks/roadmap.md]"
@@ -165,3 +165,4 @@ Follow the shared alignment-page convention via the packaged convention resolver
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
+

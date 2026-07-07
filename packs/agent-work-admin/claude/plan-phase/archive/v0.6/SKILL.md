@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.7
+version: v0.6
 release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[phase-number] [--no-tdd]"

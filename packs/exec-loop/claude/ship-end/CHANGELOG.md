@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-07-07
+
+- Aligned the Claude skill version with the mirrored Codex skill so shared Claude/Codex skills carry matching version metadata.
+
 ## v0.14 - 2026-07-06
 
 - Removed Build-In-Public wrap-up behavior and dropped the `social-ledger` convention dependency that was only needed for BIP post suggestions.

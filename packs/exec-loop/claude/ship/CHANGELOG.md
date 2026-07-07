@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-07-07
+
+- Aligned the Claude skill version with the mirrored Codex skill so shared Claude/Codex skills carry matching version metadata.
+
 ## v0.11 - 2026-07-06
 
 - Removed the Build-In-Public output-boundary clause now that BIP is no longer an active shipping path.
