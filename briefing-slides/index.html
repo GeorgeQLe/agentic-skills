@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Briefing Slides Index</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #647089;
+      --line: #d9e0ea;
+      --paper: #fbfcff;
+      --panel: #ffffff;
+      --blue: #2364aa;
+      --teal: #0f8b8d;
+      --green: #2f7d4f;
+      --gold: #9a6a10;
+      --violet: #6653a6;
+      --red: #b33a3a;
+      --shadow: 0 14px 38px rgba(24, 32, 47, .1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eef5ff, #fbfcff 36%, #f4f7fb);
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header {
+      padding: clamp(22px, 4vw, 42px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 252, 255, .88);
+    }
+    .eyebrow {
+      color: var(--teal);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    h1 {
+      margin: 0;
+      max-width: 980px;
+      font-size: clamp(34px, 6vw, 68px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    .lead {
+      margin: 14px 0 0;
+      max-width: 850px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 21px);
+      line-height: 1.4;
+    }
+    main {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin: 0 0 18px;
+    }
+    input[type="search"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      padding: 12px 14px;
+      font: inherit;
+      box-shadow: var(--shadow);
+    }
+    .count {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    section {
+      margin: 22px 0;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 32px);
+      letter-spacing: 0;
+    }
+    .section-head span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      display: grid;
+      gap: 9px;
+      min-height: 136px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      box-shadow: 0 8px 24px rgba(24, 32, 47, .06);
+    }
+    .card:hover {
+      border-color: #aab8cb;
+      box-shadow: var(--shadow);
+    }
+    .card strong {
+      font-size: 17px;
+      line-height: 1.2;
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: #f7f9fc;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .business { border-left: 4px solid var(--blue); }
+    .devtool { border-left: 4px solid var(--teal); }
+    .game { border-left: 4px solid var(--green); }
+    .rapid { border-left: 4px solid var(--gold); }
+    .other { border-left: 4px solid var(--violet); }
+    .empty {
+      display: none;
+      padding: 18px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .7);
+    }
+    footer {
+      margin: 28px 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      main { padding: 12px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Briefing slides</div>
+    <h1>Index of slide-first review decks.</h1>
+    <p class="lead">Use this page to open the AFPS series overview, individual skill decks, rapid feeder decks, and existing briefing-slide artifacts.</p>
+  </header>
+  <main>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search decks by skill, deck, phase, or filename" aria-label="Search briefing slide decks">
+      <div class="count" id="count">46 decks</div>
+    </div>
+    <div class="empty" id="empty">No matching briefing decks.</div>
+
+    <section data-section>
+      <div class="section-head"><h2>AFPS Overview</h2><span>1 deck</span></div>
+      <div class="grid">
+        <a class="card business" href="afps-skill-overviews.html" data-card data-text="afps overview business devtool game vard ord canonical flow">
+          <strong>AFPS Skill Overview</strong>
+          <p>Series-wide map of Business AFPS, Devtool AFPS, Game AFPS, VARD, and ORD.</p>
+          <div class="chips"><span class="chip">overview</span><span class="chip">13 slides</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section data-section>
+      <div class="section-head"><h2>Business AFPS</h2><span>20 decks</span></div>
+      <div class="grid">
+        <a class="card business" href="afps-skill-idea-scope-brief.html" data-card data-text="business afps concept market idea-scope-brief planning"><strong>idea-scope-brief</strong><p>Shape a rough product idea into a scoped brief.</p><div class="chips"><span class="chip">concept</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-customer-discovery.html" data-card data-text="business afps concept market customer-discovery research"><strong>customer-discovery</strong><p>Define ICP and customer evidence before market decisions.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-competitive-analysis.html" data-card data-text="business afps concept market competitive-analysis research"><strong>competitive-analysis</strong><p>Map alternatives, competitors, differentiation, and risks.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-journey-map.html" data-card data-text="business afps concept market journey-map lifecycle research"><strong>journey-map</strong><p>Turn customer stages and task flow into lifecycle evidence.</p><div class="chips"><span class="chip">concept</span><span class="chip">lifecycle</span></div></a>
+        <a class="card business" href="afps-skill-positioning.html" data-card data-text="business afps concept market positioning research"><strong>positioning</strong><p>Lock category, value wedge, alternatives, and narrative.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-user-flow-map.html" data-card data-text="business afps product shape user-flow-map planning"><strong>user-flow-map</strong><p>Create the design-tree root: flows, surfaces, channels, and branches.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-state-model.html" data-card data-text="business afps product shape state-model planning"><strong>state-model</strong><p>Model entities, state machines, events, commands, and contracts.</p><div class="chips"><span class="chip">product shape</span><span class="chip">optional</span></div></a>
+        <a class="card business" href="afps-skill-ux-variations.html" data-card data-text="business afps product shape ux-variations planning"><strong>ux-variations</strong><p>Explore alternate progression branches for one named user flow.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-ui-interview.html" data-card data-text="business afps product shape ui-interview planning"><strong>ui-interview</strong><p>Specify visual UI details for a selected UX variation.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-build-ui-screens.html" data-card data-text="business afps prototype proof build-ui-screens execution"><strong>build-ui-screens</strong><p>Build visual screens for an approved UI branch.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
+        <a class="card business" href="afps-skill-logic-wiring.html" data-card data-text="business afps prototype proof logic-wiring execution"><strong>logic-wiring</strong><p>Wire screens and channel behavior into a clickable prototype.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
+        <a class="card business" href="afps-skill-uat.html" data-card data-text="business afps prototype proof uat analysis variant evaluation"><strong>uat</strong><p>Define acceptance journeys and evidence capture for variant evaluation.</p><div class="chips"><span class="chip">prototype</span><span class="chip">analysis</span></div></a>
+        <a class="card business" href="afps-skill-consolidate-prototypes.html" data-card data-text="business afps prototype proof consolidate-prototypes planning"><strong>consolidate-prototypes</strong><p>Converge evaluated branches into one approved MVP.</p><div class="chips"><span class="chip">prototype</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-research-roadmap.html" data-card data-text="business afps production handoff research-roadmap planning docs"><strong>research-roadmap</strong><p>Scan research and documentation health, then route cleanup.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-spec-interview.html" data-card data-text="business afps production handoff spec-interview planning"><strong>spec-interview</strong><p>Extract a production spec from the consolidated prototype.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-roadmap.html" data-card data-text="business afps execution roadmap planning"><strong>roadmap</strong><p>Sequence specs and repo state into phased work.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-plan-phase.html" data-card data-text="business afps execution plan-phase planning"><strong>plan-phase</strong><p>Break one roadmap phase into implementable steps.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-exec.html" data-card data-text="business afps execution exec implementation"><strong>exec</strong><p>Execute the next approved implementation step or phase.</p><div class="chips"><span class="chip">execution</span><span class="chip">build</span></div></a>
+        <a class="card business" href="afps-skill-ship.html" data-card data-text="business afps execution ship shipping"><strong>ship</strong><p>Ship current work with docs, commit, push, and optional deploy.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
+        <a class="card business" href="afps-skill-ship-end.html" data-card data-text="business afps execution ship-end shipping wrap"><strong>ship-end</strong><p>Close the session with docs, commit, push, and handoff state.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
+      </div>
+    </section>
+
+    <section data-section>
+      <div class="section-head"><h2>Devtool AFPS</h2><span>5 decks</span></div>
+      <div class="grid">
+        <a class="card devtool" href="afps-skill-devtool-positioning.html" data-card data-text="devtool afps devtool-positioning research"><strong>devtool-positioning</strong><p>Position developer tools by workflow, ecosystem, trust, and switching cost.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-adoption.html" data-card data-text="devtool afps devtool-adoption research"><strong>devtool-adoption</strong><p>Plan examples, templates, proof artifacts, community, and adoption loops.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-dx-journey.html" data-card data-text="devtool afps devtool-dx-journey analysis"><strong>devtool-dx-journey</strong><p>Analyze install, quickstart, first success, debugging, and production adoption.</p><div class="chips"><span class="chip">devtool</span><span class="chip">analysis</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-docs-audit.html" data-card data-text="devtool afps devtool-docs-audit review docs"><strong>devtool-docs-audit</strong><p>Audit quickstarts, examples, API reference, troubleshooting, and migration paths.</p><div class="chips"><span class="chip">devtool</span><span class="chip">review</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-monetization.html" data-card data-text="devtool afps devtool-monetization research pricing"><strong>devtool-monetization</strong><p>Design pricing, packaging, OSS strategy, limits, and team conversion.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+      </div>
+    </section>
+
+    <section data-section>
+      <div class="section-head"><h2>Game AFPS</h2><span>10 decks</span></div>
+      <div class="grid">
+        <a class="card game" href="afps-skill-game-audience.html" data-card data-text="game afps game-audience research"><strong>game-audience</strong><p>Identify player segments by taste, behavior, platform, genre affinity, and motivation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-fantasy.html" data-card data-text="game afps game-fantasy research"><strong>game-fantasy</strong><p>Define emotional promise, player fantasy, vibe references, and hook.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-genre-map.html" data-card data-text="game afps game-genre-map research"><strong>game-genre-map</strong><p>Map genre conventions, expectations, complaints, and anti-patterns.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-comparables.html" data-card data-text="game afps game-comparables research"><strong>game-comparables</strong><p>Research comparable titles, tags, prices, player signals, and positioning.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-core-loop.html" data-card data-text="game afps game-core-loop analysis"><strong>game-core-loop</strong><p>Analyze moment-to-moment, session, progression, and retention loops.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
+        <a class="card game" href="afps-skill-game-prototype-test.html" data-card data-text="game afps game-prototype-test planning"><strong>game-prototype-test</strong><p>Design playable prototype tests for fun, clarity, and replay.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
+        <a class="card game" href="afps-skill-game-playtest-metrics.html" data-card data-text="game afps game-playtest-metrics analysis"><strong>game-playtest-metrics</strong><p>Define metrics for time-to-fun, replay, confusion, quit points, and retention.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
+        <a class="card game" href="afps-skill-game-store-page-test.html" data-card data-text="game afps game-store-page-test research store"><strong>game-store-page-test</strong><p>Plan store-page, capsule, trailer, screenshot, tag, and wishlist validation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-launch.html" data-card data-text="game afps game-launch research"><strong>game-launch</strong><p>Plan festivals, creator outreach, demo timing, community, and wishlist targets.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-roadmap.html" data-card data-text="game afps game-roadmap planning"><strong>game-roadmap</strong><p>Sequence prototype, vertical slice, demo, store page, launch, and post-launch.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
+      </div>
+    </section>
+
+    <section data-section>
+      <div class="section-head"><h2>Rapid Feeders</h2><span>8 decks</span></div>
+      <div class="grid">
+        <a class="card rapid" href="afps-skill-vard-scan.html" data-card data-text="rapid feeder vard vard-scan research"><strong>vard-scan</strong><p>Scan for viral app opportunities from trends, gaps, and user pain.</p><div class="chips"><span class="chip">VARD</span><span class="chip">research</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-align.html" data-card data-text="rapid feeder vard vard-align analysis"><strong>vard-align</strong><p>Run quick feasibility and novelty checks for this week's build.</p><div class="chips"><span class="chip">VARD</span><span class="chip">analysis</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-ship.html" data-card data-text="rapid feeder vard vard-ship ops"><strong>vard-ship</strong><p>Deploy the app, create landing page, set analytics, and log shipment.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-traction.html" data-card data-text="rapid feeder vard vard-traction ops"><strong>vard-traction</strong><p>Check traction and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-scan.html" data-card data-text="rapid feeder ord ord-scan research"><strong>ord-scan</strong><p>Scan npm gaps, GitHub trends, and developer pain for OSS opportunities.</p><div class="chips"><span class="chip">ORD</span><span class="chip">research</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-align.html" data-card data-text="rapid feeder ord ord-align analysis"><strong>ord-align</strong><p>Validate namespace, existing solutions, and feasibility before building.</p><div class="chips"><span class="chip">ORD</span><span class="chip">analysis</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-ship.html" data-card data-text="rapid feeder ord ord-ship ops"><strong>ord-ship</strong><p>Publish to npm, create README, set up repo, and log shipment.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-traction.html" data-card data-text="rapid feeder ord ord-traction ops"><strong>ord-traction</strong><p>Check adoption and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
+      </div>
+    </section>
+
+    <section data-section>
+      <div class="section-head"><h2>Other Briefing Decks</h2><span>2 decks</span></div>
+      <div class="grid">
+        <a class="card other" href="create-briefing-slides.html" data-card data-text="other create-briefing-slides convention skill"><strong>create-briefing-slides</strong><p>Deck explaining the briefing-slide skill and review convention.</p><div class="chips"><span class="chip">ops</span><span class="chip">reference</span></div></a>
+        <a class="card other" href="release-lane-change-boundary.html" data-card data-text="other release-lane-change-boundary"><strong>release-lane-change-boundary</strong><p>Existing briefing-slide artifact outside the AFPS skill series.</p><div class="chips"><span class="chip">reference</span></div></a>
+      </div>
+    </section>
+
+    <footer>
+      Index links are repo-relative and intended to work from <code>file://</code>. Dense source artifacts remain in their original docs, research, pack, and skill files.
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById('search');
+    const count = document.getElementById('count');
+    const empty = document.getElementById('empty');
+    const cards = Array.from(document.querySelectorAll('[data-card]'));
+    const sections = Array.from(document.querySelectorAll('[data-section]'));
+
+    function update() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach((card) => {
+        const text = `${card.textContent} ${card.dataset.text || ''}`.toLowerCase();
+        const match = !query || text.includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) visible += 1;
+      });
+      sections.forEach((section) => {
+        const hasVisible = Array.from(section.querySelectorAll('[data-card]')).some((card) => card.style.display !== 'none');
+        section.style.display = hasVisible ? '' : 'none';
+      });
+      count.textContent = `${visible} deck${visible === 1 ? '' : 's'}`;
+      empty.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    search.addEventListener('input', update);
+    update();
+  </script>
+</body>
+</html>
