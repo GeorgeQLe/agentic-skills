@@ -811,9 +811,9 @@ function pinnedVersions(config) {
     : {};
 }
 
-function writePackProjectConfig(projectRoot, pack, packs) {
+function writePackProjectConfig(projectRoot, manifest, pack, packs) {
   const existing = readProjectConfig(projectRoot);
-  const next = existing
+  let next = existing
     ? { ...existing }
     : {
         project_type: projectTypeForPack(pack) || inferProjectType(projectRoot),
@@ -826,6 +826,7 @@ function writePackProjectConfig(projectRoot, pack, packs) {
   }
   next.enabled_packs = packs;
   next.skill_pack_version = 1;
+  next = applyEnabledSkillDependencies(next, manifest);
   return writeProjectConfigIfChanged(projectRoot, next);
 }
 
@@ -900,12 +901,15 @@ function installPack(projectRoot, manifest, pack) {
       if (linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config)) {
         changed = true;
       }
+      if (linkRequiredBaseSkills(projectRoot, manifest, tool, skill, config)) {
+        changed = true;
+      }
     }
   }
 
   const packs = [...enabledPacks(readProjectConfig(projectRoot)), pack]
     .filter((candidate, index, all) => all.indexOf(candidate) === index);
-  if (writePackProjectConfig(projectRoot, pack, packs)) {
+  if (writePackProjectConfig(projectRoot, manifest, pack, packs)) {
     console.log('Updated .agents/project.json');
     changed = true;
   }
@@ -946,15 +950,19 @@ function installSingleSkill(projectRoot, manifest, skillName) {
       if (linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config)) {
         changed = true;
       }
+      if (linkRequiredBaseSkills(projectRoot, manifest, tool, skill, config)) {
+        changed = true;
+      }
     }
   }
 
-  const next = ensureProjectConfigForSkill(projectRoot);
+  let next = ensureProjectConfigForSkill(projectRoot);
   const enabledSkills = next.enabled_skills && typeof next.enabled_skills === 'object'
     ? { ...next.enabled_skills }
     : {};
   enabledSkills[skillName] = pack || 'base';
   next.enabled_skills = enabledSkills;
+  next = applyEnabledSkillDependencies(next, manifest);
   if (writeProjectConfigIfChanged(projectRoot, next)) {
     console.log(`Updated .agents/project.json (skill: ${skillName} from ${pack ? `pack: ${pack}` : 'base'})`);
     changed = true;
@@ -962,13 +970,13 @@ function installSingleSkill(projectRoot, manifest, skillName) {
   return changed;
 }
 
-function removeEnabledSkill(projectRoot, skillName) {
+function removeEnabledSkill(projectRoot, manifest, skillName) {
   const existing = readProjectConfig(projectRoot);
   if (!existing) {
     return;
   }
 
-  const next = { ...existing };
+  let next = { ...existing };
   if (next.enabled_skills && typeof next.enabled_skills === 'object') {
     const enabledSkills = { ...next.enabled_skills };
     delete enabledSkills[skillName];
@@ -978,6 +986,7 @@ function removeEnabledSkill(projectRoot, skillName) {
       delete next.enabled_skills;
     }
   }
+  next = applyEnabledSkillDependencies(next, manifest);
   writeProjectConfigIfChanged(projectRoot, next);
 }
 
@@ -999,7 +1008,7 @@ function removeSingleSkill(projectRoot, manifest, skillName) {
   }
 
   const before = readProjectConfig(projectRoot);
-  removeEnabledSkill(projectRoot, skillName);
+  removeEnabledSkill(projectRoot, manifest, skillName);
   const after = readProjectConfig(projectRoot);
   if (!projectConfigsEqual(before, after)) {
     console.log(`Updated .agents/project.json (removed skill: ${skillName})`);
@@ -1028,7 +1037,7 @@ function removePack(projectRoot, manifest, pack) {
   }
 
   const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => candidate !== pack);
-  if (writePackProjectConfig(projectRoot, pack, packs)) {
+  if (writePackProjectConfig(projectRoot, manifest, pack, packs)) {
     console.log('Updated .agents/project.json');
   }
 }
@@ -1038,6 +1047,86 @@ function enabledSkillEntries(config) {
     return [];
   }
   return Object.entries(config.enabled_skills);
+}
+
+function enabledSkillDependencyEntries(config) {
+  if (!config?.enabled_skill_dependencies || typeof config.enabled_skill_dependencies !== 'object') {
+    return [];
+  }
+  return Object.entries(config.enabled_skill_dependencies);
+}
+
+function skillRequiredBaseSkills(skill) {
+  return Array.isArray(skill?.required_base_skills)
+    ? skill.required_base_skills.filter(Boolean)
+    : [];
+}
+
+function addRequiredBaseSkillDependencies(dependencies, skill) {
+  for (const requiredBaseSkill of skillRequiredBaseSkills(skill)) {
+    if (!dependencies.has(requiredBaseSkill)) {
+      dependencies.set(requiredBaseSkill, new Set());
+    }
+    const conventions = dependencies.get(requiredBaseSkill);
+    if (Array.isArray(skill.required_conventions) && skill.required_conventions.includes('briefing-slides')) {
+      conventions.add('briefing-slides');
+    } else {
+      conventions.add('required_base_skills');
+    }
+  }
+}
+
+function dependencyEntriesForConfig(manifest, config) {
+  const dependencies = new Map();
+
+  for (const pack of enabledPacks(config)) {
+    for (const skill of manifestSkills(manifest).filter((candidate) => {
+      return installableSkill(candidate) && candidate.pack === pack;
+    })) {
+      addRequiredBaseSkillDependencies(dependencies, skill);
+    }
+  }
+
+  for (const [skillName, pack] of enabledSkillEntries(config)) {
+    for (const skill of manifestSkills(manifest).filter((candidate) => {
+      return installableSkill(candidate)
+        && candidate.name === skillName
+        && (pack === 'base' ? candidate.scope === 'base' : candidate.pack === pack);
+    })) {
+      addRequiredBaseSkillDependencies(dependencies, skill);
+    }
+  }
+
+  return [...dependencies.entries()]
+    .map(([skillName, reasons]) => [skillName, [...reasons].sort((a, b) => a.localeCompare(b))])
+    .sort(([left], [right]) => left.localeCompare(right));
+}
+
+function applyEnabledSkillDependencies(config, manifest) {
+  const next = { ...config };
+  const dependencies = Object.fromEntries(dependencyEntriesForConfig(manifest, next));
+  if (Object.keys(dependencies).length > 0) {
+    next.enabled_skill_dependencies = dependencies;
+  } else {
+    delete next.enabled_skill_dependencies;
+  }
+  return next;
+}
+
+function requiredBaseSkillEntriesForSkill(manifest, tool, skill) {
+  return skillRequiredBaseSkills(skill)
+    .map((skillName) => findBaseSkillEntry(manifest, tool, skillName))
+    .filter(Boolean);
+}
+
+function linkRequiredBaseSkills(projectRoot, manifest, tool, skill, config) {
+  let changed = false;
+  for (const requiredBaseSkill of requiredBaseSkillEntriesForSkill(manifest, tool, skill)) {
+    if (linkSkill(projectRoot, tool, requiredBaseSkill.name, skillSourceDir(requiredBaseSkill), config)) {
+      changed = true;
+    }
+  }
+  return changed;
 }
 
 function staleProjectPackError(pack, location, reason = '') {
@@ -1111,6 +1200,15 @@ function reconcileProjectConfig(projectRoot, manifest) {
     }
     next.enabled_skills = enabledSkills;
   }
+
+  const nextWithDependencies = applyEnabledSkillDependencies(next, manifest);
+  if (
+    JSON.stringify(nextWithDependencies.enabled_skill_dependencies || null)
+    !== JSON.stringify(next.enabled_skill_dependencies || null)
+  ) {
+    changed = true;
+  }
+  Object.assign(next, nextWithDependencies);
 
   if (changed) {
     writeProjectConfig(projectRoot, next);
@@ -1294,6 +1392,10 @@ function expectedSkillNames(manifest, config) {
     expected.add(skillName);
   }
 
+  for (const [skillName] of dependencyEntriesForConfig(manifest, config)) {
+    expected.add(skillName);
+  }
+
   for (const skillName of Object.keys(pinnedVersions(config))) {
     expected.add(skillName);
   }
@@ -1344,6 +1446,15 @@ function expectedSkillInstallEntries(manifest, config, projectRoot) {
       const skill = pack === 'base'
         ? findBaseSkillEntry(manifest, tool, skillName)
         : findSkillEntry(manifest, pack, tool, skillName);
+      if (skill) {
+        add(tool, skillName, skillSourceDir(skill));
+      }
+    }
+  }
+
+  for (const [skillName] of dependencyEntriesForConfig(manifest, config)) {
+    for (const tool of TOOLS) {
+      const skill = findBaseSkillEntry(manifest, tool, skillName);
       if (skill) {
         add(tool, skillName, skillSourceDir(skill));
       }
@@ -1442,7 +1553,7 @@ function readOnlyReconciledConfig(manifest, config) {
     next.enabled_skills = enabledSkills;
   }
 
-  return next;
+  return applyEnabledSkillDependencies(next, manifest);
 }
 
 function readOnlyReconciledProjectConfig(projectRoot, manifest) {
@@ -1975,6 +2086,9 @@ function syncExpectedSkillRoots(projectRoot, manifest) {
         if (linkSkill(projectRoot, tool, skill.name, skillSourceDir(skill), config)) {
           changed += 1;
         }
+        if (linkRequiredBaseSkills(projectRoot, manifest, tool, skill, config)) {
+          changed += 1;
+        }
       }
     }
   }
@@ -1985,6 +2099,9 @@ function syncExpectedSkillRoots(projectRoot, manifest) {
         ? findBaseSkillEntry(manifest, tool, skillName)
         : findSkillEntry(manifest, pack, tool, skillName);
       if (skill && linkSkill(projectRoot, tool, skillName, skillSourceDir(skill), config)) {
+        changed += 1;
+      }
+      if (skill && linkRequiredBaseSkills(projectRoot, manifest, tool, skill, config)) {
         changed += 1;
       }
     }

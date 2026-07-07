@@ -139,9 +139,13 @@ describe('skillpacks manifest deck metadata', () => {
     const manifest = canaryManifest();
     const ideaScope = skillByPath(manifest, 'packs/base/codex/idea-scope-brief/SKILL.md');
     const userFlowMap = skillByPath(manifest, 'packs/product-design/codex/user-flow-map/SKILL.md');
+    const competitiveAnalysis = skillByPath(manifest, 'packs/business-research/codex/competitive-analysis/SKILL.md');
 
     assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'briefing-slides', 'interrogation-page']);
     assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'briefing-slides', 'design-tree-loop', 'interrogation-page']);
+    assert.deepEqual(ideaScope.required_base_skills, ['create-briefing-slides']);
+    assert.deepEqual(userFlowMap.required_base_skills, ['create-briefing-slides']);
+    assert.deepEqual(competitiveAnalysis.required_base_skills, ['create-briefing-slides']);
   });
 
   it('omits canary-only briefing-slide skills from the stable manifest', () => {
@@ -157,6 +161,11 @@ describe('skillpacks manifest deck metadata', () => {
       stableManifest.skills.some((skill) => skill.required_conventions.includes('briefing-slides')),
       false,
       'stable manifest should not include skills requiring canary-only conventions'
+    );
+    assert.equal(
+      stableManifest.skills.some((skill) => Object.hasOwn(skill, 'required_base_skills')),
+      false,
+      'stable manifest should not expose briefing-slide helper metadata'
     );
   });
 

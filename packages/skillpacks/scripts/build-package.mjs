@@ -46,6 +46,7 @@ const repoOwnedEntries = [
   { fromRoot: repoRoot, from: "scripts/upgrade-interrogation-page.mjs", to: "scripts/upgrade-interrogation-page.mjs" },
   { fromRoot: repoRoot, from: "scripts/upgrade-design-tree-loop.mjs", to: "scripts/upgrade-design-tree-loop.mjs" },
   { fromRoot: repoRoot, from: "scripts/audit-alignment-pages.mjs", to: "scripts/audit-alignment-pages.mjs" },
+  { fromRoot: repoRoot, from: "scripts/audit-briefing-slides.mjs", to: "scripts/audit-briefing-slides.mjs" },
   { fromRoot: repoRoot, from: "scripts/open-html-page.mjs", to: "scripts/open-html-page.mjs" },
   { fromRoot: repoRoot, from: "scripts/serve-alignment.mjs", to: "scripts/serve-alignment.mjs" },
   { fromRoot: repoRoot, from: "scripts/inject-tts.mjs", to: "scripts/inject-tts.mjs" },
@@ -89,6 +90,7 @@ const requiredBuildFiles = [
   "scripts/upgrade-interrogation-page.mjs",
   "scripts/upgrade-design-tree-loop.mjs",
   "scripts/audit-alignment-pages.mjs",
+  "scripts/audit-briefing-slides.mjs",
   "scripts/open-html-page.mjs",
   "scripts/serve-alignment.mjs",
   "scripts/inject-tts.mjs",
@@ -101,6 +103,7 @@ const requiredBuildFiles = [
   "assets/briefing-slides-convention.md",
   "assets/design-tree-loop-convention.md",
   "assets/templates/alignment-page.html",
+  "assets/templates/briefing-slides.html",
   "assets/templates/interrogation-page.html",
   "assets/social-post-convention.md",
   "assets/social-video-content-convention.md",
@@ -145,6 +148,18 @@ const publicExportPaths = [
   "exports/skills-catalog/v1/proof.json",
   "exports/skills-catalog/v1/manifest.json"
 ];
+
+const canaryOnlyPackagePaths = new Set([
+  "scripts/audit-briefing-slides.mjs",
+  "assets/templates/briefing-slides.html"
+]);
+
+function pathAllowedForLane(relativePath) {
+  if (canaryOnlyPackagePaths.has(relativePath) && !releaseLaneAllowed("canary", packageLane)) {
+    return false;
+  }
+  return true;
+}
 
 function copyEntry({ fromRoot, from, to }) {
   const source = path.join(fromRoot, from);
@@ -195,6 +210,9 @@ function deniedSkillRootsForLane(files) {
 
 function allowedPackageEntries(entries) {
   return entries.filter((entry) => {
+    if (!pathAllowedForLane(entry.to)) {
+      return false;
+    }
     const registryEntry = Object.values(SKILL_CONVENTIONS).find(
       (convention) => convention.packageAsset === entry.to
     );
@@ -221,7 +239,7 @@ function laneFilteredPackageFiles(files) {
       .filter(Boolean)
   );
 
-  return files.filter((file) => !deniedAssets.has(file));
+  return files.filter((file) => !deniedAssets.has(file) && pathAllowedForLane(file));
 }
 
 function stagedPackageJson() {
@@ -335,6 +353,9 @@ function scrubDeniedSkillRowsFromPackMetadata(files) {
 
 function assertBuildBoundary() {
   const requiredForLane = requiredBuildFiles.filter((relativePath) => {
+    if (!pathAllowedForLane(relativePath)) {
+      return false;
+    }
     const registryEntry = Object.values(SKILL_CONVENTIONS).find(
       (convention) => convention.packageAsset === relativePath
     );
@@ -380,6 +401,7 @@ function buildPackage() {
     ...packManifestPaths(laneFiles),
     "scripts/pack.sh",
     "scripts/skill-links.sh",
+    "scripts/audit-briefing-slides.mjs",
     "packages/skillpacks/scripts/release-lane.mjs"
   ], { source: "index" });
 
@@ -395,6 +417,11 @@ function buildPackage() {
   }
   for (const entry of allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane)) {
     copyEntry(entry);
+  }
+  for (const relativePath of canaryOnlyPackagePaths) {
+    if (!pathAllowedForLane(relativePath)) {
+      rmSync(path.join(buildRoot, relativePath), { recursive: true, force: true });
+    }
   }
   writeStagedManifest();
   scrubDeniedSkillRowsFromPackMetadata(files);

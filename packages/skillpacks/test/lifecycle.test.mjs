@@ -1089,6 +1089,58 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(join(dir, '.agents/.pack.lock')), false);
   });
 
+  it('installs briefing-slide helper dependencies for enabled packs and refreshes them', async () => {
+    const dir = makeTempProject();
+
+    const install = await runSkillpacks(dir, ['install', 'business-research']);
+
+    assert.match(install.stdout, /Installed \.codex\/skills\/competitive-analysis/);
+    assert.match(install.stdout, /Installed \.codex\/skills\/create-briefing-slides/);
+    assert.match(install.stdout, /Installed \.claude\/skills\/create-briefing-slides/);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'competitive-analysis')), true);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'create-briefing-slides')), true);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'create-briefing-slides')), true);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, ['business-research']);
+    assert.equal(Object.hasOwn(readProjectConfig(dir), 'enabled_skills'), false);
+    assert.deepEqual(readProjectConfig(dir).enabled_skill_dependencies, {
+      'create-briefing-slides': ['briefing-slides']
+    });
+
+    const reinstall = await runSkillpacks(dir, ['install', 'business-research']);
+    assert.equal(reinstall.stdout, 'Pack already installed!\n');
+
+    rmSync(skillPath(dir, 'codex', 'create-briefing-slides'), { recursive: true, force: true });
+    const refresh = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(refresh.stdout, /Installed \.codex\/skills\/create-briefing-slides/);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'create-briefing-slides')), true);
+    assert.deepEqual(readProjectConfig(dir).enabled_skill_dependencies, {
+      'create-briefing-slides': ['briefing-slides']
+    });
+  });
+
+  it('keeps dependency-installed helpers while remaining enabled skills require them', async () => {
+    const dir = makeTempProject();
+
+    await runSkillpacks(dir, ['install', 'competitive-analysis']);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'create-briefing-slides')), true);
+    assert.deepEqual(readProjectConfig(dir).enabled_skills, { 'competitive-analysis': 'business-research' });
+    assert.deepEqual(readProjectConfig(dir).enabled_skill_dependencies, {
+      'create-briefing-slides': ['briefing-slides']
+    });
+
+    const kept = await runSkillpacks(dir, ['prune']);
+    assert.match(kept.stdout, /Nothing to prune\./);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'create-briefing-slides')), true);
+
+    await runSkillpacks(dir, ['remove', 'competitive-analysis']);
+    const pruned = await runSkillpacks(dir, ['prune']);
+
+    assert.match(pruned.stdout, /removed  \.codex\/skills\/create-briefing-slides \(pack not enabled\)/);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'create-briefing-slides')), false);
+    assert.equal(Object.hasOwn(readProjectConfig(dir), 'enabled_skill_dependencies'), false);
+  });
+
   it('does not copy nested skill archives into latest managed installs', async () => {
     const dir = makeTempProject();
 
@@ -2069,19 +2121,24 @@ describe('Node multi-repo --all commands', () => {
     const { exitCode, stdout } = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run'], { home: makeParent() });
 
     assert.match(stdout, /=== a ===/);
-    assert.match(stdout, /Proposed: 3 install, 1 update, 1 remove\./);
+    assert.match(stdout, /Proposed: 5 install, 1 update, 1 remove\./);
+    assert.match(stdout, /install  \.claude\/skills\/create-briefing-slides @ v0\.1/);
     assert.match(stdout, /install  \.claude\/skills\/extract-shared-types @ v0\.2/);
+    assert.match(stdout, /install  \.codex\/skills\/create-briefing-slides @ v0\.1/);
     assert.match(stdout, /update   \.claude\/skills\/quality-sweep \(v0\.0 -> v0\.2\)/);
     assert.match(stdout, /remove   \.codex\/skills\/orphan-skill \(pack not enabled\)/);
     assert.match(stdout, /=== b ===/);
+    assert.match(stdout, /install  \.claude\/skills\/create-briefing-slides @ v0\.1/);
     assert.match(stdout, /install  \.claude\/skills\/devtool-adoption/);
+    assert.match(stdout, /install  \.codex\/skills\/create-briefing-slides @ v0\.1/);
     assert.match(stdout, /=== c ===/);
     assert.match(stdout, /No refresh changes proposed\./);
     assert.match(stdout, /Summary \(refresh --all --dry-run\): 3 project\(s\) scanned\./);
-    assert.match(stdout, /a: 3 install, 1 update, 1 remove/);
-    assert.match(stdout, /b: [0-9]+ install, 0 update, 0 remove/);
+    assert.match(stdout, /a: 5 install, 1 update, 1 remove/);
+    assert.match(stdout, /b: 18 install, 0 update, 0 remove/);
     assert.match(stdout, /c: 0 install, 0 update, 0 remove/);
     assert.match(stdout, /Affected skills:/);
+    assert.match(stdout, /a: install create-briefing-slides \(\.claude\/skills\/create-briefing-slides\)/);
     assert.match(stdout, /a: update quality-sweep \(\.claude\/skills\/quality-sweep\)/);
     assert.doesNotMatch(stdout, /c: update quality-sweep/);
     assert.doesNotMatch(stdout, /Unsafe reasons:/);

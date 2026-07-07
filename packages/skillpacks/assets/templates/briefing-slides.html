@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{DECK_TITLE}} Briefing Slides</title>
+  <style>
+    :root { --slide-scale: 1; color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #141414; background: #f3f0ea; }
+    a { color: inherit; }
+    .topbar, .controls { position: fixed; left: 0; right: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 12px 18px; background: rgba(250, 248, 243, 0.94); border-color: #d8d1c3; }
+    .topbar { top: 0; border-bottom: 1px solid #d8d1c3; }
+    .controls { bottom: 0; border-top: 1px solid #d8d1c3; }
+    .deck-title { font-weight: 750; }
+    .counter { margin-left: auto; font-variant-numeric: tabular-nums; }
+    .progress { position: fixed; top: 52px; left: 0; right: 0; height: 4px; background: #ddd4c5; z-index: 11; }
+    .progress-fill { width: 0; height: 100%; background: #1e6f68; }
+    .deck { min-height: 100vh; padding: 76px 24px 92px; display: grid; place-items: center; }
+    .slide { display: none; width: min(1180px, 100%); aspect-ratio: 16 / 9; padding: 20px; transform: scale(var(--slide-scale)); transform-origin: center; }
+    .slide.active { display: block; }
+    .slide-inner { width: 100%; height: 100%; display: grid; grid-template-rows: auto 1fr; gap: 20px; padding: 34px; background: #fffdf8; border: 1px solid #d5cbbc; box-shadow: 0 18px 40px rgba(54, 43, 30, 0.14); overflow: hidden; }
+    .slide h1, .slide h2 { margin: 0; line-height: 1.05; letter-spacing: 0; }
+    .slide h1 { font-size: 48px; }
+    .slide h2 { font-size: 34px; }
+    .eyebrow { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #6d665b; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-content: start; }
+    .card { border: 1px solid #d8d1c3; border-radius: 8px; padding: 14px; background: #faf6ee; }
+    .card strong { display: block; margin-bottom: 8px; }
+    .card p, .card ul { margin: 0; color: #36332e; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip { display: inline-flex; align-items: center; min-height: 28px; padding: 5px 9px; border-radius: 999px; border: 1px solid #cabfaa; background: #f7efe2; font-size: 13px; text-decoration: none; }
+    .gate { display: grid; gap: 10px; align-content: start; }
+    .gate label { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border: 1px solid #d8d1c3; border-radius: 8px; background: #fbf8f0; }
+    .filmstrip { display: flex; gap: 6px; overflow-x: auto; flex: 1; }
+    button, select, textarea { font: inherit; }
+    button { border: 1px solid #b9ad98; border-radius: 7px; background: #fffaf0; color: #171512; padding: 8px 10px; cursor: pointer; }
+    .filmstrip button { width: 34px; min-width: 34px; padding: 7px 0; }
+    .filmstrip button.active { background: #1e6f68; color: #fff; border-color: #1e6f68; }
+    .filmstrip button.has-gate::after { content: ""; display: block; width: 6px; height: 6px; margin: 4px auto 0; border-radius: 50%; background: #a16b00; }
+    .filmstrip button.gate-complete::after { background: #1e6f68; }
+    .nav { display: flex; gap: 8px; }
+    .feedback-sidebar { position: fixed; top: 0; right: 0; z-index: 20; width: min(390px, 94vw); height: 100vh; padding: 18px; background: #fffdf8; border-left: 1px solid #d8d1c3; transform: translateX(100%); transition: transform 140ms ease; display: grid; grid-template-rows: auto auto auto 1fr; gap: 14px; }
+    .feedback-sidebar.open { transform: translateX(0); }
+    .sidebar-actions, .copy-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .feedback-sidebar textarea, .fallback, pre { width: 100%; }
+    .feedback-sidebar textarea, .fallback { min-height: 80px; border: 1px solid #cfc4b2; border-radius: 8px; padding: 10px; }
+    pre { max-height: 180px; overflow: auto; margin: 0; padding: 12px; border: 1px solid #d8d1c3; border-radius: 8px; background: #f5efe4; white-space: pre-wrap; }
+    .fallback { display: none; }
+    @media (max-width: 720px) {
+      .deck { padding-left: 8px; padding-right: 8px; }
+      .slide { aspect-ratio: auto; min-height: 70vh; }
+      .slide-inner { padding: 22px; }
+      .slide h1 { font-size: 34px; }
+      .slide h2 { font-size: 28px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      .topbar, .controls, .feedback-sidebar, .progress { display: none !important; }
+      .deck { display: block; padding: 0; }
+      .slide { display: block !important; width: 100%; height: 100vh; aspect-ratio: auto; break-after: page; page-break-after: always; transform: none; }
+      .slide-inner { box-shadow: none; border: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="deck-title">{{DECK_TITLE}}</div>
+    <div class="counter" id="slideCounter">Slide 1 / 4</div>
+  </header>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+  <main class="deck" aria-label="{{DECK_TITLE}} briefing deck">
+    <section class="slide active" id="slide-1" data-title="Frame">
+      <div class="slide-inner">
+        <div>
+          <p class="eyebrow">{{OWNING_COMMAND}}</p>
+          <h1>{{DECK_TITLE}}</h1>
+          <div class="chips"><a class="chip" href="{{PRIMARY_REFERENCE}}">Primary reference</a></div>
+        </div>
+        <div class="grid">
+          <div class="card"><strong>Decision</strong><p>{{DECISION_SUMMARY}}</p></div>
+          <div class="card"><strong>Evidence</strong><p>{{EVIDENCE_SUMMARY}}</p></div>
+          <div class="card"><strong>Review Need</strong><p>{{REVIEW_NEED}}</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-2" data-title="Options">
+      <div class="slide-inner">
+        <div><p class="eyebrow">Review choices</p><h2>Compare the practical options.</h2></div>
+        <div class="grid">
+          <div class="card"><strong>Option A</strong><p>{{OPTION_A}}</p></div>
+          <div class="card"><strong>Option B</strong><p>{{OPTION_B}}</p></div>
+          <div class="card"><strong>Option C</strong><p>{{OPTION_C}}</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-3" data-title="Gate">
+      <div class="slide-inner">
+        <div><p class="eyebrow">Gate</p><h2>Choose the handoff state.</h2></div>
+        <div class="gate" role="radiogroup" aria-label="Approval gate">
+          <label><input type="radio" name="approval_gate" data-gate="approval_gate" value="approve"> Approve for agent review</label>
+          <label><input type="radio" name="approval_gate" data-gate="approval_gate" value="revise"> Revise before review</label>
+          <label><input type="radio" name="approval_gate" data-gate="approval_gate" value="needs-clarification"> Needs clarification</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-4" data-title="YAML">
+      <div class="slide-inner">
+        <div><p class="eyebrow">Final compiler</p><h2>Compile review YAML.</h2></div>
+        <div>
+          <div class="copy-row">
+            <button type="button" id="copyYaml">Copy compiled YAML</button>
+            <button type="button" id="refreshYaml">Refresh YAML</button>
+          </div>
+          <pre id="yamlOutput" aria-live="polite"># Compile review YAML from the deck controls.</pre>
+          <textarea class="fallback" id="copyFallback" readonly aria-label="Copy fallback"></textarea>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="feedback-sidebar" id="feedbackSidebar" aria-hidden="true" aria-label="Slide feedback">
+    <div class="sidebar-actions">
+      <button type="button" class="sidebar-close" id="closeFeedback">Close</button>
+      <button type="button" id="copySidebarTitle">Copy slide title</button>
+      <button type="button" id="copySidebarReferences">Copy references</button>
+    </div>
+    <div>
+      <p class="eyebrow" id="sidebarSlideMeta">Slide 1 / 4</p>
+      <h2 id="sidebarSlideTitle">Frame</h2>
+    </div>
+    <label>Feedback
+      <select id="sidebarFeedback">
+        <option value=""></option>
+        <option value="emphasize">emphasize</option>
+        <option value="revise">revise</option>
+        <option value="needs-clarification">needs-clarification</option>
+      </select>
+    </label>
+    <label>Mark
+      <select id="sidebarMark">
+        <option value=""></option>
+        <option value="important">important</option>
+        <option value="question">question</option>
+        <option value="approved">approved</option>
+        <option value="skip">skip</option>
+      </select>
+    </label>
+    <label>Annotation
+      <textarea id="sidebarAnnotation" aria-label="Slide annotation"></textarea>
+    </label>
+    <div class="sidebar-actions">
+      <button type="button" id="copySlideYaml">Copy slide YAML</button>
+      <button type="button" id="copyAllFeedbackYaml">Copy all feedback YAML</button>
+    </div>
+    <pre class="sidebar-yaml" id="slideYamlOutput" aria-live="polite"># Compile YAML for the active slide.</pre>
+    <pre class="sidebar-yaml" id="allFeedbackYamlOutput" aria-live="polite"># Compile review YAML from all deck controls.</pre>
+    <textarea class="fallback" id="sidebarCopyFallback" readonly aria-label="Sidebar copy fallback"></textarea>
+  </aside>
+
+  <footer class="controls">
+    <nav class="filmstrip" id="filmstrip" aria-label="Slide navigation"></nav>
+    <div class="nav">
+      <button type="button" id="openFeedback">Feedback</button>
+      <button type="button" id="prevSlide">Previous</button>
+      <button type="button" id="nextSlide">Next</button>
+    </div>
+  </footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('slideCounter');
+    const progressFill = document.getElementById('progressFill');
+    const filmstrip = document.getElementById('filmstrip');
+    const feedbackSidebar = document.getElementById('feedbackSidebar');
+    const sidebarFeedback = document.getElementById('sidebarFeedback');
+    const sidebarMark = document.getElementById('sidebarMark');
+    const sidebarAnnotation = document.getElementById('sidebarAnnotation');
+    const sidebarSlideMeta = document.getElementById('sidebarSlideMeta');
+    const sidebarSlideTitle = document.getElementById('sidebarSlideTitle');
+    const references = ['{{PRIMARY_REFERENCE}}', '{{SECONDARY_REFERENCE}}'];
+    const stateKey = '{{STATE_KEY}}-review-state';
+    const currentKey = '{{STATE_KEY}}-current-slide';
+    const state = JSON.parse(localStorage.getItem(stateKey) || '{}');
+    let current = Math.max(0, Math.min(slides.length - 1, Number(location.hash.replace('#slide-', '')) - 1 || Number(localStorage.getItem(currentKey) || 0)));
+
+    function persist() {
+      localStorage.setItem(stateKey, JSON.stringify(state));
+      localStorage.setItem(currentKey, String(current));
+    }
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === current));
+      counter.textContent = `Slide ${current + 1} / ${slides.length}`;
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+      Array.from(filmstrip.children).forEach((button, buttonIndex) => button.classList.toggle('active', buttonIndex === current));
+      history.replaceState(null, '', `#slide-${current + 1}`);
+      persist();
+      syncSidebar();
+    }
+
+    function gateStatusForSlide(slide) {
+      const gateNames = Array.from(slide.querySelectorAll('[data-gate]')).map((control) => control.dataset.gate).filter(Boolean);
+      if (!gateNames.length) return '';
+      const gates = state.gates || {};
+      return Array.from(new Set(gateNames)).every((gateName) => Boolean(gates[gateName])) ? 'complete' : 'unanswered';
+    }
+
+    function updateFilmstripGateStatus() {
+      Array.from(filmstrip.children).forEach((button, index) => {
+        const status = gateStatusForSlide(slides[index]);
+        button.classList.toggle('has-gate', Boolean(status));
+        button.classList.toggle('gate-unanswered', status === 'unanswered');
+        button.classList.toggle('gate-complete', status === 'complete');
+      });
+    }
+
+    slides.forEach((slide, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = String(index + 1);
+      button.title = slide.dataset.title;
+      button.addEventListener('click', () => showSlide(index));
+      filmstrip.appendChild(button);
+    });
+
+    document.getElementById('prevSlide').addEventListener('click', () => showSlide(current - 1));
+    document.getElementById('nextSlide').addEventListener('click', () => showSlide(current + 1));
+    document.getElementById('openFeedback').addEventListener('click', () => openSidebar());
+    document.getElementById('closeFeedback').addEventListener('click', () => closeSidebar());
+
+    function isFormEditingTarget(target) {
+      return target && (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) || target.isContentEditable);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (isFormEditingTarget(event.target)) return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const key = event.key.toLowerCase();
+      if (key === 'arrowleft' || key === 'a') { event.preventDefault(); showSlide(current - 1); }
+      if (key === 'arrowright' || key === 'd' || event.key === ' ') { event.preventDefault(); showSlide(current + 1); }
+      if (key === 'home') { event.preventDefault(); showSlide(0); }
+      if (key === 'end') { event.preventDefault(); showSlide(slides.length - 1); }
+    });
+
+    document.querySelector('.deck').addEventListener('click', (event) => {
+      const activeSlide = event.target.closest('.slide.active');
+      if (!activeSlide && event.target !== event.currentTarget) return;
+      if (event.target.closest('.slide-inner, a, button, input, textarea, select')) return;
+      showSlide(current + 1);
+    });
+
+    function activeSlideId() { return slides[current].id; }
+    function activeSlideTitle() { return slides[current].dataset.title || activeSlideId(); }
+    function stateForSlide(slideId) {
+      state[slideId] = state[slideId] || {};
+      return state[slideId];
+    }
+
+    function syncSidebar() {
+      const slideState = stateForSlide(activeSlideId());
+      sidebarSlideMeta.textContent = `Slide ${current + 1} / ${slides.length}`;
+      sidebarSlideTitle.textContent = activeSlideTitle();
+      sidebarFeedback.value = slideState.feedback || '';
+      sidebarMark.value = slideState.mark || '';
+      sidebarAnnotation.value = slideState.annotation || '';
+    }
+
+    function openSidebar() {
+      syncSidebar();
+      feedbackSidebar.classList.add('open');
+      feedbackSidebar.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSidebar() {
+      feedbackSidebar.classList.remove('open');
+      feedbackSidebar.setAttribute('aria-hidden', 'true');
+      document.getElementById('openFeedback').focus();
+    }
+
+    function updateActiveSlideReview(type, value) {
+      stateForSlide(activeSlideId())[type] = value;
+      persist();
+      compileAllFeedbackYaml();
+    }
+
+    sidebarFeedback.addEventListener('input', () => updateActiveSlideReview('feedback', sidebarFeedback.value));
+    sidebarMark.addEventListener('input', () => updateActiveSlideReview('mark', sidebarMark.value));
+    sidebarAnnotation.addEventListener('input', () => updateActiveSlideReview('annotation', sidebarAnnotation.value));
+    document.querySelectorAll('[data-gate]').forEach((control) => {
+      if (state.gates && state.gates[control.dataset.gate] === control.value) control.checked = true;
+      control.addEventListener('change', () => {
+        state.gates = state.gates || {};
+        state.gates[control.dataset.gate] = control.value;
+        persist();
+        updateFilmstripGateStatus();
+        compileAllFeedbackYaml();
+      });
+    });
+
+    async function copyText(text) {
+      const fallback = feedbackSidebar.classList.contains('open') ? document.getElementById('sidebarCopyFallback') : document.getElementById('copyFallback');
+      try {
+        await navigator.clipboard.writeText(text);
+        fallback.style.display = 'none';
+      } catch (error) {
+        fallback.value = text;
+        fallback.style.display = 'block';
+        fallback.focus();
+        fallback.select();
+      }
+    }
+
+    function yamlQuote(value) { return JSON.stringify(String(value || '')); }
+    function gateAnswersForSlide(slide) {
+      const gates = state.gates || {};
+      const gateNames = Array.from(slide.querySelectorAll('[data-gate]')).map((control) => control.dataset.gate).filter(Boolean);
+      return Array.from(new Set(gateNames)).map((gateName) => ({ gate: gateName, answer: gates[gateName] || '' }));
+    }
+    function allGateAnswers() { return slides.flatMap((slide) => gateAnswersForSlide(slide)); }
+
+    function compileSlideYaml() {
+      const slideId = activeSlideId();
+      const slideState = stateForSlide(slideId);
+      const gateEntries = gateAnswersForSlide(slides[current]);
+      const yaml = [
+        '# Invoke with: {{OWNING_COMMAND}}',
+        'command: "{{OWNING_COMMAND}}"',
+        'briefing_slides: {{OUTPUT_PATH}}',
+        `slide: ${yamlQuote(slideId)}`,
+        `slide_title: ${yamlQuote(activeSlideTitle())}`,
+        'feedback:',
+        `  status: ${yamlQuote(slideState.feedback || '')}`,
+        `  mark: ${yamlQuote(slideState.mark || '')}`,
+        `  annotation: ${yamlQuote(slideState.annotation || '')}`,
+        'gate_answers:',
+        ...(gateEntries.length ? gateEntries.map((entry) => `  ${entry.gate}: ${yamlQuote(entry.answer)}`) : ['  []'])
+      ].join('\n');
+      document.getElementById('slideYamlOutput').textContent = yaml;
+      return yaml;
+    }
+
+    function buildFullDeckYaml() {
+      const gateEntries = allGateAnswers();
+      const feedbackEntries = Object.entries(state).filter(([slideId, value]) => slideId.startsWith('slide-') && value.feedback).map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    feedback: ${yamlQuote(value.feedback)}`);
+      const annotationEntries = Object.entries(state).filter(([slideId, value]) => slideId.startsWith('slide-') && value.annotation).map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    note: ${yamlQuote(value.annotation)}`);
+      const markedEntries = Object.entries(state).filter(([slideId, value]) => slideId.startsWith('slide-') && value.mark).map(([slideId, value]) => `  - slide: ${yamlQuote(slideId)}\n    slide_title: ${yamlQuote(document.getElementById(slideId)?.dataset.title || slideId)}\n    status: ${yamlQuote(value.mark)}`);
+      const hasBlockingFeedback = Object.values(state).some((value) => value && ['revise', 'needs-clarification'].includes(value.feedback));
+      const unansweredRequired = gateEntries.filter((entry) => !entry.answer).map((entry) => entry.gate);
+      const approved = gateEntries.length > 0 && unansweredRequired.length === 0 && gateEntries.every((entry) => entry.answer === 'approve') && !hasBlockingFeedback;
+      return [
+        '# Invoke with: {{OWNING_COMMAND}}',
+        'command: "{{OWNING_COMMAND}}"',
+        'briefing_slides: {{OUTPUT_PATH}}',
+        'reference_pages:',
+        ...references.map((reference) => `  - ${reference}`),
+        'source_artifacts:',
+        ...references.map((reference) => `  - ${reference}`),
+        'gate_answers:',
+        ...(gateEntries.length ? gateEntries.map((entry) => `  ${entry.gate}: ${yamlQuote(entry.answer)}`) : ['  []']),
+        'slide_feedback:',
+        ...(feedbackEntries.length ? feedbackEntries : ['  []']),
+        'annotations:',
+        ...(annotationEntries.length ? annotationEntries : ['  []']),
+        'marked_slides:',
+        ...(markedEntries.length ? markedEntries : ['  []']),
+        'unanswered_required_questions:',
+        ...(unansweredRequired.length ? unansweredRequired.map((gate) => `  - ${gate}`) : ['  []']),
+        `approval_status: ${approved ? 'ready-for-agent-review' : 'not-approved'}`
+      ].join('\n');
+    }
+
+    function compileYaml() {
+      const yaml = buildFullDeckYaml();
+      document.getElementById('yamlOutput').textContent = yaml;
+      return yaml;
+    }
+
+    function compileAllFeedbackYaml() {
+      const yaml = buildFullDeckYaml();
+      document.getElementById('allFeedbackYamlOutput').textContent = yaml;
+      return yaml;
+    }
+
+    document.getElementById('copyYaml').addEventListener('click', () => copyText(compileYaml()));
+    document.getElementById('refreshYaml').addEventListener('click', () => compileYaml());
+    document.getElementById('copySlideYaml').addEventListener('click', () => copyText(compileSlideYaml()));
+    document.getElementById('copyAllFeedbackYaml').addEventListener('click', () => copyText(compileAllFeedbackYaml()));
+    document.getElementById('copySidebarTitle').addEventListener('click', () => copyText(activeSlideTitle()));
+    document.getElementById('copySidebarReferences').addEventListener('click', () => copyText(references.join('\n')));
+
+    showSlide(current);
+    updateFilmstripGateStatus();
+    compileYaml();
+    compileAllFeedbackYaml();
+  </script>
+</body>
+</html>

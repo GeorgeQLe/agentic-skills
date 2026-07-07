@@ -340,10 +340,23 @@ function isInstallableSkill(skill) {
   return /^packs\/[^/]+\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path);
 }
 
+function requiredBaseSkillsForSkill(skill) {
+  const required = new Set(skill.requiredBaseSkills || []);
+  if (
+    isInstallableSkill(skill)
+    && skill.name !== "create-briefing-slides"
+    && skill.requiredConventions.includes("briefing-slides")
+  ) {
+    required.add("create-briefing-slides");
+  }
+  return [...required].sort((a, b) => a.localeCompare(b));
+}
+
 function buildSkills(skills, files, decks) {
   return skills
     .map((skill) => {
       const releaseLane = skillReleaseLaneFromIndex(repoRoot, skill.path);
+      const requiredBaseSkills = requiredBaseSkillsForSkill(skill);
       return {
         id: skill.id,
         name: skill.name,
@@ -354,6 +367,7 @@ function buildSkills(skills, files, decks) {
         release_lane: releaseLane,
         ...skillDeprecation(skill.path),
         required_conventions: skill.requiredConventions,
+        ...(requiredBaseSkills.length > 0 ? { required_base_skills: requiredBaseSkills } : {}),
         path: skill.path,
         installable: isInstallableSkill(skill),
         content_sha256: skillContentHash(skill.path),

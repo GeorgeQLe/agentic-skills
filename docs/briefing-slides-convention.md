@@ -4,6 +4,17 @@ This file is the **single authoring source** for the briefing-slides convention.
 
 Briefing slides do **not** replace dense artifacts. They make review more visual and navigable while preserving dense `alignment/*.html`, `interrogation/*.html`, markdown reports, specs, research notes, and source documents as linked references.
 
+## Canonical Template
+
+Start from the canonical template unless you have a strong reason to preserve an already-compliant existing deck:
+
+- Source checkout template: `packages/skillpacks/assets/templates/briefing-slides.html`.
+- Packaged install template: `assets/templates/briefing-slides.html`.
+
+Replace the template placeholders with the deck title, owning command, output path, references, decision content, gates, and source artifacts. Custom visual treatment is allowed, but the generated deck must preserve the template's structural contract: topbar, active slide shell, progress/counter, filmstrip, previous/next controls, keyboard navigation, hash/localStorage resume, empty-stage click navigation, slide feedback sidebar, annotations, marked slides, copy fallback, print CSS, references, and final YAML compiler.
+
+Do not ship legacy stacked document pages as briefing slides. A briefing deck is a slideshow review surface, not a vertically scrolling report.
+
 ## Output Path
 
 Write decks under `briefing-slides/`.
@@ -116,6 +127,7 @@ Set `approval_status: ready-for-agent-review` only when every required gate has 
 Before handoff:
 
 - Re-open the written deck textually and confirm it contains navigation controls, gate controls, feedback controls, YAML compiler, reference links, and print CSS.
+- Run `node scripts/audit-briefing-slides.mjs briefing-slides/<name>.html` and fix every diagnostic before handoff.
 - Confirm every linked dense reference path exists when it is repo-local, or mark missing references visibly in the deck.
 - Verify authored slide content fits without incoherent overlap, clipped text, hidden overflow, or slide-body scrolling at a normal desktop viewport and a mobile-sized viewport. Internal scrolling is allowed only for explicit bounded tool surfaces such as YAML output or copy fallback controls.
 - Attempt to open only the deck with `npx skillpacks alignment pages open briefing-slides/<name>.html --browser auto`.

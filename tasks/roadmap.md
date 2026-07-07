@@ -2,55 +2,52 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Recover Slide-First AFPS Experimental Canary
+## Current Implementation - Briefing Slides Convention Enforcement
 
 ### Goal
 
-Recover the slide-first AFPS canary work on `canary/slides-review-surface`, merge in current `master` release/publish fixes, rebuild package artifacts, and prepare an experimental prerelease whose AFPS/prototype skills declare `briefing-slides`.
+Make briefing slides a template-backed, auditable canary convention. Skills that require `briefing-slides` must install the same-platform `create-briefing-slides` helper automatically, and generated decks must pass a structural audit before handoff.
 
 ### Plan
 
-- [x] Inspect branch state, dirty release artifacts, and canary/master divergence.
-- [x] Stash temporary prerelease metadata from the failed master-side publish attempt.
-- [x] Merge current `master` into `canary/slides-review-surface`.
-- [x] Resolve conflicts by preserving master release fixes and canary slide-first skill migrations.
-- [x] Rebuild package artifacts so the manifest carries `briefing-slides` for AFPS/prototype skills.
-- [x] Run package, task-doc, manifest-coverage, and publish dry-run verification.
-- [ ] Publish the new experimental prerelease and verify experimental dist-tags.
+- [x] Add a canonical `assets/templates/briefing-slides.html` template with slideshow, review, print, copy, and YAML compiler surfaces.
+- [x] Add `scripts/audit-briefing-slides.mjs` and fixtures/tests for compliant and legacy/missing-marker decks.
+- [x] Update `docs/briefing-slides-convention.md` and briefing slide skills to require the template and audit command.
+- [x] Add manifest `required_base_skills` metadata from frontmatter and `briefing-slides` conventions.
+- [x] Install dependency base skills for pack/single-skill installs and refresh without changing `enabled_skills` semantics.
+- [x] Extend manifest, lifecycle, and package-boundary tests.
+- [x] Regenerate manifests/package artifacts from the current tree and run verification.
 
 ### Acceptance Criteria
 
-- [x] `canary/slides-review-surface` contains current `master` release/publish fixes without dropping slide-first AFPS skill edits.
-- [x] `business-afps`, `devtool-afps`, `game-afps`, and migrated prototype-tier skills include `briefing-slides` in generated manifest `required_conventions`.
-- [x] Dense `alignment/` and `interrogation/` pages remain linked source/detail artifacts while `briefing-slides/` is the only auto-opened review UI.
-- [x] Publish lane uses npm dist-tag `experimental` with preid `experimental`.
-- [ ] Consumer refresh succeeds with `npx skillpacks@experimental refresh --all`.
+- [x] Canary packages include the briefing template, audit script, convention, and `create-briefing-slides`; stable packages exclude canary-only briefing assets/helpers.
+- [x] Canary manifest skills requiring `briefing-slides` expose `required_base_skills: ["create-briefing-slides"]`; stable manifest remains free of briefing-slide requirements.
+- [x] Installing a briefing-slide pack or skill installs the requested skill plus same-platform `create-briefing-slides` and records dependency provenance in `.agents/project.json`.
+- [x] Refresh/status treats dependency-installed helpers as managed and current.
+- [x] Removing/pruning is conservative: helpers stay while any enabled item still requires them.
+- [x] The audit accepts compliant slideshow decks and rejects stacked/missing-control decks.
 
 ### Verification
 
+- [x] `node --test packages/skillpacks/test/briefing-slides-audit.test.mjs`
+- [x] `node --test packages/skillpacks/test/manifest.test.mjs packages/skillpacks/test/lifecycle.test.mjs packages/skillpacks/test/package-boundary.test.mjs`
+- [x] `node scripts/audit-briefing-slides.mjs briefing-slides/create-briefing-slides.html`
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build`
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `SKILLPACKS_PACKAGE_LANE=stable node packages/skillpacks/scripts/build-package.mjs --check`
 - [x] `npm --workspace packages/skillpacks run test:node`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] Manifest coverage assertion for AFPS/prototype `briefing-slides`
-- [x] `./publish.sh --dry-run --tag experimental --preid experimental 0.1.22-experimental.1`
-- [x] `npm view skillpacks dist-tags.experimental`
-- [x] `npm view @glexcorp/gskp dist-tags.experimental`
-- [ ] `./publish.sh --tag experimental --preid experimental 0.1.22-experimental.1`
-- [ ] `npx skillpacks@experimental list`
-- [ ] `npx skillpacks@experimental refresh --all --dry-run`
-- [ ] `npx skillpacks@experimental refresh --all`
 
 ### Review
 
-Merged `master` into `canary/slides-review-surface`, resolved conflicts to keep current release/publish fixes and the slide-first skill migration, and marked the 315 active briefing-slide skills with `release_lane: canary` so stable manifests filter them while canary manifests include them.
+Added a canonical briefing slides template at `packages/skillpacks/assets/templates/briefing-slides.html` and a structural audit at `scripts/audit-briefing-slides.mjs`. The audit accepts the canonical slideshow contract, rejects legacy stacked decks and missing required markers, and passes against `briefing-slides/create-briefing-slides.html`.
 
-Updated manifest generation to lane-filter deck definitions and deck memberships, keeping stable manifests free of dangling canary-only deck cards while preserving full AFPS/VARD/ORD metadata in canary manifests. Refreshed the package manifest to canary lane and verified 148 AFPS deck-member skills plus 30 prototype-tier page skills have `briefing-slides`.
+Updated the briefing slides convention and bumped both `create-briefing-slides` mirrors from `v0.0` to `v0.1` after archiving the old `SKILL.md` files. The helper skills now explicitly require starting from the packaged template and running `node scripts/audit-briefing-slides.mjs briefing-slides/<name>.html`.
 
-Local verification passed for canary build, canary build check, full package Node tests, task-doc audit, diff hygiene, and manifest coverage. The explicit experimental dry run passed for `0.1.22-experimental.1` because `0.1.22-experimental.0` already exists from the earlier master-side publish. Dry-run staging produced a canary package with 409 active skills, 42 packs, and `briefing-slides` assets included.
+Manifest generation now emits `required_base_skills: ["create-briefing-slides"]` for installable canary skills requiring `briefing-slides`. Lifecycle install/refresh/prune logic installs the same-platform helper as a dependency, records `enabled_skill_dependencies`, keeps helpers while enabled items still require them, and removes them only after they become orphaned.
 
-The real publish is blocked before any registry write: the pre-bump npm auth checks passed, but the staged real-publish auth preflight failed with `E401 Unauthorized - GET https://registry.npmjs.org/-/whoami` and requested logging in to npm as `glexcorp`. The script restored `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` to `0.1.21` canary metadata, and npm experimental dist-tags still point to `0.1.22-experimental.0` for both `skillpacks` and `@glexcorp/gskp`.
+Package staging now includes the template and audit script only in canary packages. The direct stable package staging check passed; `SKILLPACKS_PACKAGE_LANE=stable npm --workspace packages/skillpacks run build:check` is not applicable while `dist/skillpacks-manifest.json` is intentionally canary-lane because its manifest check expects the committed dist manifest to match the selected lane.
 
 ## Historical Implementation - Cleanup Scope Flags
 
@@ -8193,6 +8190,26 @@ Patch skillpacks so installed skills can load every convention or contract docum
 - Refresh restores deleted convention docs even when skill files are already current.
 - Doctor reports missing or stale convention docs and recommends the existing refresh command.
 - Package build output includes all registry convention/contract docs.
+
+## Current Plan - Claude/Codex Skill Version Parity
+
+### Goal
+
+Ensure every active skill that exists in both `packs/*/claude/<skill>/SKILL.md` and `packs/*/codex/<skill>/SKILL.md` has the same YAML frontmatter `version:` value.
+
+### Plan
+
+- [x] Inspect existing mirror/version audit tooling and identify whether version drift is currently allowed.
+- [x] Run a strict active-skill comparison for Claude/Codex pairs.
+- [x] Align any mismatched active skill versions without touching one-sided skills or archives.
+- [x] Add or update verification so future mismatches are caught.
+- [x] Run focused verification and record results.
+
+### Acceptance Criteria
+
+- [x] Shared active Claude/Codex skills report zero `version:` mismatches.
+- [x] Existing broader skill audits still pass or have documented intentional non-version drift.
+- [x] Any changed version fields follow repo archive/changelog conventions where required.
 
 ## Current Plan - Shared Alignment and Interrogation HTML Scaffolds
 

@@ -1,6 +1,6 @@
 {
   "name": "skillpacks",
-  "version": "0.1.21",
+  "version": "0.1.22-experimental.1",
   "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {
@@ -30,6 +30,7 @@
     "scripts/upgrade-interrogation-page.mjs",
     "scripts/upgrade-design-tree-loop.mjs",
     "scripts/audit-alignment-pages.mjs",
+    "scripts/audit-briefing-slides.mjs",
     "scripts/open-html-page.mjs",
     "scripts/serve-alignment.mjs",
     "scripts/inject-tts.mjs",

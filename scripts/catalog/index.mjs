@@ -257,6 +257,7 @@ export function parseSkill(repoRoot, relativePath, { source = "worktree" } = {})
     visualTier: fields.visual_tier || null,
     version: fields.version || null,
     requiredConventions: parseFrontmatterList(text, "required_conventions"),
+    requiredBaseSkills: parseFrontmatterList(text, "required_base_skills"),
     argumentHint: fields["argument-hint"] || null,
     platform,
     command: platform === "claude" ? `/${name}` : `$${name}`,

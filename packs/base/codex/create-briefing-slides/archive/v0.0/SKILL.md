@@ -1,8 +1,8 @@
 ---
 name: create-briefing-slides
-description: Create or amend a self-contained PowerPoint-like HTML briefing slide deck for alignment pages, interrogation questions, research findings, framework/workshop artifacts, specs, reports, or documentation plans. Use when Claude should make review material more visual and navigable while preserving dense alignment/interrogation pages and source documents as linked references instead of auto-opening them.
+description: Create or amend a self-contained PowerPoint-like HTML briefing slide deck for alignment pages, interrogation questions, research findings, framework/workshop artifacts, specs, reports, or documentation plans. Use when Codex should make review material more visual and navigable while preserving dense alignment/interrogation pages and source documents as linked references instead of auto-opening them.
 type: ops
-version: v0.1
+version: v0.0
 release_lane: canary
 required_conventions: [briefing-slides]
 argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]"
@@ -10,7 +10,7 @@ argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/pa
 
 # Create Briefing Slides
 
-Invoke as `/create-briefing-slides`.
+Invoke as `$create-briefing-slides`.
 
 Create a self-contained HTML slide deck that becomes the primary opened review surface for dense research, interrogation, alignment, framework, workshop, spec, report, or documentation-creation artifacts. Follow the shared briefing-slides convention via the packaged convention resolver: source checkouts load `docs/briefing-slides-convention.md`, and packaged installs load `assets/briefing-slides-convention.md`.
 
@@ -29,16 +29,14 @@ Create a self-contained HTML slide deck that becomes the primary opened review s
 
 3. Design the deck:
    - Load `docs/briefing-slides-convention.md` or `assets/briefing-slides-convention.md` before authoring the HTML.
-   - Start from the canonical template: `packages/skillpacks/assets/templates/briefing-slides.html` in a source checkout, or `assets/templates/briefing-slides.html` in a packaged install.
    - Choose the relevant deck pattern: alignment briefing, interrogation briefing, framework/workshop briefing, or documentation briefing.
-   - Preserve the required presentation navigation, active slide shell, progress/counter, filmstrip, reference chips, review controls, marking/annotation controls, copy fallback, print CSS, and YAML compiler from the template/convention.
+   - Build the required presentation navigation, reference chips, review controls, marking/annotation controls, copy fallback, print CSS, and YAML compiler from the convention.
 
 4. Archive before replacement:
    - Before replacing an existing deck, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/briefing-slides/<filename>.html`.
    - Highlight what changed in the updated deck when amending after feedback.
 
 5. Verify and open:
-   - Run `node scripts/audit-briefing-slides.mjs briefing-slides/<name>.html` and fix every diagnostic before handoff.
    - Run the convention's verification checklist.
    - Attempt to open only the deck, using the packaged HTML opener command specified by the convention.
    - Report opener status exactly as `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.

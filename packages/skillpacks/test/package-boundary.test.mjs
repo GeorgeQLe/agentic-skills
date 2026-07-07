@@ -149,6 +149,8 @@ describe('skillpacks npm publish target boundary', () => {
     for (const canaryOnlyPath of [
       'assets/briefing-slides-convention.md',
       'assets/skillpacks-docs/briefing-slides-convention.md',
+      'assets/templates/briefing-slides.html',
+      'scripts/audit-briefing-slides.mjs',
       'packs/base/claude/create-briefing-slides',
       'packs/base/codex/create-briefing-slides'
     ]) {
@@ -191,6 +193,8 @@ describe('skillpacks npm publish target boundary', () => {
     for (const requiredPath of [
       'assets/briefing-slides-convention.md',
       'assets/skillpacks-docs/briefing-slides-convention.md',
+      'assets/templates/briefing-slides.html',
+      'scripts/audit-briefing-slides.mjs',
       'packs/base/claude/create-briefing-slides/SKILL.md',
       'packs/base/codex/create-briefing-slides/SKILL.md'
     ]) {
