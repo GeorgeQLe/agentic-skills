@@ -162,6 +162,7 @@ describe('skillpacks manifest deck metadata', () => {
       undefined
     );
     assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'workflow-backfill'), false);
     assert.equal(
       stableManifest.skills.some((skill) => skill.required_conventions.includes('briefing-slides')),
       false,
@@ -185,6 +186,46 @@ describe('skillpacks manifest deck metadata', () => {
     assert.deepEqual(briefingSkills, [
       ['claude', 'canary', 'packs/base/claude/create-briefing-slides/SKILL.md'],
       ['codex', 'canary', 'packs/base/codex/create-briefing-slides/SKILL.md']
+    ]);
+  });
+
+  it('includes workflow-backfill as a canary base skill with briefing helper dependency', () => {
+    const canaryManifest = generatedManifestForLane('canary');
+    const workflowBackfillSkills = canaryManifest.skills
+      .filter((skill) => skill.name === 'workflow-backfill')
+      .map((skill) => [
+        skill.platform,
+        skill.scope,
+        skill.pack,
+        skill.version,
+        skill.release_lane,
+        skill.path,
+        skill.required_conventions,
+        skill.required_base_skills
+      ])
+      .sort();
+
+    assert.deepEqual(workflowBackfillSkills, [
+      [
+        'claude',
+        'base',
+        null,
+        'v0.0',
+        'canary',
+        'packs/base/claude/workflow-backfill/SKILL.md',
+        ['briefing-slides'],
+        ['create-briefing-slides']
+      ],
+      [
+        'codex',
+        'base',
+        null,
+        'v0.0',
+        'canary',
+        'packs/base/codex/workflow-backfill/SKILL.md',
+        ['briefing-slides'],
+        ['create-briefing-slides']
+      ]
     ]);
   });
 });

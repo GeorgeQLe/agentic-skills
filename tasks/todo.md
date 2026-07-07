@@ -1,49 +1,45 @@
 # Current Task
 
-## Current Implementation - Publish Recovery Cleanup Guard
+## Current Implementation - Workflow Backfill Canary Skill
 
 ### Goal
 
-Verify the publish bottleneck report against the current checkout and patch only findings that still reproduce, starting with the Bash 3.2 `set -u` empty-array cleanup failure.
+Create a canary-only `workflow-backfill` base/admin skill that scans target repos after a canary skill refresh, plans safe artifact backfill, and routes canonical research/prototype repair back to producing skills.
 
 ### Plan
 
 - [x] Record starting repository status and preserve unrelated local work.
-- [x] Reproduce the publish recovery cleanup failure in a clean temp repo.
-- [x] Patch only confirmed Bash 3.2 `set -u` empty-array hazards in `publish.sh`.
-- [x] Run focused and package-level correctness verification.
-- [x] Inspect manifest/package-boundary timings and apply only minimal duplicate-work cleanup if it clearly pays off.
-- [x] Run final audits, then commit and push intended tracked changes.
+- [x] Inspect existing canary briefing-slide, manifest, package-boundary, and audit conventions.
+- [x] Add mirrored `workflow-backfill` skill sources with canary frontmatter, changelogs, and Codex UI metadata.
+- [x] Update base pack metadata and package/manifest tests for canary inclusion and stable exclusion.
+- [x] Regenerate/check manifests and run focused audits.
+- [x] Document results, commit, and push intended changes.
 
 ### Acceptance Criteria
 
-- [x] Interrupting `./publish.sh --dry-run --current --tag experimental` before temp dirs are created no longer masks the interrupt with `TMP_DIRS[@]: unbound variable`.
-- [x] Dirty-tree summary, cleanup, and auth preflight keep their existing output and behavior.
-- [x] Publish recovery tests cover the early-interrupt cleanup path.
-- [x] Broader package tests and publish dry-run checks pass or have documented external blockers.
-- [x] Final status contains only intended changes plus pre-existing unrelated files.
+- [x] Canary manifest includes both `workflow-backfill` mirrors at `v0.0`; stable manifest excludes them.
+- [x] The skill requires `briefing-slides` and therefore exposes `required_base_skills: ["create-briefing-slides"]` in canary metadata.
+- [x] Stable package staging does not publish `workflow-backfill` or briefing-slide canary metadata.
+- [x] Skill instructions enforce approval-gated mutation, safe artifact-only backfill, archive-before-replace for decks, and canonical artifact routing back to owners.
+- [x] Verification reports exact pass/fail status for manifest/package/audit checks.
 
 ### Verification
 
-- [x] `npm_config_cache=/tmp/skillpacks-npm-cache node --test --test-concurrency=1 packages/skillpacks/test/publish-recovery.test.mjs`
-- [x] Clean temp interrupted dry-run: `npm_config_cache=/tmp/skillpacks-npm-cache ./publish.sh --dry-run --current --tag experimental`, then SIGINT during registry check
-- [x] `npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run test:node`
+- [x] `node --test packages/skillpacks/test/manifest.test.mjs packages/skillpacks/test/package-boundary.test.mjs packages/skillpacks/test/workflow-backfill-scan.test.mjs`
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
-- [x] `SKILLPACKS_PACKAGE_LANE=canary npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run verify:package`
-- [x] Performance timing: `packages/skillpacks/test/manifest.test.mjs`
-- [x] Performance timing: `packages/skillpacks/test/package-boundary.test.mjs`
+- [x] `SKILLPACKS_PACKAGE_LANE=stable node packages/skillpacks/scripts/build-package.mjs --check`
+- [x] `bash scripts/skill-mirror-parity-audit.sh`
+- [x] `bash scripts/skill-archive-audit.sh --strict`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
 
 ### Review
 
-Reproduced the Bash 3.2 cleanup bug by interrupting a clean temp-repo `./publish.sh --dry-run --current --tag experimental` while it was still in the early registry check. Before the fix, cleanup masked the interrupt with `TMP_DIRS[@]: unbound variable`; after the fix, the same interrupted dry-run exits with the intended SIGINT restoration message.
+Added canary-only `workflow-backfill` mirrors under `packs/base/{claude,codex}` at `v0.0`, with matching changelogs, Codex UI metadata, and a local deterministic scanner. The skill scans target repos for installed skill marker provenance, missing `create-briefing-slides` dependency helpers, missing briefing-slide decks for alignment/interrogation pages owned by briefing-enabled skills, existing deck conflicts, review-gate hints, and canonical target hints that must route back to owner workflows.
 
-Patched `publish.sh` to guard empty-array expansions for dirty-path summary output, preflight `env` args, and cleanup temp dirs without changing release gate text or dirty-tree classification behavior. Added publish recovery regression coverage for SIGINT during the early `--current` registry check.
+Updated base pack metadata, canary manifest generation output, manifest tests, package-boundary tests, and scanner fixture tests. Canary manifests include both mirrors with `required_base_skills: ["create-briefing-slides"]`; stable manifests and stable package staging exclude `workflow-backfill` and canary briefing-slide metadata.
 
-Applied minimal test-side performance cleanup after correctness passed. `manifest.test.mjs` now reuses generated manifests by lane, reducing the manifest block from about 32.3s to about 21.1s in the full suite. `package-boundary.test.mjs` now caches staged package state by lane and dist-manifest mode, preserving one full `npm pack --dry-run` per unique package state while reducing that block from about 99.5s to about 62.5s in the final full suite.
-
-Verification passed for focused publish recovery tests, the clean temp interrupted dry-run, canary `build:check`, canary `verify:package`, and full package `test:node` with 207 passing tests in about 120.7s.
+Verification passed for focused Node tests, canary build check, stable package staging, mirror parity, strict archive audit, task-doc audit, and diff whitespace.
 
 ## Historical Task State
 

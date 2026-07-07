@@ -170,7 +170,9 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/templates/briefing-slides.html',
       'scripts/audit-briefing-slides.mjs',
       'packs/base/claude/create-briefing-slides',
-      'packs/base/codex/create-briefing-slides'
+      'packs/base/codex/create-briefing-slides',
+      'packs/base/claude/workflow-backfill',
+      'packs/base/codex/workflow-backfill'
     ]) {
       assert.equal(
         hasPathClass(paths, canaryOnlyPath),
@@ -182,7 +184,7 @@ describe('skillpacks npm publish target boundary', () => {
     for (const [relativePath, forbiddenPattern] of [
       ['package.json', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
       ['scripts/skill-convention-registry.mjs', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
-      ['packs/base/PACK.md', /briefing-slides|create-briefing-slides|"release_lane": "canary"/]
+      ['packs/base/PACK.md', /briefing-slides|create-briefing-slides|workflow-backfill|"release_lane": "canary"/]
     ]) {
       assert.doesNotMatch(
         builtText(relativePath),
@@ -214,7 +216,11 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/templates/briefing-slides.html',
       'scripts/audit-briefing-slides.mjs',
       'packs/base/claude/create-briefing-slides/SKILL.md',
-      'packs/base/codex/create-briefing-slides/SKILL.md'
+      'packs/base/codex/create-briefing-slides/SKILL.md',
+      'packs/base/claude/workflow-backfill/SKILL.md',
+      'packs/base/claude/workflow-backfill/scripts/scan.mjs',
+      'packs/base/codex/workflow-backfill/SKILL.md',
+      'packs/base/codex/workflow-backfill/scripts/scan.mjs'
     ]) {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published in canary packages`);
     }
@@ -238,9 +244,14 @@ describe('skillpacks npm publish target boundary', () => {
 
     assert.equal(stableManifest.package.release_lane, 'stable');
     assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'workflow-backfill'), false);
     assert.equal(canaryManifest.package.release_lane, 'canary');
     assert.equal(
       canaryManifest.skills.filter((skill) => skill.name === 'create-briefing-slides').length,
+      2
+    );
+    assert.equal(
+      canaryManifest.skills.filter((skill) => skill.name === 'workflow-backfill').length,
       2
     );
   });

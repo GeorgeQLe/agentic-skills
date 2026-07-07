@@ -15,3 +15,4 @@ Base skills live under `packs/base/{claude,codex}` so their source layout matche
 ## Skills
 
 - `create-briefing-slides`: Create slide-first HTML briefing decks for alignment/interrogation review material while keeping dense artifacts as linked references.
+- `workflow-backfill`: Scan and approval-gate safe canary artifact backfill after a skillpacks canary refresh.

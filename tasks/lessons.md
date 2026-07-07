@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-07 - Verify canary refresh against installed markers and tarball contents
+
+- A canary refresh investigation showed a target repo still had `journey-map` installed from `skillpacks@0.1.21` at `v0.26`, while the source checkout and npm `experimental` tag were at later canary states.
+- Rule: before assuming a canary feature is active in a target repo, check `.agentic-skills-managed` `source_package`/`source_version`, `npm view <package> dist-tags`, and a `npx skillpacks@experimental refresh --all --dry-run` plan from the target project tree.
+- For canary packages, inspect the published tarball or manifest for required dependency metadata and assets; a source checkout can be newer than the immutable npm prerelease currently under the experimental tag.
+
 ## 2026-07-06 - Briefing slides are canary-lane until promoted
 
 - A release-split answer classified `create-briefing-slides`, briefing-slide convention assets, and briefing-slide UX work as general-release content even though the user clarified they are canary.

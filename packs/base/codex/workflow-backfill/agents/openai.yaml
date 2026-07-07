@@ -1,0 +1,7 @@
+interface:
+  display_name: "Workflow Backfill"
+  short_description: "Backfill canary review artifacts"
+  default_prompt: "Use $workflow-backfill to scan this repo after a canary skill refresh and plan safe briefing-slide or review-index backfill."
+
+policy:
+  allow_implicit_invocation: true
