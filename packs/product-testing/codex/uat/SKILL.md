@@ -2,7 +2,7 @@
 name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
-version: v0.17
+version: v0.18
 release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
@@ -23,7 +23,7 @@ Create a user acceptance testing plan from the perspective of a potential or tar
 
 UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into their own workflow to understand and evaluate it. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use.
 
-This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
+This is a human-run acceptance plan, not automated testing. Do not run or operate the product. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
 
 When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before any consolidation decision. This mode helps the user try each variant in a comparable way using explicit walkthrough checklists and capture enough evidence to form a defensible consolidation opinion.
 

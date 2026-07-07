@@ -2,7 +2,49 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Briefing Slides Convention Enforcement
+## Current Implementation - Visible UAT Skill
+
+### Goal
+
+Create a new `visible-uat` skill in the product-testing pack for deterministic visible UAT execution against local desktop, web, and app surfaces. Keep it distinct from the existing `uat` skill, which remains a human-run UAT plan generator.
+
+### Plan
+
+- [x] Add source skill mirrors under `packs/product-testing/{claude,codex}/visible-uat/` with `version: v0.0`, matching changelogs, and pack metadata.
+- [x] Build package artifacts and refresh runtime mirrors from source.
+- [x] Run required text checks, mirror/version verification, task-doc audit, diff hygiene, commit, and push.
+
+### Acceptance Criteria
+
+- [x] The skill requires reading project instructions and UAT scope before launching anything.
+- [x] The skill requires detecting launch/test/smoke hooks and safe setup APIs.
+- [x] Transient setup scripts are limited to `/tmp`; app source changes are prohibited unless the user changes the task to implementation.
+- [x] Visible interactions start from the visible UI state tool and prefer accessibility-tree element actions.
+- [x] Reports are written under `docs/testing/` unless a stronger convention exists, with complete PASS/FAIL/BLOCKED data.
+- [x] Automated checks are labeled supplemental and run only after visible UAT.
+- [x] Processes started for UAT are stopped before handoff.
+- [x] The current `uat` human-run contract remains intact.
+
+### Verification
+
+- [x] `rg -n "visible-uat|Computer Use|/tmp|docs/testing|manual-gated|automated checks" packs/product-testing/{claude,codex}/visible-uat/SKILL.md`
+- [x] `rg -n "Do not run or operate the product" packs/product-testing/{claude,codex}/uat/SKILL.md`
+- [x] Manual contract check: `visible-uat` is execution; `uat` remains planning.
+- [x] Refreshed mirror/version check.
+- [x] `npm run skillpacks:build`
+- [x] `scripts/pack.sh refresh`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+Added source `visible-uat` skill mirrors and changelogs for Claude and Codex at `v0.0`. Updated the product-testing pack listing, archived and bumped `uat` to `v0.18` with an explicit non-operation boundary, and regenerated the canary manifest.
+
+The canary dist manifest exposes `visible-uat` for both platforms at `v0.0`. Runtime `scripts/pack.sh refresh` ran, but this repo does not enable `product-testing` in `.agents/project.json`, so project-local `.claude/skills` and `.codex/skills` do not install that pack during refresh.
+
+Verification passed: required wording scan, `uat` boundary scan, manual contract check, manifest version check, `SKILLPACKS_PACKAGE_LANE=canary npm run skillpacks:build`, `scripts/pack.sh refresh`, `bash scripts/skill-mirror-parity-audit.sh`, `bash scripts/skill-archive-audit.sh --strict`, `node scripts/audit-task-docs.mjs`, and staged diff whitespace.
+
+## Historical Implementation - Briefing Slides Convention Enforcement
 
 ### Goal
 

@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.1",
     "release_lane": "canary"
   },
-  "source_fingerprint": "76d9d657000abffa0202bb9ccd368db5863c7eccbda71e3e690a669c19e9e546",
+  "source_fingerprint": "04278b8229e10490c6b73adec88c47d154e32237d919e49ea144ad1ad65033ad",
   "packs": [
     {
       "name": "agent-bridge",
@@ -569,9 +569,10 @@
       ],
       "skills": [
         "dogfood",
-        "uat"
+        "uat",
+        "visible-uat"
       ],
-      "skill_count": 2
+      "skill_count": 3
     },
     {
       "name": "project-fleet",
@@ -831,7 +832,7 @@
       "scope": "pack",
       "pack": "agent-work-admin",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -844,14 +845,15 @@
       ],
       "path": "packs/agent-work-admin/claude/plan-phase/SKILL.md",
       "installable": true,
-      "content_sha256": "1ceebffbb7179f636fe5e8cea03e5e987f802e526afcc3a2c91c08d994929a37",
+      "content_sha256": "0d10eef7a430cce2c7e9724d4231c653063c9fa2ce444d015d03d3357218e567",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/plan-phase",
       "deck_memberships": []
@@ -1733,7 +1735,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.15",
+      "version": "v0.16",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -1746,7 +1748,7 @@
       ],
       "path": "packs/base/claude/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "5599ea96605792dbcae49dab9b33d25139f9a7ad3d678ee13e5b52b80c84374e",
+      "content_sha256": "3684069818daffd1e408959d86a2545955fefe42130085a3e9525c30b3e2d8be",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1755,6 +1757,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -8164,15 +8167,17 @@
       "scope": "pack",
       "pack": "docs-health",
       "platform": "codex",
-      "version": "v0.0",
+      "version": "v0.1",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/docs-health/codex/hygiene/SKILL.md",
       "installable": true,
-      "content_sha256": "d205f062196a135b7352e0fecf4150fa6c9b23d609c3ebd774a64cb5277f5e45",
-      "archive_versions": [],
+      "content_sha256": "1d944e044be818cf5db465d9236ef5da34ba9ad540a7327b19a1d14805271622",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "$hygiene",
       "deck_memberships": []
     },
@@ -8236,14 +8241,14 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.14",
+      "version": "v0.15",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "cfd4cf09b3f4c4d8d13a982553701709ec8bac025867a4289016710594baabeb",
+      "content_sha256": "d0cb7085a07d02a2f34dd5ee71fecd1f244810dceeadcfdc9f3e90131e854adf",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -8251,6 +8256,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -8269,18 +8275,19 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.13",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship/SKILL.md",
       "installable": true,
-      "content_sha256": "02004ed3e76df60a58c086dcbeb13921b3ebe9f5a561d54e55a447637ab11c4c",
+      "content_sha256": "f6bb7f7791aca96e52ae5acaa401e7d4daecb0cd6e9a343387034629bd3c4c80",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -9460,7 +9467,7 @@
       "scope": "pack",
       "pack": "monorepo",
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -9473,11 +9480,12 @@
       ],
       "path": "packs/monorepo/claude/mono-plan/SKILL.md",
       "installable": true,
-      "content_sha256": "6b9c07de2bd9e76bce46709cd2fdbf19481d4a1d8232cc23d44bd4053eac5f65",
+      "content_sha256": "8c4c2d54813f82bf8f40ab293fe27e7c30cdd0b08504bc0faa74e2158eed1744",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/mono-plan",
       "deck_memberships": []
@@ -10255,7 +10263,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.13",
+      "version": "v0.14",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -10270,13 +10278,14 @@
       ],
       "path": "packs/product-design/claude/state-model/SKILL.md",
       "installable": true,
-      "content_sha256": "bcf71c31bbadf852002e6e237acce92ece787affe781a806509c150039d7cdf7",
+      "content_sha256": "0426d386b0bece27e625d614ef6232e2a6d8a4e06e5bfb0c518e1ddbd706e8de",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
         "v0.11",
         "v0.12",
+        "v0.13",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -10429,7 +10438,7 @@
       "scope": "pack",
       "pack": "product-design",
       "platform": "claude",
-      "version": "v0.34",
+      "version": "v0.35",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -10444,7 +10453,7 @@
       ],
       "path": "packs/product-design/claude/ux-variations/SKILL.md",
       "installable": true,
-      "content_sha256": "076ab33a47db5a210b7755c5eeba2db45ac36c314d312595763b50c0c7e2c81e",
+      "content_sha256": "fab1c1ce40ccd068393bb262d3f164c9da73874ed275a129424801ca28ccdba0",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -10474,6 +10483,7 @@
         "v0.31",
         "v0.32",
         "v0.33",
+        "v0.34",
         "v0.4",
         "v0.5",
         "v0.6",
@@ -11121,7 +11131,7 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "claude",
-      "version": "v0.17",
+      "version": "v0.18",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -11135,7 +11145,7 @@
       ],
       "path": "packs/product-testing/claude/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "b4765618f9e4fa0a0df4f901caf64b0212dc0a67527d458e681e7c635ea075c3",
+      "content_sha256": "987da50242def8cb18be3bd644fef68fd42043ebd92bc90b90916882135a46c7",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -11146,6 +11156,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -11156,6 +11167,24 @@
         "v0.9"
       ],
       "command": "/uat",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-product-testing-claude-visible-uat",
+      "name": "visible-uat",
+      "scope": "pack",
+      "pack": "product-testing",
+      "platform": "claude",
+      "version": "v0.0",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/product-testing/claude/visible-uat/SKILL.md",
+      "installable": true,
+      "content_sha256": "e3aba6478e62637df6b89466c474d9aadcf2f099372d22e2c4a451ee5cd50dda",
+      "archive_versions": [],
+      "command": "/visible-uat",
       "deck_memberships": []
     },
     {
@@ -11194,7 +11223,7 @@
       "scope": "pack",
       "pack": "product-testing",
       "platform": "codex",
-      "version": "v0.17",
+      "version": "v0.18",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -11208,7 +11237,7 @@
       ],
       "path": "packs/product-testing/codex/uat/SKILL.md",
       "installable": true,
-      "content_sha256": "e740598f7cd67118e32aa4cc9dbdd9765ac1fcf8fc86770d40a9631ffe2aaed1",
+      "content_sha256": "949c83c0296bb28111beec896782380cfeb21795f4993e69ea996f9602a0ab16",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -11219,6 +11248,7 @@
         "v0.14",
         "v0.15",
         "v0.16",
+        "v0.17",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -11229,6 +11259,24 @@
         "v0.9"
       ],
       "command": "$uat",
+      "deck_memberships": []
+    },
+    {
+      "id": "pack-product-testing-codex-visible-uat",
+      "name": "visible-uat",
+      "scope": "pack",
+      "pack": "product-testing",
+      "platform": "codex",
+      "version": "v0.0",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/product-testing/codex/visible-uat/SKILL.md",
+      "installable": true,
+      "content_sha256": "34f1849be6532270a9f26897e6b37e9f044dda15a13fe484ec8884245c52af58",
+      "archive_versions": [],
+      "command": "$visible-uat",
       "deck_memberships": []
     },
     {
@@ -12381,15 +12429,17 @@
       "scope": "pack",
       "pack": "vard",
       "platform": "claude",
-      "version": "v0.0",
+      "version": "v0.1",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/vard/claude/vard-align/SKILL.md",
       "installable": true,
-      "content_sha256": "6dbfd8655f35cd1ff20441d71a982e0681fd59566da2fb51bbf3fc78e865ff0c",
-      "archive_versions": [],
+      "content_sha256": "6960a82806bbf1b7040635aecaeb3e4fc15d3b94666b5d92f48c2aed727a0279",
+      "archive_versions": [
+        "v0.0"
+      ],
       "command": "/vard-align",
       "deck_memberships": [
         "vard"

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.18 - 2026-07-07
+
+- Clarified that `/uat` must not run or operate the product, preserving its human-run planning boundary alongside the new `/visible-uat` execution skill.
+
 ## v0.17 - 2026-07-06
 
 - Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/uat-{topic}.html` is now the primary review surface and compiled YAML routes back to `/uat`.

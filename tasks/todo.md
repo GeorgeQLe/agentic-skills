@@ -1,6 +1,49 @@
 # Current Task
 
-## Current Implementation - Briefing Slides Convention Enforcement
+## Current Implementation - Visible UAT Skill
+
+### Goal
+
+Create a new `visible-uat` skill in the product-testing pack for deterministic, visible UI-driven UAT execution, while preserving the existing `uat` skill as a human-run UAT plan generator.
+
+### Plan
+
+- [x] Add Claude and Codex `visible-uat` skill mirrors at initial version `v0.0`, with matching changelogs and product-testing pack metadata.
+- [x] Regenerate package/manifest artifacts and refresh runtime mirrors after source changes.
+- [x] Verify required wording, existing `uat` contract, refreshed mirrors, task docs, and diff hygiene; then commit and push intended changes.
+
+### Acceptance Criteria
+
+- [x] `visible-uat` explicitly conducts visible UAT through Computer Use or the available visible UI tool.
+- [x] Temporary setup is restricted to `/tmp`, app state is isolated where possible, and visible UI inspection is the assertion source.
+- [x] Reports go under `docs/testing/` unless a stronger repo convention exists and include populated PASS/FAIL/BLOCKED run tables.
+- [x] Automated checks are supplemental and run only after visible UAT observations.
+- [x] The existing `uat` skill still says it is human-run planning and does not direct agents to operate the product.
+
+### Verification
+
+- [x] `rg -n "visible-uat|Computer Use|/tmp|docs/testing|manual-gated|automated checks" packs/product-testing/{claude,codex}/visible-uat/SKILL.md`
+- [x] `rg -n "Do not run or operate the product" packs/product-testing/{claude,codex}/uat/SKILL.md`
+- [x] Verify `visible-uat` is distinct from `uat` and does not weaken `uat`'s human-run contract.
+- [x] Verify refreshed mirrors expose the new skill and matching version.
+- [x] `npm run skillpacks:build`
+- [x] `scripts/pack.sh refresh`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+Added `visible-uat` in both Claude and Codex product-testing mirrors at `v0.0`, with matching changelogs and product-testing pack metadata. The skill requires visible UI execution through Computer Use or the available visible UI tool, `/tmp`-only transient setup, isolated state where possible, visible assertions, `docs/testing/` reports, supplemental-only automated checks, and cleanup of started processes.
+
+Archived both `uat` mirrors at `archive/v0.17/`, bumped them to `v0.18`, and added the exact "Do not run or operate the product" boundary so `uat` remains a human-run plan skill while `visible-uat` owns execution.
+
+Regenerated the canary skillpacks manifest after staging source. The dist manifest exposes both `visible-uat` entries at `v0.0` for `claude` and `codex`. `scripts/pack.sh refresh` ran successfully; this repo's project-local runtime registry does not install `product-testing` during refresh because only `exec-loop` is enabled in `.agents/project.json`, so `.claude/skills` and `.codex/skills` remain limited to enabled skills by design.
+
+Verification passed for required wording, `uat` contract wording, manifest version exposure, mirror parity, strict archive audit, task-doc audit, and staged diff whitespace.
+
+## Historical Task State
+
+## Review - Briefing Slides Convention Enforcement
 
 ### Goal
 
@@ -46,8 +89,6 @@ Updated the briefing slides convention and bumped both `create-briefing-slides` 
 Manifest generation now emits `required_base_skills: ["create-briefing-slides"]` for installable canary skills requiring `briefing-slides`. Lifecycle install/refresh/prune logic installs the same-platform helper as a dependency, records `enabled_skill_dependencies`, keeps helpers while enabled items still require them, and removes them only after they become orphaned.
 
 Package staging now includes the template and audit script only in canary packages. The direct stable package staging check passed; `SKILLPACKS_PACKAGE_LANE=stable npm --workspace packages/skillpacks run build:check` is not applicable while `dist/skillpacks-manifest.json` is intentionally canary-lane because its manifest check expects the committed dist manifest to match the selected lane.
-
-## Historical Task State
 
 ## Review - Cleanup Scope Flags
 
