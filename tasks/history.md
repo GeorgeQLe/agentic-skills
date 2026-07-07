@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-06 - skillpacks 0.1.21 source-state closeout
+
+- Investigated the `skillpacks` `0.1.21` package/manifest diff and confirmed npm had already published `skillpacks@0.1.21` and `@glexcorp/gskp@0.1.21` while `origin/master` was still committed at `0.1.20`.
+- Committed and pushed the source package/manifest version bump, then regenerated and committed the manifest fingerprint after post-commit verification caught the stale index-sourced fingerprint.
+- Created and pushed release tag `v0.1.21` at `408baeb59`.
+- Verification passed: `npm --workspace packages/skillpacks run build:manifest:check`, npm registry metadata checks for both package names, remote head/tag confirmation, and clean working-tree status.
+- Manifest: `tasks/ship-manifest-2026-07-06-skillpacks-0.1.21-source-state.md`.
+
 ## 2026-07-06 - Release-lane convention agent-review handoff
 
 - Processed the approved `implement release-lane convention` briefing-slides handoff for `briefing-slides/release-lane-change-boundary.html`.
