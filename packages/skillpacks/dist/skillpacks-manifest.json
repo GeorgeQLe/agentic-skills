@@ -5,7 +5,7 @@
     "version": "0.1.21",
     "release_lane": "stable"
   },
-  "source_fingerprint": "65150fccd5ac7dbbd11350c7d6f0d0dd70966a6e7883361e8afb9d99da2c9faa",
+  "source_fingerprint": "d71f75489af9e174455929756508b55ef1284bc4db13990661ef30b7c0816c8b",
   "packs": [
     {
       "name": "agent-bridge",
