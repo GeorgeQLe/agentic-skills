@@ -12,7 +12,20 @@ const manifestJsonPath = path.join(repoRoot, "packages/skillpacks/dist/skillpack
 const packageVersion = JSON.parse(
   readFileSync(packageJsonPath, "utf8")
 ).version;
-const nextPatchVersion = packageVersion.replace(/^(\d+)\.(\d+)\.(\d+)(?:-.+)?$/, (_, major, minor, patch) => `${major}.${minor}.${Number(patch) + 1}`);
+const packageIsPrerelease = packageVersion.includes("-");
+const currentPublishTag = packageIsPrerelease ? "experimental" : "latest";
+
+function npmPrereleaseVersion(version, preid) {
+  const [base, prerelease] = version.split("-");
+  if (prerelease?.startsWith(`${preid}.`)) {
+    return `${base}-${preid}.${Number(prerelease.slice(preid.length + 1)) + 1}`;
+  }
+
+  return base.replace(
+    /^(\d+)\.(\d+)\.(\d+)$/,
+    (_, major, minor, patch) => `${major}.${minor}.${Number(patch) + 1}-${preid}.0`
+  );
+}
 
 function makeMockBin() {
   const tempDir = mkdtempSync(path.join(tmpdir(), "skillpacks-publish-mock-"));
@@ -275,7 +288,11 @@ function runPublish(args, extraEnv = {}) {
 }
 
 function runPublishCurrent(extraEnv = {}, { dryRun = true } = {}) {
-  const args = dryRun ? ["--dry-run", "--current"] : ["--current"];
+  const args = [
+    ...(dryRun ? ["--dry-run"] : []),
+    "--current",
+    ...(packageIsPrerelease ? ["--tag", currentPublishTag] : [])
+  ];
   return runPublish(args, extraEnv);
 }
 
@@ -373,7 +390,7 @@ test("unknown publish flags are rejected", () => {
 
 test("canary prerelease publishes both packages with the experimental dist-tag", () => {
   const result = runPublish(["--tag", "experimental", "--preid", "experimental", "prerelease"]);
-  const canaryVersion = `${nextPatchVersion}-experimental.0`;
+  const canaryVersion = npmPrereleaseVersion(packageVersion, "experimental");
   const publishCalls = result.calls
     .split("\n")
     .filter((line) => line.startsWith("publish "));
@@ -564,7 +581,7 @@ test("--current recovery publishes only the scoped alias when skillpacks exists 
     .filter((line) => line.startsWith("publish "));
 
   assert.equal(publishCalls.length, 1, result.calls);
-  assert.match(publishCalls[0], /--access public --tag latest --dry-run/);
+  assert.match(publishCalls[0], new RegExp(`--access public --tag ${currentPublishTag} --dry-run`));
 });
 
 test("--current recovery reuses an experimental dist-tag for a partial canary publish", () => {

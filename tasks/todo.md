@@ -1,6 +1,45 @@
 # Current Task
 
-## Current Implementation - Cleanup Scope Flags
+## Current Implementation - Experimental Publish Dry-Run Verification
+
+### Goal
+
+Fix `./publish.sh --dry-run --tag experimental --preid experimental prerelease` so package verification passes while source metadata is temporarily bumped to an experimental prerelease.
+
+### Plan
+
+- [x] Inspect the failing package-boundary and publish-recovery tests.
+- [x] Keep staged package manifests tied to the selected release lane instead of stale `dist` state.
+- [x] Make publish-recovery tests valid when the source package version is already a prerelease during the release dry run.
+- [x] Run targeted package-boundary and publish-recovery tests.
+- [x] Run package-level verification and task-doc checks.
+
+### Acceptance Criteria
+
+- [x] Stable package staging emits a stable manifest even after a canary manifest was generated in `dist`.
+- [x] Canary package staging still emits canary-only briefing-slide assets and manifest entries.
+- [x] Publish recovery tests pass from both stable source versions and temporarily pre-bumped experimental source versions.
+- [x] The experimental publish dry run reaches its normal dry-run completion path.
+
+### Verification
+
+- [x] `node --test packages/skillpacks/test/package-boundary.test.mjs packages/skillpacks/test/publish-recovery.test.mjs`
+- [x] `npm --workspace packages/skillpacks run test:node`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] `./publish.sh --dry-run --tag experimental --preid experimental prerelease`
+
+### Review
+
+Fixed canary package staging so `build-package.mjs` generates a lane-local staged manifest instead of copying whatever manifest was last written to `packages/skillpacks/dist`. Stable staging now stays stable even after a canary manifest is generated during a publish dry run, while canary staging still includes briefing-slide canary assets.
+
+Updated publish recovery tests to derive npm prerelease expectations from the current source version and to use the experimental tag for `--current` recovery when the suite is running under a temporarily pre-bumped prerelease source.
+
+Verification passed for the targeted failure files, full package Node suite, task-doc audit, diff hygiene, and the original experimental publish dry run. The dry run restored source metadata to `0.1.21` / `stable` afterward.
+
+## Historical Task State
+
+## Review - Cleanup Scope Flags
 
 ### Goal
 
@@ -40,8 +79,6 @@ Updated lifecycle labels, refresh warnings, help text, README, quickstart, scrip
 Added focused coverage for explicit `--all`, `--global --dry-run`, `--global --reinstall-base --dry-run`, flag ordering with `--reinstall-base`, incompatible scope rejection, and compatibility/help docs.
 
 Verification passed: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check.
-
-# Historical Task State
 
 ## Review - Release Lane Briefing Slides 2026-07-06
 

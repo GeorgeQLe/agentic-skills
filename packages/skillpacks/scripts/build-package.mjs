@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,8 +33,7 @@ const packageLane = packageLaneFromEnv();
 const packageOwnedEntries = [
   { fromRoot: packageRoot, from: "bin", to: "bin" },
   { fromRoot: packageRoot, from: "src", to: "src" },
-  { fromRoot: packageRoot, from: "scripts/prepublish-auth-check.mjs", to: "scripts/prepublish-auth-check.mjs" },
-  { fromRoot: packageRoot, from: "dist/skillpacks-manifest.json", to: "dist/skillpacks-manifest.json" }
+  { fromRoot: packageRoot, from: "scripts/prepublish-auth-check.mjs", to: "scripts/prepublish-auth-check.mjs" }
 ];
 
 const repoOwnedEntries = [
@@ -277,6 +277,39 @@ function writeLaneFilteredConventionRegistry() {
   writeFileSync(target, registrySource);
 }
 
+function writeStagedManifest() {
+  const result = spawnSync(
+    process.execPath,
+    [path.join(packageRoot, "scripts/build-skillpacks-manifest.mjs"), "--print"],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+      env: process.env,
+      maxBuffer: 64 * 1024 * 1024
+    }
+  );
+  if (result.status !== 0) {
+    throw new Error(
+      [
+        "Failed to generate package manifest for staging.",
+        result.stdout,
+        result.stderr
+      ].filter(Boolean).join("\n")
+    );
+  }
+
+  const manifest = JSON.parse(result.stdout);
+  if ((manifest.package?.release_lane || "stable") !== packageLane) {
+    throw new Error(
+      `Generated package manifest lane ${manifest.package?.release_lane || "stable"} !== ${packageLane}`
+    );
+  }
+
+  const target = path.join(buildRoot, "dist/skillpacks-manifest.json");
+  mkdirSync(path.dirname(target), { recursive: true });
+  writeFileSync(target, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
 function conventionIdsDeniedForLane() {
   return Object.entries(SKILL_CONVENTIONS)
     .filter(([, convention]) => !releaseLaneAllowed(convention.release_lane, packageLane))
@@ -363,6 +396,7 @@ function buildPackage() {
   for (const entry of allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane)) {
     copyEntry(entry);
   }
+  writeStagedManifest();
   scrubDeniedSkillRowsFromPackMetadata(files);
   writeLaneFilteredConventionRegistry();
 
