@@ -3,6 +3,7 @@ name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
 version: v0.13
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 context_intake: deep

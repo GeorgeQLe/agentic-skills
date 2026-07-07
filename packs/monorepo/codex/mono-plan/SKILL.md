@@ -3,6 +3,7 @@ name: mono-plan
 description: Detect monorepo structure, identify shared chokepoints, and generate safe parallel lane specs aligned to package boundaries
 type: planning
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

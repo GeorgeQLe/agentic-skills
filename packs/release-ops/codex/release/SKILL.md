@@ -3,6 +3,7 @@ name: release
 description: Version bump, generate changelog, tag, and prepare a release
 type: shipping
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

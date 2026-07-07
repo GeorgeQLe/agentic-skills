@@ -3,6 +3,7 @@ name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 context_intake: deep

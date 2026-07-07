@@ -3,6 +3,7 @@ name: jtbd-timeline
 description: Moesta/Switch JTBD timeline — map first thought→passive→active→deciding→consuming→satisfaction with push/pull/anxiety/habit forces
 type: research
 version: v0.11
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: sub-skill
 parent: journey-map

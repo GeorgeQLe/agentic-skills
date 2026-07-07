@@ -3,6 +3,7 @@ name: devtool-adoption
 description: Use only for developer-facing products; plan adoption loops, examples, templates, community, and proof artifacts
 type: research
 version: v0.10
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 context_intake: scoped
 visual_tier: visual

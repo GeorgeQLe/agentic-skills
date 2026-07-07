@@ -3,6 +3,7 @@ name: devtool-dx-journey
 description: Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 context_intake: scoped
 visual_tier: visual

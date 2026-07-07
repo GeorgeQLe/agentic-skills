@@ -3,6 +3,7 @@ name: game-core-loop
 description: Use only for video game projects; analyze moment-to-moment, session, progression, and retention loops
 type: analysis
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: artifact_only
 visual_tier: visual

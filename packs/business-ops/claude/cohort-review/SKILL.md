@@ -3,6 +3,7 @@ name: cohort-review
 description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from /metrics
 type: analysis
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 context_intake: artifact_only

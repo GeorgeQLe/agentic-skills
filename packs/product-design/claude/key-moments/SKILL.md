@@ -3,6 +3,7 @@ name: key-moments
 description: Rank a topic's user-flow branches by proof priority (value × risk × frequency) right after user-flow-map, ordering the branches, gating variation breadth, and promoting or pruning flows so state-model and ux-variations grow the tree in proof order — writes only existing flow-tree ordering fields, no schema change.
 type: execution
 version: v0.1
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[optional: topic]"
 context_intake: scoped

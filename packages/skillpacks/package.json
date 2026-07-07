@@ -1,6 +1,6 @@
 {
   "name": "skillpacks",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "CLI and packaged markdown skill library for Claude Code and OpenAI Codex.",
   "type": "module",
   "bin": {

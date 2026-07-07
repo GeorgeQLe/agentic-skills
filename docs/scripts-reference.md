@@ -7,7 +7,7 @@ Compact command index for all scripts in this repository.
 | Command | Description |
 | --- | --- |
 | `npx skillpacks init` | Install managed base skill directories into the current project's local `.claude/skills/` and `.codex/skills/` roots and record `base_skills: true` in `.agents/project.json` |
-| `npx skillpacks cleanup [--dry-run]` | Remove or preview deprecated skillpacks state: legacy skillpacks-owned base installs under `~/.claude/skills` / `~/.codex/skills` and BIP config in discovered projects |
+| `npx skillpacks cleanup [--all\|--global] [--dry-run]` | Remove or preview deprecated skillpacks state: stale BIP config below the current directory by default, or legacy user-home base installs plus projects below the user home with `--global` |
 | `npx skillpacks pin ship v0.0` | Pin a project-local base skill to an archived version |
 
 ## Project Packs
@@ -26,8 +26,6 @@ Compact command index for all scripts in this repository.
 | `scripts/pack.sh unpin <skill>` | Return a pinned skill to track-latest |
 | `scripts/pack.sh set-mode <mode>` | Set agent mode: `claude-only`, `codex-only`, `hybrid`, or `unset` |
 | `scripts/pack.sh set-update-mode <mode>` | Set drift update mode: `warn`, `auto`, or `unset` |
-| `scripts/pack.sh set-bip <mode>` | Set build-in-public alignment default: `on`, `off`, or `unset` |
-| `scripts/pack.sh set-bip-platforms <platform...>` | Set project-level build-in-public priority platform list, or use `unset` to clear it |
 | `scripts/pack.sh list-packs` | Internal: print enabled packs (used by Codex `$exec` routing) |
 
 ## Mode & Handoff
@@ -58,7 +56,7 @@ Compact command index for all scripts in this repository.
 | `npx skillpacks doctor` | Check project-local base skill drift |
 | `npx skillpacks refresh` | Re-copy project-local managed base skills, clearing drift |
 | `npx skillpacks pin <skill> <version>` | Pin a project-local base skill to an archived version |
-| `npx skillpacks cleanup [--dry-run]` | Remove or preview deprecated skillpacks state, including legacy skillpacks-owned base installs and BIP config |
+| `npx skillpacks cleanup [--all\|--global] [--dry-run]` | Remove or preview deprecated skillpacks state; use `--global` for legacy user-home base installs |
 
 ## Testing & Benchmarks
 

@@ -3,6 +3,7 @@ name: repo-glossary
 description: Audit and reconcile the shared project glossary — find stale terms, missing definitions, conflicts, shadows, inheritance gaps, and cross-path divergences across research docs
 type: research
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"tooling\", \"business\", \"workflow\"]"
 ---

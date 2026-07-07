@@ -3,6 +3,7 @@ name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
 version: v0.28
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 context_intake: scoped

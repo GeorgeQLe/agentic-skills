@@ -3,6 +3,7 @@ name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
 version: v0.21
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: orchestrator
 ---

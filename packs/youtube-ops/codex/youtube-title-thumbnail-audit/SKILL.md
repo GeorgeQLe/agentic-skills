@@ -3,6 +3,7 @@ name: youtube-title-thumbnail-audit
 description: Audit YouTube titles and thumbnails against channel performance and peer packaging patterns
 type: research
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<channel slug or handle> [--peer <channel>...] [--count N]"
 context_intake: artifact_only

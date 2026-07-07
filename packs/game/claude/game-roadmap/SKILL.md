@@ -3,6 +3,7 @@ name: game-roadmap
 description: Use only for video game projects; sequence prototype, vertical slice, demo, store page, festival, launch, and post-launch milestones
 type: planning
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: artifact_only
 visual_tier: visual

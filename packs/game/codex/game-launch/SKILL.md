@@ -3,6 +3,7 @@ name: game-launch
 description: Use only for video game projects; plan Steam launch, festivals, creator outreach, demo timing, community, and wishlist targets
 type: research
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: scoped
 visual_tier: visual

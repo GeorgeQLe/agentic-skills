@@ -3,6 +3,8 @@
 ## v0.17 - 2026-07-06
 
 - Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/uat-{topic}.html` is now the primary review surface and compiled YAML routes back to `$uat`.
+- Required UAT plans to include click-by-click, command-by-command, request-by-request, or hybrid tester checklists for each journey.
+- Required variant-evaluation outputs to include shared and per-variant walkthrough checklists with explicit evidence capture points.
 
 ## v0.16 - 2026-07-02
 

@@ -3,6 +3,7 @@ name: prompt-history-backfill
 description: Scan Claude and Codex conversation history for skill invocation prompts missing from repo prompt history and report or backfill them safely
 type: analysis
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[--repo <path>] [--skill <slug>] [--since YYYY-MM-DD] [--until YYYY-MM-DD] [--apply] [history/export paths...]"
 ---

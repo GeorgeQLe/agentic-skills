@@ -3,6 +3,7 @@ name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
 type: shipping
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[focus area] [--target=codex]"
 ---

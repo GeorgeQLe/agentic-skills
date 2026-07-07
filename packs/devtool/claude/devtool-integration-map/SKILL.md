@@ -3,6 +3,7 @@ name: devtool-integration-map
 description: Use only for developer-facing products; map integrations, ecosystems, setup surfaces, and compatibility constraints
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 context_intake: scoped
 visual_tier: visual

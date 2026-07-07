@@ -3,6 +3,7 @@ name: expert-review
 description: Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents
 type: review
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

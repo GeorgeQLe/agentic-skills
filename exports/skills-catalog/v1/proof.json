@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "cdfaa0a66ca88f81a0fe79acc964d21c254c48d7",
-  "generated_at": "2026-07-06T01:14:53.637Z",
-  "source_fingerprint": "1e681a2146492e5772ea77351290577e93f5cbbfb2ada24a26236025a46f3d3f",
+  "source_commit": "a59fc1b80c56c52797f1268dcafef77de11b0607",
+  "generated_at": "2026-07-06T17:27:22.844Z",
+  "source_fingerprint": "d14ff9dacee9a492ecfd1de99bfb5ea776b28ab6df1363489656ee2cc74515b6",
   "source_count": 453,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-06 - Release-lane convention agent-review handoff",
+    "2026-07-06 - ship-end closeout for UAT checklist contract",
     "2026-07-05 - ship-end closeout for build-ui-screens prototype-plan handoff",
     "2026-07-04 - Deprecated product-design alias cleanup",
     "2026-07-02 - Dev-docs task reconciliation",
     "2026-07-02 - Research Amend routing integration",
     "2026-07-02 - Research Amend workflow routing inspection",
-    "2026-07-02 - Research Amend base skill",
-    "2026-07-02 - Base pack nesting migration",
-    "2026-07-02 - BIP prompt and blocker cleanup"
+    "2026-07-02 - Research Amend base skill"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

@@ -3,6 +3,7 @@ name: brainstorm-inspirations
 description: Survey and compare possible product-design inspirations for current design-tree flows, surfaces, UX branches, UI direction, visual language, and product class
 type: research
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[optional: topic, surface, product class, UX branch, or design question]"
 context_intake: scoped

@@ -575,7 +575,7 @@ let bundlesWritten = 0;
 const classification = new Map();
 function recordClassification(skillName, file, kind) {
   if (!classification.has(skillName)) {
-    classification.set(skillName, { bespokeFiles: [], ownableFiles: [] });
+    classification.set(skillName, { bespokeFiles: [], ownableFiles: [], bundleOnlyFiles: [] });
   }
   classification.get(skillName)[kind].push(file);
 }
@@ -590,13 +590,18 @@ for (const file of files) {
   const abs = `${repoRoot}/${file}`;
   const before = readFileSync(abs, "utf8");
   const body = alignmentSectionBody(before);
+  const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
+  const hasLegacyBundleOnly = body === null && existsSync(bundlePath);
   // Skills without an alignment section are out of scope.
   if (body === null) {
-    if (!isOptionalAlignmentSkill(skillName)) {
+    if (hasLegacyBundleOnly) {
+      recordClassification(skillName, file, "bundleOnlyFiles");
+    } else if (!isOptionalAlignmentSkill(skillName)) {
       outOfScope += 1;
       continue;
+    } else {
+      recordClassification(skillName, file, "ownableFiles");
     }
-    recordClassification(skillName, file, "ownableFiles");
   } else if (!isOwnable(body)) {
     // Preserve hand-authored / hybrid alignment sections verbatim unless the
     // skill is in the optional batch. Optional skills must not retain older
@@ -614,14 +619,15 @@ for (const file of files) {
   // 1. Legacy bundled convention file beside the skill. Default mode no longer
   // writes this file; --legacy-bundles keeps the previous behavior available
   // for installed skills that still need a sibling fallback regenerated.
-  const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
   const bundleContent = bundledContentFor(skillName, file);
   const bundleBefore = existsSync(bundlePath) ? readFileSync(bundlePath, "utf8") : "";
   const bundleChanged = legacyBundles && bundleBefore !== bundleContent;
 
   // 2. Short stub inside SKILL.md pointing at the bundled file.
-  const after = replaceOrInsert(before, skillName, { replaceSection: body !== null && !isOwnable(body) && isOptionalAlignmentSkill(skillName) });
-  const skillChanged = before !== after;
+  const after = hasLegacyBundleOnly
+    ? before
+    : replaceOrInsert(before, skillName, { replaceSection: body !== null && !isOwnable(body) && isOptionalAlignmentSkill(skillName) });
+  const skillChanged = !hasLegacyBundleOnly && before !== after;
 
   if (!bundleChanged && !skillChanged) continue;
 
@@ -645,11 +651,10 @@ for (const file of files) {
 // default. The old byte-equal check is available only with --legacy-bundles.
 const bundleDiagnostics = [];
 let ownableChecked = 0;
-for (const [name, { ownableFiles, bespokeFiles }] of classification) {
+for (const [name, { ownableFiles, bespokeFiles, bundleOnlyFiles }] of classification) {
   // Mixed sibling pairs already fail via the bespoke diagnostics below.
   if (bespokeFiles.length) continue;
-  for (const file of ownableFiles) {
-    ownableChecked += 1;
+  for (const file of [...ownableFiles, ...bundleOnlyFiles]) {
     const abs = `${repoRoot}/${file}`;
     const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
     const relBundle = relative(repoRoot, bundlePath);
@@ -665,6 +670,10 @@ for (const [name, { ownableFiles, bespokeFiles }] of classification) {
         );
       }
     }
+  }
+  for (const file of ownableFiles) {
+    ownableChecked += 1;
+    const abs = `${repoRoot}/${file}`;
     const content = readFileSync(abs, "utf8");
     if (replaceOrInsert(content, name) !== content) {
       bundleDiagnostics.push(
@@ -702,10 +711,11 @@ for (const file of files) {
 // Failing diagnostics: bespoke classification must match the allowlist
 // exactly, and sibling mirrors must agree, in both dry-run and write mode.
 const diagnostics = [];
-for (const [name, { bespokeFiles, ownableFiles }] of classification) {
-  if (bespokeFiles.length && ownableFiles.length) {
+for (const [name, { bespokeFiles, ownableFiles, bundleOnlyFiles }] of classification) {
+  const generatedFiles = [...ownableFiles, ...bundleOnlyFiles];
+  if (bespokeFiles.length && generatedFiles.length) {
     diagnostics.push(
-      `Mixed siblings for "${name}" — generated: ${ownableFiles.join(", ")}; bespoke: ${bespokeFiles.join(", ")}. Convert the bespoke mirror(s) to the generated stub paragraph or hand-author both mirrors.`,
+      `Mixed siblings for "${name}" — generated: ${generatedFiles.join(", ")}; bespoke: ${bespokeFiles.join(", ")}. Convert the bespoke mirror(s) to the generated stub paragraph or hand-author both mirrors.`,
     );
   } else if (bespokeFiles.length && !bespokeAllowlist.has(name)) {
     diagnostics.push(

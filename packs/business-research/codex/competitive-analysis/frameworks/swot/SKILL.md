@@ -3,6 +3,7 @@ name: swot
 description: SWOT competitive analysis - strengths, weaknesses, opportunities, and threats grounded in market evidence
 type: research
 version: v0.12
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 invocation: sub-skill
 parent: competitive-analysis

@@ -3,6 +3,7 @@ name: conversion-map
 description: Plan evaluation, trial, pricing decision, objections, buyer roles, and conversion triggers
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: app, segment, or conversion motion]"
 context_intake: deep

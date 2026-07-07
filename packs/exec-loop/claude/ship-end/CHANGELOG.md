@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-07-06
+
+- Removed Build-In-Public wrap-up behavior and dropped the `social-ledger` convention dependency that was only needed for BIP post suggestions.
+
 ## v0.13 - 2026-07-02
 
 - Tightened BIP wrap-up prompting so `/ship-end` asks only as terminal output after reporting, only when `alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed` is not true; explicit `alignment.build_in_public: false` now suppresses both prompting and BIP output, and BIP page review can never block shipping or next-work routing.

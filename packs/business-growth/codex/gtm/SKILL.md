@@ -3,6 +3,7 @@ name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
 version: v0.13
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 context_intake: deep

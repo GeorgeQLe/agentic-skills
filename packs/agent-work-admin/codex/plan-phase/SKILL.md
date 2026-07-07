@@ -3,6 +3,7 @@ name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: sub-skill
 parent: exec

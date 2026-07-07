@@ -2,8 +2,9 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.11
-required_conventions: [alignment-page, briefing-slides]
+version: v0.12
+release_lane: canary
+required_conventions: [alignment-page, briefing-slides, interrogation-page]
 argument-hint: "[optional: target industry or market segment]"
 context_intake: deep
 visual_tier: visual
@@ -31,6 +32,7 @@ Do not include `Recommended next skill`, `Recommended next command`, or downstre
 
 Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
 
+0. **Stage 0 - Interrogation.** Before Stage 1 scope approval, run the shared interrogation-page workflow at `interrogation/enterprise-icp-r{N}-{branch}.html`. Require completed compiled interrogation YAML before advancing to Stage 1. The confidence gate must cover enterprise stakeholder roles, buying stages, deal-killers, onboarding complexity, requirements delta, champion risk, procurement reality, land-and-expand signals, segmentation, source gaps, and unknowns; unresolved or waived areas must be carried into the Stage 1 assumptions and source plan.
 1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
 2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page so it renders the complete working-packet substance as structured HTML review UI: purpose-built sections, tables, matrices, gates, cards, and tier-appropriate charts or diagrams that preserve every packet section, finding, caveat, and decision detail without summary loss. Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI; do not make a `Full Preliminary Packet` or `Full Working Packet` raw Markdown dump, giant `<pre><code>` block, link-only view, or source-only view the primary review surface. Include the evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
 3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
@@ -123,6 +125,9 @@ When this skill produces follow-up work, file it by execution semantics:
 - Present before writing — never write until findings are validated.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
+## Interrogation Page
+
+Follow the shared interrogation-page convention via the packaged convention resolver; output path is `interrogation/enterprise-icp-r{N}-{branch}.html`. Before producing research, run the stage-zero interrogation loop, starting with the assumptions manifest as round 1, and loop until the confidence gate passes. This skill **cannot advance to stage one until** the confidence gate passes with at least one completed interrogation round and every interview area covered or waived. Each round page must contain at least one genuinely open input (`data-open-input`).
 
 ## Briefing Slides Review Surface
 

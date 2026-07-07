@@ -3,6 +3,7 @@ name: youtube-meta-research
 description: Research the current public YouTube meta around a channel handle or URL, including peer and adjacent surfaces, breakout/outlier videos, search observations, topic/packaging/format patterns, and differentiated exploit/avoid/counter-position recommendations. Use for prompts like current YouTube meta, what is working now, find opportunities for @channel, breakout patterns, or what this channel should exploit or avoid.
 type: research
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<channel URL or @handle> [--count N] [--peer-limit N] [--query-limit N] [--window 30|90|180|365]"
 context_intake: artifact_only

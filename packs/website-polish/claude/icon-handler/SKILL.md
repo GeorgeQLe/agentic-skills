@@ -3,6 +3,7 @@ name: icon-handler
 description: Audit and apply project-root icon assets to favicon, app icon, Apple touch icon, and manifest surfaces
 type: execution
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[audit|fix] [asset filename]"
 ---

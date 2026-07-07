@@ -3,6 +3,7 @@ name: youtube-channel-audit
 description: Run an evidence-first YouTube channel audit that captures raw metadata/transcripts, performance fields, portfolio roles, and repeated content patterns
 type: research
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<channel URL or handle> [--count N]"
 context_intake: artifact_only

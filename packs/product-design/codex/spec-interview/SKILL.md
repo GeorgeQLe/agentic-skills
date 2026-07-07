@@ -3,6 +3,7 @@ name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated route/screen realizations and channel behavior to extract production specifications
 type: planning
 version: v0.20
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[--ideas]"
 context_intake: deep

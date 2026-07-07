@@ -69,10 +69,21 @@ The script publishes `skillpacks` first, then `@glexcorp/gskp --access public`, 
 
 ## Canary / Experimental Release
 
-Use npm dist-tags for canary releases. The default canary tag is `experimental`, and the version should use the same prerelease identifier so the package version is visibly non-GA:
+Use npm dist-tags for canary releases. The default canary tag is `experimental`, and the version should use the same prerelease identifier so the package version is visibly non-GA.
+
+### Pre-publish gates only: Verify, Then Stop
 
 ```bash
+npm --workspace packages/skillpacks run test:node
+npm run skillpacks:verify
 ./publish.sh --dry-run --tag experimental --preid experimental prerelease
+```
+
+Stop here unless all gates pass; do not commit, tag, push, or publish during the pre-publish gates.
+
+### Publish Canary: Run Only After All Gates Pass
+
+```bash
 ./publish.sh --tag experimental --preid experimental prerelease
 ```
 
@@ -94,15 +105,20 @@ npx skillpacks@experimental install <pack-or-skill>
 npx @glexcorp/gskp@experimental install <pack-or-skill>
 ```
 
-After a successful canary publish, commit, tag, and push the prerelease source state:
+### POST-PUBLISH ONLY: Commit, Tag, and Push Source State
+
+Run these only after `./publish.sh` succeeds. Use the exact version printed by `publish.sh`, such as `0.1.21-experimental.0`:
 
 ```bash
+VERSION=<published-version>
 git add packages/skillpacks/package.json packages/skillpacks/dist/skillpacks-manifest.json
-git commit -m "Release skillpacks <version>"
-git tag skillpacks-v<version>
+git commit -m "Release skillpacks $VERSION"
+git tag "skillpacks-v$VERSION"
 git push
-git push origin skillpacks-v<version>
+git push origin "skillpacks-v$VERSION"
 ```
+
+### Post-Publish Verification: Confirm Dist-Tags and Smoke Checks
 
 Validate the canary dist-tag parity:
 
@@ -127,18 +143,6 @@ If the canary is approved for GA, run a normal stable release later:
 ```
 
 The stable release publishes a new stable semver version to `latest`; it does not promote the canary tarball directly.
-
-After a successful publish, commit and push the source release state immediately:
-
-```bash
-git add packages/skillpacks/package.json packages/skillpacks/dist/skillpacks-manifest.json
-git commit -m "Release skillpacks <version>"
-git tag skillpacks-v<version>
-git push
-git push origin skillpacks-v<version>
-```
-
-Use the actual published version in the commit message and tag. Do this before starting another release so npm and git do not drift.
 
 ## Partial-Publish Recovery
 

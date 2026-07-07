@@ -3,6 +3,7 @@ name: youtube-portfolio
 description: Map a YouTube channel's video portfolio by archetype, strategic role, performance concentration, and cleanup or refresh opportunities
 type: research
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[channel slug or audit path]"
 context_intake: artifact_only

@@ -2,6 +2,7 @@
 name: pmf-assessment
 type: research
 version: v0.11
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"

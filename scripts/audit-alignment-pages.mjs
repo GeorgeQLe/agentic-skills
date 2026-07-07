@@ -35,43 +35,6 @@ const INLINE_TTS_RE = /alignTTS|\/\/ --- Brief Me TTS ---/;
 // stray radios (chart toggles, filters) are deliberately not a trigger.
 const ANSWERABLE_RE = /\bCompile Responses\b/;
 const DATE_RE = /\b\d{4}-\d{2}-\d{2}\b/;
-const BIP_CHANNEL_CONVENTIONS = [
-  ["LinkedIn posts", /(?:docs|assets)\/social\/linkedin-post-convention\.md/i],
-  ["X posts", /(?:docs|assets)\/social\/x-post-convention\.md/i],
-  ["Bluesky posts", /(?:docs|assets)\/social\/bluesky-convention\.md/i],
-  ["Threads posts", /(?:docs|assets)\/social\/threads-convention\.md/i],
-  ["Mastodon posts", /(?:docs|assets)\/social\/mastodon-convention\.md/i],
-  ["Reddit posts", /(?:docs|assets)\/social\/reddit-convention\.md/i],
-  ["Hacker News submissions/comments", /(?:docs|assets)\/social\/hacker-news-convention\.md/i],
-  ["YouTube Community posts", /(?:docs|assets)\/social\/youtube-community-convention\.md/i],
-  ["YouTube long-form", /(?:docs|assets)\/social\/youtube-long-form-convention\.md/i],
-  ["YouTube Shorts", /(?:docs|assets)\/social\/youtube-shorts-convention\.md/i],
-  ["TikTok", /(?:docs|assets)\/social\/tiktok-convention\.md/i],
-  ["Instagram Reels", /(?:docs|assets)\/social\/instagram-reels-convention\.md/i],
-  ["LinkedIn video", /(?:docs|assets)\/social\/linkedin-video-convention\.md/i],
-  [
-    "Founder/devtool reusable video prompts",
-    /(?:docs|assets)\/social\/founder-devtool-video-prompts-convention\.md/i,
-  ],
-];
-const BIP_REQUIRED_FIELD_PATTERNS = [
-  ["recommendation notes", /\brecommendation[-_ ]notes?\b/i],
-  ["source basis", /\bsource[-_ ]basis\b/i],
-  ["fresh-audience context", /\bfresh[-_ ]audience[-_ ]context\b/i],
-  ["jargon expansion", /\bjargon[-_ ]expansion\b/i],
-  ["public-facing significance", /\bpublic[-_ ](?:facing[-_ ])?significance\b/i],
-  ["claim-safety notes", /\bclaim[-_ ]safety[-_ ]notes?\b/i],
-  ["risk level", /\brisk[-_ ]level\b|\brisk\b/i],
-  ["publish precheck", /\bpublish[-_ ]precheck\b|\bplatform[-_ ]or[-_ ]community[-_ ]precheck\b/i],
-  ["loaded convention path", /\bloaded[-_ ](?:channel[-_ ])?convention\b|\bloaded[-_ ]convention[-_ ]path\b/i],
-];
-const BIP_RECOMMENDATION_STATUS_PATTERNS = [
-  ["recommended", /\brecommended\b/i],
-  ["not-now", /\bnot[-_ ]now\b/i],
-  ["rejected", /\brejected\b/i],
-];
-const BIP_OBSOLETE_CHECKPOINT_RE =
-  /\b(?:data-bip-status|data-bip-page|data-bip-gates|bip_gates|bip_approval_status)\b/i;
 // Compiled-response YAML must join its line array with a real newline ("\n").
 // A double-escaped separator (.join("\\n") in source) glues every YAML line
 // onto one physical line separated by the literal characters \n, so the
@@ -87,9 +50,7 @@ function collectHtmlPages(dir, prefix = "") {
     if (dirent.name.startsWith(".")) continue;
     const rel = prefix ? `${prefix}/${dirent.name}` : dirent.name;
     const full = `${dir}/${dirent.name}`;
-    if (dirent.isDirectory()) {
-      entries.push(...collectHtmlPages(full, rel));
-    } else if (dirent.isFile() && dirent.name.endsWith(".html")) {
+    if (dirent.isFile() && dirent.name.endsWith(".html")) {
       entries.push(rel);
     }
   }
@@ -109,7 +70,6 @@ const embedDiagnostics = [];
 const alignmentStatusDiagnostics = [];
 const indexDiagnostics = [];
 const collapsingFillDiag = [];
-const bipDiagnostics = [];
 const yamlJoinDiagnostics = [];
 
 function checkAttribute(htmlTag, rel, attribute, allowed) {
@@ -127,112 +87,6 @@ function checkAttribute(htmlTag, rel, attribute, allowed) {
 
 function isConfirmedPage(html) {
   return /\bdata-alignment-status=["']confirmed["']/i.test(html) || /\balignment_status:\s*confirmed\b/i.test(html);
-}
-
-function isBipPage(file, html) {
-  return file.startsWith("bip/") || file.startsWith("bip-") || file.endsWith("-bip.html") || /\bdata-alignment-page-kind=["']bip["']/i.test(html);
-}
-
-function htmlAttributeValue(tag, attribute) {
-  const escaped = attribute.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const match = tag.match(new RegExp(`\\b${escaped}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"));
-  return match ? (match[1] ?? match[2] ?? match[3] ?? "").trim() : "";
-}
-
-function requiredGateRecords(html) {
-  const records = [];
-  for (const match of html.matchAll(/<[^!/][^>]*\bdata-required\s*=\s*(?:"true"|'true'|true)(?=\s|>|\/)[^>]*>/gi)) {
-    const tag = match[0];
-    const haystack = [
-      htmlAttributeValue(tag, "data-gate"),
-      htmlAttributeValue(tag, "data-gate-type"),
-      htmlAttributeValue(tag, "data-section"),
-      htmlAttributeValue(tag, "data-question-id"),
-    ].join(" ").toLowerCase().replace(/_/g, "-");
-    records.push({ tag, haystack });
-  }
-  return records;
-}
-
-function bipPostConfirmationDiagnostics(rel, file, html) {
-  const diagnostics = [];
-
-  if (!file.startsWith("bip/")) {
-    diagnostics.push(
-      `Stale BIP page path in ${rel} — post-confirmation BIP pages must use alignment/bip/{skill-name}.html, not top-level bip-* or old *-bip.html checkpoint shapes.`,
-    );
-  }
-
-  if (!/\bdata-alignment-page-kind=["']bip["']/i.test(html)) {
-    diagnostics.push(
-      `Missing BIP page metadata in ${rel} — set data-alignment-page-kind="bip" on the HTML page.`,
-    );
-  }
-
-  if (!/\bdata-bip-generation=["']post-confirmation["']/i.test(html) && !/\bbip_generation:\s*post-confirmation\b/i.test(html)) {
-    diagnostics.push(
-      `Missing BIP generation metadata in ${rel} — set data-bip-generation="post-confirmation".`,
-    );
-  }
-
-  const sourceSkill = html.match(/\bdata-bip-source-skill=["']([^"']+)["']/i)?.[1]?.trim();
-  if (!sourceSkill) {
-    diagnostics.push(
-      `Missing BIP source-skill metadata in ${rel} — set data-bip-source-skill="{skill-name}".`,
-    );
-  } else if (file !== `bip/${sourceSkill}.html`) {
-    diagnostics.push(
-      `BIP page path/source mismatch in ${rel} — data-bip-source-skill="${sourceSkill}" requires alignment/bip/${sourceSkill}.html.`,
-    );
-  }
-
-  if (!/\bdata-alignment-status=["']confirmed["']/i.test(html) && !/\bbip_page_status:\s*(?:confirmed|post-confirmation)\b/i.test(html)) {
-    diagnostics.push(
-      `Missing read-only BIP status in ${rel} — post-confirmation BIP pages should be confirmed/read-only, not approval checkpoints.`,
-    );
-  }
-
-  if (BIP_OBSOLETE_CHECKPOINT_RE.test(html)) {
-    diagnostics.push(
-      `Obsolete BIP checkpoint metadata in ${rel} — post-confirmation BIP pages must not use data-bip-status, data-bip-page, data-bip-gates, bip_gates, or bip_approval_status.`,
-    );
-  }
-
-  const requiredGates = requiredGateRecords(html);
-  if (requiredGates.length) {
-    diagnostics.push(
-      `Active BIP approval gates in ${rel} — post-confirmation BIP pages are read-only help content and must not contain required gate controls.`,
-    );
-  }
-
-  const missingChannels = BIP_CHANNEL_CONVENTIONS
-    .filter(([, pattern]) => !pattern.test(html))
-    .map(([label]) => label);
-  if (missingChannels.length) {
-    diagnostics.push(
-      `Incomplete BIP channel coverage in ${rel} — include every bundled channel convention. Missing: ${missingChannels.join(", ")}.`,
-    );
-  }
-
-  const missingFields = BIP_REQUIRED_FIELD_PATTERNS
-    .filter(([, pattern]) => !pattern.test(html))
-    .map(([label]) => label);
-  if (missingFields.length) {
-    diagnostics.push(
-      `Incomplete BIP candidate fields in ${rel} — include ${missingFields.join(", ")} for post candidates.`,
-    );
-  }
-
-  const missingStatuses = BIP_RECOMMENDATION_STATUS_PATTERNS
-    .filter(([, pattern]) => !pattern.test(html))
-    .map(([label]) => label);
-  if (missingStatuses.length) {
-    diagnostics.push(
-      `Incomplete BIP recommendation statuses in ${rel} — candidate status must support recommended, not-now, and rejected. Missing: ${missingStatuses.join(", ")}.`,
-    );
-  }
-
-  return diagnostics;
 }
 
 function confirmedPageControlFindings(html) {
@@ -257,7 +111,6 @@ function confirmedPageControlFindings(html) {
   return findings;
 }
 
-let bipPageCount = 0;
 for (const file of pages) {
   const rel = `alignment/${file}`;
   const html = readFileSync(`${alignmentDir}/${file}`, "utf8");
@@ -335,10 +188,6 @@ for (const file of pages) {
     }
   }
 
-  if (isBipPage(file, html)) {
-    bipPageCount += 1;
-    bipDiagnostics.push(...bipPostConfirmationDiagnostics(rel, file, html));
-  }
 }
 
 // Index integrity: the central index must exist when active pages do, link
@@ -415,7 +264,6 @@ console.log(`Embed prohibition: ${pages.length} pages, ${embedDiagnostics.length
 console.log(`Collapsing fill: ${pages.length} pages, ${collapsingFillDiag.length ? "DRIFT" : "exact"}`);
 console.log(`Compiled-YAML newline join: ${pages.length} pages, ${yamlJoinDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Alignment status controls: ${activePages.length} pages, ${alignmentStatusDiagnostics.length ? "DRIFT" : "exact"}`);
-console.log(`BIP handling: ${bipPageCount} post-confirmation pages, ${bipDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Index integrity: ${indexEntries} entries, ${indexDiagnostics.length ? "DRIFT" : "exact"}`);
 
 const groups = [
@@ -427,7 +275,6 @@ const groups = [
   ["Collapsing fill drift:", collapsingFillDiag],
   ["Compiled-YAML newline join drift:", yamlJoinDiagnostics],
   ["Alignment status controls drift:", alignmentStatusDiagnostics],
-  ["BIP handling drift:", bipDiagnostics],
   ["Index integrity drift:", indexDiagnostics],
 ];
 let failed = false;

@@ -3,6 +3,7 @@ name: reconcile-dev-docs
 description: Reconcile development docs by auditing roadmap, todo, history, phase archives, specs, git history, and code reality
 type: analysis
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[audit|fix] [tasks|specs|all]"
 ---

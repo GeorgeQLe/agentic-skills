@@ -3,6 +3,7 @@ name: extract-shared-types
 description: Extract shared type definitions into a dedicated types directory without runtime behavior changes
 type: execution
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: package, app, directory, or domain to refactor]"
 ---

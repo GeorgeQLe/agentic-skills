@@ -3,6 +3,7 @@ name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
 version: v0.9
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 context_intake: deep

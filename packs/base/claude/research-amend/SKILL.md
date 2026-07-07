@@ -3,6 +3,7 @@ name: research-amend
 description: Amend approved research artifacts through a bounded alignment-gated workflow
 type: analysis
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[research path or artifact] [amendment request]"
 visual_tier: document

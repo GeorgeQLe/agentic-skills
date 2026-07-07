@@ -3,6 +3,7 @@ name: skill-interview
 description: Interview the user to define the characteristics of a skill they want created
 type: planning
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[skill-name-or-topic]"
 context_intake: deep

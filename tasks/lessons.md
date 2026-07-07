@@ -1,5 +1,23 @@
 # Lessons
 
+## 2026-07-06 - Briefing slides are canary-lane until promoted
+
+- A release-split answer classified `create-briefing-slides`, briefing-slide convention assets, and briefing-slide UX work as general-release content even though the user clarified they are canary.
+- Rule: until an explicit promotion task lands, classify briefing slides, `create-briefing-slides`, briefing-slide conventions, and related review-surface UX as canary-lane content, even when those files currently live on `master` and would be included in a canary package snapshot.
+- General-release changelogs should exclude or clearly defer briefing-slide behavior unless the task is specifically promoting that behavior to stable.
+
+## 2026-07-06 - Keep canary-only conventions out of general release fixes
+
+- A general-release interrogation upgrade inherited `briefing-slides` from a canary experiment handoff, which would have promoted canary-only behavior into normal skill metadata.
+- Rule: when a task explicitly starts from `master` or says it is not a canary publish task, do not add canary-only conventions, artifacts, or routing even if a previous branch plan mentions them.
+- Before committing convention metadata, verify whether each convention belongs to the current release lane or only to an experiment branch.
+
+## 2026-07-06 - Publish helpers need clear gate boundaries
+
+- A canary publish helper made post-publish git commands visually adjacent to dry-run gates, which could be misread when transcript UIs collapse or skim checklist output.
+- Rule: helper checklists must visually separate dry-run/pre-publish gates from post-publish source-state commands in a way that survives transcript folding, not only when the output is fully expanded.
+- For release helpers, put commit, tag, push, and real publish instructions only after an explicit successful-publish boundary.
+
 ## 2026-07-06 - Briefing decks must fit the viewport
 
 - A dogfood briefing deck carried too much explanatory content directly on slides, making the deck compete with the dense references it was supposed to summarize.

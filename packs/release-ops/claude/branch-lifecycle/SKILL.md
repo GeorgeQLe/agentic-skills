@@ -3,6 +3,7 @@ name: branch-lifecycle
 description: "Evaluate feature branches and decide whether to merge, salvage, keep open, or delete based on branch health, PR status, and stale-branch heuristics"
 type: ops
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]"
 ---

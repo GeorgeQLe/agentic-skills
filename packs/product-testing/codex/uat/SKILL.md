@@ -3,6 +3,7 @@ name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
 version: v0.17
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 context_intake: artifact_only
@@ -18,13 +19,13 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `$uat`.
 
-Create a user acceptance testing plan from the perspective of a potential or target user. Read the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys that validate whether the product satisfies user goals.
+Create a user acceptance testing plan from the perspective of a potential or target user. Read the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys with click-by-click or surface-appropriate checklists that validate whether the product satisfies user goals.
 
 UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into their own workflow to understand and evaluate it. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use.
 
 This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
 
-When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before any consolidation decision. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
+When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before any consolidation decision. This mode helps the user try each variant in a comparable way using explicit walkthrough checklists and capture enough evidence to form a defensible consolidation opinion.
 
 Follow `DESIGN-TREE-LOOP.md` for prototype-phase routing, state storage, approval boundaries, and task classification. Human-run prototype/UAT evaluation belongs in `tasks/manual-todo.md`; confirmed implementation fixes may enter `tasks/todo.md` only after human evidence exists.
 
@@ -76,8 +77,8 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Read `design/ui-layout-variations-[topic].md`, `design/ux-variations-[topic].md`, `design/ui-requirements-[topic].md`, `design/**/flow-tree-*.yaml`, `design/prototype-build-plan-[topic].md`, product-path-scoped equivalents, built prototype directories under `prototypes/{topic}/`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
    - Treat legacy `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, and `specs/ui-requirements-[topic].md` as fallback evidence only when the corresponding `design/` artifact is missing.
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
-   - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
-   - Include a side-by-side comparison matrix and a "Ready for `$consolidate-prototypes`?" checklist.
+   - Create comparable journeys that make the user perform the same core task in every variant, with step-by-step checklist instructions for each built variant. Use click-by-click language for UI prototypes, command-by-command language for CLI prototypes, request-by-request language for API prototypes, and mixed checklist steps for hybrid surfaces.
+   - Include a side-by-side comparison matrix, per-variant walkthrough checklists, and a "Ready for `$consolidate-prototypes`?" checklist.
    - In the variant inventory and readiness output, distinguish these four statuses explicitly: `built + evaluated`, `built + not run`, `approved but unbuilt/deferred`, and `explicitly excluded from MVP`.
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
    - While any built variant result log is `Not run`, recommend manual UAT/evidence capture rather than `$consolidate-prototypes`.
@@ -100,13 +101,14 @@ When product path `{slug}` is active, read and write research under `research/{s
      - real-world trigger
      - setup and preconditions
      - end-to-end task sequence
+     - click-by-click, command-by-command, request-by-request, or hybrid tester checklist
      - expected user-visible success state
      - acceptance criteria
      - non-acceptance signals
      - evidence to capture
      - tester notes prompt
      - follow-up routing
-   - Use concrete product language from specs and journeys. Avoid vague instructions such as "verify the feature works."
+   - Use concrete product language from specs and journeys. Avoid vague instructions such as "verify the feature works." Every tester checklist item should be directly executable by a human and checkable after completion.
 
 5. **Classify follow-up work**
    - Human-run UAT journeys go in `tasks/manual-todo.md` under `## UAT Journeys`.
@@ -141,6 +143,10 @@ Use this journey format in `research/uat-plan.md`:
 - Setup: [accounts, data, environment, permissions, or sample state needed]
 - Task sequence:
   - [step the human tester performs as the target user]
+- Tester checklist:
+  - [ ] [Click/type/run/send the exact first action, including route, button, field, command, or request detail]
+  - [ ] [Observe the expected intermediate state before continuing]
+  - [ ] [Capture evidence at the named point]
 - Expected success state: [observable user-visible result]
 - Acceptance criteria:
   - [ ] [specific criterion]
@@ -182,6 +188,10 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 - Scenario:
 - Setup:
 - Core task sequence:
+- Shared tester checklist:
+  - [ ] [Open or start the prototype surface]
+  - [ ] [Complete the first comparable task action]
+  - [ ] [Capture evidence at the first checkpoint]
 - Success criteria:
 - Non-acceptance signals:
 - Evidence to capture:
@@ -190,6 +200,10 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 
 #### [Variant name]
 
+- Walkthrough checklist:
+  - [ ] [Variant-specific click/type/run/send step]
+  - [ ] [Variant-specific checkpoint to observe]
+  - [ ] [Variant-specific evidence to capture]
 - Status: Not run | Pass | Fail | Blocked
 - Evidence captured:
 - What worked:

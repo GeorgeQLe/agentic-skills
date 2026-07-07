@@ -3,6 +3,7 @@ name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
 version: v0.12
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 context_intake: artifact_only

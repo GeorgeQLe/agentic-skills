@@ -3,6 +3,7 @@ name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: path-to-enterprise-icp-spec]"
 context_intake: artifact_only

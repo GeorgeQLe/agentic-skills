@@ -3,6 +3,7 @@ name: take-inspiration
 description: Study one specific product or reference through an approved lens, synthesize it against the current design tree, and recommend owner-routed design actions
 type: research
 version: v0.1
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "<reference product/site/app/pattern> [optional: topic, surface, or lens]"
 context_intake: interview

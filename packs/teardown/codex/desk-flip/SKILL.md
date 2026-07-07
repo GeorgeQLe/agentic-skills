@@ -3,6 +3,7 @@ name: desk-flip
 description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via $bootstrap-repo reset or new-repo bootstrap
 type: execution
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<project-path>"
 ---

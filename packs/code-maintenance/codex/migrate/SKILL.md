@@ -3,6 +3,7 @@ name: migrate
 description: Guide a structural migration or dependency upgrade with a step-by-step plan and verification
 type: execution
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

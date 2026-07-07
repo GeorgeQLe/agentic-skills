@@ -3,6 +3,7 @@ name: fork-idea-branch
 description: Split an idea or active research path into two or more new research product-path stubs after alignment approval; preserves the source path by default and archives it only when --archive is passed
 type: planning
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[branch/product-path specs...] [--source <path-id>] [--from <skill>] [--archive] [--reuse <artifact-types>]"
 ---

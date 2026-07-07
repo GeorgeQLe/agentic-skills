@@ -3,6 +3,7 @@ name: animation-design-planner
 description: Plan interactive UI animations before implementation with visible motion contracts, lifecycle ownership, accessibility/performance guardrails, and proof gates
 type: planning
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: orchestrator
 argument-hint: "[component, interaction, animation bug, or motion brief]"

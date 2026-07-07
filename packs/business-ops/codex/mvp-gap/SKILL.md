@@ -3,6 +3,7 @@ name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
 version: v0.11
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: artifact_only
 visual_tier: visual

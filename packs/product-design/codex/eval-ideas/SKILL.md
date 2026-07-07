@@ -4,6 +4,7 @@ description: Loop feature-interviews over a brainstorm idea set and consolidate 
 type: planning
 invocation: orchestrator
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional brainstorm topic or tasks/ideas.md ref] [--override-gate]"
 context_intake: scoped

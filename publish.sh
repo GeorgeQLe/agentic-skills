@@ -12,6 +12,7 @@ ALLOW_DIRTY_TREE=0
 DIST_TAG=latest
 PREID=""
 TARGET=""
+PACKAGE_LANE=stable
 TMP_DIRS=()
 RESTORE_DIR=""
 PUBLISH_STARTED=0
@@ -458,6 +459,14 @@ if [[ "$USE_CURRENT" != "1" ]]; then
   esac
 fi
 
+if [[ "$DIST_TAG" == "experimental" ]] && {
+  [[ "$TARGET" == "prerelease" && "$PREID" == "experimental" ]] || [[ "$TARGET" == *"-experimental."* ]]
+}; then
+  PACKAGE_LANE=canary
+fi
+
+export SKILLPACKS_PACKAGE_LANE="$PACKAGE_LANE"
+
 cd "$ROOT_DIR"
 
 TRACKED_STATUS=$(git status --porcelain --untracked-files=no)
@@ -497,6 +506,11 @@ fi
 
 ORIGINAL_VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 
+if [[ "$USE_CURRENT" == "1" && "$DIST_TAG" == "experimental" ]] && is_prerelease_version "$ORIGINAL_VERSION"; then
+  PACKAGE_LANE=canary
+  export SKILLPACKS_PACKAGE_LANE="$PACKAGE_LANE"
+fi
+
 if [[ "$USE_CURRENT" == "1" ]]; then
   VERSION="$ORIGINAL_VERSION"
   MANIFEST_VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).package.version)" "$MANIFEST_JSON")
@@ -507,8 +521,11 @@ if [[ "$USE_CURRENT" == "1" ]]; then
   if [[ "$DIST_TAG" == "latest" ]] && is_prerelease_version "$VERSION"; then
     fail "Refusing to publish prerelease version $VERSION to the npm latest dist-tag. Use --tag <non-latest>."
   fi
+  if is_prerelease_version "$VERSION" && [[ "$PACKAGE_LANE" != "canary" ]]; then
+    fail "Refusing to publish prerelease version $VERSION without the canary package lane. Use --tag experimental --preid experimental prerelease."
+  fi
 
-  log "Using current packages/skillpacks version $VERSION for partial-publish recovery on dist-tag $DIST_TAG"
+  log "Using current packages/skillpacks version $VERSION for partial-publish recovery on dist-tag $DIST_TAG with package lane $PACKAGE_LANE"
   SKILLPACKS_ALREADY_PUBLISHED=0
   GSKP_ALREADY_PUBLISHED=0
   if package_published skillpacks "$VERSION"; then
@@ -546,6 +563,9 @@ else
   if [[ "$DIST_TAG" == "latest" ]] && is_prerelease_version "$VERSION"; then
     fail "Refusing to publish prerelease version $VERSION to the npm latest dist-tag. Use --tag <non-latest>."
   fi
+  if is_prerelease_version "$VERSION" && [[ "$PACKAGE_LANE" != "canary" ]]; then
+    fail "Refusing to publish prerelease version $VERSION without the canary package lane. Use --tag experimental --preid experimental prerelease."
+  fi
 
   log "Running pre-bump npm auth preflight for skillpacks@$VERSION and @glexcorp/gskp@$VERSION"
   run_pre_mutation_auth_preflight skillpacks "$VERSION"
@@ -557,7 +577,7 @@ else
   VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8')).version)" "$PACKAGE_JSON")
 fi
 
-log "Building and verifying skillpacks@$VERSION"
+log "Building and verifying skillpacks@$VERSION with package lane $PACKAGE_LANE"
 run npm --workspace packages/skillpacks run build:manifest
 run npm --workspace packages/skillpacks run test:node
 
@@ -607,10 +627,10 @@ log "Patching staged package metadata"
 patch_stage_manifest "$SKILLPACKS_STAGE" "skillpacks"
 patch_stage_manifest "$GSKP_STAGE" "@glexcorp/gskp"
 
-node - "$SKILLPACKS_STAGE" "$GSKP_STAGE" "$VERSION" <<'NODE'
+node - "$SKILLPACKS_STAGE" "$GSKP_STAGE" "$VERSION" "$DIST_TAG" "$PACKAGE_LANE" <<'NODE'
 const fs = require("fs");
 const path = require("path");
-const [skillpacksStage, gskpStage, version] = process.argv.slice(2);
+const [skillpacksStage, gskpStage, version, distTag, packageLane] = process.argv.slice(2);
 const expectations = [
   [skillpacksStage, "skillpacks"],
   [gskpStage, "@glexcorp/gskp"]
@@ -625,6 +645,14 @@ for (const [stage, name] of expectations) {
   if (pkg.bin?.skillpacks !== "bin/skillpacks.mjs") failures.push(`${stage} missing skillpacks bin`);
   if (manifest.package?.name !== name) failures.push(`${stage} manifest package name ${manifest.package?.name} !== ${name}`);
   if (manifest.package?.version !== version) failures.push(`${stage} manifest package version ${manifest.package?.version} !== ${version}`);
+  if ((manifest.package?.release_lane || "stable") !== packageLane) failures.push(`${stage} manifest package lane ${manifest.package?.release_lane || "stable"} !== ${packageLane}`);
+  if (distTag === "latest") {
+    for (const skill of manifest.skills || []) {
+      if (skill.release_lane === "canary") {
+        failures.push(`${stage} latest publish includes canary skill ${skill.path}`);
+      }
+    }
+  }
 }
 if (failures.length) {
   console.error(failures.join("\n"));

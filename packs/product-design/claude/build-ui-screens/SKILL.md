@@ -3,6 +3,7 @@ name: build-ui-screens
 description: Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.
 type: execution
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[approved-ui-experiment]"
 context_intake: scoped

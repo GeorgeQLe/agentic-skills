@@ -3,6 +3,7 @@
 ## v0.24 - 2026-07-06
 
 - Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/idea-scope-brief-{topic}.html` is now the primary review surface and compiled YAML routes back to `$idea-scope-brief`.
+- Removed Build-In-Public runtime behavior: the skill no longer asks the BIP Suggestion Gate, enables BIP, accepts `--bip` as an output path, or generates `alignment/bip/idea-scope-brief.html`.
 
 ## v0.23 - 2026-07-05
 

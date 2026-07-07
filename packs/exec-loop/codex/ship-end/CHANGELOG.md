@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-07-06
+
+- Removed Build-In-Public wrap-up behavior and dropped the `social-ledger` convention dependency that was only needed for BIP post suggestions.
+
 ## v0.14 - 2026-07-02
 
 - Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent handoff is required.

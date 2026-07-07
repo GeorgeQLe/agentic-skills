@@ -3,6 +3,7 @@ name: game-store-page-test
 description: Use only for video game projects; plan Steam/store page, capsule, trailer, screenshot, tag, and wishlist validation
 type: research
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: scoped
 visual_tier: prototype

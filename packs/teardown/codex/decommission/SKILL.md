@@ -3,6 +3,7 @@ name: decommission
 description: Systematically tear down and remove a service, package, or infrastructure component
 type: execution
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

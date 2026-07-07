@@ -17,6 +17,12 @@ import {
   readTextFromIndex,
   unique
 } from "../../../scripts/catalog/index.mjs";
+import {
+  isConventionAllowed,
+  packageLaneFromEnv,
+  releaseLaneAllowed,
+  skillReleaseLaneFromIndex
+} from "./release-lane.mjs";
 
 // The committed manifest must be a pure function of the git index (what the
 // committing session is staging), so a concurrent session's unstaged edits on
@@ -29,13 +35,19 @@ const repoRoot = path.resolve(packageRoot, "../..");
 const manifestRelativePath = "packages/skillpacks/dist/skillpacks-manifest.json";
 const manifestPath = path.join(repoRoot, manifestRelativePath);
 const checkMode = process.argv.includes("--check");
+const printMode = process.argv.includes("--print");
+const packageLane = packageLaneFromEnv();
 
-const allowedArgs = new Set(["--check"]);
+const allowedArgs = new Set(["--check", "--print"]);
 for (const arg of process.argv.slice(2)) {
   if (!allowedArgs.has(arg)) {
-    console.error(`Unknown argument '${arg}'. Usage: node packages/skillpacks/scripts/build-skillpacks-manifest.mjs [--check]`);
+    console.error(`Unknown argument '${arg}'. Usage: node packages/skillpacks/scripts/build-skillpacks-manifest.mjs [--check|--print]`);
     process.exit(1);
   }
+}
+if (checkMode && printMode) {
+  console.error("Use only one of --check or --print.");
+  process.exit(1);
 }
 
 const deckDefinitions = [
@@ -225,9 +237,9 @@ function packMetadataByName(files) {
   );
 }
 
-function deckMembershipsForPack(packName) {
+function deckMembershipsForPack(packName, decks = deckDefinitions) {
   if (!packName) return [];
-  return deckDefinitions
+  return decks
     .filter((deck) => {
       return deck.default_packs.includes(packName) || deck.full_packs.includes(packName);
     })
@@ -235,18 +247,37 @@ function deckMembershipsForPack(packName) {
     .sort();
 }
 
-function buildDecks() {
+function buildDecks(skills) {
+  const skillNamesByPack = new Map();
+  for (const skill of skills) {
+    if (!skill.pack || !isInstallableSkill(skill)) continue;
+    if (!skillNamesByPack.has(skill.pack)) skillNamesByPack.set(skill.pack, new Set());
+    skillNamesByPack.get(skill.pack).add(skill.name);
+  }
+
   return deckDefinitions
     .map((deck) => {
-      const defaultPacks = [...deck.default_packs];
-      const fullPacks = [...deck.full_packs];
+      const fullPacks = deck.full_packs.filter((packName) => (skillNamesByPack.get(packName)?.size ?? 0) > 0);
+      const defaultPacks = deck.default_packs.filter((packName) => fullPacks.includes(packName));
       const tags = [...deck.tags];
       const fullTags = [...deck.full_tags];
-      const phases = (deck.phases ?? []).map((phase) => ({
-        key: phase.key,
-        name: phase.name,
-        cards: [...phase.cards]
-      }));
+      const deckSkillNames = new Set();
+      for (const packName of fullPacks) {
+        for (const skillName of skillNamesByPack.get(packName) ?? []) {
+          deckSkillNames.add(skillName);
+        }
+      }
+      const phases = (deck.phases ?? [])
+        .map((phase) => ({
+          key: phase.key,
+          name: phase.name,
+          cards: phase.cards.filter((card) => deckSkillNames.has(card))
+        }))
+        .filter((phase) => phase.cards.length > 0);
+
+      if (defaultPacks.length === 0 || fullPacks.length === 0 || phases.length === 0) {
+        return null;
+      }
 
       return {
         name: deck.name,
@@ -268,6 +299,7 @@ function buildDecks() {
         }
       };
     })
+    .filter(Boolean)
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -308,9 +340,10 @@ function isInstallableSkill(skill) {
   return /^packs\/[^/]+\/(?:claude|codex)\/[^/]+\/SKILL\.md$/.test(skill.path);
 }
 
-function buildSkills(skills, files) {
+function buildSkills(skills, files, decks) {
   return skills
     .map((skill) => {
+      const releaseLane = skillReleaseLaneFromIndex(repoRoot, skill.path);
       return {
         id: skill.id,
         name: skill.name,
@@ -318,6 +351,7 @@ function buildSkills(skills, files) {
         pack: skill.pack,
         platform: skill.platform,
         version: skill.version,
+        release_lane: releaseLane,
         ...skillDeprecation(skill.path),
         required_conventions: skill.requiredConventions,
         path: skill.path,
@@ -325,7 +359,7 @@ function buildSkills(skills, files) {
         content_sha256: skillContentHash(skill.path),
         archive_versions: discoverArchiveVersions(repoRoot, skill.path, { ...MANIFEST_SOURCE, files }),
         command: skill.command,
-        deck_memberships: deckMembershipsForPack(skill.pack)
+        deck_memberships: deckMembershipsForPack(skill.pack, decks)
       };
     })
     .sort((a, b) => a.path.localeCompare(b.path));
@@ -333,13 +367,22 @@ function buildSkills(skills, files) {
 
 function buildManifest() {
   const files = gitFiles(repoRoot);
-  const archivePaths = files.filter((file) => /\/archive\/[^/]+\/SKILL\.md$/.test(file));
+  const laneSkillPaths = activeSkillPaths(files).filter((skillPath) => {
+    return releaseLaneAllowed(skillReleaseLaneFromIndex(repoRoot, skillPath), packageLane);
+  });
+  const laneSkillPathSet = new Set(laneSkillPaths);
+  const archivePaths = files.filter((file) => {
+    if (!/\/archive\/[^/]+\/SKILL\.md$/.test(file)) return false;
+    const activePath = file.replace(/\/archive\/[^/]+\/SKILL\.md$/, "/SKILL.md");
+    return laneSkillPathSet.has(activePath);
+  });
   const manifestSources = unique([
-    ...activeSkillPaths(files),
+    ...laneSkillPaths,
     ...packManifestPaths(files),
     "docs/decks.md",
     "packages/skillpacks/package.json",
     "packages/skillpacks/scripts/build-skillpacks-manifest.mjs",
+    "packages/skillpacks/scripts/release-lane.mjs",
     "scripts/catalog/index.mjs",
     "scripts/skill-convention-registry.mjs"
   ]);
@@ -348,19 +391,23 @@ function buildManifest() {
   // `git cat-file` spawn rather than one per file.
   prefetchIndex(repoRoot, unique([...manifestSources, ...archivePaths]));
 
-  const skills = listSkills(repoRoot, files, MANIFEST_SOURCE);
+  const laneFiles = files.filter((file) => !activeSkillPaths(files).includes(file) || laneSkillPathSet.has(file));
+  const rawSkills = listSkills(repoRoot, laneFiles, MANIFEST_SOURCE);
   const packageJson = readPackageJson();
+  const decks = buildDecks(rawSkills);
+  const skills = buildSkills(rawSkills, files, decks);
 
   const manifest = {
     schema_version: 1,
     package: {
       name: packageJson.name,
-      version: packageJson.version
+      version: packageJson.version,
+      release_lane: packageLane
     },
     source_fingerprint: fileFingerprint(repoRoot, manifestSources, MANIFEST_SOURCE),
     packs: buildPacks(files, skills),
-    skills: buildSkills(skills, files),
-    decks: buildDecks()
+    skills,
+    decks
   };
 
   validateManifest(manifest);
@@ -393,6 +440,11 @@ function validateManifest(manifest) {
     }
     if (!skill.version) {
       errors.push(`active skill lacks version: ${skill.path}`);
+    }
+    for (const conventionId of skill.required_conventions) {
+      if (!isConventionAllowed(conventionId, manifest.package.release_lane)) {
+        errors.push(`stable manifest includes ${skill.path}, which requires canary-only convention '${conventionId}'`);
+      }
     }
   }
 
@@ -440,6 +492,11 @@ function stableJson(value) {
 
 function writeOrCheckManifest() {
   const generated = stableJson(buildManifest());
+
+  if (printMode) {
+    process.stdout.write(generated);
+    return;
+  }
 
   if (checkMode) {
     if (!existsSync(manifestPath)) {

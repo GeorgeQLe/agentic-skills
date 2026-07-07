@@ -3,6 +3,7 @@ name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /feature-interview
 type: planning
 version: v0.8
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 argument-hint: "[optional: focus area] [--dump] [--quick]"
 context_intake: scoped

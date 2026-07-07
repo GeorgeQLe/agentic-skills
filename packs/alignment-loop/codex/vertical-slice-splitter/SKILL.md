@@ -3,6 +3,7 @@ name: vertical-slice-splitter
 description: Decompose a destination doc or spec into vertical-slice issue cards with a dependency DAG
 type: planning
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 ---
 

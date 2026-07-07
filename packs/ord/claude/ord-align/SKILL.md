@@ -3,6 +3,7 @@ name: ord-align
 description: Validate whether an OSS tool is worth building through staged namespace, existing-solution, and feasibility review
 type: analysis
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: scoped
 research_workflow: lightweight

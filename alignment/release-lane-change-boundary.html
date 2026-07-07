@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="review" data-alignment-stage="stage-1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Release Lane Change Boundary Alignment Briefing</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --surface: #181b20;
+  --panel: #11151b;
+  --panel-2: #1f242d;
+  --border: #343a46;
+  --text: #e3e7ee;
+  --muted: #a7afbd;
+  --accent: #6bb6ff;
+  --green: #56d364;
+  --orange: #f0b849;
+  --red: #ff7b72;
+  --code: #0b0f15;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+main {
+  width: min(1180px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+h1, h2, h3 { color: #fff; line-height: 1.18; }
+h1 { margin: 0 0 10px; font-size: 2.2rem; }
+h2 { margin: 0 0 12px; color: var(--accent); font-size: 1.35rem; }
+h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+p { margin: 10px 0; }
+a { color: var(--accent); }
+code {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #f0f4fb;
+  padding: 1px 5px;
+}
+pre {
+  overflow-x: auto;
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+section, .toc, .compile-box {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  margin: 20px 0;
+  padding: 20px;
+}
+.lead { max-width: 900px; color: #f3f6fb; font-size: 1.04rem; }
+.muted { color: var(--muted); }
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 10px;
+  margin: 18px 0 0;
+}
+.status-grid div {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  min-height: 58px;
+  padding: 12px;
+}
+.status-grid strong { display: block; color: #fff; }
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 10px;
+}
+.toc a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 10px 14px;
+  text-decoration: none;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 12px;
+}
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 14px;
+}
+.panel strong { color: #fff; }
+.recommended {
+  border-color: rgba(86, 211, 100, .65);
+  box-shadow: inset 0 0 0 1px rgba(86, 211, 100, .15);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: .86rem;
+  margin: 0 6px 6px 0;
+}
+.badge.ok { color: var(--green); border-color: rgba(86, 211, 100, .55); }
+.badge.warn { color: var(--orange); border-color: rgba(240, 184, 73, .65); }
+.badge.stop { color: var(--red); border-color: rgba(255, 123, 114, .65); }
+.callout {
+  border: 1px solid rgba(107, 182, 255, .55);
+  border-radius: 8px;
+  background: #122033;
+  padding: 14px;
+  margin: 14px 0;
+}
+.callout.ok { border-color: rgba(86, 211, 100, .65); background: #102519; }
+.callout.warn { border-color: rgba(240, 184, 73, .7); background: #241c0c; }
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 14px 0;
+}
+table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--panel); color: #fff; }
+tr:last-child td { border-bottom: 0; }
+.question-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  padding: 14px;
+  margin: 14px 0;
+}
+.options {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+label.option {
+  min-height: 44px;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 9px 10px;
+}
+textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+.compile-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+#compiled-yaml { min-height: 190px; margin-top: 10px; }
+@media (max-width: 720px) {
+  main { width: min(100vw - 24px, 1180px); padding-top: 24px; }
+  h1 { font-size: 1.7rem; }
+  table { min-width: 720px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Release Lane Change Boundary</h1>
+    <p class="lead">Alignment briefing for a standard way to keep canary experiments and general-release edits from mixing across skill source, conventions, package metadata, task docs, and promotion work.</p>
+    <div class="status-grid">
+      <div><strong>alignment_status</strong><span>review</span></div>
+      <div><strong>date</strong><span>2026-07-06</span></div>
+      <div><strong>category</strong><span>qa-meta</span></div>
+      <div><strong>recommended COA</strong><span>release-lane contract plus audit gate</span></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#principles">Boundary Principles</a></li>
+      <li><a href="#coas">Courses Of Action</a></li>
+      <li><a href="#directory-split">Directory Split Question</a></li>
+      <li><a href="#recommendation">Recommendation</a></li>
+      <li><a href="#implementation">Implementation Shape</a></li>
+      <li><a href="#approval">Approval Gates</a></li>
+    </ul>
+  </nav>
+
+  <section id="problem">
+    <h2>Problem</h2>
+    <p>Recent planning crossed two different release lanes: a normal `master` interrogation upgrade and a canary-only review-surface experiment. The failure mode is not specific to interrogation pages. Any future source change can accidentally import canary conventions, artifacts, branch assumptions, package metadata, or task handoff language into general-release work unless the task states its lane and a verification gate enforces that boundary.</p>
+    <div class="callout warn">
+      <strong>Risk:</strong> If canary and general-release edits share task language without lane metadata, agents can promote experimental behavior by editing canonical `packs/**/SKILL.md`, package exports, or convention registries on `master`.
+    </div>
+  </section>
+
+  <section id="principles">
+    <h2>Boundary Principles</h2>
+    <div class="grid">
+      <div class="panel"><strong>Declare the lane first.</strong><p>Every non-trivial task should state whether it is `general`, `canary`, `promotion`, `hotfix`, or `research/prototype` before implementation starts.</p></div>
+      <div class="panel"><strong>Separate lanes, not source truth.</strong><p>Keep canonical skill source under `packs/**` unless a promotion task deliberately changes it. Canary can use branches or overlays.</p></div>
+      <div class="panel"><strong>Promotion is a distinct lane.</strong><p>A canary result becomes general-release behavior only through an explicit promotion task with target behavior, source evidence, and verification.</p></div>
+      <div class="panel"><strong>Audit disallowed surfaces.</strong><p>General tasks should fail if they add canary-only conventions, paths, or metadata outside a promotion lane.</p></div>
+    </div>
+  </section>
+
+  <section id="coas">
+    <h2>Courses Of Action</h2>
+    <div class="table-wrap" data-tts-narrative="The comparison recommends a release-lane contract plus an audit gate. Separate full source directories are reserved for exceptional long-lived divergence because they raise drift and promotion costs.">
+      <table>
+        <thead>
+          <tr><th>COA</th><th>Description</th><th>Pros</th><th>Risks</th><th>Fit</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>A. Task metadata only</strong></td>
+            <td>Add `Release lane`, `Allowed surfaces`, and `Disallowed surfaces` blocks to active tasks.</td>
+            <td>Fast, visible, easy to apply across all work.</td>
+            <td>Soft control. Depends on agents reading and honoring it.</td>
+            <td>Useful baseline, not sufficient alone.</td>
+          </tr>
+          <tr class="recommended">
+            <td><strong>B. Lane contract plus audit</strong></td>
+            <td>Create a shared release-lane convention and add an audit that checks active task lane, branch, and touched disallowed surfaces.</td>
+            <td>Standardized, mechanical, applies beyond interrogation upgrades, low source churn.</td>
+            <td>Needs a small parser and a maintained convention registry for lane-sensitive surfaces.</td>
+            <td><strong>Recommended default.</strong></td>
+          </tr>
+          <tr>
+            <td><strong>C. Canary overlay directory</strong></td>
+            <td>Keep canonical skills in `packs/**`, but store experiment patches or overlay files under `canary-overlays/&lt;experiment&gt;/`.</td>
+            <td>Clear experiment boundary without duplicating full skill trees.</td>
+            <td>Requires overlay tooling and promotion rules if experiments become common.</td>
+            <td>Useful for long-running experiments.</td>
+          </tr>
+          <tr>
+            <td><strong>D. Separate canary/general source trees</strong></td>
+            <td>Duplicate skill source into separate canary and general directories.</td>
+            <td>Very visible separation.</td>
+            <td>High drift, duplicated archives/changelogs, unclear package ownership, hard promotion path.</td>
+            <td>Do not use by default.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="directory-split">
+    <h2>Do We Need Separate Directories?</h2>
+    <p>No, not as the default source-of-truth model. A full split between canary and general skill directories solves visibility by creating a worse maintenance problem: duplicated mirror files, duplicated archives and changelogs, package staging ambiguity, and manual promotion diffing.</p>
+    <div class="callout ok">
+      <strong>Preferred boundary:</strong> one canonical skill tree, explicit release-lane metadata, branch policy, disallowed-surface audit, and optional canary overlays for long-lived experiments.
+    </div>
+    <p>Separate directories are only justified if a canary experiment needs long-lived divergent definitions that cannot be represented as a branch, generated staging area, or overlay patch. Even then, the directory should be an overlay, not a second canonical skill source.</p>
+  </section>
+
+  <section id="recommendation">
+    <h2>Recommendation</h2>
+    <p>Adopt COA B as the repo standard, with COA C available for larger experiments:</p>
+    <ol>
+      <li>Create `docs/release-lane-convention.md` defining `general`, `canary`, `promotion`, `hotfix`, and `research/prototype` lanes.</li>
+      <li>Add a required `### Release Lane` block to active tasks in `tasks/todo.md` and future roadmap backlog items.</li>
+      <li>Add `scripts/audit-release-lane.mjs` and call it from `scripts/audit-task-docs.mjs` or the standard verification list.</li>
+      <li>Represent canary-specific behavior through canary branches and, when needed, `canary-overlays/&lt;experiment&gt;/` patch directories.</li>
+      <li>Require promotion tasks to name the canary source, target general behavior, accepted files, and verification gates.</li>
+    </ol>
+  </section>
+
+  <section id="implementation">
+    <h2>Implementation Shape</h2>
+    <h3>Task Block</h3>
+    <pre><code>### Release Lane
+
+- Lane: general
+- Branch: master
+- Allowed surfaces: [packs, scripts, tests, docs, exports]
+- Disallowed surfaces: [canary-only conventions, canary publish metadata, experimental review surfaces]
+- Promotion source: none</code></pre>
+
+    <h3>Canary Block</h3>
+    <pre><code>### Release Lane
+
+- Lane: canary
+- Branch: canary/&lt;experiment&gt;
+- Allowed surfaces: [canary branch, canary overlays, canary package metadata]
+- General release impact: none until promotion
+- Promotion path: explicit promotion task required</code></pre>
+
+    <h3>Promotion Block</h3>
+    <pre><code>### Release Lane
+
+- Lane: promotion
+- Branch: master
+- Promotion source: canary/&lt;experiment&gt; @ &lt;commit&gt;
+- Target behavior: &lt;specific behavior to graduate&gt;
+- Rejected canary behavior: &lt;behavior that stays out&gt;</code></pre>
+  </section>
+
+  <section id="approval">
+    <h2>Approval Gates</h2>
+    <div class="question-block" data-question="release-lane-standard">
+      <h3>Gate 1 - Standardize Release Lane Metadata</h3>
+      <p>Should future non-trivial tasks require a `### Release Lane` block before implementation?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate-release-lane-standard" value="approve" data-approval-effect="approve"> Approve - require the lane block for future non-trivial tasks.</label>
+        <label class="option"><input type="radio" name="gate-release-lane-standard" value="revise" data-approval-effect="clarify"> Revise - use lane metadata, but change the required fields.</label>
+        <label class="option"><input type="radio" name="gate-release-lane-standard" value="reject" data-approval-effect="block"> Reject - do not add task-level release-lane metadata.</label>
+      </div>
+    </div>
+
+    <div class="question-block" data-question="audit-enforcement">
+      <h3>Gate 2 - Add Mechanical Audit Enforcement</h3>
+      <p>Should the repo add a release-lane audit that fails disallowed surface changes for the active lane?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate-audit-enforcement" value="approve" data-approval-effect="approve"> Approve - add an audit and wire it into task-doc verification.</label>
+        <label class="option"><input type="radio" name="gate-audit-enforcement" value="manual-only" data-approval-effect="clarify"> Revise - document the rule first, defer audit implementation.</label>
+        <label class="option"><input type="radio" name="gate-audit-enforcement" value="reject" data-approval-effect="block"> Reject - keep lane separation as a manual review concern.</label>
+      </div>
+    </div>
+
+    <div class="question-block" data-question="directory-policy">
+      <h3>Gate 3 - Directory Split Policy</h3>
+      <p>Should the repo avoid separate full canary/general skill source directories by default?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="gate-directory-policy" value="approve" data-approval-effect="approve"> Approve - use one canonical skill tree, with optional overlays only for long-lived experiments.</label>
+        <label class="option"><input type="radio" name="gate-directory-policy" value="separate-dirs" data-approval-effect="clarify"> Revise - explore separate source directories before deciding.</label>
+        <label class="option"><input type="radio" name="gate-directory-policy" value="reject" data-approval-effect="block"> Reject - use separate full source directories for canary and general release.</label>
+      </div>
+    </div>
+
+    <label for="decision-notes"><strong>Optional decision notes</strong></label>
+    <textarea id="decision-notes" placeholder="Add field changes, audit scope changes, or promotion-policy constraints."></textarea>
+  </section>
+
+  <section class="compile-box">
+    <h2>Compile Responses</h2>
+    <p>Use this YAML to continue with an implementation task after reviewing the briefing.</p>
+    <div class="compile-actions">
+      <button type="button" id="compile">Compile Responses</button>
+      <button type="button" id="copy">Copy YAML</button>
+      <span id="status" class="muted" aria-live="polite"></span>
+    </div>
+    <textarea id="compiled-yaml" readonly aria-label="Compiled response YAML"></textarea>
+  </section>
+</main>
+
+<script>
+const gates = [
+  ["release_lane_standard", "gate-release-lane-standard"],
+  ["audit_enforcement", "gate-audit-enforcement"],
+  ["directory_policy", "gate-directory-policy"]
+];
+
+function selected(name) {
+  const input = document.querySelector(`input[name="${name}"]:checked`);
+  if (!input) return null;
+  return {
+    value: input.value,
+    approval_effect: input.dataset.approvalEffect || "clarify",
+    label: input.closest("label").textContent.trim().replace(/\s+/g, " ")
+  };
+}
+
+function yamlQuote(value) {
+  return JSON.stringify(String(value ?? ""));
+}
+
+function compileYaml() {
+  const answers = gates.map(([id, name]) => ({ id, ...selected(name) })).filter((item) => item.value);
+  const missing = gates.filter(([, name]) => !selected(name)).map(([id]) => id);
+  const hasBlock = answers.some((item) => item.approval_effect === "block");
+  const hasClarify = answers.some((item) => item.approval_effect === "clarify");
+  const approval = missing.length || hasBlock || hasClarify ? "not-approved" : "ready-for-agent-review";
+  const notes = document.getElementById("decision-notes").value.trim();
+  const lines = [
+    "# Invoke with: implement release-lane convention",
+    'command: "implement release-lane convention"',
+    "alignment_page: alignment/release-lane-change-boundary.html",
+    "response_status: " + (missing.length ? "partial" : "complete"),
+    "required_gate_status: " + (missing.length ? "incomplete" : "complete"),
+    "approval_status: " + approval,
+    "unanswered_required_questions:",
+    ...missing.map((id) => "  - " + id),
+    "gate_answers:",
+    ...answers.flatMap((item) => [
+      "  - gate: " + item.id,
+      "    value: " + yamlQuote(item.value),
+      "    approval_effect: " + yamlQuote(item.approval_effect),
+      "    selected_label: " + yamlQuote(item.label)
+    ]),
+    "decision_notes: " + yamlQuote(notes),
+    "agent_routing:",
+    "  workflow: release-lane-convention",
+    "  next_resolution: implement-approved-lane-contract-and-audit"
+  ];
+  const output = lines.join("\n");
+  document.getElementById("compiled-yaml").value = output;
+  document.getElementById("status").textContent = approval === "ready-for-agent-review" ? "Compiled: ready for agent review." : "Compiled: not approved or incomplete.";
+  return output;
+}
+
+document.getElementById("compile").addEventListener("click", compileYaml);
+document.getElementById("copy").addEventListener("click", async () => {
+  const output = document.getElementById("compiled-yaml").value || compileYaml();
+  try {
+    await navigator.clipboard.writeText(output);
+    document.getElementById("status").textContent = "Copied YAML.";
+  } catch {
+    const area = document.getElementById("compiled-yaml");
+    area.focus();
+    area.select();
+    document.getElementById("status").textContent = "Clipboard blocked; YAML selected.";
+  }
+});
+</script>
+<script src="../scripts/alignment-question-nav.js"></script>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

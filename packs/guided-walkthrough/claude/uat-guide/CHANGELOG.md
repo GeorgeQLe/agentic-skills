@@ -3,6 +3,7 @@
 ## v0.6 - 2026-07-06
 
 - Added `briefing-slides` to the required conventions via the shared packaged convention resolver. Dense alignment/interrogation pages remain source artifacts, while `briefing-slides/uat-guide-{topic}.html` is now the primary review surface and compiled YAML routes back to `/uat-guide`.
+- Changed generated UAT guide steps from plain numbered substeps to checkable tester actions with explicit checkpoint and evidence items.
 
 ## v0.5 - 2026-06-12
 

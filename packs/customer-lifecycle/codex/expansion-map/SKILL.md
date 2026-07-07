@@ -3,6 +3,7 @@ name: expansion-map
 description: Plan account expansion, upgrades, seat growth, referrals, advocacy, and land-and-expand paths
 type: analysis
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: app, segment, or expansion motion]"
 context_intake: deep

@@ -3,6 +3,7 @@ name: series-spec
 description: Specify a repeatable YouTube series format with audience job, episode shape, evidence requirements, packaging rules, and success metrics
 type: planning
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<series idea or programming path>"
 context_intake: scoped

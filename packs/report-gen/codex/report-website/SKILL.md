@@ -3,6 +3,7 @@ name: report-website
 description: Convert one Markdown report or a collection of documented Markdown outputs into clean JSX routes for a polished, readable frontend website
 type: execution
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<report.md|directory|--all-output-docs> [base route]"
 ---

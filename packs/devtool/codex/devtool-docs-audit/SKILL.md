@@ -3,6 +3,7 @@ name: devtool-docs-audit
 description: Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths
 type: review
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 context_intake: scoped
 ---

@@ -1,5 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -22,7 +23,6 @@ import {
   refreshAllProjects,
   refreshProject,
   removeResolved,
-  setBuildInPublicModeAll,
   statusAllProjects,
   uninstallGlobal,
   unpinSkill
@@ -760,10 +760,10 @@ Commands:
   install <name...>            Enable packs or individual skills
   install-deck <deck> [--full] Enable packs selected by deck metadata
   init                         Install base skills into this project
-  cleanup [--reinstall-base] [--dry-run]
-                               Remove deprecated skillpacks state: legacy globals and BIP config
+  cleanup [--all|--global] [--reinstall-base] [--dry-run]
+                               Remove deprecated state below cwd, or user-home state with --global
   uninstall-global [--reinstall-base] [--dry-run]
-                               Deprecated alias for cleanup
+                               Deprecated alias for cleanup --global
   remove <name...>             Remove packs or individual skills
   refresh                      Recreate local skill roots from project config
   refresh --all [--dry-run]    Refresh every project under the current directory
@@ -790,59 +790,12 @@ Commands:
   alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
-  set-bip <mode> [--all] [--dry-run]
-                               Set build-in-public alignment default: on, off, or unset
-  set-bip <mode> --all --dry-run
-                               Preview build-in-public changes across discovered projects
-  set-bip-platforms <platform...>
-                               Set project build-in-public target platforms
-  set-bip-platforms unset      Clear only alignment.bip_platforms
-  set-bip-prompt <action>      Set build-in-public suggestion prompt state: dismiss or reset
   pin <skill> <version>        Pin a skill to an archived version
   unpin <skill>                Revert a pinned skill to latest
   set-mode <mode>              Set project agent mode
   which <skill>                Show which pack provides a skill
 
 Project-local commands write to the current working directory.`);
-}
-
-function parseSetBipArgs(args) {
-  let mode = null;
-  let all = false;
-  let dryRun = false;
-
-  for (const arg of args) {
-    if (arg === '--all') {
-      if (all) {
-        throw new Error('set-bip: duplicate --all');
-      }
-      all = true;
-      continue;
-    }
-    if (arg === '--dry-run') {
-      if (dryRun) {
-        throw new Error('set-bip: duplicate --dry-run');
-      }
-      dryRun = true;
-      continue;
-    }
-    if (arg.startsWith('-')) {
-      throw new Error(`set-bip: unsupported flag '${arg}'`);
-    }
-    if (mode !== null) {
-      throw new Error('set-bip requires exactly one mode: on, off, or unset');
-    }
-    mode = arg;
-  }
-
-  if (mode === null) {
-    throw new Error('set-bip requires exactly one mode: on, off, or unset');
-  }
-  if (dryRun && !all) {
-    throw new Error('set-bip --dry-run requires --all');
-  }
-
-  return { mode, all, dryRun };
 }
 
 export async function runSkillpacksCli(args) {
@@ -902,15 +855,7 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'set-bip') {
-    const options = parseSetBipArgs(rest);
-    if (options.all) {
-      return setBuildInPublicModeAll({
-        mode: options.mode,
-        rootDir: process.cwd(),
-        dryRun: options.dryRun
-      });
-    }
-    return setBuildInPublicMode(options.mode);
+    return setBuildInPublicMode(rest[0]);
   }
 
   if (command === 'set-bip-platforms') {
@@ -918,9 +863,6 @@ export async function runSkillpacksCli(args) {
   }
 
   if (command === 'set-bip-prompt') {
-    if (rest.length !== 1) {
-      throw new Error('set-bip-prompt requires exactly one action: dismiss or reset');
-    }
     return setBipPromptDismissed(rest[0]);
   }
 
@@ -928,7 +870,17 @@ export async function runSkillpacksCli(args) {
     const commandName = command;
     let reinstallBase = false;
     let dryRun = false;
+    let allScope = false;
+    let globalScope = command === 'uninstall-global';
     for (const arg of rest) {
+      if (arg === '--all') {
+        allScope = true;
+        continue;
+      }
+      if (arg === '--global') {
+        globalScope = true;
+        continue;
+      }
       if (arg === '--reinstall-base') {
         reinstallBase = true;
         continue;
@@ -942,10 +894,15 @@ export async function runSkillpacksCli(args) {
       }
       throw new Error(`${commandName}: unexpected argument '${arg}'`);
     }
+    if (allScope && globalScope) {
+      throw new Error(`${commandName}: --all and --global cannot be used together`);
+    }
+    const rootDir = globalScope ? homedir() : process.cwd();
     return uninstallGlobal({
       manifest: reinstallBase ? readManifest() : null,
       reinstallBase,
-      rootDir: process.cwd(),
+      rootDir,
+      cleanupScope: globalScope ? 'global' : allScope ? 'all' : 'default',
       dryRun
     });
   }

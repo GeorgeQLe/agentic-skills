@@ -3,6 +3,7 @@ name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
 version: v0.12
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: specific job or segment to focus on]"
 context_intake: scoped

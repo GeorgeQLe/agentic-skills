@@ -56,7 +56,7 @@ Use these prompts only when the source basis exists. Each prompt must be special
 - **Risk:** High.
 - **Safety checks:** Include methodology, avoid cherry-picking, and do not compare competitors without evidence.
 
-### Build-In-Public Weekly Note
+### Weekly Work Summary
 
 - **Use when:** There is an approved weekly work summary.
 - **Hook:** "This week we learned where the workflow breaks."

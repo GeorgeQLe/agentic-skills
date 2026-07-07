@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "cdfaa0a66ca88f81a0fe79acc964d21c254c48d7",
-  "generated_at": "2026-07-06T01:14:53.577Z",
-  "source_fingerprint": "1e681a2146492e5772ea77351290577e93f5cbbfb2ada24a26236025a46f3d3f",
+  "source_commit": "a59fc1b80c56c52797f1268dcafef77de11b0607",
+  "generated_at": "2026-07-06T17:27:22.785Z",
+  "source_fingerprint": "d14ff9dacee9a492ecfd1de99bfb5ea776b28ab6df1363489656ee2cc74515b6",
   "source_count": 453,
   "skill_count": 409,
   "pack_count": 42,
@@ -929,7 +929,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.23",
+      "version": "v0.24",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -1400,7 +1400,7 @@
       "type": "planning",
       "contextIntake": "deep",
       "visualTier": null,
-      "version": "v0.23",
+      "version": "v0.24",
       "requiredConventions": [
         "alignment-page",
         "interrogation-page"
@@ -2698,9 +2698,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2727,9 +2728,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2756,9 +2758,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2785,9 +2788,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "claude",
@@ -2812,9 +2816,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.28",
+      "version": "v0.29",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: \\\"--synthesize\\\" | \\\"core\\\" | concept/category/competitors]",
       "platform": "claude",
@@ -3064,9 +3069,10 @@
       "type": "research",
       "contextIntake": "deep",
       "visualTier": "visual",
-      "version": "v0.10",
+      "version": "v0.12",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: target industry or market segment]",
       "platform": "claude",
@@ -3317,9 +3323,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3346,9 +3353,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3375,9 +3383,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3404,9 +3413,10 @@
       "type": "research",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": null,
       "platform": "codex",
@@ -3431,9 +3441,10 @@
       "type": "research",
       "contextIntake": "scoped",
       "visualTier": "visual",
-      "version": "v0.28",
+      "version": "v0.29",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: \\\"--synthesize\\\" | \\\"core\\\" | concept/category/competitors]",
       "platform": "codex",
@@ -3683,9 +3694,10 @@
       "type": "research",
       "contextIntake": "deep",
       "visualTier": "visual",
-      "version": "v0.10",
+      "version": "v0.12",
       "requiredConventions": [
-        "alignment-page"
+        "alignment-page",
+        "interrogation-page"
       ],
       "argumentHint": "[optional: target industry or market segment]",
       "platform": "codex",
@@ -6365,10 +6377,8 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.13",
-      "requiredConventions": [
-        "social-ledger"
-      ],
+      "version": "v0.14",
+      "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
       "command": "/ship-end",
@@ -6393,7 +6403,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.10",
+      "version": "v0.11",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6443,10 +6453,8 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
-      "requiredConventions": [
-        "social-ledger"
-      ],
+      "version": "v0.15",
+      "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
       "command": "$ship-end",
@@ -6471,7 +6479,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.12",
+      "version": "v0.13",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -7260,7 +7268,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -7313,7 +7321,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -8916,7 +8924,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.16",
+      "version": "v0.17",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"
@@ -8971,7 +8979,7 @@
       "type": "analysis",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.16",
+      "version": "v0.17",
       "requiredConventions": [
         "alignment-page",
         "design-tree-loop"

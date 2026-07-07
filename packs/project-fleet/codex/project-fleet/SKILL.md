@@ -3,6 +3,7 @@ name: project-fleet
 description: Orchestrate a central control repository that plans, provisions, tracks, and advances many related downstream repositories or work items with guarded batches, blocker handling, and productive fallback work.
 type: orchestration
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[--status] [--plan] [--execute]"
 ---

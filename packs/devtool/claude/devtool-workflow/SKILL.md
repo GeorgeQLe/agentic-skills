@@ -3,6 +3,7 @@ name: devtool-workflow
 description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products
 type: planning
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 invocation: orchestrator
 context_intake: scoped

@@ -2,8 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.13
-required_conventions: [social-ledger]
+version: v0.14
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -50,18 +49,6 @@ Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` co
    - What's outstanding
    - Branch and commit list
    - Confirm working tree is clean
-
-7. **BIP post suggestions** (terminal-only advisory; never blocks wrap-up — run after the summary, even if shipping reported nothing):
-   - Read `.agents/project.json`.
-   - If `alignment.build_in_public === true`, skip only the enablement question, then run the enabled BIP post-suggestion path below. Do not report only that the BIP gate was skipped.
-   - Else if `alignment.build_in_public === false`, skip both enablement and post suggestions. Treat explicit `false` as a project opt-out.
-   - Else if `alignment.bip_prompt_dismissed === true`, skip both enablement and post suggestions.
-   - Else if `.agents/project.json.alignment.build_in_public` is absent and `alignment.bip_prompt_dismissed !== true`, ask the user once in terminal output only, after shipping/reporting is complete: explain that Build-In-Public mode generates source-safe social posts from your alignment pages and shipped work, and ask whether to enable it for this project.
-   - On **yes**: run `scripts/pack.sh set-bip on` (or `npx skillpacks set-bip on`) **and** `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Then run the enabled BIP post-suggestion path for this shipped session.
-   - On **no**: run `scripts/pack.sh set-bip-prompt dismiss` (or the `npx` equivalent). Do not ask again.
-   - Enabled BIP post-suggestion path: inspect the shipped boundary from the session summary, changed files, commits, task/history notes, and any alignment pages. Read `.agents/project.json.alignment.bip_platforms` only as optional priority/ranking metadata. Do not ask a project-platform setup question and do not use saved platforms as a filter. Load the shared social routers and every bundled text/community and video channel convention.
-   - Infer `bip_phase` as exactly one of `research`, `prototyping`, or `implementation` from the shipped boundary. Before drafting, write a public-safe fresh-audience brief: what the project/work is in ordinary language, who the likely outside audience is, why the work matters, what changed, which acronyms or internal terms need expansion, and which details must stay private or unsaid. Following `docs/social-ledger-convention.md` plus every bundled channel convention, draft an exhaustive phase-aware batch of source-safe Build-In-Public post candidates for every bundled channel, or state that there is no safe public angle for this wrap-up. Mark top-ranked options clearly and keep rejected/not-now options visible when useful for dedupe or future context. For each candidate, include target channel, optional priority rank from saved `alignment.bip_platforms`, `bip_phase`, angle, source basis, fresh-audience context, jargon expansion, public-facing significance, loaded convention path, risk level, claim-safety notes, publish precheck, and draft post text or a concise video/community-post outline.
-   - **Write the batch to the single HTML BIP page, not inline.** Treat the successful ship as the equivalent of alignment-page confirmation and write the exhaustive per-channel batch to `alignment/bip/ship-end.html`, following the shared post-confirmation BIP page shape: set `data-alignment-page-kind="bip"`, `data-bip-generation="post-confirmation"`, `data-bip-source-skill="ship-end"`, and `data-alignment-status="confirmed"` on `<html>`; cover every bundled text/community and video channel; include the recommendation-notes, source-basis, fresh-audience-context, jargon-expansion, public-facing-significance, claim-safety-notes, risk-level, publish-precheck, and loaded-convention-path fields with the recommended/not-now/rejected statuses; add the responsive viewport meta and the Brief Me TTS include before `</body>`; and use no embeds or active approval gates. If `alignment/bip/ship-end.html` already exists, archive it first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/bip/ship-end.html`. Include the page in `alignment/index.html` (with today's date and a BIP label/grouping), run the TTS inject step, and attempt to open it after wrap-up. Print a one-line terminal pointer to the file instead of dumping candidates inline. BIP page generation, review, or follow-up selection must never block shipping, wrap-up, commit/push, deploy reporting, or next-work routing. Do not publish externally or write social-ledger records without later explicit approval.
 
 ## Output
 

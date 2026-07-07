@@ -24,10 +24,8 @@ import {
 import {
   discoverProjectRoots,
   inferProjectType,
-  planBuildInPublicMode,
   printProjectStatus,
   readProjectConfig,
-  setBuildInPublicMode,
   writeProjectConfig,
   withProjectLock
 } from './project-config.mjs';
@@ -597,8 +595,8 @@ function printGlobalRepoSkillWarning(installs, homeRoot = homedir()) {
   for (const install of installs) {
     console.log(`  ${install.rel}`);
   }
-  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks cleanup');
-  console.log('To clean up and enable project-local base skills below the current directory: npx skillpacks cleanup --reinstall-base');
+  console.log('Global skill installs are retired. Recommended cleanup: npx skillpacks cleanup --global');
+  console.log('To clean up and enable project-local base skills below your home directory: npx skillpacks cleanup --global --reinstall-base');
 }
 
 function comparePathStrings(left, right) {
@@ -1780,9 +1778,19 @@ export async function uninstallGlobal({
   manifest = null,
   reinstallBase = false,
   rootDir = process.cwd(),
+  cleanupScope = 'default',
   dryRun = false
 } = {}) {
-  const commandLabel = reinstallBase ? 'cleanup --reinstall-base' : 'cleanup';
+  const commandParts = ['cleanup'];
+  if (cleanupScope === 'global') {
+    commandParts.push('--global');
+  } else if (cleanupScope === 'all') {
+    commandParts.push('--all');
+  }
+  if (reinstallBase) {
+    commandParts.push('--reinstall-base');
+  }
+  const commandLabel = commandParts.join(' ');
   const installs = globalRepoSkillInstalls(homeRoot);
   let removed = installs.length;
 
@@ -1825,12 +1833,13 @@ export async function uninstallGlobal({
 
   const roots = discoverProjectRoots(rootDir);
   if (roots.length === 0) {
+    const initTargetLabel = cleanupScope === 'global' ? 'user-home scan root' : 'current directory';
     if (dryRun) {
-      console.log(`No projects with .agents/project.json found under ${rootDir}. Would initialize current directory with base skills.`);
+      console.log(`No projects with .agents/project.json found under ${rootDir}. Would initialize ${initTargetLabel} with base skills.`);
       console.log(`Dry run. Would initialize project base skills to ${manifestPackageLabel(manifest)}.`);
       return 0;
     }
-    console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing current directory.`);
+    console.log(`No projects with .agents/project.json found under ${rootDir}. Initializing ${initTargetLabel}.`);
     return initProject({ manifest, projectRoot: rootDir });
   }
 
@@ -2482,78 +2491,6 @@ export async function runAcrossProjects({
   return failed > 0 || flagged > 0 ? 1 : 0;
 }
 
-function printBuildInPublicDryRunProjectPlan(plan) {
-  console.log(`  ${plan.action}`);
-  if (plan.normalizationChanged) {
-    console.log('  would also normalize project metadata');
-  }
-}
-
-export async function setBuildInPublicModeAll({
-  mode,
-  rootDir = process.cwd(),
-  dryRun = false
-} = {}) {
-  if (!['on', 'off', 'unset'].includes(mode || '')) {
-    throw new Error('set-bip requires a mode: on, off, or unset');
-  }
-
-  if (dryRun) {
-    const roots = discoverProjectRoots(rootDir);
-
-    if (roots.length === 0) {
-      console.log(`No projects with .agents/project.json found under ${rootDir}`);
-      return 0;
-    }
-
-    const projectPlans = [];
-    const failures = [];
-
-    for (const root of roots) {
-      const rel = relative(rootDir, root) || '.';
-      console.log('');
-      console.log(`=== ${rel} ===`);
-      try {
-        const plan = planBuildInPublicMode(mode, root);
-        printBuildInPublicDryRunProjectPlan(plan);
-        projectPlans.push({ rel, plan });
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.log(`  failed: ${message}`);
-        failures.push({ rel, message });
-      }
-    }
-
-    const safe = failures.length === 0;
-
-    console.log('');
-    console.log(`Summary (set-bip ${mode} --all --dry-run): ${roots.length} project(s) scanned.`);
-    for (const project of projectPlans) {
-      console.log(`  ${project.rel}: ${project.plan.action}`);
-    }
-    if (failures.length > 0) {
-      console.log('  Failures:');
-      for (const failure of failures) {
-        console.log(`    ${failure.rel}: ${failure.message}`);
-      }
-      console.log(`  Unsafe reasons: ${failures.length} project(s) failed dry-run planning.`);
-    }
-    console.log(`Safe to run: ${safe ? 'yes' : 'no'}`);
-    if (safe) {
-      console.log(`Recommended command: skillpacks set-bip ${mode} --all`);
-    }
-
-    return safe ? 0 : 1;
-  }
-
-  return runAcrossProjects({
-    rootDir,
-    label: `set-bip ${mode} --all`,
-    run: (root) => setBuildInPublicMode(mode, root),
-    summarizeFailures: true
-  });
-}
-
 export async function refreshAllProjects({
   manifest,
   rootDir = process.cwd(),
@@ -2635,7 +2572,7 @@ export async function refreshAllProjects({
         console.log(
           `    - Found ${globalInstalls.length} legacy user-home skillpacks install(s) under ${homeRoot}.`
         );
-        console.log('      Cleanup: npx skillpacks cleanup');
+        console.log('      Cleanup: npx skillpacks cleanup --global');
       }
       if (failures.length > 0) {
         console.log(`    - ${failures.length} project(s) failed dry-run planning; see Failures above.`);

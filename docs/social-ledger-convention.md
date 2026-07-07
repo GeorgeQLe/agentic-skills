@@ -4,7 +4,7 @@ Research date: 2026-06-26.
 Canonical package asset: `assets/social-ledger-convention.md`.
 Parent router: `docs/social-post-convention.md`.
 
-This is the system-of-record contract for build-in-public and alignment-producing agents that draft, approve, post, and promote social content. It defines how an agent finds prior posts, avoids duplicates, records what was drafted and published, links public-safe context, and keeps canonical records private. Load this file when a BIP run needs cross-run memory of social activity or a public alignment context link; it is not needed to draft a single one-off post with no ledger.
+This is the system-of-record contract for alignment-producing agents that draft, approve, post, and promote social content. It defines how an agent finds prior posts, avoids duplicates, records what was drafted and published, links public-safe context, and keeps canonical records private. Load this file when a social drafting workflow needs cross-run memory of social activity or a public alignment context link; it is not needed to draft a single one-off post with no ledger.
 
 ## Resolution Order
 

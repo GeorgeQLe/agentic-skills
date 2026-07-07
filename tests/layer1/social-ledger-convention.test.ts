@@ -81,12 +81,12 @@ describe("social ledger cross-references", () => {
     expect(x).toContain("6eorge.com/brain");
   });
 
-  it("the alignment-page convention keeps BIP ledger writes behind later explicit approval", () => {
-    const alignment = read("docs/alignment-page-convention.md");
-    expect(alignment).toContain("docs/social-ledger-convention.md");
-    expect(alignment).toContain("assets/social-ledger-convention.md");
-    expect(alignment).toContain("ledger storage scope");
-    expect(alignment).toContain("account identity");
-    expect(alignment).toContain("Do not write social-ledger records from this page unless a later workflow receives explicit posting or ledger approval");
+  it("the social router keeps ledger writes behind later explicit approval", () => {
+    const router = read("docs/social-post-convention.md");
+    expect(router).toContain("docs/social-ledger-convention.md");
+    expect(router).toContain("assets/social-ledger-convention.md");
+    expect(router).toContain("account-scoped duplicate detection");
+    expect(router).toContain("post_plus_replies");
+    expect(router).toContain("Final YAML should preserve selected channels");
   });
 });

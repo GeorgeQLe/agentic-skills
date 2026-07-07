@@ -3,6 +3,7 @@ name: ui-interview
 description: Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
 version: v0.33
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[optional: app, page, flow, feature, or draft UI] [--no-chunk]"
 context_intake: deep

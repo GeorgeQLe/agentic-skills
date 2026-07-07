@@ -3,6 +3,7 @@ name: spin-off
 description: Extract a bounded part of the invoking codebase into a new GitHub repository with private and public-OSS readiness gates
 type: execution
 version: v0.2
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<target-path-or-symbol> --name <repo-name> [--visibility private|public-oss] [--owner <github-owner>]"
 ---

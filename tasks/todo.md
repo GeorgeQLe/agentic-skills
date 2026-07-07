@@ -1,96 +1,139 @@
 # Current Task
 
-## Current Implementation - Canary Slides Review Surface
+## Current Implementation - Recover Slide-First AFPS Experimental Canary
 
 ### Goal
 
-Create a canary-only experiment where page-producing skills use briefing slides as the primary human review surface while preserving dense `alignment/*.html` and `interrogation/*.html` pages as linked source/context artifacts.
+Recover the slide-first AFPS canary work on `canary/slides-review-surface`, merge in current `master` release/publish fixes, rebuild package artifacts, and prepare an experimental prerelease whose AFPS/prototype skills declare `briefing-slides`.
 
 ### Plan
 
-- [x] Work on branch `canary/slides-review-surface`.
-- [x] Identify active, non-archived skills declaring `alignment-page` or `interrogation-page`.
-- [x] Archive each targeted `SKILL.md`, bump its version, add `briefing-slides` to `required_conventions`, add the briefing slides review surface section, and update `CHANGELOG.md`.
-- [x] Preserve dense page conventions and generated resolver stubs.
-- [x] Run static migration checks and repo verification.
-- [ ] Run canary publish dry run, publish canary if verification passes, and verify canary dist-tags. Blocked by npm auth preflight `E401 Unauthorized`.
-- [ ] Commit and push intended canary branch changes.
+- [x] Inspect branch state, dirty release artifacts, and canary/master divergence.
+- [x] Stash temporary prerelease metadata from the failed master-side publish attempt.
+- [x] Merge current `master` into `canary/slides-review-surface`.
+- [x] Resolve conflicts by preserving master release fixes and canary slide-first skill migrations.
+- [x] Rebuild package artifacts so the manifest carries `briefing-slides` for AFPS/prototype skills.
+- [x] Run package, task-doc, manifest-coverage, and publish dry-run verification.
+- [ ] Publish the new experimental prerelease and verify experimental dist-tags.
 
 ### Acceptance Criteria
 
-- [x] Every active targeted skill declares `briefing-slides` in `required_conventions`.
-- [x] Every changed skill has a new archive snapshot, bumped version, and changelog entry.
-- [x] Codex skill instructions route compiled deck YAML to `$skill`; Claude skill instructions route to `/skill`.
-- [x] Dense alignment/interrogation pages remain canonical linked artifacts and are not removed.
-- [x] `skillpacks@latest` remains untouched; experiment has not published because npm auth preflight failed before any release mutation.
+- [x] `canary/slides-review-surface` contains current `master` release/publish fixes without dropping slide-first AFPS skill edits.
+- [x] `business-afps`, `devtool-afps`, `game-afps`, and migrated prototype-tier skills include `briefing-slides` in generated manifest `required_conventions`.
+- [x] Dense `alignment/` and `interrogation/` pages remain linked source/detail artifacts while `briefing-slides/` is the only auto-opened review UI.
+- [x] Publish lane uses npm dist-tag `experimental` with preid `experimental`.
+- [ ] Consumer refresh succeeds with `npx skillpacks@experimental refresh --all`.
 
 ### Verification
 
-- [x] Static migration checks for target coverage, archive creation, version bumps, changelog entries, and command prefixes.
-- [x] `node scripts/upgrade-alignment-page.mjs --check`
-- [x] `node scripts/upgrade-interrogation-page.mjs --check`
-- [x] `bash scripts/skill-archive-audit.sh --strict`
-- [x] `bash scripts/skill-mirror-parity-audit.sh`
-- [x] `npm --workspace packages/skillpacks run build`
-- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
 - [x] `npm --workspace packages/skillpacks run test:node`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [ ] `./publish.sh --dry-run --tag canary --preid canary prerelease` blocked at npm auth preflight after computing `0.1.21-canary.0`.
-- [ ] `./publish.sh --tag canary --preid canary prerelease`
-- [ ] Verify `skillpacks` and `@glexcorp/gskp` resolve through dist-tag `canary`.
+- [x] Manifest coverage assertion for AFPS/prototype `briefing-slides`
+- [x] `./publish.sh --dry-run --tag experimental --preid experimental 0.1.22-experimental.1`
+- [x] `npm view skillpacks dist-tags.experimental`
+- [x] `npm view @glexcorp/gskp dist-tags.experimental`
+- [ ] `./publish.sh --tag experimental --preid experimental 0.1.22-experimental.1`
+- [ ] `npx skillpacks@experimental list`
+- [ ] `npx skillpacks@experimental refresh --all --dry-run`
+- [ ] `npx skillpacks@experimental refresh --all`
 
 ### Review
 
-Migrated 315 active, non-archived page-producing source skills to dual-output review: dense `alignment/*.html` and `interrogation/*.html` artifacts remain canonical detail/source pages, while `briefing-slides/<skill>-{topic}.html` is now the primary human review surface. Each migrated skill now declares `briefing-slides`, references the shared packaged convention resolver, routes compiled deck YAML back to the owning skill command, and instructs agents to open only the slide deck.
+Merged `master` into `canary/slides-review-surface`, resolved conflicts to keep current release/publish fixes and the slide-first skill migration, and marked the 315 active briefing-slide skills with `release_lane: canary` so stable manifests filter them while canary manifests include them.
 
-Archived every pre-migration `SKILL.md`, bumped each migrated skill version by one decimal, and added matching changelog entries. Refreshed runtime skill copies with `scripts/pack.sh refresh`, rebuilt package staging, and updated lifecycle tests for the bumped `quality-sweep` / `extract-shared-types` versions.
+Updated manifest generation to lane-filter deck definitions and deck memberships, keeping stable manifests free of dangling canary-only deck cards while preserving full AFPS/VARD/ORD metadata in canary manifests. Refreshed the package manifest to canary lane and verified 148 AFPS deck-member skills plus 30 prototype-tier page skills have `briefing-slides`.
 
-Verification passed through static migration checks, alignment/interrogation generator checks, strict archive audit, mirror parity audit, package build, package build check, Node tests, task-doc audit, and diff hygiene. Canary dry run reached the expected prerelease target `0.1.21-canary.0` but stopped before mutation because npm auth preflight failed with `E401 Unauthorized` from `npm whoami`; real publish and canary dist-tag verification remain blocked until npm is logged in as the expected publisher.
+Local verification passed for canary build, canary build check, full package Node tests, task-doc audit, diff hygiene, and manifest coverage. The explicit experimental dry run passed for `0.1.22-experimental.1` because `0.1.22-experimental.0` already exists from the earlier master-side publish. Dry-run staging produced a canary package with 409 active skills, 42 packs, and `briefing-slides` assets included.
 
-# Historical Task State
+The real publish is blocked before any registry write: the pre-bump npm auth checks passed, but the staged real-publish auth preflight failed with `E401 Unauthorized - GET https://registry.npmjs.org/-/whoami` and requested logging in to npm as `glexcorp`. The script restored `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` to `0.1.21` canary metadata, and npm experimental dist-tags still point to `0.1.22-experimental.0` for both `skillpacks` and `@glexcorp/gskp`.
 
-## Review - Resize Slide When Feedback Sidebar Opens 2026-07-05
+## Historical Task State
+
+## Review - Cleanup Scope Flags
 
 ### Goal
 
-When the feedback sidebar opens on desktop/tablet widths, reserve the sidebar's width and scale the active slide so the full slide remains visible in the remaining left viewport. Keep the existing full-width overlay behavior on small/mobile viewports.
+Add explicit cleanup scope flags so `cleanup --all` spells the current recursive project cleanup scope and `cleanup --global` scans user-home projects plus legacy user-home skill roots, while plain `cleanup` remains backward compatible.
 
 ### Plan
 
-- [x] Archive the current dogfood deck before amendment.
-- [x] Add an explicit sidebar-open body state and shared sidebar width variable.
-- [x] Reserve desktop/tablet space for the deck, topbar, and footer while the sidebar is open.
-- [x] Add active-slide fit recalculation on sidebar open/close, slide navigation, resize, and sidebar sync.
-- [x] Keep mobile sidebar behavior unchanged at the existing breakpoint.
-- [x] Verify static hooks, behavior-critical source paths, package builds, task docs, diff hygiene, and browser opener.
-- [x] Commit and push intended changes on `master`.
+- [x] Update CLI help and parser for `cleanup [--all|--global] [--reinstall-base] [--dry-run]`.
+- [x] Treat `--all` as the current default recursive cleanup from the command cwd.
+- [x] Treat `--global` as user-home cleanup scope for project config cleanup, deprecated alias cleanup, and optional base-skill reinstall migration.
+- [x] Reject `cleanup --all --global` with a clear error.
+- [x] Keep `uninstall-global` as a compatibility alias while routing docs toward `cleanup --global`.
+- [x] Add focused parser, lifecycle, and compatibility coverage.
+- [x] Run focused and package-level verification.
 
 ### Acceptance Criteria
 
-- [x] Desktop/tablet sidebar open state no longer overlays the active slide.
-- [x] Active slide scales visually with `--slide-scale` while the sidebar is open and resets when closed.
-- [x] Slide navigation and browser resize recalculate the active slide scale.
-- [x] Mobile widths keep the full-width sidebar behavior without side-by-side slide scaling.
-- [x] Gate markers, inline gate controls, feedback persistence, and YAML compilation remain intact.
+- [x] `cleanup`, `cleanup --all`, and `cleanup --all --dry-run` scan projects from the command cwd.
+- [x] `cleanup --global --dry-run` scans projects under the fake/user home, not the command cwd, and still previews legacy user-home skill removals.
+- [x] `cleanup --global --reinstall-base` uses the user-home project scan root for migration.
+- [x] `cleanup --all --global` is rejected.
+- [x] Help text, compatibility docs, and tests document `cleanup --global` as the replacement for device-wide `uninstall-global` usage.
 
 ### Verification
 
-- [x] Confirm source contains sidebar open class, resize/fit function, resize listener, and shared sidebar width variable.
-- [x] Confirm existing sidebar open/close, Escape handling, YAML builders, and gate controls remain present.
-- [x] `npm --workspace packages/skillpacks run build`
-- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `node --test packages/skillpacks/test/lifecycle.test.mjs packages/skillpacks/test/project-config.test.mjs packages/skillpacks/test/compatibility.test.mjs`
+- [x] `npm --workspace packages/skillpacks run test:node`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] `node scripts/open-html-page.mjs briefing-slides/create-briefing-slides.html --browser auto`
 
 ### Review
 
-Implemented desktop/tablet reserved-space behavior for the feedback sidebar in `briefing-slides/create-briefing-slides.html`. The deck now uses a shared `--feedback-sidebar-width`, toggles `body.feedback-sidebar-open`, reserves the sidebar width for the topbar, deck, and footer on non-mobile widths, and scales the active `.slide-inner` with `--slide-scale` while the sidebar is open.
+Added `--all` and `--global` cleanup scope parsing. Plain `cleanup` remains current-directory recursive cleanup, `cleanup --all` is its explicit spelling, `cleanup --global` scans projects under the user home while still removing legacy user-home base skill roots, and `cleanup --all --global` is rejected.
 
-Added a scheduled slide-fit recalculation path for sidebar open/close, active slide sync, slide navigation, resize, and breakpoint changes. Mobile keeps the existing full-width sidebar overlay and disables side-by-side slide scaling.
+Updated lifecycle labels, refresh warnings, help text, README, quickstart, scripts reference, skillpack distribution docs, pack docs, and skills reference to route device/user-home cleanup toward `cleanup --global`. `uninstall-global` remains as a compatibility alias for the user-home scope.
 
-Archived the pre-amendment dogfood deck to `docs/history/archive/2026-07-05/225618/briefing-slides/create-briefing-slides.html`. Verification passed for static hooks, browser sanity checks, package build, package build check, task-doc audit, diff hygiene, and the local opener.
+Added focused coverage for explicit `--all`, `--global --dry-run`, `--global --reinstall-base --dry-run`, flag ordering with `--reinstall-base`, incompatible scope rejection, and compatibility/help docs.
+
+Verification passed: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check.
+
+## Review - Release Lane Briefing Slides 2026-07-06
+
+### Goal
+
+Create a briefing slide deck for the release-lane change-boundary COAs, linked to the dense alignment briefing, so the canary-vs-general-release standard can be reviewed as slides.
+
+### Review
+
+Created `briefing-slides/release-lane-change-boundary.html` as the slide-first review surface for the release-lane COAs. The deck links to the dense alignment page, summarizes the problem and recommendation, answers the directory-split question, and includes decision gates plus a compiled YAML handoff.
+
+The deck includes previous/next controls, filmstrip navigation, keyboard and empty-stage navigation, hash resume, print CSS, slide-scoped feedback, marking, annotations, per-slide YAML, and final full-deck YAML.
+
+Static deck hooks, linked reference existence, task-doc audit, diff hygiene, and the HTML opener passed.
+
+## Review - Release Lane Alignment Briefing 2026-07-06
+
+### Goal
+
+Create an alignment briefing that evaluates how to keep canary and general-release edits from mixing across future skill, convention, and package changes.
+
+### Review
+
+Created `alignment/release-lane-change-boundary.html` as a review-state alignment briefing for canary versus general-release change boundaries. The page compares task metadata, lane contract plus audit, canary overlays, and separate source trees, and recommends the release-lane contract plus audit gate while keeping one canonical skill tree by default.
+
+Updated `alignment/index.html` under QA/meta and corrected the visible index count/date to match the active-page audit.
+
+Verification passed for alignment-page audit, task-doc audit, diff hygiene, and the HTML opener.
+
+## Review - Enterprise ICP Interrogation Upgrade 2026-07-06
+
+### Goal
+
+Upgrade `enterprise-icp` in both Claude and Codex mirrors so it participates in the shared `interrogation-page` workflow while preserving existing alignment-page behavior.
+
+### Review
+
+Upgraded both `enterprise-icp` mirrors from `v0.10` to `v0.12` with `interrogation-page` in `required_conventions`. Each mirror now has a Stage 0 interrogation gate before Stage 1 scope approval and a generated shared interrogation-page resolver stub plus sibling bundle.
+
+Archived both pre-upgrade `SKILL.md` files to `archive/v0.10/`, added matching changelog entries, registered `enterprise-icp` in the interrogation generator and layer1 contract, and refreshed skills catalog export artifacts.
+
+Verification passed through interrogation/alignment generator checks, targeted layer1 Vitest, strict archive audit, mirror parity audit, package manifest/export/build checks, task-doc audit, and diff hygiene.
 
 ## Review - Competitive Analysis Interrogation Upgrade 2026-07-05
 
@@ -143,7 +186,7 @@ Updated the interrogation generator and layer1 registry for the five new partici
 Business research:
 
 - `competitive-analysis` completed
-- `enterprise-icp`
+- `enterprise-icp` completed
 - `customer-feedback`
 - `lean-canvas`
 - `value-prop-canvas`

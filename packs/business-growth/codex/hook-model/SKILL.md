@@ -2,6 +2,7 @@
 name: hook-model
 type: research
 version: v0.10
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 description: Nir Eyal engagement loop design — trigger, action, variable reward, investment
 argument-hint: "[optional: specific engagement loop or user behavior to focus on]"

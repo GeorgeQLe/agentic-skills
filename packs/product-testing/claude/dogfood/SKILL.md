@@ -3,6 +3,7 @@ name: dogfood
 description: Derive owner/operator dogfood scenarios from product evidence and active-use cadence, then produce adoption instructions and manual evaluation checks
 type: analysis
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
 context_intake: artifact_only

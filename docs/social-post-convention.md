@@ -4,13 +4,13 @@ Research date: 2026-06-25.
 Canonical package asset: `assets/social-post-convention.md`.
 Channel docs directory: `docs/social/` in a source checkout, `assets/social/` in a packaged install.
 
-This is the thin router and shared contract for build-in-public and alignment-producing agents that draft source-safe text/community posts. Load this file first. In ordinary channel-selected drafting, load only the selected channel docs from `docs/social/` or `assets/social/`. In Build-In-Public mode (`set-bip on`, explicit `--bip`, or `.agents/project.json alignment.build_in_public: true`), load every bundled text/community channel convention listed below so the BIP page can rank exhaustive candidates; use `alignment.bip_platforms` only as optional prioritization metadata, not as a filter.
+This is the thin router and shared contract for alignment-producing agents that draft source-safe text/community posts. Load this file first. Load only the selected channel docs from `docs/social/` or `assets/social/`.
 
 For cross-run memory of what has already been drafted, approved, posted, and promoted — and for public-safe alignment context links — also load the system-of-record contract `docs/social-ledger-convention.md` (`assets/social-ledger-convention.md` in a packaged install). It defines ledger resolution, the post record schema, account-scoped duplicate detection, the gBrain public archive link, and the public/private boundary.
 
 ## Routing Rule
 
-Do not load every social channel convention by default for ordinary post drafting. After the user selects target channels, load only the matching channel files. When BIP mode is active, load every bundled channel file in this table, then label saved `alignment.bip_platforms` as priority channels while still generating candidates for the rest:
+Do not load every social channel convention by default. After the user selects target channels, load only the matching channel files:
 
 | Target channel | Source checkout doc | Packaged asset |
 | --- | --- | --- |
@@ -23,13 +23,13 @@ Do not load every social channel convention by default for ordinary post draftin
 | Hacker News submissions/comments | `docs/social/hacker-news-convention.md` | `assets/social/hacker-news-convention.md` |
 | YouTube Community posts | `docs/social/youtube-community-convention.md` | `assets/social/youtube-community-convention.md` |
 
-If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk. BIP mode should stay exhaustive across the bundled channel list and should not use unsupported channels unless the user explicitly asks for them.
+If a target channel is not listed, do not infer a channel profile. Ask for approval to create a new channel convention or draft from this shared contract only with explicit `unsupported_channel` risk.
 
 ## Rules Vs Norms
 
 - **Platform official guidance** is treated as a rule or hard constraint. It includes help-center docs, community guidelines, product docs, and explicit platform policy.
 - **Creator/practitioner norms** are optional style guidance. They can improve fit, but they are not policy and must never override platform rules, user instructions, source safety, or accuracy.
-- If official guidance and practitioner advice conflict, follow official guidance and explain the tradeoff in the BIP page.
+- If official guidance and practitioner advice conflict, follow official guidance and explain the tradeoff in the draft review.
 - If a platform limit is account-, client-, subscription-, region-, or server-dependent, draft below the conservative default and tell the user what to verify before publishing.
 
 ## Agent Source-Safety Rules
@@ -96,7 +96,7 @@ Some channels support a `post_plus_replies` shape: a standalone main post, a fir
 
 Record the chosen `post_mode`, `main_post`, and `reply_chain` (each reply tagged with a `purpose`) in the ledger per `docs/social-ledger-convention.md`.
 
-## BIP Page Output Shape
+## Review Output Shape
 
 When an alignment page uses this convention, render channel decisions in a table or cards with these fields:
 
@@ -118,4 +118,4 @@ When an alignment page uses this convention, render channel decisions in a table
 - `reply_chain`: ordered replies, each with `purpose` (`full_alignment_doc`, `skill_promo`, or other), `text`, and optional `url` (for `post_plus_replies`)
 - `user_decision`: `approve`, `revise`, `reject`, or `not-now`
 
-Final YAML from the BIP page should preserve selected channels, loaded convention paths, user selections, rejected angles, requested edits, and any channel-specific pre-publish checks.
+Final YAML should preserve selected channels, loaded convention paths, user selections, rejected angles, requested edits, and any channel-specific pre-publish checks.

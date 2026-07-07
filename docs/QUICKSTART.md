@@ -6,7 +6,7 @@ Get from clone to a working skill in under 5 minutes.
 
 - **Node.js 18+** for the `gskp` npm CLI and package build
 - **bash** shell (macOS, Linux, or WSL on Windows) for `scripts/pack.sh` and remaining shell-backed `gskp` commands
-- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, `set-update-mode`, `set-bip`, and `set-bip-platforms` do not require `jq`
+- **jq** for git-checkout `scripts/pack.sh` write commands and `gskp install-deck` materialization: `brew install jq` (macOS) or `apt install jq` (Debian/Ubuntu). Node-owned `gskp install`, `remove`, `refresh`, `doctor`, `prune`, `pin`, `unpin`, `status`, `list-packs`, `set-mode`, and `set-update-mode` do not require `jq`
 - **Claude Code** or **OpenAI Codex** installed on your machine
 - **pnpm** (optional, for running tests): `npm install -g pnpm`
 
@@ -35,7 +35,7 @@ npx skillpacks init
 npx skillpacks list
 ```
 
-The npm CLI installs base skills **project-local only** — there is no user-home (global) install path. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. To clean up deprecated skillpacks state, including legacy user-home base installs from the retired init path and stale BIP config, run `npx skillpacks cleanup`; use `npx skillpacks cleanup --dry-run` to preview the cleanup first. Domain packs are never installed as base skills.
+The npm CLI installs base skills **project-local only** — there is no user-home (global) install path. `npx skillpacks init` installs base skills into the current repository's local `.claude/skills/` and `.codex/skills/` roots and records `base_skills: true` in `.agents/project.json`. Later `npx skillpacks refresh` updates those base skills from the package snapshot being run. To clean up deprecated user-home skillpacks state from the retired init path, run `npx skillpacks cleanup --global`; use `npx skillpacks cleanup --global --dry-run` to preview the cleanup first. Plain `npx skillpacks cleanup` removes stale BIP config from projects below the current directory. Domain packs are never installed as base skills.
 
 The scoped alias package is published from the same release artifact and version. Users who prefer that package identity can run `npx @glexcorp/gskp init`, `npx @glexcorp/gskp install devtool`, and the same subcommands.
 

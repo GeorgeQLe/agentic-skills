@@ -3,6 +3,7 @@ name: jtbd-positioning
 description: Jobs-to-be-Done positioning analysis — identify primary job, map functional/social/emotional dimensions, position around job outcome
 type: research
 version: v0.14
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: sub-skill
 parent: positioning

@@ -3,6 +3,7 @@ name: user-flow-map
 description: Turn a high-level product concept, positioned goal, or goal sequence into flow and surface structure with entry points, decisions/actions/states, branches, channels, failure paths, and low-fidelity UI-candidate guidance before UX/UI/spec/prototype work
 type: planning
 version: v1.10
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[optional: product, flow, feature, route, or goal] [--no-chunk]"
 context_intake: deep

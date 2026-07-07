@@ -1,5 +1,27 @@
 # Session History
 
+## 2026-07-06 - skillpacks 0.1.21 source-state closeout
+
+- Investigated the `skillpacks` `0.1.21` package/manifest diff and confirmed npm had already published `skillpacks@0.1.21` and `@glexcorp/gskp@0.1.21` while `origin/master` was still committed at `0.1.20`.
+- Committed and pushed the source package/manifest version bump, then regenerated and committed the manifest fingerprint after post-commit verification caught the stale index-sourced fingerprint.
+- Created and pushed release tag `v0.1.21` at `408baeb59`.
+- Verification passed: `npm --workspace packages/skillpacks run build:manifest:check`, npm registry metadata checks for both package names, remote head/tag confirmation, and clean working-tree status.
+- Manifest: `tasks/ship-manifest-2026-07-06-skillpacks-0.1.21-source-state.md`.
+
+## 2026-07-06 - Release-lane convention agent-review handoff
+
+- Processed the approved `implement release-lane convention` briefing-slides handoff for `briefing-slides/release-lane-change-boundary.html`.
+- Confirmed the implementation is already landed at `5d4c3c396` on `master` / `origin/master` with the stable/canary package release-lane boundary.
+- Captured the visible invocation under `prompts/exec/`.
+- Verification passed: `npm --workspace packages/skillpacks run test:node` (203/203), `node scripts/audit-task-docs.mjs`, and `git diff --check`.
+
+## 2026-07-06 - ship-end closeout for UAT checklist contract
+
+- Wrapped the already-completed UAT click-by-click checklist instruction update recorded in `tasks/todo.md` and `tasks/roadmap.md`.
+- Confirmed there were no unpushed commits and no source changes waiting to ship before this closeout.
+- Captured the visible `$ship-end` invocation under `prompts/ship-end/`.
+- No source-code changes were made in this closeout; validation is limited to task-doc and diff hygiene checks.
+
 ## 2026-07-05 - ship-end closeout for build-ui-screens prototype-plan handoff
 
 - Wrapped the already-shipped `build-ui-screens` prototype-plan handoff session.
@@ -15402,3 +15424,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Updated package staging, package boundary assertions, compatibility docs, canonical convention guidance, and focused tests for generated fixture pages that pass existing audits.
 - Verification: package alignment tests, package-boundary test, full package Node suite, package `build:check`, package dry-run, skill archive audit, and diff hygiene passed.
 - Commit: `147a79dd6 feat: add packaged page scaffolds`, pushed to `master`.
+
+## 2026-07-06 — Cleanup scope flags
+
+- Added explicit `cleanup --all` and `cleanup --global` scopes to the Node skillpacks CLI.
+- Kept plain `cleanup` as current-directory recursive cleanup, made `--all` its explicit spelling, and made `--global` scan user-home projects while still previewing/removing legacy user-home base skill roots.
+- Preserved `uninstall-global` as the compatibility alias for the user-home cleanup scope and rejected `cleanup --all --global`.
+- Updated help text, lifecycle warnings, README, quickstart, scripts reference, package distribution docs, pack docs, skills reference, and compatibility matrix docs toward `cleanup --global` for device/user-home cleanup.
+- Added lifecycle and compatibility coverage for explicit scopes, flag ordering, global dry-run, global reinstall migration, and incompatible scope rejection.
+- Verification: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check passed.
+- Commit: `438d87939 Add cleanup scope flags`, pushed to `master`.

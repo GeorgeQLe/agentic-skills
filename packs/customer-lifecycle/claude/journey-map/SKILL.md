@@ -3,6 +3,7 @@ name: journey-map
 description: Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview
 type: research
 version: v0.27
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: \"product\" | \"--synthesize\" | app, use case, persona]"
 invocation: orchestrator

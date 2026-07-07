@@ -3,6 +3,7 @@ name: youtube-cadence-diagnosis
 description: Diagnose YouTube publishing cadence, gaps, streaks, and post-gap performance effects against channel and peer evidence
 type: research
 version: v0.7
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<channel slug or handle> [--peer <channel>...] [--count N]"
 context_intake: artifact_only

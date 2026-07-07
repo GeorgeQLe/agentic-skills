@@ -3,6 +3,7 @@ name: risk-register
 description: Broad risk assessment — key-person, technical, regulatory, competitive, financial, and execution risks beyond product/market
 type: analysis
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"financial\"]"
 context_intake: scoped

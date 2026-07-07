@@ -1,23 +1,50 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(
   readFileSync(new URL('../dist/skillpacks-manifest.json', import.meta.url), 'utf8')
 );
+let canaryManifestCache;
 
-function deckByName(name) {
-  return manifest.decks.find((deck) => deck.name === name);
+function generatedManifestForLane(lane) {
+  const result = spawnSync(process.execPath, ['scripts/build-skillpacks-manifest.mjs', '--print'], {
+    cwd: packageRoot,
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      SKILLPACKS_PACKAGE_LANE: lane
+    },
+    maxBuffer: 64 * 1024 * 1024
+  });
+
+  assert.equal(result.status, 0, [result.stdout, result.stderr].filter(Boolean).join('\n'));
+  return JSON.parse(result.stdout);
 }
 
-function skillByPath(skillPath) {
-  return manifest.skills.find((skill) => skill.path === skillPath);
+function canaryManifest() {
+  canaryManifestCache ??= generatedManifestForLane('canary');
+  return canaryManifestCache;
+}
+
+function deckByName(sourceManifest, name) {
+  return sourceManifest.decks.find((deck) => deck.name === name);
+}
+
+function skillByPath(sourceManifest, skillPath) {
+  return sourceManifest.skills.find((skill) => skill.path === skillPath);
 }
 
 describe('skillpacks manifest deck metadata', () => {
   it('models rapid deck traction phases for VARD and ORD', () => {
+    const manifest = canaryManifest();
+
     assert.deepEqual(
-      deckByName('vard').phases.map((phase) => [phase.key, phase.cards]),
+      deckByName(manifest, 'vard').phases.map((phase) => [phase.key, phase.cards]),
       [
         ['scan', ['vard-scan']],
         ['align', ['vard-align']],
@@ -26,7 +53,7 @@ describe('skillpacks manifest deck metadata', () => {
       ]
     );
     assert.deepEqual(
-      deckByName('ord').phases.map((phase) => [phase.key, phase.cards]),
+      deckByName(manifest, 'ord').phases.map((phase) => [phase.key, phase.cards]),
       [
         ['scan', ['ord-scan']],
         ['align', ['ord-align']],
@@ -37,7 +64,7 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('models Game AFPS as a deliberate game deck backed by the game pack', () => {
-    const deck = deckByName('game-afps');
+    const deck = deckByName(canaryManifest(), 'game-afps');
 
     assert.ok(deck, 'game-afps deck should exist');
     assert.equal(deck.title, 'Game AFPS');
@@ -52,7 +79,7 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('assigns game-pack skills to Game AFPS deck membership', () => {
-    const gameSkills = manifest.skills.filter((skill) => skill.pack === 'game');
+    const gameSkills = canaryManifest().skills.filter((skill) => skill.pack === 'game');
 
     assert.ok(gameSkills.length > 0, 'manifest should include game-pack skills');
     assert.ok(
@@ -62,9 +89,10 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('keeps nested framework skills in inventory but marks them non-installable', () => {
-    const parent = skillByPath('packs/business-research/codex/customer-discovery/SKILL.md');
-    const framework = skillByPath('packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md');
-    const baseSkill = skillByPath('packs/base/codex/skills/SKILL.md');
+    const manifest = canaryManifest();
+    const parent = skillByPath(manifest, 'packs/business-research/codex/customer-discovery/SKILL.md');
+    const framework = skillByPath(manifest, 'packs/business-research/codex/customer-discovery/frameworks/pmf-engine/SKILL.md');
+    const baseSkill = skillByPath(manifest, 'packs/base/codex/skills/SKILL.md');
 
     assert.ok(parent, 'customer-discovery parent skill should exist');
     assert.ok(framework, 'nested pmf-engine framework skill should remain in the manifest');
@@ -84,16 +112,17 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('keeps deprecated product-design aliases out of active manifest discovery', () => {
-    const logicWiring = skillByPath('packs/product-design/claude/logic-wiring/SKILL.md');
-    const buildUiScreens = skillByPath('packs/product-design/claude/build-ui-screens/SKILL.md');
-    const consolidatePrototypes = skillByPath('packs/product-design/claude/consolidate-prototypes/SKILL.md');
+    const manifest = canaryManifest();
+    const logicWiring = skillByPath(manifest, 'packs/product-design/claude/logic-wiring/SKILL.md');
+    const buildUiScreens = skillByPath(manifest, 'packs/product-design/claude/build-ui-screens/SKILL.md');
+    const consolidatePrototypes = skillByPath(manifest, 'packs/product-design/claude/consolidate-prototypes/SKILL.md');
 
-    assert.equal(skillByPath('packs/product-design/claude/prototype/SKILL.md'), undefined);
-    assert.equal(skillByPath('packs/product-design/claude/create-ui-experiment/SKILL.md'), undefined);
-    assert.equal(skillByPath('packs/product-design/claude/consolidate-variations/SKILL.md'), undefined);
-    assert.equal(skillByPath('packs/product-design/codex/prototype/SKILL.md'), undefined);
-    assert.equal(skillByPath('packs/product-design/codex/create-ui-experiment/SKILL.md'), undefined);
-    assert.equal(skillByPath('packs/product-design/codex/consolidate-variations/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/claude/prototype/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/claude/create-ui-experiment/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/claude/consolidate-variations/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/codex/prototype/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/codex/create-ui-experiment/SKILL.md'), undefined);
+    assert.equal(skillByPath(manifest, 'packs/product-design/codex/consolidate-variations/SKILL.md'), undefined);
 
     assert.ok(logicWiring, 'logic-wiring primary skill should exist');
     assert.ok(buildUiScreens, 'build-ui-screens primary skill should exist');
@@ -107,10 +136,41 @@ describe('skillpacks manifest deck metadata', () => {
   });
 
   it('exposes required convention metadata for bundled skills', () => {
-    const ideaScope = skillByPath('packs/base/codex/idea-scope-brief/SKILL.md');
-    const userFlowMap = skillByPath('packs/product-design/codex/user-flow-map/SKILL.md');
+    const manifest = canaryManifest();
+    const ideaScope = skillByPath(manifest, 'packs/base/codex/idea-scope-brief/SKILL.md');
+    const userFlowMap = skillByPath(manifest, 'packs/product-design/codex/user-flow-map/SKILL.md');
 
-    assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'interrogation-page']);
-    assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'design-tree-loop', 'interrogation-page']);
+    assert.deepEqual(ideaScope.required_conventions, ['alignment-page', 'briefing-slides', 'interrogation-page']);
+    assert.deepEqual(userFlowMap.required_conventions, ['alignment-page', 'briefing-slides', 'design-tree-loop', 'interrogation-page']);
+  });
+
+  it('omits canary-only briefing-slide skills from the stable manifest', () => {
+    const stableManifest = generatedManifestForLane('stable');
+
+    assert.equal(stableManifest.package.release_lane, 'stable');
+    assert.equal(
+      stableManifest.skills.find((skill) => skill.path === 'packs/base/codex/create-briefing-slides/SKILL.md'),
+      undefined
+    );
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(
+      stableManifest.skills.some((skill) => skill.required_conventions.includes('briefing-slides')),
+      false,
+      'stable manifest should not include skills requiring canary-only conventions'
+    );
+  });
+
+  it('includes both create-briefing-slides mirrors in the canary manifest', () => {
+    const canaryManifest = generatedManifestForLane('canary');
+    const briefingSkills = canaryManifest.skills
+      .filter((skill) => skill.name === 'create-briefing-slides')
+      .map((skill) => [skill.platform, skill.release_lane, skill.path])
+      .sort();
+
+    assert.equal(canaryManifest.package.release_lane, 'canary');
+    assert.deepEqual(briefingSkills, [
+      ['claude', 'canary', 'packs/base/claude/create-briefing-slides/SKILL.md'],
+      ['codex', 'canary', 'packs/base/codex/create-briefing-slides/SKILL.md']
+    ]);
   });
 });

@@ -3,6 +3,7 @@ name: content-programming
 description: Design an evidence-backed channel programming plan across pillars, formats, cadence, roles, and measurement without writing scripts
 type: research
 version: v0.6
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[channel slug or positioning path]"
 context_intake: scoped

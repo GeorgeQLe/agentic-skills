@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.13 - 2026-07-06
+
+- Removed the Build-In-Public output-boundary clause now that BIP is no longer an active shipping path.
+
 ## v0.12 - 2026-07-02
 
 - Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent handoff is required.

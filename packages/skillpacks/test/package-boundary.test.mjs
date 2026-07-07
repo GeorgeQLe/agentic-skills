@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
@@ -11,6 +11,7 @@ import {
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '../..');
+const manifestPath = resolve(packageRoot, 'dist/skillpacks-manifest.json');
 const socialAssetPaths = [
   'assets/social/bluesky-convention.md',
   'assets/social/founder-devtool-video-prompts-convention.md',
@@ -28,10 +29,14 @@ const socialAssetPaths = [
   'assets/social/youtube-shorts-convention.md'
 ];
 
-function run(command, args) {
+function run(command, args, { env = {} } = {}) {
   const result = spawnSync(command, args, {
     cwd: packageRoot,
     encoding: 'utf8',
+    env: {
+      ...process.env,
+      ...env
+    },
     maxBuffer: 64 * 1024 * 1024
   });
 
@@ -43,8 +48,25 @@ function run(command, args) {
   return result.stdout;
 }
 
-function packedPaths() {
-  run(process.execPath, ['scripts/build-package.mjs', '--check']);
+function generatedManifestForLane(lane) {
+  const stdout = run(process.execPath, ['scripts/build-skillpacks-manifest.mjs', '--print'], {
+    env: { SKILLPACKS_PACKAGE_LANE: lane }
+  });
+  return `${JSON.stringify(JSON.parse(stdout), null, 2)}\n`;
+}
+
+function packedPaths({ lane = 'stable', writeLaneManifest = false } = {}) {
+  const originalManifest = readFileSync(manifestPath, 'utf8');
+  try {
+    if (writeLaneManifest) {
+      writeFileSync(manifestPath, generatedManifestForLane(lane));
+    }
+    run(process.execPath, ['scripts/build-package.mjs', '--check'], {
+      env: { SKILLPACKS_PACKAGE_LANE: lane }
+    });
+  } finally {
+    writeFileSync(manifestPath, originalManifest);
+  }
   const stdout = run('npm', ['pack', './build', '--dry-run', '--json', '--silent']);
   const [packument] = JSON.parse(stdout);
 
@@ -52,6 +74,15 @@ function packedPaths() {
   return new Set(
     packument.files.map((file) => file.path.replace(/^package\//, ''))
   );
+}
+
+function builtManifest({ lane = 'stable', writeLaneManifest = false } = {}) {
+  packedPaths({ lane, writeLaneManifest });
+  return JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'));
+}
+
+function builtText(relativePath) {
+  return readFileSync(resolve(packageRoot, 'build', relativePath), 'utf8');
 }
 
 function hasPathClass(paths, deniedPath) {
@@ -109,17 +140,39 @@ describe('skillpacks npm publish target boundary', () => {
       'assets/social-video-content-convention.md',
       'assets/social-ledger-convention.md',
       ...socialAssetPaths,
-      'packs/release-ops/codex/release/SKILL.md',
-      'packs/release-ops/codex/release/ALIGNMENT-PAGE.md',
-      'packs/base/codex/idea-scope-brief/INTERROGATION-PAGE.md',
-      'packs/product-design/codex/user-flow-map/DESIGN-TREE-LOOP.md',
-      'packs/product-testing/codex/uat/DESIGN-TREE-LOOP.md',
+      'packs/exec-loop/codex/ship/SKILL.md',
       'packs/code-quality/PACK.md'
     ]) {
       assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published`);
     }
 
+    for (const canaryOnlyPath of [
+      'assets/briefing-slides-convention.md',
+      'assets/skillpacks-docs/briefing-slides-convention.md',
+      'packs/base/claude/create-briefing-slides',
+      'packs/base/codex/create-briefing-slides'
+    ]) {
+      assert.equal(
+        hasPathClass(paths, canaryOnlyPath),
+        false,
+        `${canaryOnlyPath} should not be published in stable packages`
+      );
+    }
+
+    for (const [relativePath, forbiddenPattern] of [
+      ['package.json', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
+      ['scripts/skill-convention-registry.mjs', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
+      ['packs/base/PACK.md', /briefing-slides|create-briefing-slides|"release_lane": "canary"/]
+    ]) {
+      assert.doesNotMatch(
+        builtText(relativePath),
+        forbiddenPattern,
+        `${relativePath} should not publish canary metadata in stable packages`
+      );
+    }
+
     for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
+      if (convention.release_lane === 'canary') continue;
       if (convention.generatorScript) {
         assert.equal(paths.has(convention.generatorScript), true, `${id} generator should be published`);
       }
@@ -127,11 +180,38 @@ describe('skillpacks npm publish target boundary', () => {
     }
 
     for (const entry of managedConventionDocEntries(repoRoot)) {
+      if (entry.canonicalDoc === 'docs/briefing-slides-convention.md') continue;
       assert.equal(paths.has(entry.packageAsset), true, `${entry.packageAsset} should be published`);
     }
   });
 
-  it('registers social conventions as static package assets for BIP guidance', () => {
+  it('includes briefing-slide skills and assets in canary package staging', () => {
+    const paths = packedPaths({ lane: 'canary', writeLaneManifest: true });
+
+    for (const requiredPath of [
+      'assets/briefing-slides-convention.md',
+      'assets/skillpacks-docs/briefing-slides-convention.md',
+      'packs/base/claude/create-briefing-slides/SKILL.md',
+      'packs/base/codex/create-briefing-slides/SKILL.md'
+    ]) {
+      assert.equal(paths.has(requiredPath), true, `${requiredPath} should be published in canary packages`);
+    }
+  });
+
+  it('keeps package manifests inside their selected release lane', () => {
+    const stableManifest = builtManifest();
+    const canaryManifest = builtManifest({ lane: 'canary', writeLaneManifest: true });
+
+    assert.equal(stableManifest.package.release_lane, 'stable');
+    assert.equal(stableManifest.skills.some((skill) => skill.name === 'create-briefing-slides'), false);
+    assert.equal(canaryManifest.package.release_lane, 'canary');
+    assert.equal(
+      canaryManifest.skills.filter((skill) => skill.name === 'create-briefing-slides').length,
+      2
+    );
+  });
+
+  it('registers social conventions as static package assets without BIP runtime guidance', () => {
     assert.deepEqual(
       Object.keys(SKILL_CONVENTIONS).filter((id) => id.startsWith('social-')).sort(),
       ['social-ledger', 'social-post', 'social-video-content']
@@ -150,39 +230,21 @@ describe('skillpacks npm publish target boundary', () => {
     assert.equal(SKILL_CONVENTIONS['social-video-content'].generatorScript, undefined);
 
     const alignmentConvention = readFileSync(resolve(repoRoot, 'docs/alignment-page-convention.md'), 'utf8');
-    assert.match(alignmentConvention, /alignment\/bip\/\{skill-name\}\.html/);
-    assert.match(alignmentConvention, /post-confirmation/);
-    assert.match(alignmentConvention, /prioritization metadata/);
-    assert.match(alignmentConvention, /alignment\.bip_platforms/);
-    assert.match(alignmentConvention, /set-bip-platforms <platform\.\.\.>/);
-    assert.match(alignmentConvention, /Do not treat `alignment\.bip_platforms` as a channel filter/);
-    assert.match(alignmentConvention, /every bundled channel/);
+    assert.doesNotMatch(alignmentConvention, /alignment\/bip/);
+    assert.doesNotMatch(alignmentConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.doesNotMatch(alignmentConvention, /Stage 2 has a required halfway review step/);
-    assert.match(alignmentConvention, /docs\/social-post-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-post-convention\.md/);
-    assert.match(alignmentConvention, /docs\/social-video-content-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-video-content-convention\.md/);
-    assert.match(alignmentConvention, /docs\/social\//);
-    assert.match(alignmentConvention, /assets\/social\//);
-    assert.match(alignmentConvention, /loaded convention path/);
-    assert.match(alignmentConvention, /platform_aligned/);
-    assert.match(alignmentConvention, /creator_inspired/);
 
     const socialPostConvention = readFileSync(resolve(repoRoot, 'docs/social-post-convention.md'), 'utf8');
     assert.match(socialPostConvention, /docs\/social\/linkedin-post-convention\.md/);
     assert.match(socialPostConvention, /assets\/social\/linkedin-post-convention\.md/);
-    assert.match(socialPostConvention, /BIP mode is active/);
-    assert.match(socialPostConvention, /load every bundled channel file/);
-    assert.match(socialPostConvention, /alignment\.bip_platforms.*prioritization metadata/);
+    assert.doesNotMatch(socialPostConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.match(socialPostConvention, /loaded_channel_convention/);
     assert.doesNotMatch(socialPostConvention, /^### LinkedIn$/m);
 
     const socialVideoConvention = readFileSync(resolve(repoRoot, 'docs/social-video-content-convention.md'), 'utf8');
     assert.match(socialVideoConvention, /docs\/social\/youtube-shorts-convention\.md/);
     assert.match(socialVideoConvention, /assets\/social\/youtube-shorts-convention\.md/);
-    assert.match(socialVideoConvention, /BIP mode is active/);
-    assert.match(socialVideoConvention, /load every bundled channel and prompt-family file/);
-    assert.match(socialVideoConvention, /alignment\.bip_platforms.*prioritization metadata/);
+    assert.doesNotMatch(socialVideoConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
     assert.match(socialVideoConvention, /loaded_channel_convention/);
     assert.doesNotMatch(socialVideoConvention, /^### YouTube Long-Form$/m);
 
@@ -208,11 +270,6 @@ describe('skillpacks npm publish target boundary', () => {
     assert.match(xPostConvention, /Post Plus Replies Pattern/);
     assert.match(xPostConvention, /6eorge\.com\/brain/);
 
-    // Alignment BIP guidance teaches ledger scope, account, and post-confirmation review fields.
-    assert.match(alignmentConvention, /docs\/social-ledger-convention\.md/);
-    assert.match(alignmentConvention, /assets\/social-ledger-convention\.md/);
-    assert.match(alignmentConvention, /ledger storage scope/);
-    assert.match(alignmentConvention, /claim-safety notes/);
-    assert.match(alignmentConvention, /publish precheck/);
+    assert.doesNotMatch(ledgerConvention, /Build-In-Public|BIP|--bip|alignment\.bip_|alignment\.build_in_public|set-bip/);
   });
 });

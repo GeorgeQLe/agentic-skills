@@ -3,6 +3,7 @@ name: consolidate-prototypes
 description: Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval
 type: planning
 version: v0.23
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop, interrogation-page]
 argument-hint: "[optional: topic, page, or path to variation specs]"
 visual_tier: prototype

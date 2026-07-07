@@ -3,6 +3,7 @@ name: game-prototype-test
 description: Use only for video game projects; design playable prototype tests and success criteria for fun, clarity, and replay
 type: planning
 version: v0.3
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 context_intake: scoped
 visual_tier: prototype

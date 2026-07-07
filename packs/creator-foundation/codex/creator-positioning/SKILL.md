@@ -3,6 +3,7 @@ name: creator-positioning
 description: Define a creator or founder-media channel's audience promise, category, differentiated wedge, proof, and anti-positioning
 type: research
 version: v0.8
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[channel slug or audit path]"
 context_intake: scoped

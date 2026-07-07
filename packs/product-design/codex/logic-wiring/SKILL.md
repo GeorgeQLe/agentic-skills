@@ -3,6 +3,7 @@ name: logic-wiring
 description: Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation
 type: execution
 version: v0.26
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, design-tree-loop]
 argument-hint: "[optional: topic, --variant N]"
 visual_tier: prototype

@@ -3,6 +3,7 @@ name: create-alignment-page
 description: Create or amend a portable HTML alignment review page in a target repo using bundled conventions and skillpacks alignment commands
 type: ops
 version: v0.4
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "<skill-or-topic> [target artifact or repo path]"
 ---

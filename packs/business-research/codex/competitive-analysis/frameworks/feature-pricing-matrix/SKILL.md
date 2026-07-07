@@ -3,6 +3,7 @@ name: feature-pricing-matrix
 description: Feature and pricing matrix competitive analysis - compare capabilities, packages, proof points, and pricing models
 type: research
 version: v0.12
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides, interrogation-page]
 invocation: sub-skill
 parent: competitive-analysis

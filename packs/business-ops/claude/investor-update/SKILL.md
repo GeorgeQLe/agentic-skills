@@ -3,6 +3,7 @@ name: investor-update
 description: Generate structured monthly stakeholder update from current research state, metrics, roadmap, and feedback
 type: analysis
 version: v0.5
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint: "[optional: month e.g. \"March 2026\"]"
 context_intake: artifact_only

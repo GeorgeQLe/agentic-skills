@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11 - 2026-07-06
+
+- Removed the Build-In-Public output-boundary clause now that BIP is no longer an active shipping path.
+
 ## v0.10 - 2026-07-02
 
 - Added an explicit BIP output boundary: `/ship` must never create BIP blockers, approval/review gates, or routing prerequisites, and any future BIP prompt must be terminal-only after shipping when `alignment.build_in_public` is absent and the prompt has not been dismissed.

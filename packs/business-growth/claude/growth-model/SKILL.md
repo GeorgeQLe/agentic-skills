@@ -2,6 +2,7 @@
 name: growth-model
 type: research
 version: v0.10
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"

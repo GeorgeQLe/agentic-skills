@@ -3,6 +3,7 @@ name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
 version: v0.15
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 argument-hint:
 ---

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,19 +14,26 @@ import {
 } from "../../../scripts/catalog/index.mjs";
 import {
   MANAGED_CONVENTION_DOC_PACKAGE_ROOT,
+  SKILL_CONVENTIONS,
   managedConventionDocEntries
 } from "../../../scripts/skill-convention-registry.mjs";
+import {
+  allowedConventionEntries,
+  packageLaneFromEnv,
+  releaseLaneAllowed,
+  skillReleaseLaneFromText
+} from "./release-lane.mjs";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.resolve(packageRoot, "../..");
 const buildRoot = path.join(packageRoot, "build");
 const checkMode = process.argv.includes("--check");
+const packageLane = packageLaneFromEnv();
 
 const packageOwnedEntries = [
   { fromRoot: packageRoot, from: "bin", to: "bin" },
   { fromRoot: packageRoot, from: "src", to: "src" },
-  { fromRoot: packageRoot, from: "scripts/prepublish-auth-check.mjs", to: "scripts/prepublish-auth-check.mjs" },
-  { fromRoot: packageRoot, from: "dist/skillpacks-manifest.json", to: "dist/skillpacks-manifest.json" }
+  { fromRoot: packageRoot, from: "scripts/prepublish-auth-check.mjs", to: "scripts/prepublish-auth-check.mjs" }
 ];
 
 const repoOwnedEntries = [
@@ -60,6 +68,7 @@ const repoOwnedEntries = [
 ];
 
 const managedConventionDocEntriesForBuild = managedConventionDocEntries(repoRoot).map((entry) => ({
+  canonicalDoc: entry.canonicalDoc,
   fromRoot: repoRoot,
   from: entry.canonicalDoc,
   to: entry.packageAsset
@@ -171,6 +180,50 @@ function copyTrackedPrefixes(files, prefixes) {
   }
 }
 
+function deniedSkillRootsForLane(files) {
+  const deniedSkillRoots = new Set();
+  for (const file of activeSkillPaths(files)) {
+    const source = path.join(repoRoot, file);
+    if (!existsSync(source)) continue;
+    if (!releaseLaneAllowed(skillReleaseLaneFromText(readFileSync(source, "utf8")), packageLane)) {
+      deniedSkillRoots.add(path.posix.dirname(file));
+    }
+  }
+
+  return deniedSkillRoots;
+}
+
+function allowedPackageEntries(entries) {
+  return entries.filter((entry) => {
+    const registryEntry = Object.values(SKILL_CONVENTIONS).find(
+      (convention) => convention.packageAsset === entry.to
+    );
+    return releaseLaneAllowed(registryEntry?.release_lane, packageLane);
+  });
+}
+
+function laneFilteredFiles(files) {
+  const deniedSkillRoots = deniedSkillRootsForLane(files);
+
+  return files.filter((file) => {
+    for (const deniedRoot of deniedSkillRoots) {
+      if (file === deniedRoot || file.startsWith(`${deniedRoot}/`)) return false;
+    }
+    return true;
+  });
+}
+
+function laneFilteredPackageFiles(files) {
+  const deniedAssets = new Set(
+    Object.values(SKILL_CONVENTIONS)
+      .filter((convention) => !releaseLaneAllowed(convention.release_lane, packageLane))
+      .map((convention) => convention.packageAsset)
+      .filter(Boolean)
+  );
+
+  return files.filter((file) => !deniedAssets.has(file));
+}
+
 function stagedPackageJson() {
   const packageJson = JSON.parse(readFileSync(path.join(packageRoot, "package.json"), "utf8"));
   const allowedKeys = [
@@ -198,12 +251,97 @@ function stagedPackageJson() {
       prepublishOnly: packageJson.scripts.prepublishOnly
     };
   }
+  if (Array.isArray(staged.files)) {
+    staged.files = laneFilteredPackageFiles(staged.files);
+  }
 
   return staged;
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function writeLaneFilteredConventionRegistry() {
+  const target = path.join(buildRoot, "scripts/skill-convention-registry.mjs");
+  let registrySource = readFileSync(target, "utf8");
+
+  for (const conventionId of conventionIdsDeniedForLane()) {
+    const conventionBlock = new RegExp(
+      `\\n  "${escapeRegExp(conventionId)}": \\{[\\s\\S]*?\\n  \\},`,
+      "g"
+    );
+    registrySource = registrySource.replace(conventionBlock, "");
+  }
+
+  writeFileSync(target, registrySource);
+}
+
+function writeStagedManifest() {
+  const result = spawnSync(
+    process.execPath,
+    [path.join(packageRoot, "scripts/build-skillpacks-manifest.mjs"), "--print"],
+    {
+      cwd: repoRoot,
+      encoding: "utf8",
+      env: process.env,
+      maxBuffer: 64 * 1024 * 1024
+    }
+  );
+  if (result.status !== 0) {
+    throw new Error(
+      [
+        "Failed to generate package manifest for staging.",
+        result.stdout,
+        result.stderr
+      ].filter(Boolean).join("\n")
+    );
+  }
+
+  const manifest = JSON.parse(result.stdout);
+  if ((manifest.package?.release_lane || "stable") !== packageLane) {
+    throw new Error(
+      `Generated package manifest lane ${manifest.package?.release_lane || "stable"} !== ${packageLane}`
+    );
+  }
+
+  const target = path.join(buildRoot, "dist/skillpacks-manifest.json");
+  mkdirSync(path.dirname(target), { recursive: true });
+  writeFileSync(target, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
+function conventionIdsDeniedForLane() {
+  return Object.entries(SKILL_CONVENTIONS)
+    .filter(([, convention]) => !releaseLaneAllowed(convention.release_lane, packageLane))
+    .map(([conventionId]) => conventionId);
+}
+
+function scrubDeniedSkillRowsFromPackMetadata(files) {
+  const deniedSkillNames = [...deniedSkillRootsForLane(files)].map((skillRoot) => path.posix.basename(skillRoot));
+  if (deniedSkillNames.length === 0) return;
+
+  const copiedPackManifests = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
+  for (const packManifestPath of copiedPackManifests) {
+    const target = path.join(buildRoot, packManifestPath);
+    if (!existsSync(target)) continue;
+    let packText = readFileSync(target, "utf8");
+    for (const skillName of deniedSkillNames) {
+      const skillRow = new RegExp(`^- \`${escapeRegExp(skillName)}\`:.*\\n?`, "gm");
+      packText = packText.replace(skillRow, "");
+    }
+    writeFileSync(target, packText);
+  }
+}
+
 function assertBuildBoundary() {
-  for (const relativePath of requiredBuildFiles) {
+  const requiredForLane = requiredBuildFiles.filter((relativePath) => {
+    const registryEntry = Object.values(SKILL_CONVENTIONS).find(
+      (convention) => convention.packageAsset === relativePath
+    );
+    return releaseLaneAllowed(registryEntry?.release_lane, packageLane);
+  });
+
+  for (const relativePath of requiredForLane) {
     if (!existsSync(path.join(buildRoot, relativePath))) {
       throw new Error(`Package build is missing required file: ${relativePath}`);
     }
@@ -228,8 +366,9 @@ function assertExportBoundary(beforeFingerprint) {
 function buildPackage() {
   const exportFingerprint = fileFingerprint(repoRoot, publicExportPaths);
   const files = gitFiles(repoRoot);
-  const skills = listSkills(repoRoot, files);
-  const packs = listPacks(repoRoot, files, skills);
+  const laneFiles = laneFilteredFiles(files);
+  const skills = listSkills(repoRoot, laneFiles);
+  const packs = listPacks(repoRoot, laneFiles, skills);
   // Source fingerprint reads the git index (like the manifest generator) so it
   // is a pure function of staged content and unaffected by a concurrent
   // session's unstaged edits on the shared working tree. The export-boundary
@@ -237,10 +376,11 @@ function buildPackage() {
   // detect in-build mutation of committed public export artifacts, which is a
   // working-tree concern.
   const sourceFingerprint = fileFingerprint(repoRoot, [
-    ...activeSkillPaths(files),
-    ...packManifestPaths(files),
+    ...activeSkillPaths(laneFiles),
+    ...packManifestPaths(laneFiles),
     "scripts/pack.sh",
-    "scripts/skill-links.sh"
+    "scripts/skill-links.sh",
+    "packages/skillpacks/scripts/release-lane.mjs"
   ], { source: "index" });
 
   rmSync(buildRoot, { recursive: true, force: true });
@@ -249,13 +389,16 @@ function buildPackage() {
   for (const entry of packageOwnedEntries) {
     copyEntry(entry);
   }
-  copyTrackedPrefixes(files, ["packs"]);
-  for (const entry of repoOwnedEntries) {
+  copyTrackedPrefixes(laneFiles, ["packs"]);
+  for (const entry of allowedPackageEntries(repoOwnedEntries)) {
     copyEntry(entry);
   }
-  for (const entry of managedConventionDocEntriesForBuild) {
+  for (const entry of allowedConventionEntries(managedConventionDocEntriesForBuild, packageLane)) {
     copyEntry(entry);
   }
+  writeStagedManifest();
+  scrubDeniedSkillRowsFromPackMetadata(files);
+  writeLaneFilteredConventionRegistry();
 
   writeFileSync(
     path.join(buildRoot, "package.json"),
@@ -266,7 +409,7 @@ function buildPackage() {
   assertExportBoundary(exportFingerprint);
 
   console.log(
-    `Staged skillpacks package at ${path.relative(repoRoot, buildRoot)} with ${skills.length} skills, ${packs.length} packs, and source fingerprint ${sourceFingerprint}.`
+    `Staged skillpacks package at ${path.relative(repoRoot, buildRoot)} for ${packageLane} lane with ${skills.length} skills, ${packs.length} packs, and source fingerprint ${sourceFingerprint}.`
   );
 
   if (checkMode) {

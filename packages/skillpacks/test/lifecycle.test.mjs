@@ -582,6 +582,67 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(join(project, '.agents/.pack.lock')), false);
   });
 
+  it('cleanup --all --dry-run scans current-directory projects and nested projects only', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const projectA = join(root, 'project-a');
+    const projectB = join(root, 'nested/project-b');
+    const homeProject = join(home, 'home-project');
+    for (const project of [projectA, projectB, homeProject]) {
+      writeProjectConfig(project, {
+        project_type: 'devtool',
+        enabled_packs: [],
+        skill_pack_version: 1,
+        alignment: { build_in_public: true }
+      });
+    }
+
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup', '--all', '--dry-run'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove alignment\.build_in_public from project-a\/\.agents\/project\.json/);
+    assert.match(stdout, /Would remove alignment\.build_in_public from nested\/project-b\/\.agents\/project\.json/);
+    assert.doesNotMatch(stdout, /home-project/);
+    assert.match(stdout, /Dry run\. Would remove Build-In-Public config from 2 project\(s\)/);
+    assert.equal(readProjectConfig(projectA).alignment.build_in_public, true);
+    assert.equal(readProjectConfig(projectB).alignment.build_in_public, true);
+    assert.equal(readProjectConfig(homeProject).alignment.build_in_public, true);
+  });
+
+  it('cleanup --global --dry-run scans user-home projects and previews legacy globals', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const cwdProject = join(root, 'cwd-project');
+    const homeProject = join(home, 'home-project');
+    writeProjectConfig(cwdProject, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: { build_in_public: true }
+    });
+    writeProjectConfig(homeProject, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      alignment: { build_in_public: true }
+    });
+    writeManagedSkillDir(
+      join(home, '.claude/skills/codebase-status'),
+      join(repoRoot, 'base/claude/codebase-status')
+    );
+
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup', '--global', '--dry-run'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Would remove \.claude\/skills\/codebase-status/);
+    assert.match(stdout, /Would remove alignment\.build_in_public from home-project\/\.agents\/project\.json/);
+    assert.doesNotMatch(stdout, /cwd-project/);
+    assert.match(stdout, /Dry run\. Would remove Build-In-Public config from 1 project\(s\)/);
+    assert.equal(existsSync(join(home, '.claude/skills/codebase-status')), true);
+    assert.equal(readProjectConfig(cwdProject).alignment.build_in_public, true);
+    assert.equal(readProjectConfig(homeProject).alignment.build_in_public, true);
+  });
+
   it('cleanup --dry-run previews managed deprecated product-design alias removals without deleting them', async () => {
     const root = makeTempProject();
     const home = makeTempProject();
@@ -670,7 +731,8 @@ describe('Node lifecycle commands', () => {
   it('keeps uninstall-global as a compatibility alias for cleanup', async () => {
     const root = makeTempProject();
     const home = makeTempProject();
-    writeProjectConfig(root, {
+    const homeProject = join(home, 'home-project');
+    writeProjectConfig(homeProject, {
       project_type: 'devtool',
       enabled_packs: [],
       skill_pack_version: 1,
@@ -682,28 +744,29 @@ describe('Node lifecycle commands', () => {
     const { stdout, exitCode } = await runSkillpacks(root, ['uninstall-global'], { home });
 
     assert.equal(exitCode, 0);
-    assert.match(stdout, /Removed alignment\.build_in_public from \.\/\.agents\/project\.json/);
-    assert.equal(Object.hasOwn(readProjectConfig(root), 'alignment'), false);
+    assert.match(stdout, /Removed alignment\.build_in_public from home-project\/\.agents\/project\.json/);
+    assert.equal(Object.hasOwn(readProjectConfig(homeProject), 'alignment'), false);
   });
 
   it('uninstall-global compatibility alias also removes managed deprecated project-local aliases', async () => {
     const root = makeTempProject();
     const home = makeTempProject();
-    writeProjectConfig(root, {
+    const homeProject = join(home, 'home-project');
+    writeProjectConfig(homeProject, {
       project_type: 'business-app',
       enabled_packs: ['product-design'],
       skill_pack_version: 1
     });
     writeManagedSkillDir(
-      skillPath(root, 'claude', 'prototype'),
+      skillPath(homeProject, 'claude', 'prototype'),
       join(repoRoot, 'packs/product-design/claude/prototype')
     );
 
     const { stdout, exitCode } = await runSkillpacks(root, ['uninstall-global'], { home });
 
     assert.equal(exitCode, 0);
-    assert.match(stdout, /Removed \.\/\.claude\/skills\/prototype \(deprecated alias replaced by logic-wiring\)/);
-    assert.equal(existsSync(skillPath(root, 'claude', 'prototype')), false);
+    assert.match(stdout, /Removed home-project\/\.claude\/skills\/prototype \(deprecated alias replaced by logic-wiring\)/);
+    assert.equal(existsSync(skillPath(homeProject, 'claude', 'prototype')), false);
   });
 
   it('rejects arguments to cleanup', async () => {
@@ -722,19 +785,34 @@ describe('Node lifecycle commands', () => {
     assert.match(error.message, /cleanup: unsupported flag '--bad'/);
   });
 
-  it('accepts cleanup dry-run flags in either order', async () => {
+  it('rejects incompatible cleanup scope flags', async () => {
+    const dir = makeTempProject();
+
+    const error = await runSkillpacksExpectError(dir, ['cleanup', '--all', '--global']);
+
+    assert.match(error.message, /cleanup: --all and --global cannot be used together/);
+  });
+
+  it('accepts cleanup dry-run and reinstall flags with explicit scopes in any order', async () => {
     const first = makeTempProject();
     const second = makeTempProject();
+    const third = makeTempProject();
+    const thirdHome = makeTempProject();
 
     const firstResult = await runSkillpacksRaw(first, ['cleanup', '--dry-run', '--reinstall-base']);
-    const secondResult = await runSkillpacksRaw(second, ['cleanup', '--reinstall-base', '--dry-run']);
+    const secondResult = await runSkillpacksRaw(second, ['cleanup', '--all', '--reinstall-base', '--dry-run']);
+    const thirdResult = await runSkillpacksRaw(third, ['cleanup', '--reinstall-base', '--global', '--dry-run'], { home: thirdHome });
 
     assert.equal(firstResult.exitCode, 0, firstResult.stderr);
     assert.equal(secondResult.exitCode, 0, secondResult.stderr);
+    assert.equal(thirdResult.exitCode, 0, thirdResult.stderr);
     assert.match(firstResult.stdout, /Would initialize current directory with base skills/);
     assert.match(secondResult.stdout, /Would initialize current directory with base skills/);
+    assert.match(thirdResult.stdout, /Would initialize user-home scan root with base skills/);
+    assert.match(thirdResult.stdout, /Dry run\. Would initialize project base skills/);
     assert.equal(existsSync(projectConfigPath(first)), false);
     assert.equal(existsSync(projectConfigPath(second)), false);
+    assert.equal(existsSync(projectConfigPath(thirdHome)), false);
   });
 
   it('refresh --all flags legacy user-home installs while still refreshing projects', async () => {
@@ -762,7 +840,7 @@ describe('Node lifecycle commands', () => {
     assert.equal(exitCode, 1);
     assert.match(stdout, /WARNING: Found 1 legacy user-home skillpacks install\(s\)/);
     assert.match(stdout, /\.claude\/skills\/codebase-status/);
-    assert.match(stdout, /Recommended cleanup: npx skillpacks cleanup/);
+    assert.match(stdout, /Recommended cleanup: npx skillpacks cleanup --global/);
     assert.match(stdout, /=== project-a ===/);
     assert.match(stdout, /Refreshed project skills to skillpacks@/);
     assert.match(stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 0 failed across 1 project\(s\)\./);
@@ -797,7 +875,7 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Summary \(refresh --all --dry-run\): 1 project\(s\) scanned\./);
     assert.match(stdout, /Unsafe reasons:/);
     assert.match(stdout, /Found 1 legacy user-home skillpacks install\(s\) under /);
-    assert.match(stdout, /Cleanup: npx skillpacks cleanup/);
+    assert.match(stdout, /Cleanup: npx skillpacks cleanup --global/);
     assert.match(stdout, /Safe to run: no/);
     assert.equal(existsSync(skillPath(project, 'claude', 'codebase-status')), false);
     assert.equal(existsSync(skillPath(project, 'codex', 'afps-status')), false);
@@ -912,6 +990,36 @@ describe('Node lifecycle commands', () => {
     assert.equal(existsSync(skillPath(projectB, 'claude', 'afps-status')), false);
     assert.equal(existsSync(lockDir(projectA)), false);
     assert.equal(existsSync(lockDir(projectB)), false);
+  });
+
+  it('cleanup --global --reinstall-base --dry-run migrates projects under the user home scope', async () => {
+    const root = makeTempProject();
+    const home = makeTempProject();
+    const cwdProject = join(root, 'cwd-project');
+    const homeProject = join(home, 'home-project');
+    writeProjectConfig(cwdProject, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+    writeProjectConfig(homeProject, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+    const cwdText = readFileSync(projectConfigPath(cwdProject), 'utf8');
+    const homeText = readFileSync(projectConfigPath(homeProject), 'utf8');
+
+    const { exitCode, stdout } = await runSkillpacks(root, ['cleanup', '--global', '--reinstall-base', '--dry-run'], { home });
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /Dry run\. Would reinstall project-local base skills in 1 project\(s\)/);
+    assert.match(stdout, /=== home-project ===/);
+    assert.doesNotMatch(stdout, /cwd-project/);
+    assert.match(stdout, /Summary \(cleanup --global --reinstall-base --dry-run\): 1 project\(s\) scanned/);
+    assert.equal(readFileSync(projectConfigPath(cwdProject), 'utf8'), cwdText);
+    assert.equal(readFileSync(projectConfigPath(homeProject), 'utf8'), homeText);
+    assert.equal(existsSync(skillPath(homeProject, 'claude', 'codebase-status')), false);
   });
 
   it('uninstall-global --reinstall-base initializes the current directory when no projects are discovered', async () => {

@@ -3,6 +3,7 @@ name: four-forces
 description: Moesta Four Forces of Progress — map Push, Pull, Anxiety, and Habit forces per ICP candidate to identify switching catalysts and barriers
 type: research
 version: v0.11
+release_lane: canary
 required_conventions: [alignment-page, briefing-slides]
 invocation: sub-skill
 parent: customer-discovery
