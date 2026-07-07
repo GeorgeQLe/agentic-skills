@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-07-07 - Dirty worktree prompt-history closeout
+
+- Cleaned the dirty worktree left by untracked prompt-history artifacts.
+- Preserved the prior `investigate` prompt capture for the anti-zed journey-map/briefing-slide investigation.
+- Captured the visible `ship-end` invocation for this closeout.
+- No source-code changes were included; validation is limited to task-doc and diff hygiene checks.
+
 ## 2026-07-07 - Active skill cut
 
 - Removed compatibility and hibernated pack names from active pack discovery/list/map surfaces while keeping `business-app`, `creator-media`, and `business-discovery` install compatibility.
