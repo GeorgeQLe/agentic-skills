@@ -1,36 +1,57 @@
 # Current Task
 
-## Current Implementation - Package Build Optimization
+## Current Implementation - Publish Recovery Cleanup Guard
+
+### Goal
+
+Verify the publish bottleneck report against the current checkout and patch only findings that still reproduce, starting with the Bash 3.2 `set -u` empty-array cleanup failure.
+
+### Plan
+
+- [x] Record starting repository status and preserve unrelated local work.
+- [x] Reproduce the publish recovery cleanup failure in a clean temp repo.
+- [x] Patch only confirmed Bash 3.2 `set -u` empty-array hazards in `publish.sh`.
+- [x] Run focused and package-level correctness verification.
+- [x] Inspect manifest/package-boundary timings and apply only minimal duplicate-work cleanup if it clearly pays off.
+- [x] Run final audits, then commit and push intended tracked changes.
+
+### Acceptance Criteria
+
+- [x] Interrupting `./publish.sh --dry-run --current --tag experimental` before temp dirs are created no longer masks the interrupt with `TMP_DIRS[@]: unbound variable`.
+- [x] Dirty-tree summary, cleanup, and auth preflight keep their existing output and behavior.
+- [x] Publish recovery tests cover the early-interrupt cleanup path.
+- [x] Broader package tests and publish dry-run checks pass or have documented external blockers.
+- [x] Final status contains only intended changes plus pre-existing unrelated files.
+
+### Verification
+
+- [x] `npm_config_cache=/tmp/skillpacks-npm-cache node --test --test-concurrency=1 packages/skillpacks/test/publish-recovery.test.mjs`
+- [x] Clean temp interrupted dry-run: `npm_config_cache=/tmp/skillpacks-npm-cache ./publish.sh --dry-run --current --tag experimental`, then SIGINT during registry check
+- [x] `npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run test:node`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run verify:package`
+- [x] Performance timing: `packages/skillpacks/test/manifest.test.mjs`
+- [x] Performance timing: `packages/skillpacks/test/package-boundary.test.mjs`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+Reproduced the Bash 3.2 cleanup bug by interrupting a clean temp-repo `./publish.sh --dry-run --current --tag experimental` while it was still in the early registry check. Before the fix, cleanup masked the interrupt with `TMP_DIRS[@]: unbound variable`; after the fix, the same interrupted dry-run exits with the intended SIGINT restoration message.
+
+Patched `publish.sh` to guard empty-array expansions for dirty-path summary output, preflight `env` args, and cleanup temp dirs without changing release gate text or dirty-tree classification behavior. Added publish recovery regression coverage for SIGINT during the early `--current` registry check.
+
+Applied minimal test-side performance cleanup after correctness passed. `manifest.test.mjs` now reuses generated manifests by lane, reducing the manifest block from about 32.3s to about 21.1s in the full suite. `package-boundary.test.mjs` now caches staged package state by lane and dist-manifest mode, preserving one full `npm pack --dry-run` per unique package state while reducing that block from about 99.5s to about 62.5s in the final full suite.
+
+Verification passed for focused publish recovery tests, the clean temp interrupted dry-run, canary `build:check`, canary `verify:package`, and full package `test:node` with 207 passing tests in about 120.7s.
+
+## Historical Task State
+
+## Review - Package Build Optimization
 
 ### Goal
 
 Reduce npm package publish/build verification time by removing redundant package-staging work and parallelizing independent package build copies without changing published package contents.
-
-### Plan
-
-- [x] Profile package build and publish verification scripts to identify duplicated or serial work.
-- [x] Add an npm-script fast path that stages from the already built or checked dist manifest.
-- [x] Parallelize independent package staging copies with bounded concurrency while preserving direct standalone staging behavior.
-- [x] Run focused and full package verification, task-doc audit, diff hygiene, then commit and push intended changes.
-
-### Acceptance Criteria
-
-- [x] `npm --workspace packages/skillpacks run build` still generates the manifest before staging.
-- [x] `npm --workspace packages/skillpacks run build:check` still checks the manifest before staging.
-- [x] Direct `node packages/skillpacks/scripts/build-package.mjs --check` remains self-contained and regenerates the staged manifest.
-- [x] The optimized npm path avoids a second manifest-generation pass during package staging.
-- [x] Package boundary tests cover staging from an already generated dist manifest.
-
-### Verification
-
-- [x] Baseline timing: `node packages/skillpacks/scripts/build-package.mjs --check`
-- [x] Optimized timing: `SKILLPACKS_PACKAGE_LANE=canary node packages/skillpacks/scripts/build-package.mjs --check --use-dist-manifest`
-- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:manifest:check`
-- [x] `node --test packages/skillpacks/test/package-boundary.test.mjs`
-- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
-- [x] `npm --workspace packages/skillpacks run test:node`
-- [x] `node scripts/audit-task-docs.mjs`
-- [x] `git diff --check`
 
 ### Review
 
@@ -39,8 +60,6 @@ Updated `packages/skillpacks` build scripts so the normal npm `build` and `build
 Converted package staging copies to bounded async copy work with `SKILLPACKS_BUILD_COPY_CONCURRENCY` defaulting to 32. Baseline direct staging improved from about 14.2s before the change to about 11.1s with parallel copies. The optimized dist-manifest staging path completed in about 1.2s in the current canary lane, and full canary `build:check` completed in about 13.4s.
 
 Added package-boundary coverage for staging from an already generated dist manifest. Verification passed for canary manifest check, focused package-boundary tests, canary build check, full `npm --workspace packages/skillpacks run test:node` with 206 passing tests, task-doc audit, and diff whitespace.
-
-## Historical Task State
 
 ## Review - Visible UAT Skill
 

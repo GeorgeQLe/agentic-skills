@@ -12,6 +12,7 @@ import {
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = resolve(packageRoot, '../..');
 const manifestPath = resolve(packageRoot, 'dist/skillpacks-manifest.json');
+const packedStateCache = new Map();
 const socialAssetPaths = [
   'assets/social/bluesky-convention.md',
   'assets/social/founder-devtool-video-prompts-convention.md',
@@ -55,7 +56,12 @@ function generatedManifestForLane(lane) {
   return `${JSON.stringify(JSON.parse(stdout), null, 2)}\n`;
 }
 
-function packedPaths({ lane = 'stable', writeLaneManifest = false, useDistManifest = false } = {}) {
+function packedState({ lane = 'stable', writeLaneManifest = false, useDistManifest = false } = {}) {
+  const cacheKey = JSON.stringify({ lane, writeLaneManifest, useDistManifest });
+  if (packedStateCache.has(cacheKey)) {
+    return packedStateCache.get(cacheKey);
+  }
+
   const originalManifest = readFileSync(manifestPath, 'utf8');
   try {
     if (writeLaneManifest) {
@@ -75,14 +81,22 @@ function packedPaths({ lane = 'stable', writeLaneManifest = false, useDistManife
   const [packument] = JSON.parse(stdout);
 
   assert.ok(packument, 'npm pack should return package metadata');
-  return new Set(
-    packument.files.map((file) => file.path.replace(/^package\//, ''))
-  );
+  const state = {
+    paths: new Set(
+      packument.files.map((file) => file.path.replace(/^package\//, ''))
+    ),
+    manifest: JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'))
+  };
+  packedStateCache.set(cacheKey, state);
+  return state;
+}
+
+function packedPaths(options = {}) {
+  return new Set(packedState(options).paths);
 }
 
 function builtManifest({ lane = 'stable', writeLaneManifest = false } = {}) {
-  packedPaths({ lane, writeLaneManifest });
-  return JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'));
+  return packedState({ lane, writeLaneManifest }).manifest;
 }
 
 function builtText(relativePath) {

@@ -9,9 +9,13 @@ const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const manifest = JSON.parse(
   readFileSync(new URL('../dist/skillpacks-manifest.json', import.meta.url), 'utf8')
 );
-let canaryManifestCache;
+const generatedManifestCache = new Map();
 
 function generatedManifestForLane(lane) {
+  if (generatedManifestCache.has(lane)) {
+    return generatedManifestCache.get(lane);
+  }
+
   const result = spawnSync(process.execPath, ['scripts/build-skillpacks-manifest.mjs', '--print'], {
     cwd: packageRoot,
     encoding: 'utf8',
@@ -23,12 +27,13 @@ function generatedManifestForLane(lane) {
   });
 
   assert.equal(result.status, 0, [result.stdout, result.stderr].filter(Boolean).join('\n'));
-  return JSON.parse(result.stdout);
+  const generatedManifest = JSON.parse(result.stdout);
+  generatedManifestCache.set(lane, generatedManifest);
+  return generatedManifest;
 }
 
 function canaryManifest() {
-  canaryManifestCache ??= generatedManifestForLane('canary');
-  return canaryManifestCache;
+  return generatedManifestForLane('canary');
 }
 
 function deckByName(sourceManifest, name) {

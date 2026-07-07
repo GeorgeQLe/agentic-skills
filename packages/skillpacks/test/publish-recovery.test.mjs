@@ -132,6 +132,15 @@ if [[ "$1" == "config" && "$2" == "get" ]]; then
 fi
 
 if [[ "$1" == "view" && "$3" == "version" ]]; then
+  if [[ -n "\${NPM_MOCK_VIEW_VERSION_SIGNAL:-}" ]]; then
+    if [[ ! -f "${tempDir}/view-version-signal-sent" ]]; then
+      touch "${tempDir}/view-version-signal-sent"
+      kill -s "\${NPM_MOCK_VIEW_VERSION_SIGNAL}" "$PPID" 2>/dev/null || true
+      sleep 0.1
+      exit 130
+    fi
+  fi
+
   spec="$2"
   version="\${spec##*@}"
   package_name="\${spec%@*}"
@@ -569,6 +578,19 @@ test("--current publishes pre-bumped current version when both packages are unpu
     `@glexcorp/gskp@${packageVersion}`
   ]);
   assert.match(result.output, /Post-publish source-state requirement/);
+});
+
+test("SIGINT during early --current registry check exits without cleanup array errors", () => {
+  const result = runPublishCurrent({
+    NPM_MOCK_VIEW_VERSION_SIGNAL: "INT"
+  });
+
+  assert.equal(result.status, 130, result.output);
+  assert.match(result.output, /Interrupted by SIGINT/);
+  assert.doesNotMatch(result.output, /unbound variable/);
+  assert.equal(result.packageJsonAfter, result.originalPackageJson);
+  assert.equal(result.manifestJsonAfter, result.originalManifestJson);
+  assert.deepEqual(result.registry, []);
 });
 
 test("--current recovery publishes only the scoped alias when skillpacks exists and alias is missing", () => {
