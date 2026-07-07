@@ -15416,3 +15416,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Updated package staging, package boundary assertions, compatibility docs, canonical convention guidance, and focused tests for generated fixture pages that pass existing audits.
 - Verification: package alignment tests, package-boundary test, full package Node suite, package `build:check`, package dry-run, skill archive audit, and diff hygiene passed.
 - Commit: `147a79dd6 feat: add packaged page scaffolds`, pushed to `master`.
+
+## 2026-07-06 — Cleanup scope flags
+
+- Added explicit `cleanup --all` and `cleanup --global` scopes to the Node skillpacks CLI.
+- Kept plain `cleanup` as current-directory recursive cleanup, made `--all` its explicit spelling, and made `--global` scan user-home projects while still previewing/removing legacy user-home base skill roots.
+- Preserved `uninstall-global` as the compatibility alias for the user-home cleanup scope and rejected `cleanup --all --global`.
+- Updated help text, lifecycle warnings, README, quickstart, scripts reference, package distribution docs, pack docs, skills reference, and compatibility matrix docs toward `cleanup --global` for device/user-home cleanup.
+- Added lifecycle and compatibility coverage for explicit scopes, flag ordering, global dry-run, global reinstall migration, and incompatible scope rejection.
+- Verification: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check passed.
+- Commit: `438d87939 Add cleanup scope flags`, pushed to `master`.
