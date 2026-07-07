@@ -69,6 +69,14 @@ describe('pack normalization helpers', () => {
       'business-growth',
       'business-ops'
     ]);
+    assert.deepEqual(normalizePack('business-app'), [
+      'business-research',
+      'customer-lifecycle',
+      'business-growth',
+      'business-ops'
+    ]);
+    assert.deepEqual(normalizePack('business-discovery'), ['business-research']);
+    assert.deepEqual(normalizePack('creator-media'), ['creator-foundation', 'youtube-ops']);
   });
 
   it('tokenizes comma-separated args, pack prefixes, and empty pack tokens like pack.sh', () => {
@@ -166,6 +174,27 @@ describe('pack command argument resolution', () => {
     assert.deepEqual(resolved.packs, ['exec-loop']);
     assert.deepEqual(resolved.skills, []);
     assert.deepEqual(resolved.args, ['exec-loop']);
+  });
+
+  it('keeps compatibility aliases out of active packs while resolving them to replacement packs', () => {
+    const activePackNames = manifest.packs.map((pack) => pack.name);
+
+    assert(!activePackNames.includes('business-app'));
+    assert(!activePackNames.includes('creator-media'));
+
+    assert.deepEqual(resolvePackCommandArgs('install', ['business-app'], { manifest }).packs, [
+      'business-research',
+      'customer-lifecycle',
+      'business-growth',
+      'business-ops'
+    ]);
+    assert.deepEqual(resolvePackCommandArgs('install', ['business-discovery'], { manifest }).packs, [
+      'business-research'
+    ]);
+    assert.deepEqual(resolvePackCommandArgs('install', ['creator-media'], { manifest }).packs, [
+      'creator-foundation',
+      'youtube-ops'
+    ]);
   });
 
   it('rejects install aliases and fuzzy skill names with unknown-name diagnostics', () => {

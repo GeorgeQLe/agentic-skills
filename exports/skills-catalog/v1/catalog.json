@@ -1,11 +1,11 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "a59fc1b80c56c52797f1268dcafef77de11b0607",
-  "generated_at": "2026-07-06T17:27:22.785Z",
-  "source_fingerprint": "d14ff9dacee9a492ecfd1de99bfb5ea776b28ab6df1363489656ee2cc74515b6",
+  "source_commit": "f21bbbdc9f26f53a5f91072437530bd904a27354",
+  "generated_at": "2026-07-07T14:02:55.906Z",
+  "source_fingerprint": "f5e6992fcf77521f94331c52605aa5bf24d333a3a87b6418f06625e2bc64ba40",
   "source_count": 453,
   "skill_count": 409,
-  "pack_count": 42,
+  "pack_count": 40,
   "deck_count": 5,
   "set_count": 3,
   "skills": [
@@ -11354,14 +11354,6 @@
       "path": "packs/alignment-page-admin/PACK.md"
     },
     {
-      "name": "business-app",
-      "title": "Business App Compatibility Pack",
-      "description": null,
-      "platforms": [],
-      "skillCount": 0,
-      "path": "packs/business-app/PACK.md"
-    },
-    {
       "name": "business-growth",
       "title": "Business Growth Pack",
       "description": null,
@@ -11459,14 +11451,6 @@
       ],
       "skillCount": 18,
       "path": "packs/creator-foundation/PACK.md"
-    },
-    {
-      "name": "creator-media",
-      "title": "Creator Media Compatibility Pack",
-      "description": null,
-      "platforms": [],
-      "skillCount": 0,
-      "path": "packs/creator-media/PACK.md"
     },
     {
       "name": "customer-lifecycle",

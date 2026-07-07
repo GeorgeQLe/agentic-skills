@@ -377,6 +377,8 @@ extract-shared-types, quality-sweep
 
 `extract-shared-types` moves shared type definitions into dedicated `types/` files without runtime behavior changes. `quality-sweep` orchestrates a behavior-preserving cleanup campaign across duplication, type hygiene, dead code, dependency boundaries, defensive error handling, legacy paths, and comments — audit-only by default, with optional `fix` or `full` modes.
 
+Use `quality-sweep` for broad cleanup, `dead-code` or `slim-audit` only for narrow read-only audits, `investigate` for claim validation, `debug` when debug changelog behavior is needed, and `reconcile-dev-docs` for task/spec/history drift.
+
 ### Monorepo
 
 For pnpm workspace monorepos that may use Turborepo and need package-aware execution, guardrails, and shipping.

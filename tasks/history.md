@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-07-07 - Active skill cut
+
+- Removed compatibility and hibernated pack names from active pack discovery/list/map surfaces while keeping `business-app`, `creator-media`, and `business-discovery` install compatibility.
+- Regenerated the package manifest, public skills-catalog export, and skill map so active pack count is 40 and product-design discovery no longer lists the removed `prototype` / `create-ui-experiment` aliases.
+- Updated routing guidance for cleanup/debug/docs-health consolidation candidates: `quality-sweep` for broad cleanup, `dead-code` / `slim-audit` for narrow read-only audits, `investigate` for claim validation, `debug` for debug changelog behavior, and `reconcile-dev-docs` for task/spec/history drift.
+- Verification passed: targeted layer1 Vitest files, package pack-normalization test, package build check, catalog export validation, pack routing audit, mirror parity audit, version-field audit, task-doc audit, staged diff hygiene, list/tree/manual compatibility install checks, BIP removed-command check, and hibernated kanban failure checks.
+
 ## 2026-07-06 - skillpacks 0.1.21 source-state closeout
 
 - Investigated the `skillpacks` `0.1.21` package/manifest diff and confirmed npm had already published `skillpacks@0.1.21` and `@glexcorp/gskp@0.1.21` while `origin/master` was still committed at `0.1.20`.

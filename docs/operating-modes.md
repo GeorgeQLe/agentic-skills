@@ -218,6 +218,12 @@ This section tags every base skill and every pack with a **primary CLI role** â€
 | `sync` | Codex-execution | `git pull` + status |
 | `trace` | Claude-orchestration | Request end-to-end trace through stack |
 
+Routing notes:
+
+- Use `quality-sweep` for broad behavior-preserving cleanup campaigns. Keep `dead-code` and `slim-audit` for narrow read-only audits where mutation is not desired.
+- Use `investigate` for claim validation and root-cause tracing. Use `debug` only when the debug changelog and duplicate-issue cross-check behavior is explicitly desired.
+- Use `reconcile-dev-docs` for roadmap, todo, spec, phase archive, and history drift. Use `hygiene` for broader structure/convention audits, not task-ledger reconciliation.
+
 ### Packs
 
 | Pack | Primary role | Notes |

@@ -8,6 +8,7 @@ const BASE_DIR = join(ROOT, 'packs', 'base', 'claude');
 const OUT = join(ROOT, 'docs', 'skillmap.excalidraw');
 const OUT_HTML = join(ROOT, 'alignment', 'skillmap.html');
 const SKILLS_CATALOG_JSON = join(ROOT, 'exports', 'skills-catalog', 'v1', 'catalog.json');
+const INACTIVE_PACKS = new Set(['business-app', 'creator-media', 'business-app-kanban', 'devtool-kanban', 'game-kanban', 'poketowork-kanban']);
 
 // --- Data collection ---
 
@@ -23,6 +24,7 @@ function getAllPacks() {
   const packs = {};
   for (const d of readdirSync(PACKS_DIR, { withFileTypes: true })) {
     if (d.name === 'base') continue;
+    if (INACTIVE_PACKS.has(d.name)) continue;
     if (!d.isDirectory()) continue;
     const claudeDir = join(PACKS_DIR, d.name, 'claude');
     packs[d.name] = getSkills(claudeDir);
@@ -89,8 +91,8 @@ function getShowcaseCounts() {
 const DOMAINS = {
   rapid_vard:   { label: 'VARD (Rapid)', packs: ['vard'], fill: '#fff3bf', border: '#fab005' },
   rapid_ord:    { label: 'ORD (Rapid)', packs: ['ord'], fill: '#fff3bf', border: '#fab005' },
-  business:     { label: 'Business', packs: ['business-research', 'customer-lifecycle', 'business-growth', 'business-ops', 'business-app'], fill: '#d3f9d8', border: '#2f9e44' },
-  creator:      { label: 'Creator', packs: ['creator-foundation', 'creator-media', 'youtube-ops'], fill: '#ffe3e3', border: '#e03131' },
+  business:     { label: 'Business', packs: ['business-research', 'customer-lifecycle', 'business-growth', 'business-ops'], fill: '#d3f9d8', border: '#2f9e44' },
+  creator:      { label: 'Creator', packs: ['creator-foundation', 'youtube-ops'], fill: '#ffe3e3', border: '#e03131' },
   game:         { label: 'Game', packs: ['game'], fill: '#e5dbff', border: '#7950f2' },
   devtool:      { label: 'Devtool', packs: ['devtool'], fill: '#d0ebff', border: '#228be6' },
   execution:    { label: 'Execution', packs: ['exec-loop', 'exec-profile', 'guided-walkthrough'], fill: '#d3f9d8', border: '#40c057' },
@@ -99,7 +101,7 @@ const DOMAINS = {
   alignment:    { label: 'Alignment', packs: ['alignment-loop', 'alignment-page-admin', 'research-admin'], fill: '#ffe8cc', border: '#fd7e14' },
   session:      { label: 'Session & Knowledge', packs: ['session-analytics', 'knowledge-check', 'context-transfer'], fill: '#c5f6fa', border: '#15aabf' },
   skilldev:     { label: 'Skill Dev', packs: ['skill-dev', 'agentic-skills-bench'], fill: '#e9fac8', border: '#82c91e' },
-  infra:        { label: 'Infrastructure', packs: ['gitops', 'release-ops', 'docs-health', 'monorepo', 'repo-maintenance', 'report-gen', 'remotion', 'teardown', 'website-polish', 'agent-bridge', 'agent-work-admin', 'poketowork-kanban', 'project-fleet'], fill: '#e9ecef', border: '#868e96' },
+  infra:        { label: 'Infrastructure', packs: ['gitops', 'release-ops', 'docs-health', 'monorepo', 'repo-maintenance', 'report-gen', 'remotion', 'teardown', 'website-polish', 'agent-bridge', 'agent-work-admin', 'project-fleet'], fill: '#e9ecef', border: '#868e96' },
 };
 
 // --- Excalidraw element factories ---

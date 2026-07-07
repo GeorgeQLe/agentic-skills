@@ -4,6 +4,15 @@ import { globSync } from "glob";
 import { describe, expect, it } from "vitest";
 
 const repoRoot = resolve(import.meta.dirname, "../..");
+const inactivePackNames = new Set([
+  "base",
+  "business-app",
+  "creator-media",
+  "business-app-kanban",
+  "devtool-kanban",
+  "game-kanban",
+  "poketowork-kanban",
+]);
 
 interface CatalogSkill {
   name: string;
@@ -32,14 +41,17 @@ describe("skills catalog export pack coverage", () => {
     const data = loadCatalog();
     expect(data.schema_version).toBe("skills-catalog.v1");
     const generatedPackPaths = new Set(data.packs.map((pack) => pack.path));
-    const activePackPaths = globSync("packs/*/PACK.md", { cwd: repoRoot }).sort();
+    const activePackPaths = globSync("packs/*/PACK.md", { cwd: repoRoot })
+      .filter((packPath) => !inactivePackNames.has(packPath.split("/")[1]))
+      .sort();
 
     activePackPaths.forEach((packPath) => {
       expect(generatedPackPaths).toContain(packPath);
     });
 
-    expect(data.packs.map((pack) => pack.name)).toContain("business-app");
-    expect(data.packs.map((pack) => pack.name)).toContain("creator-media");
+    expect(data.packs.map((pack) => pack.name)).not.toContain("business-app");
+    expect(data.packs.map((pack) => pack.name)).not.toContain("creator-media");
+    expect(data.packs.map((pack) => pack.name)).not.toContain("poketowork-kanban");
     expect(data.packs.map((pack) => pack.name)).toContain("devtool");
     expect(data.packs.map((pack) => pack.name)).toContain("game");
   });

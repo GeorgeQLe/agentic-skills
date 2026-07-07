@@ -297,7 +297,8 @@ const PACKS = {
 // AFPS chain nodes (order matters — laid out left to right)
 const AFPS_CHAIN = [
   'idea-scope-brief', 'icp', 'competitive-analysis', 'journey-map',
-  'positioning', 'user-flow-map', 'ux-variations', 'ui-interview', 'prototype',
+  'positioning', 'user-flow-map', 'ux-variations', 'ui-interview', 'build-ui-screens',
+  'logic-wiring',
   'uat', 'consolidate-prototypes', 'research-roadmap', 'spec-interview',
   'roadmap', 'plan-phase', 'run', 'ship', 'ship-end'
 ];
@@ -356,8 +357,9 @@ const EDGES = [
   { from: 'positioning',         to: 'user-flow-map',         type: 'default',     condition: 'Positioning complete' },
   { from: 'user-flow-map',       to: 'ux-variations',         type: 'default',     condition: 'Flow map approved; select a specific user flow' },
   { from: 'ux-variations',       to: 'ui-interview',          type: 'default',     condition: 'Specific UX variation branch ready for visual mockup' },
-  { from: 'ui-interview',        to: 'prototype',             type: 'default',     condition: 'Branch mockup approved' },
-  { from: 'prototype',           to: 'uat',                   type: 'default',     condition: 'Prototype built' },
+  { from: 'ui-interview',        to: 'build-ui-screens',      type: 'default',     condition: 'Approved UI branch needs concrete screens' },
+  { from: 'build-ui-screens',    to: 'logic-wiring',          type: 'default',     condition: 'Screens approved and build plan ready' },
+  { from: 'logic-wiring',        to: 'uat',                   type: 'default',     condition: 'Prototype built' },
   { from: 'uat',                 to: 'consolidate-prototypes', type: 'default',    condition: 'UAT evaluation evidence exists' },
   { from: 'consolidate-prototypes', to: 'research-roadmap',   type: 'default',     condition: 'Variants consolidated' },
   { from: 'research-roadmap',    to: 'spec-interview',        type: 'default',     condition: 'Research roadmap → post-prototype' },

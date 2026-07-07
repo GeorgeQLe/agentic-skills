@@ -261,6 +261,12 @@ const HIBERNATED_SKILL_PACKS = new Map([
   ['sync-roadmap-kanban', ['poketowork-kanban']]
 ]);
 
+const INSTALL_COMPATIBILITY_ALIASES = new Set([
+  'business-app',
+  'business-discovery',
+  'creator-media'
+]);
+
 function firstMatchingAlias(groups, token) {
   return groups.find((group) => group.aliases.includes(token));
 }
@@ -548,6 +554,14 @@ function resolveInstallToken(token, context) {
   if (titlePack) {
     context.packs.push(titlePack);
     return;
+  }
+
+  if (INSTALL_COMPATIBILITY_ALIASES.has(token)) {
+    const normalizedPacks = normalizePack(token);
+    if (allPacksExist(normalizedPacks, context.activePacks)) {
+      context.packs.push(...normalizedPacks);
+      return;
+    }
   }
 
   const hibernatedPack = canonicalHibernatedPack(token);

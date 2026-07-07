@@ -185,11 +185,18 @@ acquire_project_lock() {
 
 pack_exists() {
   [[ "$1" != "base" ]] || return 1
+  case "$1" in
+    business-app|creator-media|business-app-kanban|devtool-kanban|game-kanban|poketowork-kanban)
+      return 1
+      ;;
+  esac
   [[ -d "$PACKS_DIR/$1" ]]
 }
 
 list_packs() {
-  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sed '/^base$/d' | sort
+  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+    | sed '/^base$/d;/^business-app$/d;/^creator-media$/d;/^business-app-kanban$/d;/^devtool-kanban$/d;/^game-kanban$/d;/^poketowork-kanban$/d' \
+    | sort
 }
 
 available_packs_inline() {

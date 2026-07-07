@@ -220,8 +220,24 @@ export function activeSkillPaths(files) {
   });
 }
 
+const INACTIVE_PACK_NAMES = new Set([
+  "business-app",
+  "creator-media",
+  "business-app-kanban",
+  "devtool-kanban",
+  "game-kanban",
+  "poketowork-kanban"
+]);
+
+export function isActivePackName(name) {
+  return Boolean(name) && !INACTIVE_PACK_NAMES.has(name);
+}
+
 export function packManifestPaths(files) {
-  return files.filter((file) => /^packs\/(?!base\/)[^/]+\/PACK\.md$/.test(file));
+  return files.filter((file) => {
+    const match = file.match(/^packs\/(?!base\/)([^/]+)\/PACK\.md$/);
+    return Boolean(match) && isActivePackName(match[1]);
+  });
 }
 
 export function skillTags({ name, type, scope, pack, platform }) {
@@ -304,6 +320,7 @@ export function listPacks(
     ...metadata.keys(),
     ...skills.map((skill) => skill.pack).filter(Boolean)
   ]))
+    .filter(isActivePackName)
     .sort()
     .map((name) => {
       const packSkills = skills.filter((skill) => skill.pack === name);

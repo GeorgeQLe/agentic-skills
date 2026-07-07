@@ -5,7 +5,7 @@
     "version": "0.1.21",
     "release_lane": "stable"
   },
-  "source_fingerprint": "d71f75489af9e174455929756508b55ef1284bc4db13990661ef30b7c0816c8b",
+  "source_fingerprint": "21f700744352aa8e8d7c20c7ea3e0ae9a1ff35bc669f25e1142ddbb3ff911605",
   "packs": [
     {
       "name": "agent-bridge",
@@ -91,17 +91,6 @@
         "upgrade-alignment-pages"
       ],
       "skill_count": 2
-    },
-    {
-      "name": "business-app",
-      "title": "Business App Compatibility Pack",
-      "description": null,
-      "path": "packs/business-app",
-      "metadata_path": "packs/business-app/PACK.md",
-      "status": "active",
-      "tools": [],
-      "skills": [],
-      "skill_count": 0
     },
     {
       "name": "business-growth",
@@ -286,17 +275,6 @@
         "series-spec"
       ],
       "skill_count": 9
-    },
-    {
-      "name": "creator-media",
-      "title": "Creator Media Compatibility Pack",
-      "description": null,
-      "path": "packs/creator-media",
-      "metadata_path": "packs/creator-media/PACK.md",
-      "status": "active",
-      "tools": [],
-      "skills": [],
-      "skill_count": 0
     },
     {
       "name": "customer-lifecycle",

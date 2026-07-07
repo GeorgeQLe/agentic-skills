@@ -1,25 +1,60 @@
 # Current Task
 
-## Current Implementation - Experimental Publish Dry-Run Verification
+## Current Implementation - Active Skill Cut
+
+### Goal
+
+Remove agreed deprecated, superseded, and conflicting surfaces from active discovery while preserving compatibility aliases and deprecated command failures where existing CLI behavior already supports them.
+
+### Plan
+
+- [x] Inspect active source surfaces: pack metadata, active skills, docs, routing maps, catalog/showcase generation scripts, and generated exports.
+- [x] Remove active discovery, recommendation, or default-route references for cut surfaces.
+- [x] Preserve intentional compatibility behavior for `business-app`, `creator-media`, and `business-discovery` aliases.
+- [x] Keep BIP commands deprecated/failing and kanban packs/skills non-installable.
+- [x] Add or update routing notes for consolidation candidates without deleting them.
+- [x] Regenerate package/catalog artifacts and review diffs.
+- [x] Run targeted tests and validation gates.
+- [ ] Commit and push intended changes.
+
+### Acceptance Criteria
+
+- [x] `prototype` and `create-ui-experiment` are absent from active skill directories, pack skills, catalog cards, and route targets, with replacement guidance to `logic-wiring` and `build-ui-screens`.
+- [x] Compatibility aliases are described as aliases, not active packs, while old installs still route to replacements.
+- [x] BIP commands and kanban surfaces remain removed/hibernated from active discovery.
+- [x] `dead-code`, `slim-audit`, `debug`, and `hygiene` remain present but are routed narrowly against `quality-sweep`, `investigate`, and `reconcile-dev-docs`.
+- [x] Generated package/catalog artifacts reflect the active-surface pruning.
+
+### Verification
+
+- [x] `pnpm --dir tests test layer1/bip-removed.test.ts`
+- [x] `pnpm --dir tests test layer1/install.test.ts`
+- [x] `pnpm --dir tests test layer1/skill-install-routing-audit.test.ts`
+- [x] `pnpm --dir tests test layer1/skills-showcase-pack-coverage.test.ts`
+- [x] `node --test packages/skillpacks/test/pack-normalization.test.mjs`
+- [x] `npm --workspace packages/skillpacks run build:check`
+- [x] `scripts/validate-skills-catalog-export.sh`
+- [x] `./scripts/skill-pack-routing-audit.sh`
+- [x] `./scripts/skill-mirror-parity-audit.sh`
+- [x] `./scripts/skill-versions.sh --missing`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check --cached`
+
+### Review
+
+Filtered compatibility and hibernated pack names out of active catalog/list/map discovery while keeping legacy normalization for `business-app`, `creator-media`, and `business-discovery`. Regenerated the package manifest, public skills-catalog export, and skill map; active pack count is now 40 and `product-design` lists `build-ui-screens` and `logic-wiring` without the removed `prototype` or `create-ui-experiment` aliases.
+
+Updated CLI resolver coverage so only the intended compatibility aliases remain accepted as install tokens, and updated showcase coverage to exclude inactive alias/hibernated pack metadata from active pack expectations. Added routing guidance that sends broad cleanup to `quality-sweep`, claim validation to `investigate`, debug changelog work to `debug`, and task/spec/history drift to `reconcile-dev-docs`.
+
+Manual acceptance passed: `skillpacks list --skills`, `skillpacks list --tree`, `scripts/pack.sh list`, compatibility installs for `business-app`, `creator-media`, and `business-discovery`, removed `set-bip`, and hibernated `dev-kanban` / `exec-kanban` failures with guidance. The originally planned Vitest paths under `tests/layer1/...` are not valid from `pnpm --dir tests`; the equivalent `layer1/...` filters passed.
+
+## Historical Task State
+
+## Review - Experimental Publish Dry-Run Verification
 
 ### Goal
 
 Fix `./publish.sh --dry-run --tag experimental --preid experimental prerelease` so package verification passes while source metadata is temporarily bumped to an experimental prerelease.
-
-### Plan
-
-- [x] Inspect the failing package-boundary and publish-recovery tests.
-- [x] Keep staged package manifests tied to the selected release lane instead of stale `dist` state.
-- [x] Make publish-recovery tests valid when the source package version is already a prerelease during the release dry run.
-- [x] Run targeted package-boundary and publish-recovery tests.
-- [x] Run package-level verification and task-doc checks.
-
-### Acceptance Criteria
-
-- [x] Stable package staging emits a stable manifest even after a canary manifest was generated in `dist`.
-- [x] Canary package staging still emits canary-only briefing-slide assets and manifest entries.
-- [x] Publish recovery tests pass from both stable source versions and temporarily pre-bumped experimental source versions.
-- [x] The experimental publish dry run reaches its normal dry-run completion path.
 
 ### Verification
 
@@ -37,7 +72,6 @@ Updated publish recovery tests to derive npm prerelease expectations from the cu
 
 Verification passed for the targeted failure files, full package Node suite, task-doc audit, diff hygiene, and the original experimental publish dry run. The dry run restored source metadata to `0.1.21` / `stable` afterward.
 
-## Historical Task State
 
 ## Review - Cleanup Scope Flags
 
