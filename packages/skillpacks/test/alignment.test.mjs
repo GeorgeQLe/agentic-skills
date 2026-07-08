@@ -57,6 +57,14 @@ describe('skillpacks alignment command parsing', () => {
     assert.match(stdout, /alignment verify/);
   });
 
+  it('prints help for the page opener subcommand', async () => {
+    const { exitCode, stdout } = await captureCli(['alignment', 'pages', 'open', '--help']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /gskp alignment/);
+    assert.match(stdout, /alignment pages open <alignment\/page.html>/);
+  });
+
   it('wraps bundle generation with --root set to the target project', () => {
     const projectRoot = makeTempProject();
 

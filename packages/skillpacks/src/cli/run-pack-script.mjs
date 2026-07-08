@@ -388,6 +388,12 @@ export function resolveAlignmentCommand(args, options = {}) {
     }
 
     if (pagesCommand === 'open') {
+      if (
+        pagesRest.length === 1 &&
+        (pagesRest[0] === 'help' || pagesRest[0] === '--help' || pagesRest[0] === '-h')
+      ) {
+        return { kind: 'help' };
+      }
       const openArgs = validateOpenAlignmentPageArgs(pagesRest);
       return {
         kind: 'run',

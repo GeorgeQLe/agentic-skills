@@ -74,11 +74,14 @@ Choose the pattern that matches the source material.
 
 Every deck must support review and feedback directly on the relevant slide.
 
+- Every slide must expose a slide-scoped feedback trigger, such as a Feedback button or chip.
 - Gate questions must be answerable inline with radio, select, or freeform controls.
 - Slide feedback controls must support at least `emphasize`, `revise`, `needs-clarification`, and freeform notes.
 - Marking controls must support per-slide statuses such as `important`, `question`, `approved`, or `skip`, stored in local browser state.
 - Annotation controls must allow per-slide notes that are included in compiled YAML.
-- A bottom-bar feedback sidebar is allowed when it is slide-scoped, updates to the active slide, preserves inline gate questions on their original slides, and keeps slide YAML plus all-feedback YAML controls near the feedback controls.
+- Selecting any feedback, mark, annotation, or clarification action must open a slide-scoped sidebar or drawer for the active slide.
+- The sidebar or drawer must update when the active slide changes, preserve inline gate questions on their original slides, and provide the active slide's feedback controls, marks, note field, local slide-feedback YAML, and copy controls.
+- The persistent footer or bottom bar may show navigation, progress, slide count, and a compact feedback status or trigger affordance only. It must not contain required feedback controls, required gate answers, final approval controls, or compiled YAML output.
 - Copy controls must support copying the slide title, selected text where possible, references, and compiled YAML.
 - Clipboard writes must use the Clipboard API when available and fall back to selecting a read-only textarea.
 
@@ -86,7 +89,9 @@ Do not use sticky or fixed compile banners. Put compile controls in normal slide
 
 ## YAML Contract
 
-Provide local slide-feedback YAML near each slide's feedback controls and a final compile section on the last slide or an explicit response slide. When a deck uses a slide-scoped feedback sidebar, the sidebar may hold the local slide YAML and all-feedback YAML controls, but the final full-deck compiler remains a valid redundant handoff surface.
+Compiled YAML is produced only by local slide-feedback YAML controls in the slide sidebar or near-slide feedback surface, and by the final full-deck compiler on the response or final slide. The final full-deck compiler remains in normal slide flow on the last slide or an explicit response slide.
+
+Do not render prior compiled YAML sidecars, answer sidecars, or generated review YAML files as primary slide cards, action chips, or navigation links. If they are needed as provenance, include them in compiled `source_artifacts` and optionally in a dedicated References slide with non-action wording.
 
 Every compiled YAML payload begins with:
 
@@ -116,6 +121,9 @@ Set `approval_status: ready-for-agent-review` only when every required gate has 
 Before handoff:
 
 - Re-open the written deck textually and confirm it contains navigation controls, gate controls, feedback controls, YAML compiler, reference links, and print CSS.
+- Verify every slide has a feedback trigger and that activating it opens the slide-scoped sidebar or drawer.
+- Verify footer or bottom-bar markup does not contain required feedback inputs, required gate inputs, or YAML output textareas.
+- Verify prior YAML sidecars are not promoted as primary reference or action links outside a dedicated references or provenance area.
 - Confirm every linked dense reference path exists when it is repo-local, or mark missing references visibly in the deck.
 - Verify authored slide content fits without incoherent overlap, clipped text, hidden overflow, or slide-body scrolling at a normal desktop viewport and a mobile-sized viewport. Internal scrolling is allowed only for explicit bounded tool surfaces such as YAML output or copy fallback controls.
 - Attempt to open only the deck with `npx skillpacks alignment pages open briefing-slides/<name>.html --browser auto`.
