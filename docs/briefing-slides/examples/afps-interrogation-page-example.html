@@ -5,26 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AFPS Interrogation Page Example</title>
   <style>
-    body { margin: 0; font-family: Inter, system-ui, sans-serif; color: #18202f; background: #f6f8fb; }
-    main { max-width: 980px; margin: 0 auto; padding: 28px; }
-    h1 { margin: 0 0 8px; font-size: clamp(32px, 5vw, 56px); line-height: 1.05; }
-    h2 { margin-top: 28px; }
-    p { color: #617089; line-height: 1.45; }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .card { background: #fff; border: 1px solid #d9e0ea; border-radius: 8px; padding: 14px; }
-    .card strong { display: block; margin-bottom: 8px; }
-    label { display: block; margin: 10px 0 4px; color: #617089; font-size: 13px; font-weight: 700; }
-    textarea, select, input[type="text"] { width: 100%; border: 1px solid #d9e0ea; border-radius: 7px; padding: 9px; font: inherit; }
-    textarea { min-height: 76px; }
-    code { background: #eef3fa; padding: 2px 5px; border-radius: 5px; }
-    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 18px; } }
+    :root {
+      color-scheme: light;
+      --ink: #131a29;
+      --ink-soft: #35415a;
+      --muted: #5b6a82;
+      --faint: #8695ac;
+      --line: #e4e9f1;
+      --line-strong: #cdd8e8;
+      --panel: #ffffff;
+      --accent: #2f6ae0;
+      --accent-2: #0ea5a3;
+      --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+      --shadow-sm: 0 1px 2px rgba(19,26,41,.05), 0 1px 3px rgba(19,26,41,.04);
+      --shadow-md: 0 6px 16px -6px rgba(19,26,41,.12), 0 2px 6px -2px rgba(19,26,41,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(900px 520px at 8% -14%, rgba(47,106,224,.10), transparent 62%),
+        radial-gradient(820px 480px at 104% -6%, rgba(14,165,163,.09), transparent 58%),
+        linear-gradient(180deg, #eef3fb 0%, #f5f8fc 46%, #eef2f8 100%);
+      background-attachment: fixed;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 40px 28px 64px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 2px; }
+    a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 7px 14px 7px 12px;
+    }
+    .back:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .back::before { content: "\2190"; font-size: 14px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+      margin: 26px 0 12px;
+    }
+    .eyebrow::before { content: ""; width: 20px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    h1 { margin: 0 0 12px; font-size: clamp(34px, 5.4vw, 58px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
+    h2 { margin: 40px 0 14px; font-size: clamp(19px, 2.4vw, 24px); letter-spacing: -.01em; }
+    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(15px, 1.7vw, 18px); max-width: 68ch; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
+    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 15px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 13.5px; }
+    .q strong { color: var(--accent); }
+    label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 11.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+    textarea, select, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      padding: 10px;
+      font: inherit;
+      font-size: 13.5px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    textarea:focus, select:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,106,224,.14); outline: none; }
+    textarea { min-height: 78px; resize: vertical; }
+    ::placeholder { color: var(--faint); }
+    code { font-family: var(--mono); font-size: .86em; background: #eef2f8; border: 1px solid var(--line); border-radius: 6px; padding: 1.5px 6px; color: #274069; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 28px 18px 48px; } }
   </style>
 </head>
 <body>
   <main>
-    <p><a href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a></p>
+    <a class="back" href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a>
+    <div class="eyebrow">Review surface &middot; documentation example</div>
     <h1>Interrogation Page Example</h1>
-    <p>This documentation-only example shows the shape an AFPS skill can use before committing to deep research, design, or implementation. A real active page would live under <code>interrogation/</code> and follow the bundled interrogation-page convention for the producing skill.</p>
+    <p class="intro">This documentation-only example shows the shape an AFPS skill can use before committing to deep research, design, or implementation. A real active page would live under <code>interrogation/</code> and follow the bundled interrogation-page convention for the producing skill.</p>
 
     <section>
       <h2>Purpose</h2>
@@ -35,14 +115,14 @@
     </section>
 
     <section>
-      <h2>Example Question Groups</h2>
+      <h2>Example question groups</h2>
       <div class="grid">
-        <div class="card">
+        <div class="card q">
           <strong>Scope</strong>
           <label>Which AFPS branch is this skill operating on?</label>
           <input type="text" data-open-input placeholder="Example: first-value onboarding flow">
         </div>
-        <div class="card">
+        <div class="card q">
           <strong>Evidence</strong>
           <label>What upstream artifact should be treated as binding?</label>
           <select data-open-input>
@@ -51,12 +131,12 @@
             <option>prototypes/topic/consolidated/</option>
           </select>
         </div>
-        <div class="card">
+        <div class="card q">
           <strong>Risk</strong>
           <label>What assumption would make this skill's output wrong?</label>
           <textarea data-open-input placeholder="Describe the risky assumption"></textarea>
         </div>
-        <div class="card">
+        <div class="card q">
           <strong>Exit gate</strong>
           <label>What must be true before the skill advances?</label>
           <textarea data-open-input placeholder="Example: persona, primary task, and first-success moment are confirmed"></textarea>
