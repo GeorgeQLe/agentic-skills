@@ -385,7 +385,7 @@ function buildPackage() {
     "packages/skillpacks/scripts/release-lane.mjs"
   ], { source: "index" });
 
-  rmSync(buildRoot, { recursive: true, force: true });
+  rmSync(buildRoot, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
   mkdirSync(buildRoot, { recursive: true });
 
   for (const entry of packageOwnedEntries) {

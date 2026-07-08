@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-07-08 - Package validation bottleneck patch
+
+- Profiled package validation serially with the npm cache rooted at `/tmp/skillpacks-npm-cache`.
+- Identified `packages/skillpacks/test/package-boundary.test.mjs` as the largest reproducible local bottleneck: 90.318s of the 147.23s baseline `test:node` run, mostly from duplicate stable/canary package staging and `npm pack --dry-run` work.
+- Cached per-lane staged package snapshots inside the package-boundary test so stable and canary each still run one full staging plus one full dry-run pack, while later manifest/text assertions reuse the captured package state.
+- Added retryable recursive cleanup for `packages/skillpacks/build` in `build-package.mjs` after focused reruns surfaced an `ENOTEMPTY` cleanup failure that could leave stale lane artifacts in the shared staging directory.
+- Regenerated the canary manifest fingerprint after concurrent `master` commits changed package inputs during the session; package metadata remained `0.1.22-experimental.1` / `canary`.
+- Verification passed: focused package-boundary test, full package Node suite, canary `build:check`, and canary `verify:package`.
+- Manifest: `tasks/ship-manifest-2026-07-08-package-validation-bottleneck.md`.
+
 ## 2026-07-08 - skillpacks 0.1.22-experimental.1 canary closeout
 
 - Recreated the already-published canary source state for `skillpacks` / `@glexcorp/gskp` by committing `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` at `0.1.22-experimental.1` with manifest release lane `canary`.

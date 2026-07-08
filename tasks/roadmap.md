@@ -2,7 +2,59 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - skillpacks 0.1.22-experimental.1 canary closeout
+## Current Implementation - Package Validation Bottleneck Profiling
+
+### Goal
+
+Profile the package validation path, identify the single largest reproducible local bottleneck, and patch it only if the fix is low-risk and preserves package/release correctness.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Reason: `test:node`, `build:check`, and `verify:package` all write or consume `packages/skillpacks/build`, so package validation commands must not run concurrently.
+
+### Plan
+
+- [x] Record starting `git status --short --branch --untracked-files=normal` and preserve the completed canary closeout source/task state already in the tree.
+- [x] Capture baseline timings for `npm --workspace packages/skillpacks run test:node`, canary `build:check`, canary `verify:package`, and the slowest individual Node test files surfaced by output.
+- [x] Inspect the slowest repeat-work path and patch only confirmed duplicate or avoidable work while keeping at least one full staging and one full `npm pack --dry-run` for each distinct lane/package-state combination under test.
+- [x] Run focused after timing and full validation gates.
+- [x] Record measurements, patch rationale, final verification, and ship intended changes.
+
+### Acceptance Criteria
+
+- [x] Baseline timings identify the slowest reproducible local package validation bottleneck.
+- [x] Any patch reduces repeated validation work without weakening package boundary allow/deny assertions, release lane assertions, manifest freshness checks, or publish/recovery behavior.
+- [x] If no low-risk patch is accepted, the measured bottleneck and rejected rationale are documented without source changes.
+- [x] Final status shows only intended changes plus any pre-existing unrelated files.
+
+### Verification
+
+- [x] Focused affected test(s), if a patch is made.
+- [x] `npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run test:node`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run verify:package`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Measurement Log
+
+- Starting status: `## master...origin/master`
+- Baseline `test:node`: 147.23s, 195 tests. Slowest visible blocks: `skillpacks npm publish target boundary` 90.318s, `skillpacks manifest deck metadata` 19.914s.
+- Baseline canary `build:check`: 23.69s.
+- Baseline canary `verify:package`: 54.65s.
+- Patch decision: accepted a test-side staged package snapshot cache in `package-boundary.test.mjs`, keyed by package lane and manifest-write mode. The cache keeps one full package staging and one full `npm pack --dry-run` for stable, plus one full staging and dry-run for canary, then reuses the captured built manifest/text for the selected-release-lane assertions. Also added retryable `build/` cleanup in `build-package.mjs` after validation exposed an `ENOTEMPTY` cleanup failure that could leave stale lane artifacts in the shared build directory.
+- After focused timing: `node --test packages/skillpacks/test/package-boundary.test.mjs` passed in 60.06s, with the selected-release-lane assertion reduced to 0.265ms. The full-suite package-boundary block passed in 45.738s, down from the 90.318s baseline.
+- After full timing: `test:node` passed in 103.41s, 207 tests, after concurrent `master` commits added briefing-slide audit coverage during this run. Canary `build:check` passed in 23.55s. Canary `verify:package` passed in 29.92s.
+- Manifest note: `master` advanced to `ce8d158ba` during execution with package input changes. Regenerated only the canary manifest; the diff is fingerprint-only and keeps `0.1.22-experimental.1` / `canary` package metadata.
+
+### Review
+
+The reproducible bottleneck was duplicate stable/canary package staging and `npm pack --dry-run` work inside `package-boundary.test.mjs`. The patched test now captures the staged package paths, built manifest, and selected built text from each lane's first full package validation and reuses that immutable snapshot for later assertions. Package boundary allow/deny checks, release-lane assertions, and full pack dry-runs still run for both distinct lane states.
+
+`build-package.mjs` now uses retryable recursive removal for `packages/skillpacks/build`, which avoids stale build artifacts when the shared staging directory is briefly busy. This is a reliability fix surfaced by the focused package-boundary reruns, not a coverage reduction.
+
+## Historical Implementation - skillpacks 0.1.22-experimental.1 canary closeout
 
 ### Goal
 

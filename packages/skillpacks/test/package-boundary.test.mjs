@@ -28,6 +28,12 @@ const socialAssetPaths = [
   'assets/social/youtube-long-form-convention.md',
   'assets/social/youtube-shorts-convention.md'
 ];
+const capturedTextPaths = [
+  'package.json',
+  'scripts/skill-convention-registry.mjs',
+  'packs/base/PACK.md'
+];
+const stagedPackageCache = new Map();
 
 function run(command, args, { env = {} } = {}) {
   const result = spawnSync(command, args, {
@@ -55,7 +61,11 @@ function generatedManifestForLane(lane) {
   return `${JSON.stringify(JSON.parse(stdout), null, 2)}\n`;
 }
 
-function packedPaths({ lane = 'stable', writeLaneManifest = false } = {}) {
+function stagedPackage({ lane = 'stable', writeLaneManifest = false } = {}) {
+  const cacheKey = JSON.stringify({ lane, writeLaneManifest });
+  const cached = stagedPackageCache.get(cacheKey);
+  if (cached) return cached;
+
   const originalManifest = readFileSync(manifestPath, 'utf8');
   try {
     if (writeLaneManifest) {
@@ -71,18 +81,35 @@ function packedPaths({ lane = 'stable', writeLaneManifest = false } = {}) {
   const [packument] = JSON.parse(stdout);
 
   assert.ok(packument, 'npm pack should return package metadata');
-  return new Set(
-    packument.files.map((file) => file.path.replace(/^package\//, ''))
-  );
+  const snapshot = {
+    paths: new Set(
+      packument.files.map((file) => file.path.replace(/^package\//, ''))
+    ),
+    manifest: JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8')),
+    text: new Map(
+      capturedTextPaths.map((relativePath) => [
+        relativePath,
+        readFileSync(resolve(packageRoot, 'build', relativePath), 'utf8')
+      ])
+    )
+  };
+
+  stagedPackageCache.set(cacheKey, snapshot);
+  return snapshot;
+}
+
+function packedPaths(options = {}) {
+  return stagedPackage(options).paths;
 }
 
 function builtManifest({ lane = 'stable', writeLaneManifest = false } = {}) {
-  packedPaths({ lane, writeLaneManifest });
-  return JSON.parse(readFileSync(resolve(packageRoot, 'build/dist/skillpacks-manifest.json'), 'utf8'));
+  return stagedPackage({ lane, writeLaneManifest }).manifest;
 }
 
-function builtText(relativePath) {
-  return readFileSync(resolve(packageRoot, 'build', relativePath), 'utf8');
+function builtText(relativePath, options = {}) {
+  const text = stagedPackage(options).text.get(relativePath);
+  assert.notEqual(text, undefined, `${relativePath} should be captured from the staged package`);
+  return text;
 }
 
 function hasPathClass(paths, deniedPath) {
@@ -91,7 +118,7 @@ function hasPathClass(paths, deniedPath) {
   });
 }
 
-describe('skillpacks npm publish target boundary', () => {
+describe('skillpacks npm publish target boundary', { concurrency: false }, () => {
   it('publishes only runtime package content and npm metadata', () => {
     const paths = packedPaths();
 
