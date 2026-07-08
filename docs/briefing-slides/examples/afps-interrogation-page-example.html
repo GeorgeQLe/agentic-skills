@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS Interrogation Page Example</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #131a29;
+      --ink-soft: #35415a;
+      --muted: #5b6a82;
+      --faint: #8695ac;
+      --line: #e4e9f1;
+      --line-strong: #cdd8e8;
+      --panel: #ffffff;
+      --accent: #2f6ae0;
+      --accent-2: #0ea5a3;
+      --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+      --shadow-sm: 0 1px 2px rgba(19,26,41,.05), 0 1px 3px rgba(19,26,41,.04);
+      --shadow-md: 0 6px 16px -6px rgba(19,26,41,.12), 0 2px 6px -2px rgba(19,26,41,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(900px 520px at 8% -14%, rgba(47,106,224,.10), transparent 62%),
+        radial-gradient(820px 480px at 104% -6%, rgba(14,165,163,.09), transparent 58%),
+        linear-gradient(180deg, #eef3fb 0%, #f5f8fc 46%, #eef2f8 100%);
+      background-attachment: fixed;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 52px 32px 80px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 2px; }
+    a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 7px 14px 7px 12px;
+    }
+    .back:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .back::before { content: "\2190"; font-size: 14px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+      margin: 30px 0 14px;
+    }
+    .eyebrow::before { content: ""; width: 20px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    h1 { margin: 0 0 12px; font-size: clamp(48px, 6.8vw, 84px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
+    h2 { margin: 52px 0 16px; font-size: clamp(26px, 3.1vw, 38px); letter-spacing: -.01em; }
+    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(19px, 2.1vw, 25px); max-width: 68ch; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 18px 19px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
+    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 16px; }
+    .q strong { color: var(--accent); }
+    label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+    textarea, select, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      padding: 12px;
+      font: inherit;
+      font-size: 16px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    textarea:focus, select:focus, input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,106,224,.14); outline: none; }
+    textarea { min-height: 92px; resize: vertical; }
+    ::placeholder { color: var(--faint); }
+    code { font-family: var(--mono); font-size: .86em; background: #eef2f8; border: 1px solid var(--line); border-radius: 6px; padding: 1.5px 6px; color: #274069; }
+
+    /* --- archetype-distinctive: assumptions manifest, recommend-and-override, confidence gate --- */
+    .assume { display: block; }
+    .assume + .assume { margin-top: 14px; }
+    .assume-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .assume-head strong { display: inline; margin: 0; font-size: 18px; }
+    .assume p { margin: 2px 0 0; }
+    .tag {
+      font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
+      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+      background: #eef2f8; color: #47597a; border: 1px solid var(--line-strong);
+    }
+    .tag-prompt { background: #eaf1fe; color: #2f6ae0; border-color: #cfe0fc; }
+    .tag-repo { background: #e7f7f4; color: #0b8f8b; border-color: #c3ece6; }
+    .tag-inferred { background: #fff2e0; color: #b5711a; border-color: #f6dcb3; }
+    .seg {
+      display: inline-flex; margin-top: 12px; border: 1px solid var(--line-strong);
+      border-radius: 9px; overflow: hidden; background: #f7f9fd;
+    }
+    .seg button {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      font: inherit; font-size: 14.5px; font-weight: 600; color: var(--muted);
+      padding: 8px 16px; border-right: 1px solid var(--line-strong);
+      transition: background .15s ease, color .15s ease;
+    }
+    .seg button:last-child { border-right: 0; }
+    .seg button:hover { background: #eef3fb; color: var(--ink); }
+    .seg button[aria-pressed="true"] { color: #fff; }
+    .seg button[data-v="confirm"][aria-pressed="true"] { background: #0b8f8b; }
+    .seg button[data-v="correct"][aria-pressed="true"] { background: #b5711a; }
+    .seg button[data-v="flag"][aria-pressed="true"] { background: #d4483f; }
+    .seg button[data-v="use"] { color: var(--accent); }
+    .chip {
+      display: none; margin-left: 10px; vertical-align: middle;
+      font-size: 13.5px; font-weight: 700; letter-spacing: .01em;
+      padding: 3px 11px; border-radius: 999px;
+    }
+    .chip.show { display: inline-block; }
+    .chip-confirmed { background: #e7f7f4; color: #0b8f8b; }
+    .chip-correcting { background: #fff2e0; color: #b5711a; }
+    .chip-flagged { background: #fdeceb; color: #d4483f; }
+    .correction { display: none; margin-top: 10px; }
+    .correction.show { display: block; }
+    .badge {
+      display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px;
+    }
+    .badge-high { background: #e7f7f4; color: #0b8f8b; }
+    .badge-med { background: #fff2e0; color: #b5711a; }
+    .badge-low { background: #fdeceb; color: #d4483f; }
+    .reco {
+      margin-top: 12px; padding: 12px 13px; border-radius: 10px;
+      background: linear-gradient(180deg, #fbfdff, #f4f8ff); border: 1px solid #dbe6fa;
+    }
+    .reco-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .reco-head span { font-size: 13.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .reco-text { margin: 0 0 10px; color: var(--ink-soft); font-size: 16px; line-height: 1.45; }
+    .reco .seg { margin-top: 0; }
+    .banner {
+      position: sticky; top: 16px; z-index: 5;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      margin: 18px 0 4px; padding: 17px 20px; border-radius: 13px;
+      font-weight: 700; font-size: 17.5px; letter-spacing: -.005em;
+      border: 1px solid; box-shadow: var(--shadow-sm);
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .banner-dot { width: 11px; height: 11px; border-radius: 999px; flex: none; }
+    .banner-open { background: #fff6ec; border-color: #f3d6ac; color: #9a5b12; }
+    .banner-open .banner-dot { background: #e0912f; box-shadow: 0 0 0 4px rgba(224,145,47,.18); }
+    .banner-pass { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
+    .banner-pass .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
+    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 14.5px; }
+    .compile { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-sm); }
+    .compile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      appearance: none; cursor: pointer; font: inherit; font-size: 15.5px; font-weight: 700;
+      border-radius: 9px; padding: 11px 20px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #255bc4; }
+    .btn-ghost { border: 1px solid var(--line-strong); background: #fff; color: var(--ink-soft); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-status { font-size: 14.5px; font-weight: 600; color: var(--muted); }
+    .yaml-out {
+      display: none; margin-top: 14px; width: 100%; min-height: 260px; resize: vertical;
+      font-family: var(--mono); font-size: 13.5px; line-height: 1.5; color: #274069;
+      background: #f7f9fd; border: 1px solid var(--line-strong); border-radius: 10px; padding: 14px;
+      white-space: pre;
+    }
+    .yaml-out.show { display: block; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 28px 18px 48px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a>
+    <div class="eyebrow">Review surface &middot; documentation example</div>
+    <h1>Interrogation Page Example</h1>
+    <p class="intro">This documentation-only example shows the shape an AFPS skill can use before committing to deep research, design, or implementation. A real active page would live under <code>interrogation/</code> and follow the bundled interrogation-page convention for the producing skill.</p>
+
+    <section>
+      <h2>Purpose</h2>
+      <div class="grid">
+        <div class="card"><strong>Confidence gate</strong><p>Confirm the agent understands the user's goal, available evidence, risk, and unresolved assumptions before creating canonical artifacts.</p></div>
+        <div class="card"><strong>Open inputs</strong><p>Ask genuinely answerable questions, not fake confirmations. Every round should reduce uncertainty.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Example question groups</h2>
+      <div class="grid">
+        <div class="card q">
+          <strong>Scope</strong>
+          <label>Which AFPS branch is this skill operating on?</label>
+          <input type="text" data-open-input placeholder="Example: first-value onboarding flow">
+        </div>
+        <div class="card q">
+          <strong>Evidence</strong>
+          <label>What upstream artifact should be treated as binding?</label>
+          <select data-open-input>
+            <option>research/positioning.md</option>
+            <option>design/flow-tree-topic.yaml</option>
+            <option>prototypes/topic/consolidated/</option>
+          </select>
+        </div>
+        <div class="card q">
+          <strong>Risk</strong>
+          <label>What assumption would make this skill's output wrong?</label>
+          <textarea data-open-input placeholder="Describe the risky assumption"></textarea>
+        </div>
+        <div class="card q">
+          <strong>Exit gate</strong>
+          <label>What must be true before the skill advances?</label>
+          <textarea data-open-input placeholder="Example: persona, primary task, and first-success moment are confirmed"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Round 1 &middot; Assumptions manifest</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Before asking anything open-ended, the skill states back what it already believes &mdash; each row tagged by where the belief came from. These are <strong>intake hypotheses, not findings</strong>: confirm what holds, correct what's wrong, flag what needs research. Nothing here is canonical.</p>
+
+      <div class="card assume" data-assume data-source="prompt" data-claim="Target branch is the first-value onboarding flow">
+        <div class="assume-head">
+          <strong>Target branch is the first-value onboarding flow</strong>
+          <span class="tag tag-prompt">from prompt</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>The invocation named onboarding, so the skill scopes to that branch unless corrected.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>What's the correct branch or scope?</label>
+          <textarea placeholder="Describe the correction"></textarea>
+        </div>
+      </div>
+
+      <div class="card assume" data-assume data-source="repo" data-claim="research/positioning.md is the binding upstream artifact">
+        <div class="assume-head">
+          <strong>research/positioning.md is the binding upstream artifact</strong>
+          <span class="tag tag-repo">from repo</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>It is the most recently updated research doc on this branch, so the skill treats it as authoritative.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>Which artifact should bind instead?</label>
+          <textarea placeholder="Example: design/flow-tree-onboarding.yaml"></textarea>
+        </div>
+      </div>
+
+      <div class="card assume" data-assume data-source="inferred" data-claim="The primary persona is a returning power user">
+        <div class="assume-head">
+          <strong>The primary persona is a returning power user</strong>
+          <span class="tag tag-inferred">inferred</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>No persona was stated; the skill inferred one from the flow's density. Low confidence &mdash; likely needs research.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>Who is the real primary persona?</label>
+          <textarea placeholder="Describe the persona"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Open question &middot; recommend and override</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">At least one input each round must be <strong>genuinely open</strong> &mdash; not a disguised yes/no. The skill may still offer a recommended answer with its confidence, but the user can override freely. This is where new uncertainty actually gets reduced.</p>
+
+      <div class="card q" data-openq data-question="What is the first-success moment this flow should deliver?" data-confidence="medium">
+        <strong>What is the first-success moment this flow should deliver?</strong>
+        <div class="reco">
+          <div class="reco-head">
+            <span>Recommended answer</span>
+            <span class="badge badge-med">medium confidence</span>
+          </div>
+          <p class="reco-text" data-reco-text>User connects their first data source and sees a populated dashboard within the initial session.</p>
+          <div class="seg" role="group" aria-label="Use recommended answer">
+            <button type="button" data-v="use" aria-pressed="false">Use recommended</button>
+          </div>
+        </div>
+        <label>Your answer <span style="text-transform:none;font-weight:600;color:var(--faint);">(required &mdash; overrides the recommendation)</span></label>
+        <textarea data-open-input data-required placeholder="Define the first-success moment in your own words"></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Confidence gate &middot; loop exit</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:14px;">The gate is live. It counts every unconfirmed assumption plus every empty required answer. While anything is open, the skill stays in stage zero; when the count reaches zero, it may advance to stage one &mdash; the interrogation page never becomes the canonical artifact.</p>
+      <div class="banner banner-open" data-gate role="status" aria-live="polite">
+        <span class="banner-dot"></span>
+        <span data-gate-text>Confidence gate: 4 open items &mdash; stay in stage zero</span>
+        <small data-gate-detail>3 assumptions to resolve &middot; 1 required answer empty</small>
+      </div>
+    </section>
+
+    <section>
+      <h2>Compile responses</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">This is the round's payoff: the page compiles every assumption decision and open answer into a captured-answers YAML. The user copies it, clears context, and pastes it into a fresh session &mdash; a new agent reads the sidecar, runs the confidence gate, and either emits the next round or advances to stage one. That paste-forward is the whole Research Session Loop.</p>
+      <div class="compile" data-sidecar="research/_working/interrogation-example-r1.yaml">
+        <div class="compile-actions">
+          <button type="button" class="btn btn-primary" data-compile-btn>Compile responses</button>
+          <button type="button" class="btn btn-ghost" data-copy-btn hidden>Copy YAML</button>
+          <span class="copy-status" data-copy-status></span>
+        </div>
+        <textarea class="yaml-out" data-yaml readonly aria-label="Compiled captured-answers YAML"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var CHIP = { confirm: ["chip-confirmed", "Confirmed"], correct: ["chip-correcting", "Correcting"], flag: ["chip-flagged", "Flagged"] };
+
+      document.querySelectorAll("[data-assume]").forEach(function (row) {
+        var chip = row.querySelector("[data-chip]");
+        var correction = row.querySelector("[data-correction]");
+        row.querySelectorAll(".seg button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var v = btn.getAttribute("data-v");
+            var already = btn.getAttribute("aria-pressed") === "true";
+            row.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+            if (already) {
+              chip.className = "chip";
+              row.removeAttribute("data-state");
+            } else {
+              btn.setAttribute("aria-pressed", "true");
+              chip.className = "chip show " + CHIP[v][0];
+              chip.textContent = CHIP[v][1];
+              row.setAttribute("data-state", v);
+            }
+            correction.classList.toggle("show", !already && v === "correct");
+            recompute();
+          });
+        });
+      });
+
+      document.querySelectorAll("[data-openq]").forEach(function (q) {
+        var field = q.querySelector("[data-open-input]");
+        var useBtn = q.querySelector('[data-v="use"]');
+        var recoText = q.querySelector("[data-reco-text]");
+        if (useBtn) {
+          useBtn.addEventListener("click", function () {
+            field.value = recoText.textContent.trim();
+            useBtn.setAttribute("aria-pressed", "true");
+            recompute();
+          });
+        }
+        field.addEventListener("input", function () {
+          if (useBtn && field.value.trim() !== recoText.textContent.trim()) useBtn.setAttribute("aria-pressed", "false");
+          recompute();
+        });
+      });
+
+      var banner = document.querySelector("[data-gate]");
+      var gateText = document.querySelector("[data-gate-text]");
+      var gateDetail = document.querySelector("[data-gate-detail]");
+
+      function recompute() {
+        var assumptions = document.querySelectorAll("[data-assume]");
+        var openAssume = 0;
+        assumptions.forEach(function (row) { if (row.getAttribute("data-state") !== "confirm") openAssume++; });
+
+        var emptyReq = 0;
+        document.querySelectorAll("[data-required]").forEach(function (f) { if (!f.value.trim()) emptyReq++; });
+
+        var total = openAssume + emptyReq;
+        if (total === 0) {
+          banner.className = "banner banner-pass";
+          gateText.textContent = "Confidence gate: passed — advance to stage one";
+          gateDetail.textContent = "All assumptions resolved · required answers complete";
+        } else {
+          banner.className = "banner banner-open";
+          gateText.textContent = "Confidence gate: " + total + " open item" + (total === 1 ? "" : "s") + " — stay in stage zero";
+          var parts = [];
+          parts.push(openAssume + " assumption" + (openAssume === 1 ? "" : "s") + " to resolve");
+          parts.push(emptyReq + " required answer" + (emptyReq === 1 ? "" : "s") + " empty");
+          gateDetail.textContent = parts.join(" · ");
+        }
+      }
+
+      recompute();
+
+      // --- Compile responses → captured-answers YAML ---
+      var COMMAND = "/user-flow-map onboarding --resume-interrogation r1";
+      var compileWrap = document.querySelector(".compile");
+      var compileBtn = document.querySelector("[data-compile-btn]");
+      var copyBtn = document.querySelector("[data-copy-btn]");
+      var copyStatus = document.querySelector("[data-copy-status]");
+      var yamlOut = document.querySelector("[data-yaml]");
+      var sidecar = compileWrap.getAttribute("data-sidecar");
+
+      function q(s) { return '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s+/g, " ").trim() + '"'; }
+
+      function buildYaml() {
+        var lines = [];
+        lines.push("# Invoke with: " + COMMAND);
+        lines.push("command: " + q(COMMAND));
+        lines.push("interrogation_page: interrogation/example-r1-onboarding.html");
+        lines.push("round: 1");
+
+        var openAssume = 0, emptyReq = 0;
+        document.querySelectorAll("[data-assume]").forEach(function (r) { if (r.getAttribute("data-state") !== "confirm") openAssume++; });
+        document.querySelectorAll("[data-required]").forEach(function (f) { if (!f.value.trim()) emptyReq++; });
+        var passed = (openAssume + emptyReq) === 0;
+
+        lines.push("round_status: " + (passed ? "complete" : "partial"));
+        lines.push("gate_state: " + (passed ? "coverage-checkpoint" : "continue"));
+
+        lines.push("assumptions:");
+        document.querySelectorAll("[data-assume]").forEach(function (row) {
+          var decision = row.getAttribute("data-state") || "pending";
+          lines.push("  - source: " + q(row.getAttribute("data-source")));
+          lines.push("    claim: " + q(row.getAttribute("data-claim")));
+          lines.push("    decision: " + q(decision));
+          if (decision === "correct") {
+            var corr = row.querySelector("[data-correction] textarea");
+            lines.push("    correction: " + q(corr && corr.value ? corr.value : ""));
+          }
+        });
+
+        lines.push("open_answers:");
+        document.querySelectorAll("[data-openq]").forEach(function (block) {
+          var field = block.querySelector("[data-open-input]");
+          var reco = block.querySelector("[data-reco-text]");
+          lines.push("  - question: " + q(block.getAttribute("data-question")));
+          lines.push("    answer: " + q(field && field.value ? field.value : ""));
+          lines.push("    recommended_answer: " + q(reco ? reco.textContent : ""));
+          lines.push("    agent_confidence: " + q(block.getAttribute("data-confidence")));
+        });
+
+        lines.push("gate_answers: []");
+        lines.push("answer_sidecar: " + sidecar);
+        lines.push("agent_routing:");
+        lines.push("  command: " + q(COMMAND));
+        return lines.join("\n") + "\n";
+      }
+
+      function tryCopy() {
+        var text = yamlOut.value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(
+            function () { copyStatus.textContent = "Copied"; },
+            function () { yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy"; }
+          );
+        } else {
+          yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy";
+        }
+      }
+
+      compileBtn.addEventListener("click", function () {
+        yamlOut.value = buildYaml();
+        yamlOut.classList.add("show");
+        copyBtn.hidden = false;
+        tryCopy();
+      });
+      copyBtn.addEventListener("click", tryCopy);
+    })();
+  </script>
+</body>
+</html>

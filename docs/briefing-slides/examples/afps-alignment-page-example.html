@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS Alignment Page Example</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #131a29;
+      --ink-soft: #35415a;
+      --muted: #5b6a82;
+      --faint: #8695ac;
+      --line: #e4e9f1;
+      --line-strong: #cdd8e8;
+      --panel: #ffffff;
+      --accent: #2f6ae0;
+      --accent-2: #0ea5a3;
+      --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+      --shadow-sm: 0 1px 2px rgba(19,26,41,.05), 0 1px 3px rgba(19,26,41,.04);
+      --shadow-md: 0 6px 16px -6px rgba(19,26,41,.12), 0 2px 6px -2px rgba(19,26,41,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(900px 520px at 8% -14%, rgba(47,106,224,.10), transparent 62%),
+        radial-gradient(820px 480px at 104% -6%, rgba(14,165,163,.09), transparent 58%),
+        linear-gradient(180deg, #eef3fb 0%, #f5f8fc 46%, #eef2f8 100%);
+      background-attachment: fixed;
+    }
+    main { max-width: 1140px; margin: 0 auto; padding: 52px 32px 80px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 7px 14px 7px 12px;
+    }
+    .back:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .back::before { content: "\2190"; font-size: 14px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+      margin: 30px 0 14px;
+    }
+    .eyebrow::before { content: ""; width: 20px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    h1 { margin: 0 0 12px; font-size: clamp(48px, 6.8vw, 84px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
+    h2 { margin: 52px 0 16px; font-size: clamp(26px, 3.1vw, 38px); letter-spacing: -.01em; }
+    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(19px, 2.1vw, 25px); max-width: 68ch; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 18px 19px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
+    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 16px; }
+    .gate { border-left: 3px solid var(--accent); background: linear-gradient(180deg, #fbfdff, #f6faff); }
+    .gate strong { color: var(--accent); }
+    .handoff { border: 1px solid var(--line); }
+    code { font-family: var(--mono); font-size: .86em; background: #eef2f8; border: 1px solid var(--line); border-radius: 6px; padding: 1.5px 6px; color: #274069; }
+
+    /* --- archetype-distinctive: evidence matrix, alternatives, file writes, approval gates --- */
+    .badge {
+      display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+    }
+    .badge-high { background: #e7f7f4; color: #0b8f8b; }
+    .badge-med { background: #fff2e0; color: #b5711a; }
+    .badge-low { background: #fdeceb; color: #d4483f; }
+    .matrix-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 15px; box-shadow: var(--shadow-sm); background: var(--panel); }
+    table.matrix { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 15.5px; }
+    table.matrix th, table.matrix td { text-align: left; padding: 14px 17px; vertical-align: top; border-bottom: 1px solid var(--line); line-height: 1.45; }
+    table.matrix thead th {
+      font-size: 12.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
+      font-weight: 800; background: #f6f9fd; border-bottom: 1px solid var(--line-strong);
+      position: sticky; top: 0;
+    }
+    table.matrix tbody tr:last-child td { border-bottom: 0; }
+    table.matrix tbody tr:hover td { background: #fafcff; }
+    table.matrix .claim { font-weight: 700; color: var(--ink); }
+    table.matrix .evidence { color: var(--ink-soft); }
+    table.matrix .inference { color: var(--muted); }
+    .alt { border-top: 3px solid var(--line-strong); }
+    .alt strong { color: var(--ink); }
+    .alt .verdict { display: inline-block; margin-bottom: 8px; }
+    .writes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .writes li {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+      padding: 13px 15px; box-shadow: var(--shadow-sm);
+    }
+    .writes code { font-size: 14.5px; }
+    .action {
+      font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .05em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 6px; white-space: nowrap;
+    }
+    .action-create { background: #e7f7f4; color: #0b8f8b; border: 1px solid #c3ece6; }
+    .action-update { background: #eaf1fe; color: #2f6ae0; border: 1px solid #cfe0fc; }
+    .writes .note { color: var(--muted); font-size: 15px; margin-left: auto; }
+    .seg {
+      display: inline-flex; margin-top: 12px; border: 1px solid var(--line-strong);
+      border-radius: 9px; overflow: hidden; background: #f7f9fd;
+    }
+    .seg button {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      font: inherit; font-size: 14.5px; font-weight: 600; color: var(--muted);
+      padding: 8px 16px; border-right: 1px solid var(--line-strong);
+      transition: background .15s ease, color .15s ease;
+    }
+    .seg button:last-child { border-right: 0; }
+    .seg button:hover { background: #eef3fb; color: var(--ink); }
+    .seg button[aria-pressed="true"] { color: #fff; }
+    .seg button[data-v="approve"][aria-pressed="true"] { background: #0b8f8b; }
+    .seg button[data-v="revise"][aria-pressed="true"] { background: #b5711a; }
+    .seg button[data-v="clarify"][aria-pressed="true"] { background: #2f6ae0; }
+    .chip {
+      display: none; margin-left: 10px; vertical-align: middle;
+      font-size: 13.5px; font-weight: 700; letter-spacing: .01em;
+      padding: 3px 11px; border-radius: 999px;
+    }
+    .chip.show { display: inline-block; }
+    .chip-approved { background: #e7f7f4; color: #0b8f8b; }
+    .chip-revise { background: #fff2e0; color: #b5711a; }
+    .chip-clarify { background: #eaf1fe; color: #2f6ae0; }
+    .gate .gate-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .gate .gate-head strong { margin: 0; }
+    .banner {
+      position: sticky; top: 16px; z-index: 5;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      margin: 18px 0 4px; padding: 17px 20px; border-radius: 13px;
+      font-weight: 700; font-size: 17.5px; letter-spacing: -.005em;
+      border: 1px solid; box-shadow: var(--shadow-sm);
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .banner-dot { width: 11px; height: 11px; border-radius: 999px; flex: none; }
+    .banner-blocked { background: #fff6ec; border-color: #f3d6ac; color: #9a5b12; }
+    .banner-blocked .banner-dot { background: #e0912f; box-shadow: 0 0 0 4px rgba(224,145,47,.18); }
+    .banner-ready { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
+    .banner-ready .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
+    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 14.5px; }
+    .compile { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-sm); }
+    .compile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      appearance: none; cursor: pointer; font: inherit; font-size: 15.5px; font-weight: 700;
+      border-radius: 9px; padding: 11px 20px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #255bc4; }
+    .btn-ghost { border: 1px solid var(--line-strong); background: #fff; color: var(--ink-soft); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-status { font-size: 14.5px; font-weight: 600; color: var(--muted); }
+    .yaml-out {
+      display: none; margin-top: 14px; width: 100%; min-height: 280px; resize: vertical;
+      font-family: var(--mono); font-size: 13.5px; line-height: 1.5; color: #274069;
+      background: #f7f9fd; border: 1px solid var(--line-strong); border-radius: 10px; padding: 14px;
+      white-space: pre; box-sizing: border-box;
+    }
+    .yaml-out.show { display: block; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } main { padding: 28px 18px 48px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a>
+    <div class="eyebrow">Review surface &middot; documentation example</div>
+    <h1>Alignment Page Example</h1>
+    <p class="intro">This documentation-only example shows the dense review surface a producing AFPS skill can create before canonical writes or major handoffs. A real active page would live under <code>alignment/</code> and follow the shared alignment-page convention.</p>
+
+    <section>
+      <h2>What the page preserves</h2>
+      <div class="grid">
+        <div class="card"><strong>Source evidence</strong><p>Links to research, design, prototype, spec, task, or code artifacts used by the skill.</p></div>
+        <div class="card"><strong>Recommendation</strong><p>Shows the proposed output or route with rationale and known tradeoffs.</p></div>
+        <div class="card"><strong>Risks</strong><p>Makes assumptions and unresolved uncertainty visible before approval.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Evidence matrix</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">This is what makes an alignment page a <strong>post-research</strong> surface: every claim is separated from the evidence that supports it, the inference drawn on top, and a confidence rating. The reviewer approves reasoning, not vibes &mdash; and can see exactly where a conclusion is thin.</p>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="claim">Onboarding drop-off concentrates at the data-source step</td>
+              <td class="evidence">42% of sessions in <code>research/positioning.md</code> abandon before connecting a source (n=310)</td>
+              <td class="inference">The connect step, not signup, is the primary friction point to redesign first</td>
+              <td><span class="badge badge-high">High</span></td>
+            </tr>
+            <tr>
+              <td class="claim">Users expect a populated dashboard as the first-success signal</td>
+              <td class="evidence">7 of 9 interviews cited "seeing my own data" as the moment they trusted the product</td>
+              <td class="inference">Deferring the empty-state to after first connect will raise activation</td>
+              <td><span class="badge badge-med">Medium</span></td>
+            </tr>
+            <tr>
+              <td class="claim">Returning power users are the dominant persona</td>
+              <td class="evidence">No direct data; inferred from flow density in <code>design/flow-tree-onboarding.yaml</code></td>
+              <td class="inference">Optimizing for expert speed may mis-serve first-run users</td>
+              <td><span class="badge badge-low">Low</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Alternatives considered</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">A post-research surface shows the reasoning that was rejected, not just the recommendation &mdash; so approval is informed by what lost and why.</p>
+      <div class="grid">
+        <div class="card alt">
+          <span class="badge badge-low verdict">Rejected</span>
+          <strong>Guided multi-step wizard</strong>
+          <p>Tested well for novices but added three screens before any value; conflicts with the first-success-in-one-session evidence. Lower confidence it beats a single connect step.</p>
+        </div>
+        <div class="card alt">
+          <span class="badge badge-med verdict">Deferred</span>
+          <strong>Sample-data preview before connect</strong>
+          <p>Promising for reducing perceived risk, but no interview evidence that fake data builds trust. Parked pending a dedicated research round.</p>
+        </div>
+        <div class="card alt">
+          <span class="badge badge-low verdict">Rejected</span>
+          <strong>Persona-branched onboarding</strong>
+          <p>Would serve power users, but the persona claim itself is low-confidence. Branching on an unverified assumption compounds risk.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Proposed file changes</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Approval authorizes exactly these canonical writes &mdash; nothing is written until every gate below passes. The reviewer sees the blast radius before granting it.</p>
+      <ul class="writes">
+        <li><span class="action action-update">Update</span><code>research/positioning.md</code><span class="note">append activation-friction findings</span></li>
+        <li><span class="action action-create">Create</span><code>design/flow-tree-onboarding.yaml</code><span class="note">connect-first flow structure</span></li>
+        <li><span class="action action-create">Create</span><code>alignment/onboarding-redesign.html</code><span class="note">this page, marked confirmed</span></li>
+        <li><span class="action action-update">Update</span><code>research/glossary.md</code><span class="note">+2 approved terms</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Approval gates</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:14px;">Each gate is a real decision, not an acknowledgement. The compile banner stays blocked until every gate is approved &mdash; only then is the producing skill authorized to write. Revise or clarify holds the write.</p>
+      <div class="banner banner-blocked" data-compile role="status" aria-live="polite">
+        <span class="banner-dot"></span>
+        <span data-compile-text>Approval: blocked &mdash; 3 gates pending</span>
+        <small data-compile-detail>Approve all gates to authorize canonical writes</small>
+      </div>
+      <div class="grid" style="margin-top:16px;">
+        <div class="card gate" data-gate data-section="Scope gate" data-gate-type="scope">
+          <div class="gate-head"><strong>Scope gate</strong><span class="chip" data-chip></span></div>
+          <p>Target branch, artifact paths, and expected output are correct.</p>
+          <div class="seg" role="group" aria-label="Scope gate decision">
+            <button type="button" data-v="approve" data-approval-effect="approve" aria-pressed="false">Approve</button>
+            <button type="button" data-v="revise" data-approval-effect="block" aria-pressed="false">Revise</button>
+            <button type="button" data-v="clarify" data-approval-effect="clarify" aria-pressed="false">Clarify</button>
+          </div>
+        </div>
+        <div class="card gate" data-gate data-section="Evidence gate" data-gate-type="evidence">
+          <div class="gate-head"><strong>Evidence gate</strong><span class="chip" data-chip></span></div>
+          <p>Evidence is sufficient for the claims; low-confidence rows are acceptable as-is.</p>
+          <div class="seg" role="group" aria-label="Evidence gate decision">
+            <button type="button" data-v="approve" data-approval-effect="approve" aria-pressed="false">Approve</button>
+            <button type="button" data-v="revise" data-approval-effect="block" aria-pressed="false">Revise</button>
+            <button type="button" data-v="clarify" data-approval-effect="clarify" aria-pressed="false">Clarify</button>
+          </div>
+        </div>
+        <div class="card gate" data-gate data-section="Artifact gate" data-gate-type="artifact">
+          <div class="gate-head"><strong>Artifact gate</strong><span class="chip" data-chip></span></div>
+          <p>The proposed file changes and downstream route are approved to write.</p>
+          <div class="seg" role="group" aria-label="Artifact gate decision">
+            <button type="button" data-v="approve" data-approval-effect="approve" aria-pressed="false">Approve</button>
+            <button type="button" data-v="revise" data-approval-effect="block" aria-pressed="false">Revise</button>
+            <button type="button" data-v="clarify" data-approval-effect="clarify" aria-pressed="false">Clarify</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Compile responses</h2>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Approval is not a click &mdash; it is a payload. The page compiles every gate decision into a response YAML whose <code>approval_status</code> is computed from the gates' approval-effect metadata, not from label text. The user copies it, clears context, and pastes it into a fresh session; only a <code>ready-for-agent-review</code> payload authorizes the producing skill to write the canonical artifacts above.</p>
+      <div class="compile" data-page="alignment/onboarding-redesign.html">
+        <div class="compile-actions">
+          <button type="button" class="btn btn-primary" data-compile-btn>Compile responses</button>
+          <button type="button" class="btn btn-ghost" data-copy-btn hidden>Copy YAML</button>
+          <span class="copy-status" data-copy-status></span>
+        </div>
+        <textarea class="yaml-out" data-yaml readonly aria-label="Compiled response YAML"></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Handoff on approval</h2>
+      <div class="card handoff">
+        <strong>Next work</strong>
+        <p>Once all gates are approved, the producing skill writes the canonical artifacts above, marks this page confirmed, then emits a route such as <code>$ux-variations [specific-user-flow]</code> or <code>$research-roadmap --post-prototype</code>.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var CHIP = { approve: ["chip-approved", "Approved"], revise: ["chip-revise", "Revise requested"], clarify: ["chip-clarify", "Clarification asked"] };
+
+      document.querySelectorAll("[data-gate]").forEach(function (gate) {
+        var chip = gate.querySelector("[data-chip]");
+        gate.querySelectorAll(".seg button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var v = btn.getAttribute("data-v");
+            var already = btn.getAttribute("aria-pressed") === "true";
+            gate.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+            if (already) {
+              chip.className = "chip";
+              gate.removeAttribute("data-state");
+            } else {
+              btn.setAttribute("aria-pressed", "true");
+              chip.className = "chip show " + CHIP[v][0];
+              chip.textContent = CHIP[v][1];
+              gate.setAttribute("data-state", v);
+            }
+            recompute();
+          });
+        });
+      });
+
+      var banner = document.querySelector("[data-compile]");
+      var bText = document.querySelector("[data-compile-text]");
+      var bDetail = document.querySelector("[data-compile-detail]");
+
+      function recompute() {
+        var gates = document.querySelectorAll("[data-gate]");
+        var pending = 0;
+        gates.forEach(function (g) { if (g.getAttribute("data-state") !== "approve") pending++; });
+
+        if (pending === 0) {
+          banner.className = "banner banner-ready";
+          bText.textContent = "Approval: ready-for-agent-review — writes authorized";
+          bDetail.textContent = "All gates approved · producing skill may write canonical artifacts";
+        } else {
+          banner.className = "banner banner-blocked";
+          bText.textContent = "Approval: blocked — " + pending + " gate" + (pending === 1 ? "" : "s") + " pending";
+          bDetail.textContent = "Approve all gates to authorize canonical writes";
+        }
+      }
+
+      recompute();
+
+      // --- Compile responses → response YAML ---
+      var COMMAND = "/ux-variations onboarding-redesign --apply-approval";
+      var compileWrap = document.querySelector(".compile");
+      var compileBtn = document.querySelector("[data-compile-btn]");
+      var copyBtn = document.querySelector("[data-copy-btn]");
+      var copyStatus = document.querySelector("[data-copy-status]");
+      var yamlOut = document.querySelector("[data-yaml]");
+      var pagePath = compileWrap.getAttribute("data-page");
+
+      function q(s) { return '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s+/g, " ").trim() + '"'; }
+
+      function buildYaml() {
+        var gates = Array.prototype.slice.call(document.querySelectorAll("[data-gate]"));
+        var answered = gates.filter(function (g) { return g.getAttribute("data-state"); });
+        var unanswered = gates.filter(function (g) { return !g.getAttribute("data-state"); });
+        var allApprove = gates.length > 0 && gates.every(function (g) { return g.getAttribute("data-state") === "approve"; });
+
+        var lines = [];
+        lines.push("# Invoke with: " + COMMAND);
+        lines.push("command: " + q(COMMAND));
+        lines.push("alignment_page: " + pagePath);
+        lines.push("response_status: " + (unanswered.length === 0 ? "complete" : "partial"));
+        lines.push("approval_status: " + (allApprove ? "ready-for-agent-review" : "not-approved"));
+        lines.push("required_gate_status: " + (unanswered.length === 0 ? "complete" : "incomplete"));
+
+        if (unanswered.length === 0) {
+          lines.push("unanswered_required_questions: []");
+        } else {
+          lines.push("unanswered_required_questions:");
+          unanswered.forEach(function (g) { lines.push("  - " + q(g.getAttribute("data-section"))); });
+        }
+
+        lines.push("gate_answers:");
+        if (answered.length === 0) {
+          lines[lines.length - 1] = "gate_answers: []";
+        } else {
+          answered.forEach(function (g) {
+            var v = g.getAttribute("data-state");
+            var btn = g.querySelector('.seg button[data-v="' + v + '"]');
+            var effect = btn ? btn.getAttribute("data-approval-effect") : "";
+            var status = v === "approve" ? "answered" : "needs-clarification";
+            lines.push("  - section: " + q(g.getAttribute("data-section")));
+            lines.push("    gate_type: " + q(g.getAttribute("data-gate-type")));
+            lines.push("    status: " + q(status));
+            lines.push("    answer: " + q(v));
+            lines.push("    approval_effect: " + q(effect));
+          });
+        }
+
+        lines.push("agent_routing:");
+        lines.push("  command: " + q(COMMAND));
+        return lines.join("\n") + "\n";
+      }
+
+      function tryCopy() {
+        var text = yamlOut.value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(
+            function () { copyStatus.textContent = "Copied"; },
+            function () { yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy"; }
+          );
+        } else {
+          yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy";
+        }
+      }
+
+      compileBtn.addEventListener("click", function () {
+        yamlOut.value = buildYaml();
+        yamlOut.classList.add("show");
+        copyBtn.hidden = false;
+        tryCopy();
+      });
+      copyBtn.addEventListener("click", tryCopy);
+    })();
+  </script>
+</body>
+</html>
