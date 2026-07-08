@@ -20,6 +20,10 @@ RECOVERY_BOTH_PUBLISHED=0
 CURRENT_SOURCE_RELEASE=0
 CLEANUP_RUNNING=0
 
+# Elapsed-time reporting: SECONDS is a bash builtin counting seconds since it
+# was last assigned. Reset here so the run timer starts at script entry.
+SECONDS=0
+
 usage() {
   cat <<'USAGE'
 Usage:
@@ -50,6 +54,17 @@ USAGE
 
 log() {
   printf '\n==> %s\n' "$*"
+}
+
+format_elapsed() {
+  local total=$1
+  local minutes=$(( total / 60 ))
+  local seconds=$(( total % 60 ))
+  if (( minutes > 0 )); then
+    printf '%dm %02ds (%ds total)' "$minutes" "$seconds" "$total"
+  else
+    printf '%ds' "$total"
+  fi
 }
 
 fail() {
@@ -372,6 +387,11 @@ cleanup() {
     rm -rf "$RESTORE_DIR" || true
   fi
 
+  if [[ "$status" != "0" ]]; then
+    printf '\n==> Publish run (%s lane, dist-tag %s) failed after %s\n' \
+      "$PACKAGE_LANE" "$DIST_TAG" "$(format_elapsed "$SECONDS")" >&2
+  fi
+
   return "$status"
 }
 
@@ -684,6 +704,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
     run npm publish "$GSKP_STAGE" --access public --tag "$DIST_TAG" --dry-run
   fi
   log "Dry run complete; skipped published-package verification."
+  log "Dry-run elapsed time ($PACKAGE_LANE lane, dist-tag $DIST_TAG): $(format_elapsed "$SECONDS")"
   exit 0
 fi
 
@@ -721,6 +742,7 @@ run env SKILLPACKS_PACKAGE_NAME=skillpacks SKILLPACKS_EXPECTED_VERSION="$VERSION
 run env SKILLPACKS_PACKAGE_NAME=@glexcorp/gskp SKILLPACKS_EXPECTED_VERSION="$VERSION" SKILLPACKS_EXPECTED_DIST_TAG="$DIST_TAG" SKILLPACKS_NPM_SPEC="@glexcorp/gskp@$DIST_TAG" npm run skillpacks:verify-published
 
 log "Published skillpacks@$VERSION and @glexcorp/gskp@$VERSION with dist-tag $DIST_TAG"
+log "Publish elapsed time ($PACKAGE_LANE lane, dist-tag $DIST_TAG): $(format_elapsed "$SECONDS")"
 cat <<EOF
 Post-publish source-state requirement:
   1. Ensure packages/skillpacks/package.json and packages/skillpacks/dist/skillpacks-manifest.json are committed at version $VERSION.
