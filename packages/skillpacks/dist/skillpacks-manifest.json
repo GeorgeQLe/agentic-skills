@@ -2,10 +2,10 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.22-experimental.1",
-    "release_lane": "stable"
+    "version": "0.1.22-experimental.2",
+    "release_lane": "canary"
   },
-  "source_fingerprint": "81e5aaad3383f49277c9d71de3b0e714c083bf8f4ef504679a3ad685541a59c1",
+  "source_fingerprint": "d39a82f8319ff7712fbfa164c7a5cd3b605d165c2541776dbc3d6f3e3e44115a",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1506,6 +1506,28 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.1",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "briefing-slides"
+      ],
+      "path": "packs/base/claude/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "1895b5b05bf1749c349f032c5a4076328fa4dcd19f3170adb6e04f8d8a98a798",
+      "archive_versions": [
+        "v0.0"
+      ],
+      "command": "/create-briefing-slides",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
@@ -1921,6 +1943,28 @@
         "v0.2"
       ],
       "command": "$create-alignment-page",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.1",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "briefing-slides"
+      ],
+      "path": "packs/base/codex/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "27755228d96996e0ece191c673fa66461e4d5cecdbdf360f1bdecc7539719216",
+      "archive_versions": [
+        "v0.0"
+      ],
+      "command": "$create-briefing-slides",
       "deck_memberships": []
     },
     {
