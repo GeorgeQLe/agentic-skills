@@ -129,6 +129,7 @@ describe('skillpacks npm publish target boundary', () => {
       'scripts/upgrade-interrogation-page.mjs',
       'scripts/upgrade-design-tree-loop.mjs',
       'scripts/audit-alignment-pages.mjs',
+      'scripts/audit-briefing-slides.mjs',
       'scripts/inject-tts.mjs',
       'scripts/alignment-tts-kokoro.js',
       'assets/alignment-page-convention.md',
@@ -164,7 +165,7 @@ describe('skillpacks npm publish target boundary', () => {
     }
 
     for (const [relativePath, forbiddenPattern] of [
-      ['package.json', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
+      ['package.json', /assets\/briefing-slides-convention\.md|create-briefing-slides|"release_lane": "canary"/],
       ['scripts/skill-convention-registry.mjs', /briefing-slides|create-briefing-slides|"release_lane": "canary"/],
       ['packs/base/PACK.md', /briefing-slides|create-briefing-slides|"release_lane": "canary"/]
     ]) {
@@ -193,6 +194,7 @@ describe('skillpacks npm publish target boundary', () => {
     const paths = packedPaths({ lane: 'canary', writeLaneManifest: true });
 
     for (const requiredPath of [
+      'scripts/audit-briefing-slides.mjs',
       'assets/briefing-slides-convention.md',
       'assets/skillpacks-docs/briefing-slides-convention.md',
       'packs/base/claude/create-briefing-slides/SKILL.md',

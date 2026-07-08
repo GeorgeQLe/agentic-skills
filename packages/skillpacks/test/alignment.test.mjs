@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { afterEach, describe, it } from 'node:test';
 import {
   resolveAlignmentCommand,
+  resolveBriefingCommand,
   resolveInterrogationCommand,
   resolvePrototypeCommand,
   runSkillpacksCli
@@ -50,7 +51,7 @@ describe('skillpacks alignment command parsing', () => {
     assert.match(stdout, /gskp alignment/);
     assert.match(stdout, /alignment bundles \[--dry-run\] \[--check\] \[--legacy-bundles\]/);
     assert.match(stdout, /alignment pages audit/);
-    assert.match(stdout, /alignment pages open <alignment\/page.html>/);
+    assert.match(stdout, /alignment pages open <alignment\/page.html\|briefing-slides\/page.html>/);
     assert.match(stdout, /alignment pages serve \[--port <port>\]/);
     assert.match(stdout, /alignment pages inject-tts \[--force\]/);
     assert.match(stdout, /alignment pages scaffold <skill> <topic> --out alignment\/<skill>-<topic>\.html/);
@@ -62,7 +63,7 @@ describe('skillpacks alignment command parsing', () => {
 
     assert.equal(exitCode, 0);
     assert.match(stdout, /gskp alignment/);
-    assert.match(stdout, /alignment pages open <alignment\/page.html>/);
+    assert.match(stdout, /alignment pages open <alignment\/page.html\|briefing-slides\/page.html>/);
   });
 
   it('wraps bundle generation with --root set to the target project', () => {
@@ -115,6 +116,20 @@ describe('skillpacks alignment command parsing', () => {
       '--browser=chrome',
       'alignment/example.html'
     ]);
+  });
+
+  it('allows briefing-slide decks through the packaged HTML opener', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveAlignmentCommand(
+      ['pages', 'open', 'briefing-slides/example.html', '--dry-run'],
+      { projectRoot }
+    );
+
+    assert.equal(command.kind, 'run');
+    assert.equal(command.command, process.execPath);
+    assert.deepEqual(command.args.slice(1), ['briefing-slides/example.html', '--dry-run']);
+    assert.equal(command.args[0].endsWith('scripts/open-html-page.mjs'), true);
   });
 
   it('wraps alignment serving through the packaged server script with the project root', () => {
@@ -182,11 +197,15 @@ describe('skillpacks alignment command parsing', () => {
     );
     assert.throws(
       () => resolveAlignmentCommand(['pages', 'open', 'alignment/../example.html']),
-      /expected an alignment HTML page path/
+      /expected an alignment or briefing-slides HTML page path/
     );
     assert.throws(
       () => resolveAlignmentCommand(['pages', 'open', 'docs/example.html']),
-      /expected an alignment HTML page path/
+      /expected an alignment or briefing-slides HTML page path/
+    );
+    assert.throws(
+      () => resolveAlignmentCommand(['pages', 'open', 'briefing-slides/nested/example.html']),
+      /expected an alignment or briefing-slides HTML page path/
     );
     assert.throws(
       () => resolveAlignmentCommand(['pages', 'open', 'alignment/example.html', '--browser', 'firefox']),
@@ -279,6 +298,50 @@ describe('skillpacks alignment command parsing', () => {
       encoding: 'utf8'
     });
     assert.equal(audit.status, 0, [audit.stdout, audit.stderr].filter(Boolean).join('\n'));
+  });
+});
+
+describe('skillpacks briefing command parsing', () => {
+  it('prints briefing-specific help', async () => {
+    const { exitCode, stdout } = await captureCli(['briefing', '--help']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /gskp briefing/);
+    assert.match(stdout, /briefing slides audit/);
+  });
+
+  it('prints help for the slides audit subcommand', async () => {
+    const { exitCode, stdout } = await captureCli(['briefing', 'slides', 'audit', '--help']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /gskp briefing/);
+    assert.match(stdout, /briefing slides audit/);
+  });
+
+  it('wraps briefing-slide audit with --root set to the target project', () => {
+    const projectRoot = makeTempProject();
+
+    const command = resolveBriefingCommand(['slides', 'audit'], { projectRoot });
+
+    assert.equal(command.kind, 'run');
+    assert.equal(command.command, process.execPath);
+    assert.deepEqual(command.args.slice(1), ['--root', projectRoot]);
+    assert.equal(command.args[0].endsWith('scripts/audit-briefing-slides.mjs'), true);
+  });
+
+  it('rejects unknown briefing subcommands', () => {
+    assert.throws(
+      () => resolveBriefingCommand(['pages', 'audit']),
+      /briefing: unknown command 'pages'/
+    );
+    assert.throws(
+      () => resolveBriefingCommand(['slides', 'repair']),
+      /briefing slides: unknown command 'repair'/
+    );
+    assert.throws(
+      () => resolveBriefingCommand(['slides', 'audit', '--root', '/tmp/project']),
+      /briefing slides audit does not accept arguments/
+    );
   });
 });
 

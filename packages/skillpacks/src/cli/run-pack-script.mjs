@@ -42,6 +42,7 @@ const manifestPath = resolvePackagedPath('dist/skillpacks-manifest.json');
 const alignmentUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-alignment-page.mjs');
 const designTreeUpgradeScriptPath = resolvePackagedPath('scripts/upgrade-design-tree-loop.mjs');
 const alignmentAuditScriptPath = resolvePackagedPath('scripts/audit-alignment-pages.mjs');
+const briefingAuditScriptPath = resolvePackagedPath('scripts/audit-briefing-slides.mjs');
 const alignmentInjectTtsScriptPath = resolvePackagedPath('scripts/inject-tts.mjs');
 const alignmentOpenScriptPath = resolvePackagedPath('scripts/open-html-page.mjs');
 const alignmentServeScriptPath = resolvePackagedPath('scripts/serve-alignment.mjs');
@@ -166,7 +167,7 @@ function alignmentHelp() {
 Usage:
   gskp alignment bundles [--dry-run] [--check] [--legacy-bundles]
   gskp alignment pages audit
-  gskp alignment pages open <alignment/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
+  gskp alignment pages open <alignment/page.html|briefing-slides/page.html> [--browser auto|brave|chrome|safari|edge|default] [--dry-run] [--json]
   gskp alignment pages serve [--port <port>]
   gskp alignment pages inject-tts [--force] [--dry-run] [alignment/<page>.html]
   gskp alignment pages scaffold <skill> <topic> --out alignment/<skill>-<topic>.html
@@ -178,11 +179,21 @@ Commands:
   bundles --check            Fail on resolver-stub drift without writing
   bundles --legacy-bundles   Regenerate legacy sibling ALIGNMENT-PAGE.md files
   pages audit                Audit active rendered alignment/*.html pages
-  pages open                 Open or focus an alignment HTML page
+  pages open                 Open or focus an alignment or briefing-slide HTML page
   pages serve                Serve alignment pages from the current repo over localhost
   pages inject-tts           Add the packaged Brief Me TTS script tag to pages
   pages scaffold             Create a starter alignment HTML page from the packaged template
   verify                     Run the focused alignment verification set when present`);
+}
+
+function briefingHelp() {
+  console.log(`gskp briefing
+
+Usage:
+  gskp briefing slides audit
+
+Commands:
+  slides audit               Audit active rendered briefing-slides/*.html decks`);
 }
 
 function interrogationHelp() {
@@ -251,6 +262,29 @@ function assertSafeAlignmentPagePath(command, pagePath) {
   }
 }
 
+function assertSafeOpenHtmlPagePath(command, pagePath) {
+  if (typeof pagePath !== 'string' || pagePath.length === 0) {
+    throw new Error(`${command}: expected an alignment or briefing-slides HTML page path`);
+  }
+  if (pagePath.startsWith('/') || /^[A-Za-z]:[\\/]/.test(pagePath) || pagePath.includes('\\')) {
+    throw new Error(`${command}: expected a repo-relative alignment or briefing-slides HTML page path, got '${pagePath}'`);
+  }
+
+  const parts = pagePath.split('/');
+  const validDir = parts[0] === 'alignment' || parts[0] === 'briefing-slides';
+  if (
+    parts.length !== 2 ||
+    !validDir ||
+    !parts[1] ||
+    parts[1] === '.' ||
+    parts[1] === '..' ||
+    parts[1].includes('..') ||
+    !parts[1].endsWith('.html')
+  ) {
+    throw new Error(`${command}: expected an alignment or briefing-slides HTML page path, got '${pagePath}'`);
+  }
+}
+
 function validateOpenAlignmentPageArgs(args) {
   const passthrough = [];
   let pagePath = null;
@@ -296,7 +330,7 @@ function validateOpenAlignmentPageArgs(args) {
     passthrough.push(arg);
   }
 
-  assertSafeAlignmentPagePath('alignment pages open', pagePath);
+  assertSafeOpenHtmlPagePath('alignment pages open', pagePath);
   return passthrough;
 }
 
@@ -495,6 +529,41 @@ export function resolveInterrogationCommand(args, options = {}) {
   throw new Error(`interrogation: unknown command '${scope}'`);
 }
 
+export function resolveBriefingCommand(args, options = {}) {
+  const projectRoot = resolve(options.projectRoot || process.cwd());
+  const [scope, ...rest] = args;
+
+  if (!scope || scope === 'help' || scope === '--help' || scope === '-h') {
+    return { kind: 'help' };
+  }
+
+  if (scope === 'slides') {
+    const [slidesCommand, ...slidesRest] = rest;
+    if (!slidesCommand || slidesCommand === 'help' || slidesCommand === '--help' || slidesCommand === '-h') {
+      return { kind: 'help' };
+    }
+
+    if (slidesCommand === 'audit') {
+      if (
+        slidesRest.length === 1 &&
+        (slidesRest[0] === 'help' || slidesRest[0] === '--help' || slidesRest[0] === '-h')
+      ) {
+        return { kind: 'help' };
+      }
+      assertNoArgs('briefing slides audit', slidesRest);
+      return {
+        kind: 'run',
+        command: process.execPath,
+        args: [briefingAuditScriptPath, '--root', projectRoot]
+      };
+    }
+
+    throw new Error(`briefing slides: unknown command '${slidesCommand}'`);
+  }
+
+  throw new Error(`briefing: unknown command '${scope}'`);
+}
+
 export function resolvePrototypeCommand(args, options = {}) {
   const projectRoot = resolve(options.projectRoot || process.cwd());
   const [scope, ...rest] = args;
@@ -578,6 +647,17 @@ function runInterrogation(args) {
   }
 
   throw new Error(`unsupported interrogation command kind '${resolved.kind}'`);
+}
+
+function runBriefing(args) {
+  const resolved = resolveBriefingCommand(args, { projectRoot: process.cwd() });
+  if (resolved.kind === 'help') {
+    briefingHelp();
+    return 0;
+  }
+
+  requireCommand('node', 'Install Node.js before running gskp briefing commands.');
+  return runCommand(resolved.command, resolved.args);
 }
 
 function runPrototype(args) {
@@ -783,8 +863,8 @@ Commands:
   prototype bundles [--dry-run] [--check]
                                Generate/check per-skill DESIGN-TREE-LOOP.md bundles
   alignment pages audit        Audit active rendered alignment/*.html pages
-  alignment pages open <alignment/page.html> [--browser <browser>]
-                               Open or focus an alignment HTML page
+  alignment pages open <alignment/page.html|briefing-slides/page.html> [--browser <browser>]
+                               Open or focus an alignment or briefing-slide HTML page
   alignment pages serve [--port <port>]
                                Serve alignment pages from the current repo over localhost
   alignment pages inject-tts [--force] [alignment/<page>.html]
@@ -793,6 +873,7 @@ Commands:
                                Create a starter alignment HTML page
   interrogation pages scaffold <skill> <round> <branch> --out interrogation/<skill>-r<round>-<branch>.html
                                Create a starter interrogation HTML page
+  briefing slides audit        Audit active rendered briefing-slides/*.html decks
   alignment verify             Run focused alignment tests when present
   prune [--dry-run]            Remove orphaned managed skill installs
   set-update-mode <mode>       Set skill update mode: warn, auto, or unset
@@ -929,6 +1010,10 @@ export async function runSkillpacksCli(args) {
 
   if (command === 'interrogation') {
     return runInterrogation(rest);
+  }
+
+  if (command === 'briefing') {
+    return runBriefing(rest);
   }
 
   if (command === 'prototype') {

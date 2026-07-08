@@ -31,18 +31,22 @@ Required presentation controls:
 
 - Full-screen slide-by-slide layout.
 - One primary idea per slide.
+- Each slide root must carry `data-briefing-slide`.
 - Strong visual hierarchy with concise slide notes instead of wall-of-text prose.
 - Authored slide content must intentionally fit within the visible slide area at normal desktop and mobile-sized review viewports.
 - Do not use hidden overflow, clipped containers, tiny text, or scroll traps as a substitute for making slide content fit.
 - Use compact visual structures, short labels, and per-element reference links or chips so slides summarize decisions while dense artifacts carry the detail.
 - Previous/next buttons.
+- Previous and next controls should expose `data-slide-prev` and `data-slide-next` for static auditing.
 - Keyboard navigation: `ArrowLeft`, `ArrowRight`, `A`, `D`, `Home`, `End`, and `Space`.
 - Empty-stage click navigation: clicking the deck stage around the visible slide advances to the next slide.
 - Stage-click navigation must not hijack clicks inside the slide, links, buttons, form controls, filmstrip controls, topbar, footer, or review inputs.
 - Persistent slide counter and progress track.
+- The counter and progress track should expose `data-slide-counter` and `data-slide-progress`.
 - Hash or local browser state so the current slide can be resumed or linked.
 - Agenda or filmstrip navigation when the deck has more than five slides.
 - A references slide and per-slide reference chips.
+- Reference chips should expose `data-reference-chip`; a references slide should expose `data-references-slide`.
 - Print CSS that produces one slide per page.
 
 Use purpose-built visual structures where they clarify the material: decision cards, evidence matrices, comparison tables, canvases, workshop boards, scored options, risk/assumption registers, and compact charts. Avoid using the deck as a raw markdown dump.
@@ -74,14 +78,14 @@ Choose the pattern that matches the source material.
 
 Every deck must support review and feedback directly on the relevant slide.
 
-- Every slide must expose a slide-scoped feedback trigger, such as a Feedback button or chip.
+- Every slide must expose a slide-scoped feedback trigger, such as a Feedback button or chip, marked `data-feedback-trigger`.
 - Gate questions must be answerable inline with radio, select, or freeform controls.
 - Slide feedback controls must support at least `emphasize`, `revise`, `needs-clarification`, and freeform notes.
 - Marking controls must support per-slide statuses such as `important`, `question`, `approved`, or `skip`, stored in local browser state.
 - Annotation controls must allow per-slide notes that are included in compiled YAML.
-- Selecting any feedback, mark, annotation, or clarification action must open a slide-scoped sidebar or drawer for the active slide.
+- Selecting any feedback, mark, annotation, or clarification action must open a slide-scoped sidebar or drawer for the active slide, marked `data-slide-feedback-panel`.
 - The sidebar or drawer must update when the active slide changes, preserve inline gate questions on their original slides, and provide the active slide's feedback controls, marks, note field, local slide-feedback YAML, and copy controls.
-- The persistent footer or bottom bar may show navigation, progress, slide count, and a compact feedback status or trigger affordance only. It must not contain required feedback controls, required gate answers, final approval controls, or compiled YAML output.
+- The persistent footer or bottom bar may show navigation, progress, slide count, and a compact feedback status or trigger affordance only. When present, mark it `data-briefing-footer`. It must not contain required feedback controls, required gate answers, final approval controls, or compiled YAML output.
 - Copy controls must support copying the slide title, selected text where possible, references, and compiled YAML.
 - Clipboard writes must use the Clipboard API when available and fall back to selecting a read-only textarea.
 
@@ -89,7 +93,7 @@ Do not use sticky or fixed compile banners. Put compile controls in normal slide
 
 ## YAML Contract
 
-Compiled YAML is produced only by local slide-feedback YAML controls in the slide sidebar or near-slide feedback surface, and by the final full-deck compiler on the response or final slide. The final full-deck compiler remains in normal slide flow on the last slide or an explicit response slide.
+Compiled YAML is produced only by local slide-feedback YAML controls in the slide sidebar or near-slide feedback surface, marked `data-slide-feedback-yaml`, and by the final full-deck compiler on the response or final slide, marked `data-full-deck-yaml`. The final full-deck compiler remains in normal slide flow on the last slide or an explicit response slide.
 
 Do not render prior compiled YAML sidecars, answer sidecars, or generated review YAML files as primary slide cards, action chips, or navigation links. If they are needed as provenance, include them in compiled `source_artifacts` and optionally in a dedicated References slide with non-action wording.
 
@@ -120,6 +124,7 @@ Set `approval_status: ready-for-agent-review` only when every required gate has 
 
 Before handoff:
 
+- Run the static convention audit with `npx skillpacks briefing slides audit` from the repository root when the packaged CLI is available. In this source checkout, `node scripts/audit-briefing-slides.mjs` is the direct fallback.
 - Re-open the written deck textually and confirm it contains navigation controls, gate controls, feedback controls, YAML compiler, reference links, and print CSS.
 - Verify every slide has a feedback trigger and that activating it opens the slide-scoped sidebar or drawer.
 - Verify footer or bottom-bar markup does not contain required feedback inputs, required gate inputs, or YAML output textareas.
