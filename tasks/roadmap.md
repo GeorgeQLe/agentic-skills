@@ -2,7 +2,44 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Package Validation Bottleneck Profiling
+## Current Implementation - Briefing Slide Required Gate Border Convention
+
+### Goal
+
+Make the briefing-slide convention require slides with required gate questions to show unanswered gates with a red slide border and answered gates with a green slide border, then enforce that contract in the static audit.
+
+### Plan
+
+- [x] Validate the current convention, audit, fixture coverage, and git history for required-gate slide status handling.
+- [x] Add canonical convention text for required-gate slide root status and red/green border behavior.
+- [x] Add static audit diagnostics and fixture coverage for missing required-gate slide markers, status, border styles, and status updater logic.
+- [x] Run focused and package-facing verification.
+- [x] Record review evidence and ship intended tracked changes.
+
+### Acceptance Criteria
+
+- [x] Required gate slides have a documented root marker and `data-gate-status` contract.
+- [x] The convention explicitly requires red borders while required gate questions are unanswered and green borders once answered.
+- [x] The static briefing-slide audit fails valid-looking decks that include required gate questions without the required border/status affordance.
+- [x] Verification demonstrates the focused regression passes.
+
+### Verification
+
+- [x] `node --test packages/skillpacks/test/briefing-slides-audit.test.mjs`
+- [x] `npm --workspace packages/skillpacks run test:node`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+Added the missing visual-state contract to the canonical briefing-slide convention: any slide with a required gate question now needs a slide-root `data-required-gate-slide` marker, live `data-gate-status`, a red border while unanswered, and a green border once answered.
+
+Extended `scripts/audit-briefing-slides.mjs` with a required-gate border diagnostic that checks required gate slides for the root marker, status initialization, red and green border CSS selectors, and a status updater. Added fixture coverage proving valid decks pass and decks missing each affordance fail with targeted diagnostics.
+
+Verification passed for the focused audit test, the full package Node suite, canary `build:check`, task-doc audit, and diff whitespace check. The canary manifest was regenerated during verification and ended with no tracked diff.
+
+## Historical Implementation - Package Validation Bottleneck Profiling
 
 ### Goal
 

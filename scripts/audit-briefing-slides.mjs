@@ -25,6 +25,10 @@ const briefingDir = `${repoRoot}/briefing-slides`;
 const YAML_JOIN_NEWLINE_RE = /\.join\(\s*(["'])\\\\n\1\s*\)/;
 const TAG_RE = /<([a-z][a-z0-9:-]*)\b[^>]*>/gi;
 const ANCHOR_RE = /<a\b[^>]*\bhref\s*=\s*(["'])([^"']+\.ya?ml(?:#[^"']*)?)\1[^>]*>[\s\S]*?<\/a>/gi;
+const REQUIRED_GATE_CONTROL_RE =
+  /<(?:input|select|textarea)\b(?=[^>]*(?:\brequired\b|\baria-required\s*=\s*["']?true["']?))(?=[^>]*(?:\bdata-(?:gate-answer|required-gate|gate-question|required-question)\b|\bname\s*=\s*(["'])[^"']*(?:gate|question|approval)[^"']*\1))[^>]*>/i;
+const GATE_STATUS_UPDATE_RE =
+  /\bsetAttribute\(\s*(["'])data-gate-status\1|\.dataset\.gateStatus\s*=|\bdataset\[\s*(["'])gateStatus\2\s*\]\s*=/;
 const NAV_PATTERNS = {
   previous: /\bdata-(?:slide-)?prev(?:ious)?\b|\baria-label\s*=\s*["'][^"']*(?:previous|prev)\b[^"']*["']|>\s*(?:previous|prev|back|<)/i,
   next: /\bdata-(?:slide-)?next\b|\baria-label\s*=\s*["'][^"']*next\b[^"']*["']|>\s*(?:next|forward|>)/i,
@@ -58,6 +62,7 @@ const yamlDiagnostics = [];
 const footerDiagnostics = [];
 const sidecarDiagnostics = [];
 const yamlJoinDiagnostics = [];
+const gateBorderDiagnostics = [];
 
 function hasAttribute(tag, attribute) {
   return new RegExp(`\\b${attribute}(?:\\s*=|\\s|/?>)`, "i").test(tag);
@@ -163,6 +168,46 @@ function isPrimaryActionAnchor(anchorHtml) {
   );
 }
 
+function containsRequiredGateQuestion(content) {
+  return REQUIRED_GATE_CONTROL_RE.test(content) || /\bdata-required-gate-question(?:\s*=|\s|\/?>)/i.test(content);
+}
+
+function hasRequiredGateSlideMarker(tag) {
+  return hasAttribute(tag, "data-required-gate-slide");
+}
+
+function hasGateStatus(tag) {
+  return /\bdata-gate-status\s*=\s*(["'])(?:unanswered|answered)\1|\bdata-gate-status\s*=\s*(?:unanswered|answered)(?:\s|\/?>)/i.test(
+    tag,
+  );
+}
+
+function hasGateBorderRule(html, status) {
+  const styleBlocks = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
+    .map((match) => match[1])
+    .join("\n");
+  const css = styleBlocks || html;
+  const colorToken =
+    status === "unanswered"
+      ? /--(?:required-)?gate-(?:unanswered|border-unanswered)|--(?:red|danger|error)|\b(?:red|danger|error)\b|#(?:b42318|b91c1c|dc2626|d92d20|ef4444|f85149)\b/i
+      : /--(?:required-)?gate-(?:answered|border-answered)|--(?:green|success)|\b(?:green|success)\b|#(?:027a48|15803d|16803c|16a34a|22c55e|3fb950)\b/i;
+
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]+)\}/g)) {
+    const selector = match[1];
+    const body = match[2];
+    if (
+      /\[data-required-gate-slide\]/i.test(selector) &&
+      /\[data-gate-status\s*=\s*(["']?)(?:unanswered|answered)\1\]/i.test(selector) &&
+      new RegExp(`\\b${status}\\b`, "i").test(selector) &&
+      /\bborder(?:-[a-z-]+)?\s*:/.test(body) &&
+      colorToken.test(body)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 for (const file of pages) {
   const rel = `briefing-slides/${file}`;
   const html = readFileSync(`${briefingDir}/${file}`, "utf8");
@@ -244,6 +289,37 @@ for (const file of pages) {
         `Missing data-feedback-trigger in ${rel} ${displaySlideName(slide)} - every slide needs a slide-scoped feedback trigger.`,
       );
     }
+
+    if (containsRequiredGateQuestion(slide.content)) {
+      if (!hasRequiredGateSlideMarker(slide.tag)) {
+        gateBorderDiagnostics.push(
+          `Missing required-gate slide marker in ${rel} ${displaySlideName(slide)} - slides with required gate questions must mark the slide root data-required-gate-slide.`,
+        );
+      }
+      if (!hasGateStatus(slide.tag)) {
+        gateBorderDiagnostics.push(
+          `Missing required-gate slide status in ${rel} ${displaySlideName(slide)} - required gate slides must initialize data-gate-status to unanswered or answered.`,
+        );
+      }
+    }
+  }
+
+  if (slides.some((slide) => containsRequiredGateQuestion(slide.content))) {
+    if (!hasGateBorderRule(html, "unanswered")) {
+      gateBorderDiagnostics.push(
+        `Missing unanswered required-gate border style in ${rel} - use a red border rule for [data-required-gate-slide][data-gate-status="unanswered"].`,
+      );
+    }
+    if (!hasGateBorderRule(html, "answered")) {
+      gateBorderDiagnostics.push(
+        `Missing answered required-gate border style in ${rel} - use a green border rule for [data-required-gate-slide][data-gate-status="answered"].`,
+      );
+    }
+    if (!GATE_STATUS_UPDATE_RE.test(html)) {
+      gateBorderDiagnostics.push(
+        `Missing required-gate status updater in ${rel} - update data-gate-status when required gate answers change.`,
+      );
+    }
   }
 
   if (!/\bdata-slide-feedback-panel(?:\s*=|\s|\/?>)/i.test(html)) {
@@ -285,6 +361,7 @@ console.log(`YAML compiler: ${activeDecks.length} decks, ${yamlDiagnostics.lengt
 console.log(`Footer controls: ${pages.length} pages, ${footerDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`YAML sidecar links: ${pages.length} pages, ${sidecarDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Compiled-YAML newline join: ${pages.length} pages, ${yamlJoinDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Required gate borders: ${activeDecks.length} decks, ${gateBorderDiagnostics.length ? "DRIFT" : "exact"}`);
 
 const groups = [
   ["Viewport drift:", viewportDiagnostics],
@@ -298,6 +375,7 @@ const groups = [
   ["Footer controls drift:", footerDiagnostics],
   ["YAML sidecar link drift:", sidecarDiagnostics],
   ["Compiled-YAML newline join drift:", yamlJoinDiagnostics],
+  ["Required gate border drift:", gateBorderDiagnostics],
 ];
 let failed = false;
 for (const [title, diagnostics] of groups) {

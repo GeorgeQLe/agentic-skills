@@ -80,6 +80,8 @@ Every deck must support review and feedback directly on the relevant slide.
 
 - Every slide must expose a slide-scoped feedback trigger, such as a Feedback button or chip, marked `data-feedback-trigger`.
 - Gate questions must be answerable inline with radio, select, or freeform controls.
+- Any slide that contains a required gate question must carry `data-required-gate-slide` on the slide root and maintain `data-gate-status="unanswered"` until every required gate question on that slide has an answer. When all required gate questions on that slide have answers, update the slide root to `data-gate-status="answered"`.
+- Required gate slides must show the gate status as a slide-level border: unanswered required gates use a red border, and answered required gates use a green border. Use stable status selectors such as `[data-required-gate-slide][data-gate-status="unanswered"]` and `[data-required-gate-slide][data-gate-status="answered"]` so the static audit can verify both states.
 - Slide feedback controls must support at least `emphasize`, `revise`, `needs-clarification`, and freeform notes.
 - Marking controls must support per-slide statuses such as `important`, `question`, `approved`, or `skip`, stored in local browser state.
 - Annotation controls must allow per-slide notes that are included in compiled YAML.
@@ -127,6 +129,7 @@ Before handoff:
 - Run the static convention audit with `npx skillpacks briefing slides audit` from the repository root when the packaged CLI is available. In this source checkout, `node scripts/audit-briefing-slides.mjs` is the direct fallback.
 - Re-open the written deck textually and confirm it contains navigation controls, gate controls, feedback controls, YAML compiler, reference links, and print CSS.
 - Verify every slide has a feedback trigger and that activating it opens the slide-scoped sidebar or drawer.
+- Verify slides with required gate questions visibly change their slide-level border from red when unanswered to green when answered.
 - Verify footer or bottom-bar markup does not contain required feedback inputs, required gate inputs, or YAML output textareas.
 - Verify prior YAML sidecars are not promoted as primary reference or action links outside a dedicated references or provenance area.
 - Confirm every linked dense reference path exists when it is repo-local, or mark missing references visibly in the deck.

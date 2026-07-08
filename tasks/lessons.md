@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-08 - Required gate slide status must be visually enforced
+
+- A briefing-slide expectation required red borders for unanswered required gate questions and green borders once answered, but the convention and audit only enforced gate answerability and YAML status.
+- Rule: when a review-surface convention depends on visible state, encode stable DOM markers, state attributes, CSS selectors, and audit coverage for that state instead of relying on prose or examples.
+- For briefing slides, required gate question slides must expose a slide-root status contract and visible border state so reviewers can scan unresolved gates without opening compiled YAML.
+
 ## 2026-07-06 - Briefing slides are canary-lane until promoted
 
 - A release-split answer classified `create-briefing-slides`, briefing-slide convention assets, and briefing-slide UX work as general-release content even though the user clarified they are canary.

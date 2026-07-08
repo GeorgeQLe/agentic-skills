@@ -35,7 +35,28 @@ function runAudit(root) {
   });
 }
 
-function validDeck({ extraIntro = '', omitSecondTrigger = false, footer = null, script = '' } = {}) {
+function validDeck({
+  extraIntro = '',
+  omitSecondTrigger = false,
+  footer = null,
+  script = '',
+  decisionSlideAttrs = 'data-required-gate-slide data-gate-status="unanswered"',
+  gateBorderStyles = [
+    ':root { --gate-unanswered-border: #d92d20; --gate-answered-border: #16803c; }',
+    '[data-required-gate-slide][data-gate-status="unanswered"] { border-color: var(--gate-unanswered-border); }',
+    '[data-required-gate-slide][data-gate-status="answered"] { border-color: var(--gate-answered-border); }'
+  ].join(' '),
+  gateStatusScript = [
+    '<script>',
+    '  document.querySelectorAll("[data-gate-answer]").forEach((input) => {',
+    '    input.addEventListener("change", () => {',
+    '      const slide = input.closest("[data-required-gate-slide]");',
+    '      if (slide) slide.setAttribute("data-gate-status", input.checked ? "answered" : "unanswered");',
+    '    });',
+    '  });',
+    '</script>'
+  ].join('\n')
+} = {}) {
   const footerHtml = footer ?? [
     '<footer data-briefing-footer>',
     '  <button type="button" data-feedback-trigger>Feedback</button>',
@@ -51,7 +72,7 @@ function validDeck({ extraIntro = '', omitSecondTrigger = false, footer = null, 
     '  <meta charset="utf-8">',
     '  <meta name="viewport" content="width=device-width, initial-scale=1">',
     '  <title>Briefing Fixture</title>',
-    '  <style>@media print { [data-briefing-slide] { break-after: page; } }</style>',
+    `  <style>${gateBorderStyles} @media print { [data-briefing-slide] { break-after: page; } }</style>`,
     '</head>',
     '<body>',
     '  <main data-briefing-deck>',
@@ -61,7 +82,7 @@ function validDeck({ extraIntro = '', omitSecondTrigger = false, footer = null, 
     '      <a data-reference-chip href="../alignment/example.html">Alignment reference</a>',
     '      <button type="button" data-feedback-trigger>Slide feedback</button>',
     '    </section>',
-    '    <section data-briefing-slide data-slide-id="decision">',
+    `    <section data-briefing-slide data-slide-id="decision" ${decisionSlideAttrs}>`,
     '      <h2>Decision</h2>',
     '      <label>Approve direction <input type="radio" name="gate-direction" data-gate-answer required></label>',
     omitSecondTrigger ? '' : '      <button type="button" data-feedback-trigger>Slide feedback</button>',
@@ -94,6 +115,7 @@ function validDeck({ extraIntro = '', omitSecondTrigger = false, footer = null, 
     '    </textarea>',
     '  </aside>',
     footerHtml,
+    gateStatusScript,
     script,
     '</body>',
     '</html>',
@@ -126,6 +148,30 @@ describe('audit-briefing-slides fixture trees', () => {
     assert.match(result.stdout, /Slide feedback: 1 decks, DRIFT/);
     assert.match(result.stderr, /Slide feedback drift:/);
     assert.match(result.stderr, /Missing data-feedback-trigger in briefing-slides\/missing-feedback\.html slide "decision"/);
+  });
+
+  it('fails when required gate slides lack red and green border status affordances', () => {
+    const root = makeTempProject();
+    writeDeck(root, 'missing-gate-marker.html', validDeck({
+      decisionSlideAttrs: ''
+    }));
+    writeDeck(root, 'missing-gate-border-css.html', validDeck({
+      gateBorderStyles: ''
+    }));
+    writeDeck(root, 'missing-gate-status-updater.html', validDeck({
+      gateStatusScript: ''
+    }));
+
+    const result = runAudit(root);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /Required gate borders: 3 decks, DRIFT/);
+    assert.match(result.stderr, /Required gate border drift:/);
+    assert.match(result.stderr, /Missing required-gate slide marker in briefing-slides\/missing-gate-marker\.html slide "decision"/);
+    assert.match(result.stderr, /Missing required-gate slide status in briefing-slides\/missing-gate-marker\.html slide "decision"/);
+    assert.match(result.stderr, /Missing unanswered required-gate border style in briefing-slides\/missing-gate-border-css\.html/);
+    assert.match(result.stderr, /Missing answered required-gate border style in briefing-slides\/missing-gate-border-css\.html/);
+    assert.match(result.stderr, /Missing required-gate status updater in briefing-slides\/missing-gate-status-updater\.html/);
   });
 
   it('fails when footer markup contains YAML output or required gate inputs', () => {
