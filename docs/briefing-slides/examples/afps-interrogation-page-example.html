@@ -96,6 +96,78 @@
     textarea { min-height: 92px; resize: vertical; }
     ::placeholder { color: var(--faint); }
     code { font-family: var(--mono); font-size: .86em; background: #eef2f8; border: 1px solid var(--line); border-radius: 6px; padding: 1.5px 6px; color: #274069; }
+
+    /* --- archetype-distinctive: assumptions manifest, recommend-and-override, confidence gate --- */
+    .assume { display: block; }
+    .assume + .assume { margin-top: 14px; }
+    .assume-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .assume-head strong { display: inline; margin: 0; font-size: 16px; }
+    .assume p { margin: 2px 0 0; }
+    .tag {
+      font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .01em;
+      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+      background: #eef2f8; color: #47597a; border: 1px solid var(--line-strong);
+    }
+    .tag-prompt { background: #eaf1fe; color: #2f6ae0; border-color: #cfe0fc; }
+    .tag-repo { background: #e7f7f4; color: #0b8f8b; border-color: #c3ece6; }
+    .tag-inferred { background: #fff2e0; color: #b5711a; border-color: #f6dcb3; }
+    .seg {
+      display: inline-flex; margin-top: 12px; border: 1px solid var(--line-strong);
+      border-radius: 9px; overflow: hidden; background: #f7f9fd;
+    }
+    .seg button {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      font: inherit; font-size: 13px; font-weight: 600; color: var(--muted);
+      padding: 7px 14px; border-right: 1px solid var(--line-strong);
+      transition: background .15s ease, color .15s ease;
+    }
+    .seg button:last-child { border-right: 0; }
+    .seg button:hover { background: #eef3fb; color: var(--ink); }
+    .seg button[aria-pressed="true"] { color: #fff; }
+    .seg button[data-v="confirm"][aria-pressed="true"] { background: #0b8f8b; }
+    .seg button[data-v="correct"][aria-pressed="true"] { background: #b5711a; }
+    .seg button[data-v="flag"][aria-pressed="true"] { background: #d4483f; }
+    .seg button[data-v="use"] { color: var(--accent); }
+    .chip {
+      display: none; margin-left: 10px; vertical-align: middle;
+      font-size: 12px; font-weight: 700; letter-spacing: .01em;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .chip.show { display: inline-block; }
+    .chip-confirmed { background: #e7f7f4; color: #0b8f8b; }
+    .chip-correcting { background: #fff2e0; color: #b5711a; }
+    .chip-flagged { background: #fdeceb; color: #d4483f; }
+    .correction { display: none; margin-top: 10px; }
+    .correction.show { display: block; }
+    .badge {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 9px; border-radius: 999px;
+    }
+    .badge-high { background: #e7f7f4; color: #0b8f8b; }
+    .badge-med { background: #fff2e0; color: #b5711a; }
+    .badge-low { background: #fdeceb; color: #d4483f; }
+    .reco {
+      margin-top: 12px; padding: 12px 13px; border-radius: 10px;
+      background: linear-gradient(180deg, #fbfdff, #f4f8ff); border: 1px solid #dbe6fa;
+    }
+    .reco-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .reco-head span { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .reco-text { margin: 0 0 10px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.45; }
+    .reco .seg { margin-top: 0; }
+    .banner {
+      position: sticky; top: 16px; z-index: 5;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      margin: 18px 0 4px; padding: 15px 18px; border-radius: 13px;
+      font-weight: 700; font-size: 15.5px; letter-spacing: -.005em;
+      border: 1px solid; box-shadow: var(--shadow-sm);
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .banner-dot { width: 11px; height: 11px; border-radius: 999px; flex: none; }
+    .banner-open { background: #fff6ec; border-color: #f3d6ac; color: #9a5b12; }
+    .banner-open .banner-dot { background: #e0912f; box-shadow: 0 0 0 4px rgba(224,145,47,.18); }
+    .banner-pass { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
+    .banner-pass .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
+    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 13px; }
     @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 28px 18px 48px; } }
   </style>
 </head>
@@ -143,6 +215,171 @@
         </div>
       </div>
     </section>
+
+    <section>
+      <h2>Round 1 &middot; Assumptions manifest</h2>
+      <p class="intro" style="font-size:16px;margin-bottom:18px;">Before asking anything open-ended, the skill states back what it already believes &mdash; each row tagged by where the belief came from. These are <strong>intake hypotheses, not findings</strong>: confirm what holds, correct what's wrong, flag what needs research. Nothing here is canonical.</p>
+
+      <div class="card assume" data-assume>
+        <div class="assume-head">
+          <strong>Target branch is the first-value onboarding flow</strong>
+          <span class="tag tag-prompt">from prompt</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>The invocation named onboarding, so the skill scopes to that branch unless corrected.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>What's the correct branch or scope?</label>
+          <textarea placeholder="Describe the correction"></textarea>
+        </div>
+      </div>
+
+      <div class="card assume" data-assume>
+        <div class="assume-head">
+          <strong>research/positioning.md is the binding upstream artifact</strong>
+          <span class="tag tag-repo">from repo</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>It is the most recently updated research doc on this branch, so the skill treats it as authoritative.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>Which artifact should bind instead?</label>
+          <textarea placeholder="Example: design/flow-tree-onboarding.yaml"></textarea>
+        </div>
+      </div>
+
+      <div class="card assume" data-assume>
+        <div class="assume-head">
+          <strong>The primary persona is a returning power user</strong>
+          <span class="tag tag-inferred">inferred</span>
+          <span class="chip" data-chip></span>
+        </div>
+        <p>No persona was stated; the skill inferred one from the flow's density. Low confidence &mdash; likely needs research.</p>
+        <div class="seg" role="group" aria-label="Respond to assumption">
+          <button type="button" data-v="confirm" aria-pressed="false">Confirm</button>
+          <button type="button" data-v="correct" aria-pressed="false">Correct</button>
+          <button type="button" data-v="flag" aria-pressed="false">Flag</button>
+        </div>
+        <div class="correction" data-correction>
+          <label>Who is the real primary persona?</label>
+          <textarea placeholder="Describe the persona"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Open question &middot; recommend and override</h2>
+      <p class="intro" style="font-size:16px;margin-bottom:18px;">At least one input each round must be <strong>genuinely open</strong> &mdash; not a disguised yes/no. The skill may still offer a recommended answer with its confidence, but the user can override freely. This is where new uncertainty actually gets reduced.</p>
+
+      <div class="card q" data-openq>
+        <strong>What is the first-success moment this flow should deliver?</strong>
+        <div class="reco">
+          <div class="reco-head">
+            <span>Recommended answer</span>
+            <span class="badge badge-med">medium confidence</span>
+          </div>
+          <p class="reco-text" data-reco-text>User connects their first data source and sees a populated dashboard within the initial session.</p>
+          <div class="seg" role="group" aria-label="Use recommended answer">
+            <button type="button" data-v="use" aria-pressed="false">Use recommended</button>
+          </div>
+        </div>
+        <label>Your answer <span style="text-transform:none;font-weight:600;color:var(--faint);">(required &mdash; overrides the recommendation)</span></label>
+        <textarea data-open-input data-required placeholder="Define the first-success moment in your own words"></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Confidence gate &middot; loop exit</h2>
+      <p class="intro" style="font-size:16px;margin-bottom:14px;">The gate is live. It counts every unconfirmed assumption plus every empty required answer. While anything is open, the skill stays in stage zero; when the count reaches zero, it may advance to stage one &mdash; the interrogation page never becomes the canonical artifact.</p>
+      <div class="banner banner-open" data-gate role="status" aria-live="polite">
+        <span class="banner-dot"></span>
+        <span data-gate-text>Confidence gate: 4 open items &mdash; stay in stage zero</span>
+        <small data-gate-detail>3 assumptions to resolve &middot; 1 required answer empty</small>
+      </div>
+    </section>
   </main>
+
+  <script>
+    (function () {
+      var CHIP = { confirm: ["chip-confirmed", "Confirmed"], correct: ["chip-correcting", "Correcting"], flag: ["chip-flagged", "Flagged"] };
+
+      document.querySelectorAll("[data-assume]").forEach(function (row) {
+        var chip = row.querySelector("[data-chip]");
+        var correction = row.querySelector("[data-correction]");
+        row.querySelectorAll(".seg button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var v = btn.getAttribute("data-v");
+            var already = btn.getAttribute("aria-pressed") === "true";
+            row.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+            if (already) {
+              chip.className = "chip";
+              row.removeAttribute("data-state");
+            } else {
+              btn.setAttribute("aria-pressed", "true");
+              chip.className = "chip show " + CHIP[v][0];
+              chip.textContent = CHIP[v][1];
+              row.setAttribute("data-state", v);
+            }
+            correction.classList.toggle("show", !already && v === "correct");
+            recompute();
+          });
+        });
+      });
+
+      document.querySelectorAll("[data-openq]").forEach(function (q) {
+        var field = q.querySelector("[data-open-input]");
+        var useBtn = q.querySelector('[data-v="use"]');
+        var recoText = q.querySelector("[data-reco-text]");
+        if (useBtn) {
+          useBtn.addEventListener("click", function () {
+            field.value = recoText.textContent.trim();
+            useBtn.setAttribute("aria-pressed", "true");
+            recompute();
+          });
+        }
+        field.addEventListener("input", function () {
+          if (useBtn && field.value.trim() !== recoText.textContent.trim()) useBtn.setAttribute("aria-pressed", "false");
+          recompute();
+        });
+      });
+
+      var banner = document.querySelector("[data-gate]");
+      var gateText = document.querySelector("[data-gate-text]");
+      var gateDetail = document.querySelector("[data-gate-detail]");
+
+      function recompute() {
+        var assumptions = document.querySelectorAll("[data-assume]");
+        var openAssume = 0;
+        assumptions.forEach(function (row) { if (row.getAttribute("data-state") !== "confirm") openAssume++; });
+
+        var emptyReq = 0;
+        document.querySelectorAll("[data-required]").forEach(function (f) { if (!f.value.trim()) emptyReq++; });
+
+        var total = openAssume + emptyReq;
+        if (total === 0) {
+          banner.className = "banner banner-pass";
+          gateText.textContent = "Confidence gate: passed — advance to stage one";
+          gateDetail.textContent = "All assumptions resolved · required answers complete";
+        } else {
+          banner.className = "banner banner-open";
+          gateText.textContent = "Confidence gate: " + total + " open item" + (total === 1 ? "" : "s") + " — stay in stage zero";
+          var parts = [];
+          parts.push(openAssume + " assumption" + (openAssume === 1 ? "" : "s") + " to resolve");
+          parts.push(emptyReq + " required answer" + (emptyReq === 1 ? "" : "s") + " empty");
+          gateDetail.textContent = parts.join(" · ");
+        }
+      }
+
+      recompute();
+    })();
+  </script>
 </body>
 </html>
