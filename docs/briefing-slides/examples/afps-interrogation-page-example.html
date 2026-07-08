@@ -41,7 +41,7 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      font-size: 12.5px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--muted);
       background: rgba(255,255,255,.7);
@@ -57,16 +57,16 @@
       align-items: center;
       gap: 9px;
       color: var(--accent);
-      font-size: 12.5px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: .15em;
       font-weight: 800;
       margin: 30px 0 14px;
     }
     .eyebrow::before { content: ""; width: 20px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
-    h1 { margin: 0 0 12px; font-size: clamp(40px, 6vw, 72px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
-    h2 { margin: 48px 0 14px; font-size: clamp(22px, 2.8vw, 30px); letter-spacing: -.01em; }
-    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(17px, 1.9vw, 21px); max-width: 68ch; }
+    h1 { margin: 0 0 12px; font-size: clamp(48px, 6.8vw, 84px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
+    h2 { margin: 52px 0 16px; font-size: clamp(26px, 3.1vw, 38px); letter-spacing: -.01em; }
+    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(19px, 2.1vw, 25px); max-width: 68ch; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .card {
       background: var(--panel);
@@ -77,17 +77,17 @@
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
-    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 17px; }
-    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14.5px; }
+    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 16px; }
     .q strong { color: var(--accent); }
-    label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+    label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
     textarea, select, input[type="text"] {
       width: 100%;
       border: 1px solid var(--line-strong);
       border-radius: 9px;
-      padding: 11px;
+      padding: 12px;
       font: inherit;
-      font-size: 14.5px;
+      font-size: 16px;
       background: #fff;
       color: var(--ink);
       transition: border-color .15s ease, box-shadow .15s ease;
@@ -101,10 +101,10 @@
     .assume { display: block; }
     .assume + .assume { margin-top: 14px; }
     .assume-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-    .assume-head strong { display: inline; margin: 0; font-size: 16px; }
+    .assume-head strong { display: inline; margin: 0; font-size: 18px; }
     .assume p { margin: 2px 0 0; }
     .tag {
-      font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .01em;
+      font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
       padding: 2px 8px; border-radius: 999px; white-space: nowrap;
       background: #eef2f8; color: #47597a; border: 1px solid var(--line-strong);
     }
@@ -117,8 +117,8 @@
     }
     .seg button {
       appearance: none; border: 0; background: transparent; cursor: pointer;
-      font: inherit; font-size: 13px; font-weight: 600; color: var(--muted);
-      padding: 7px 14px; border-right: 1px solid var(--line-strong);
+      font: inherit; font-size: 14.5px; font-weight: 600; color: var(--muted);
+      padding: 8px 16px; border-right: 1px solid var(--line-strong);
       transition: background .15s ease, color .15s ease;
     }
     .seg button:last-child { border-right: 0; }
@@ -130,8 +130,8 @@
     .seg button[data-v="use"] { color: var(--accent); }
     .chip {
       display: none; margin-left: 10px; vertical-align: middle;
-      font-size: 12px; font-weight: 700; letter-spacing: .01em;
-      padding: 3px 10px; border-radius: 999px;
+      font-size: 13.5px; font-weight: 700; letter-spacing: .01em;
+      padding: 3px 11px; border-radius: 999px;
     }
     .chip.show { display: inline-block; }
     .chip-confirmed { background: #e7f7f4; color: #0b8f8b; }
@@ -140,8 +140,8 @@
     .correction { display: none; margin-top: 10px; }
     .correction.show { display: block; }
     .badge {
-      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em;
-      text-transform: uppercase; padding: 3px 9px; border-radius: 999px;
+      display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px;
     }
     .badge-high { background: #e7f7f4; color: #0b8f8b; }
     .badge-med { background: #fff2e0; color: #b5711a; }
@@ -151,14 +151,14 @@
       background: linear-gradient(180deg, #fbfdff, #f4f8ff); border: 1px solid #dbe6fa;
     }
     .reco-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-    .reco-head span { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-    .reco-text { margin: 0 0 10px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.45; }
+    .reco-head span { font-size: 13.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+    .reco-text { margin: 0 0 10px; color: var(--ink-soft); font-size: 16px; line-height: 1.45; }
     .reco .seg { margin-top: 0; }
     .banner {
       position: sticky; top: 16px; z-index: 5;
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      margin: 18px 0 4px; padding: 15px 18px; border-radius: 13px;
-      font-weight: 700; font-size: 15.5px; letter-spacing: -.005em;
+      margin: 18px 0 4px; padding: 17px 20px; border-radius: 13px;
+      font-weight: 700; font-size: 17.5px; letter-spacing: -.005em;
       border: 1px solid; box-shadow: var(--shadow-sm);
       transition: background .2s ease, border-color .2s ease, color .2s ease;
     }
@@ -167,22 +167,22 @@
     .banner-open .banner-dot { background: #e0912f; box-shadow: 0 0 0 4px rgba(224,145,47,.18); }
     .banner-pass { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
     .banner-pass .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
-    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 13px; }
+    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 14.5px; }
     .compile { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-sm); }
     .compile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .btn {
-      appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 700;
-      border-radius: 9px; padding: 10px 18px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+      appearance: none; cursor: pointer; font: inherit; font-size: 15.5px; font-weight: 700;
+      border-radius: 9px; padding: 11px 20px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
     }
     .btn:active { transform: translateY(1px); }
     .btn-primary { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
     .btn-primary:hover { background: #255bc4; }
     .btn-ghost { border: 1px solid var(--line-strong); background: #fff; color: var(--ink-soft); }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-    .copy-status { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .copy-status { font-size: 14.5px; font-weight: 600; color: var(--muted); }
     .yaml-out {
       display: none; margin-top: 14px; width: 100%; min-height: 260px; resize: vertical;
-      font-family: var(--mono); font-size: 12.5px; line-height: 1.5; color: #274069;
+      font-family: var(--mono); font-size: 13.5px; line-height: 1.5; color: #274069;
       background: #f7f9fd; border: 1px solid var(--line-strong); border-radius: 10px; padding: 14px;
       white-space: pre;
     }
@@ -237,7 +237,7 @@
 
     <section>
       <h2>Round 1 &middot; Assumptions manifest</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">Before asking anything open-ended, the skill states back what it already believes &mdash; each row tagged by where the belief came from. These are <strong>intake hypotheses, not findings</strong>: confirm what holds, correct what's wrong, flag what needs research. Nothing here is canonical.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Before asking anything open-ended, the skill states back what it already believes &mdash; each row tagged by where the belief came from. These are <strong>intake hypotheses, not findings</strong>: confirm what holds, correct what's wrong, flag what needs research. Nothing here is canonical.</p>
 
       <div class="card assume" data-assume data-source="prompt" data-claim="Target branch is the first-value onboarding flow">
         <div class="assume-head">
@@ -296,7 +296,7 @@
 
     <section>
       <h2>Open question &middot; recommend and override</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">At least one input each round must be <strong>genuinely open</strong> &mdash; not a disguised yes/no. The skill may still offer a recommended answer with its confidence, but the user can override freely. This is where new uncertainty actually gets reduced.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">At least one input each round must be <strong>genuinely open</strong> &mdash; not a disguised yes/no. The skill may still offer a recommended answer with its confidence, but the user can override freely. This is where new uncertainty actually gets reduced.</p>
 
       <div class="card q" data-openq data-question="What is the first-success moment this flow should deliver?" data-confidence="medium">
         <strong>What is the first-success moment this flow should deliver?</strong>
@@ -317,7 +317,7 @@
 
     <section>
       <h2>Confidence gate &middot; loop exit</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:14px;">The gate is live. It counts every unconfirmed assumption plus every empty required answer. While anything is open, the skill stays in stage zero; when the count reaches zero, it may advance to stage one &mdash; the interrogation page never becomes the canonical artifact.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:14px;">The gate is live. It counts every unconfirmed assumption plus every empty required answer. While anything is open, the skill stays in stage zero; when the count reaches zero, it may advance to stage one &mdash; the interrogation page never becomes the canonical artifact.</p>
       <div class="banner banner-open" data-gate role="status" aria-live="polite">
         <span class="banner-dot"></span>
         <span data-gate-text>Confidence gate: 4 open items &mdash; stay in stage zero</span>
@@ -327,7 +327,7 @@
 
     <section>
       <h2>Compile responses</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">This is the round's payoff: the page compiles every assumption decision and open answer into a captured-answers YAML. The user copies it, clears context, and pastes it into a fresh session &mdash; a new agent reads the sidecar, runs the confidence gate, and either emits the next round or advances to stage one. That paste-forward is the whole Research Session Loop.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">This is the round's payoff: the page compiles every assumption decision and open answer into a captured-answers YAML. The user copies it, clears context, and pastes it into a fresh session &mdash; a new agent reads the sidecar, runs the confidence gate, and either emits the next round or advances to stage one. That paste-forward is the whole Research Session Loop.</p>
       <div class="compile" data-sidecar="research/_working/interrogation-example-r1.yaml">
         <div class="compile-actions">
           <button type="button" class="btn btn-primary" data-compile-btn>Compile responses</button>

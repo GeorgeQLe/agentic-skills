@@ -41,7 +41,7 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      font-size: 12.5px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--muted);
       background: rgba(255,255,255,.7);
@@ -57,16 +57,16 @@
       align-items: center;
       gap: 9px;
       color: var(--accent);
-      font-size: 12.5px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: .15em;
       font-weight: 800;
       margin: 30px 0 14px;
     }
     .eyebrow::before { content: ""; width: 20px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
-    h1 { margin: 0 0 12px; font-size: clamp(40px, 6vw, 72px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
-    h2 { margin: 48px 0 14px; font-size: clamp(22px, 2.8vw, 30px); letter-spacing: -.01em; }
-    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(17px, 1.9vw, 21px); max-width: 68ch; }
+    h1 { margin: 0 0 12px; font-size: clamp(48px, 6.8vw, 84px); line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; }
+    h2 { margin: 52px 0 16px; font-size: clamp(26px, 3.1vw, 38px); letter-spacing: -.01em; }
+    .intro { color: var(--muted); line-height: 1.5; font-size: clamp(19px, 2.1vw, 25px); max-width: 68ch; }
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
     .card {
       background: var(--panel);
@@ -77,8 +77,8 @@
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--line-strong); }
-    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 17px; }
-    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14.5px; }
+    .card strong { display: block; margin-bottom: 8px; letter-spacing: -.01em; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 16px; }
     .gate { border-left: 3px solid var(--accent); background: linear-gradient(180deg, #fbfdff, #f6faff); }
     .gate strong { color: var(--accent); }
     .handoff { border: 1px solid var(--line); }
@@ -86,17 +86,17 @@
 
     /* --- archetype-distinctive: evidence matrix, alternatives, file writes, approval gates --- */
     .badge {
-      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .04em;
-      text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+      display: inline-block; font-size: 12.5px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
     }
     .badge-high { background: #e7f7f4; color: #0b8f8b; }
     .badge-med { background: #fff2e0; color: #b5711a; }
     .badge-low { background: #fdeceb; color: #d4483f; }
     .matrix-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 15px; box-shadow: var(--shadow-sm); background: var(--panel); }
-    table.matrix { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
-    table.matrix th, table.matrix td { text-align: left; padding: 13px 16px; vertical-align: top; border-bottom: 1px solid var(--line); line-height: 1.45; }
+    table.matrix { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 15.5px; }
+    table.matrix th, table.matrix td { text-align: left; padding: 14px 17px; vertical-align: top; border-bottom: 1px solid var(--line); line-height: 1.45; }
     table.matrix thead th {
-      font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
+      font-size: 12.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
       font-weight: 800; background: #f6f9fd; border-bottom: 1px solid var(--line-strong);
       position: sticky; top: 0;
     }
@@ -114,22 +114,22 @@
       background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
       padding: 13px 15px; box-shadow: var(--shadow-sm);
     }
-    .writes code { font-size: 13px; }
+    .writes code { font-size: 14.5px; }
     .action {
-      font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .05em;
-      text-transform: uppercase; padding: 3px 9px; border-radius: 6px; white-space: nowrap;
+      font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .05em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 6px; white-space: nowrap;
     }
     .action-create { background: #e7f7f4; color: #0b8f8b; border: 1px solid #c3ece6; }
     .action-update { background: #eaf1fe; color: #2f6ae0; border: 1px solid #cfe0fc; }
-    .writes .note { color: var(--muted); font-size: 13px; margin-left: auto; }
+    .writes .note { color: var(--muted); font-size: 15px; margin-left: auto; }
     .seg {
       display: inline-flex; margin-top: 12px; border: 1px solid var(--line-strong);
       border-radius: 9px; overflow: hidden; background: #f7f9fd;
     }
     .seg button {
       appearance: none; border: 0; background: transparent; cursor: pointer;
-      font: inherit; font-size: 13px; font-weight: 600; color: var(--muted);
-      padding: 7px 14px; border-right: 1px solid var(--line-strong);
+      font: inherit; font-size: 14.5px; font-weight: 600; color: var(--muted);
+      padding: 8px 16px; border-right: 1px solid var(--line-strong);
       transition: background .15s ease, color .15s ease;
     }
     .seg button:last-child { border-right: 0; }
@@ -140,8 +140,8 @@
     .seg button[data-v="clarify"][aria-pressed="true"] { background: #2f6ae0; }
     .chip {
       display: none; margin-left: 10px; vertical-align: middle;
-      font-size: 12px; font-weight: 700; letter-spacing: .01em;
-      padding: 3px 10px; border-radius: 999px;
+      font-size: 13.5px; font-weight: 700; letter-spacing: .01em;
+      padding: 3px 11px; border-radius: 999px;
     }
     .chip.show { display: inline-block; }
     .chip-approved { background: #e7f7f4; color: #0b8f8b; }
@@ -152,8 +152,8 @@
     .banner {
       position: sticky; top: 16px; z-index: 5;
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      margin: 18px 0 4px; padding: 15px 18px; border-radius: 13px;
-      font-weight: 700; font-size: 15.5px; letter-spacing: -.005em;
+      margin: 18px 0 4px; padding: 17px 20px; border-radius: 13px;
+      font-weight: 700; font-size: 17.5px; letter-spacing: -.005em;
       border: 1px solid; box-shadow: var(--shadow-sm);
       transition: background .2s ease, border-color .2s ease, color .2s ease;
     }
@@ -162,22 +162,22 @@
     .banner-blocked .banner-dot { background: #e0912f; box-shadow: 0 0 0 4px rgba(224,145,47,.18); }
     .banner-ready { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
     .banner-ready .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
-    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 13px; }
+    .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 14.5px; }
     .compile { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-sm); }
     .compile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .btn {
-      appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 700;
-      border-radius: 9px; padding: 10px 18px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+      appearance: none; cursor: pointer; font: inherit; font-size: 15.5px; font-weight: 700;
+      border-radius: 9px; padding: 11px 20px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
     }
     .btn:active { transform: translateY(1px); }
     .btn-primary { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
     .btn-primary:hover { background: #255bc4; }
     .btn-ghost { border: 1px solid var(--line-strong); background: #fff; color: var(--ink-soft); }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-    .copy-status { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .copy-status { font-size: 14.5px; font-weight: 600; color: var(--muted); }
     .yaml-out {
       display: none; margin-top: 14px; width: 100%; min-height: 280px; resize: vertical;
-      font-family: var(--mono); font-size: 12.5px; line-height: 1.5; color: #274069;
+      font-family: var(--mono); font-size: 13.5px; line-height: 1.5; color: #274069;
       background: #f7f9fd; border: 1px solid var(--line-strong); border-radius: 10px; padding: 14px;
       white-space: pre; box-sizing: border-box;
     }
@@ -203,7 +203,7 @@
 
     <section>
       <h2>Evidence matrix</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">This is what makes an alignment page a <strong>post-research</strong> surface: every claim is separated from the evidence that supports it, the inference drawn on top, and a confidence rating. The reviewer approves reasoning, not vibes &mdash; and can see exactly where a conclusion is thin.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">This is what makes an alignment page a <strong>post-research</strong> surface: every claim is separated from the evidence that supports it, the inference drawn on top, and a confidence rating. The reviewer approves reasoning, not vibes &mdash; and can see exactly where a conclusion is thin.</p>
       <div class="matrix-wrap">
         <table class="matrix">
           <thead>
@@ -235,7 +235,7 @@
 
     <section>
       <h2>Alternatives considered</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">A post-research surface shows the reasoning that was rejected, not just the recommendation &mdash; so approval is informed by what lost and why.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">A post-research surface shows the reasoning that was rejected, not just the recommendation &mdash; so approval is informed by what lost and why.</p>
       <div class="grid">
         <div class="card alt">
           <span class="badge badge-low verdict">Rejected</span>
@@ -257,7 +257,7 @@
 
     <section>
       <h2>Proposed file changes</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">Approval authorizes exactly these canonical writes &mdash; nothing is written until every gate below passes. The reviewer sees the blast radius before granting it.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Approval authorizes exactly these canonical writes &mdash; nothing is written until every gate below passes. The reviewer sees the blast radius before granting it.</p>
       <ul class="writes">
         <li><span class="action action-update">Update</span><code>research/positioning.md</code><span class="note">append activation-friction findings</span></li>
         <li><span class="action action-create">Create</span><code>design/flow-tree-onboarding.yaml</code><span class="note">connect-first flow structure</span></li>
@@ -268,7 +268,7 @@
 
     <section>
       <h2>Approval gates</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:14px;">Each gate is a real decision, not an acknowledgement. The compile banner stays blocked until every gate is approved &mdash; only then is the producing skill authorized to write. Revise or clarify holds the write.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:14px;">Each gate is a real decision, not an acknowledgement. The compile banner stays blocked until every gate is approved &mdash; only then is the producing skill authorized to write. Revise or clarify holds the write.</p>
       <div class="banner banner-blocked" data-compile role="status" aria-live="polite">
         <span class="banner-dot"></span>
         <span data-compile-text>Approval: blocked &mdash; 3 gates pending</span>
@@ -307,7 +307,7 @@
 
     <section>
       <h2>Compile responses</h2>
-      <p class="intro" style="font-size:16px;margin-bottom:18px;">Approval is not a click &mdash; it is a payload. The page compiles every gate decision into a response YAML whose <code>approval_status</code> is computed from the gates' approval-effect metadata, not from label text. The user copies it, clears context, and pastes it into a fresh session; only a <code>ready-for-agent-review</code> payload authorizes the producing skill to write the canonical artifacts above.</p>
+      <p class="intro" style="font-size:18px;margin-bottom:18px;">Approval is not a click &mdash; it is a payload. The page compiles every gate decision into a response YAML whose <code>approval_status</code> is computed from the gates' approval-effect metadata, not from label text. The user copies it, clears context, and pastes it into a fresh session; only a <code>ready-for-agent-review</code> payload authorizes the producing skill to write the canonical artifacts above.</p>
       <div class="compile" data-page="alignment/onboarding-redesign.html">
         <div class="compile-actions">
           <button type="button" class="btn btn-primary" data-compile-btn>Compile responses</button>
