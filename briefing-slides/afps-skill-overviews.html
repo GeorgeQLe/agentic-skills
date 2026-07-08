@@ -357,6 +357,81 @@
     .warning { border-left: 3px solid var(--gold); border-color: #f0e3bf; background: linear-gradient(180deg, #fffdf6, #fffaef); }
     .warning:hover { border-color: #e8d49f; }
     .hidden-textarea { position: fixed; left: -9999px; top: 0; }
+    /* YouTube "Like · Subscribe · 🔔" CTA (title slide only) */
+    .yt-cta {
+      position: relative;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 4px;
+      padding: 6px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .yt-cta:hover, .yt-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
+    }
+    .yt-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      background: #eef2f8;
+      color: var(--ink-soft);
+      box-shadow: var(--shadow-sm);
+      transform-origin: center;
+      animation: ytPress 4.5s ease-in-out infinite;
+    }
+    .yt-like { min-width: 84px; animation-delay: .09s; }
+    .yt-sub {
+      min-width: 104px;
+      background: var(--red);
+      color: #fff;
+      letter-spacing: .01em;
+      box-shadow: 0 2px 8px -2px rgba(207,66,87,.5);
+      animation-delay: 1.26s;
+    }
+    .yt-bell { min-width: 48px; font-size: 17px; animation-delay: 2.61s; }
+    @keyframes ytPress {
+      0%, 100% { transform: scale(1); filter: none; }
+      3%  { transform: scale(.93); filter: brightness(1.12); }
+      6%  { transform: scale(1.04); }
+      9%  { transform: scale(1); filter: none; }
+    }
+    .yt-cursor {
+      position: absolute;
+      top: 62%;
+      left: 16%;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      filter: drop-shadow(0 1px 1px rgba(19,26,41,.35));
+      transform: translate(-4px, 0);
+      animation: ytCursor 4.5s ease-in-out infinite;
+    }
+    .yt-cursor svg { display: block; width: 100%; height: 100%; }
+    @keyframes ytCursor {
+      0%   { left: 16%; transform: translate(-4px, 0) scale(1); }
+      5%   { left: 16%; transform: translate(-4px, 3px) scale(.86); }
+      10%  { left: 16%; transform: translate(-4px, 0) scale(1); }
+      26%  { left: 52%; transform: translate(-4px, 0) scale(1); }
+      31%  { left: 52%; transform: translate(-4px, 3px) scale(.86); }
+      36%  { left: 52%; transform: translate(-4px, 0) scale(1); }
+      56%  { left: 86%; transform: translate(-4px, 0) scale(1); }
+      61%  { left: 86%; transform: translate(-4px, 3px) scale(.86); }
+      66%  { left: 86%; transform: translate(-4px, 0) scale(1); }
+      100% { left: 16%; transform: translate(-4px, 0) scale(1); }
+    }
     @media (min-width: 981px) and (max-height: 820px) {
       .slide { padding: clamp(22px, 2.4vw, 34px); }
       h1 { font-size: clamp(34px, 4.6vw, 58px); }
@@ -389,6 +464,8 @@
     @media (prefers-reduced-motion: reduce) {
       .slide.active { animation: none; }
       * { transition-duration: .01ms !important; }
+      .yt-cursor { display: none; }
+      .yt-pill, .yt-cta { animation: none; }
     }
     @media print {
       body { background: #fff; }
@@ -407,6 +484,8 @@
       }
       .slide::before { display: none; }
       .card:hover, .skill-card:hover, .phase:hover { transform: none; box-shadow: var(--shadow-sm); }
+      .yt-cursor { display: none; }
+      .yt-pill, .yt-cta { animation: none; }
     }
   </style>
 </head>
@@ -430,6 +509,15 @@
         <header>
           <div class="eyebrow">Series deck</div>
           <h1>What each AFPS skill does, when it appears, and what people can expect.</h1>
+          <a class="yt-cta" href="https://www.youtube.com/@georgele" target="_blank"
+             rel="noopener noreferrer" aria-label="Subscribe to @georgele on YouTube">
+            <span class="yt-pill yt-like">👍 Like</span>
+            <span class="yt-pill yt-sub">Subscribe</span>
+            <span class="yt-pill yt-bell" aria-hidden="true">🔔</span>
+            <span class="yt-cursor" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 2v18l4.2-4.2 2.6 6 2.9-1.2-2.5-5.8H19z" fill="#1b2333" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
         </header>
         <div class="content grid-3">
           <div class="card"><div class="big-number">43</div><p>Named skills covered across deliberate and rapid AFPS decks.</p></div>
