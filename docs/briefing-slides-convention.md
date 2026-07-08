@@ -4,6 +4,29 @@ This file is the **single authoring source** for the briefing-slides convention.
 
 Briefing slides do **not** replace dense artifacts. They make review more visual and navigable while preserving dense `alignment/*.html`, `interrogation/*.html`, markdown reports, specs, research notes, and source documents as linked references.
 
+## Briefing-First Review Surface
+
+Where this convention is installed, the briefing deck is the **primary review surface** at each interrogation and alignment step, and the dense page is the linked fallback. When a producing skill reaches a review/open step and this convention is present, it applies briefing-first:
+
+- The producing skill first authors its dense `interrogation/*.html` or `alignment/*.html` page inline via the shared interrogation-page / alignment-page conventions, exactly as it otherwise would. The dense page remains canonical and is never skipped.
+- After the dense page exists, build `briefing-slides/<skill>-<topic>.html` as the primary review surface for that step, where `<skill>` is the producing command's slug and `<topic>` is the step's topic slug.
+- Open **only** the deck. Do not auto-open the dense page or any other linked reference. The dense page stays available as a drill-down fallback surface the reviewer can open manually.
+- Link the dense page and every source artifact from the deck using relative reference links/chips (`../interrogation/<page>.html`, `../alignment/<page>.html`, `../research/<file>.md`, etc.), not embeds.
+- The compiled full-deck YAML routes back to the **producing command** (not the briefing-slides command) via the `command` field, and carries `reference_pages` (the dense page plus every linked page) and `source_artifacts` so the producing skill can resume from the deck.
+- Preserve every unanswered gate and all slide feedback across amendments: re-authoring the deck after feedback must not drop unanswered required gates or previously captured feedback/marks/annotations.
+- Mark the deck ready for agent review (`approval_status: ready-for-agent-review`) only when **every required gate is approved** and no unresolved revise/down/clarification feedback remains, per the YAML Contract.
+
+This behavior activates purely from the presence of this convention. When this convention is absent (for example on a stable install where the asset is stripped), producing skills fall back to the dense page as the primary review surface with no briefing behavior.
+
+## Gate Parity And Partial Decks
+
+A briefing-first deck must faithfully represent the dense page's review gates.
+
+- **Full parity (default).** A full-review deck must cover **every active required gate** present on the dense page it reviews. For each covered gate, the deck must preserve the gate's identity (the same gate/question), its required-vs-optional status, its approval effect (what approving it authorizes), and its target path (the artifact or destination the gate governs). A full-review deck must carry `data-full-deck-yaml` and may emit `approval_status: ready-for-agent-review` once all required gates are approved.
+- **Partial decks.** A reduced-scope deck that intentionally covers only a subset of the dense page's required gates is allowed **only when explicitly labeled partial** (mark the deck with `data-partial-deck` and state the reduced scope on the deck). A partial deck:
+  - must emit a partial/incomplete `approval_status` (for example `partial` or `incomplete`) and must **never** emit `ready-for-agent-review`;
+  - must preserve the unanswered required gates it does not cover — list them in `unanswered_required_questions` so they are not silently dropped — and must not represent partial coverage as full approval.
+
 ## Output Path
 
 Write decks under `briefing-slides/`.
@@ -116,7 +139,7 @@ Include:
 - `annotations`: per-slide notes.
 - `marked_slides`: per-slide status marks.
 - `unanswered_required_questions`: required questions still unanswered.
-- `approval_status`: `not-approved` or `ready-for-agent-review`.
+- `approval_status`: `not-approved` or `ready-for-agent-review`. A partial deck (see Gate Parity And Partial Decks) instead emits a partial/incomplete status such as `partial` or `incomplete` and must never emit `ready-for-agent-review`.
 
 Route review YAML to the owning producing workflow when one exists. Use the briefing-slides skill command only for ad hoc decks that the briefing-slides skill owns.
 

@@ -40,6 +40,9 @@ function validDeck({
   omitSecondTrigger = false,
   footer = null,
   script = '',
+  mainAttrs = '',
+  approvalStatus = 'ready-for-agent-review',
+  includeUnanswered = false,
   decisionSlideAttrs = 'data-required-gate-slide data-gate-status="unanswered"',
   gateBorderStyles = [
     ':root { --gate-unanswered-border: #d92d20; --gate-answered-border: #16803c; }',
@@ -75,7 +78,7 @@ function validDeck({
     `  <style>${gateBorderStyles} @media print { [data-briefing-slide] { break-after: page; } }</style>`,
     '</head>',
     '<body>',
-    '  <main data-briefing-deck>',
+    `  <main data-briefing-deck ${mainAttrs}>`,
     '    <section data-briefing-slide data-slide-id="intro">',
     '      <h1>Briefing Fixture</h1>',
     `      ${extraIntro}`,
@@ -94,7 +97,8 @@ function validDeck({
     'command: "$create-briefing-slides"',
     'briefing_slides: briefing-slides/example.html',
     'slide_feedback: []',
-    'approval_status: ready-for-agent-review',
+    ...(includeUnanswered ? ['unanswered_required_questions:', '  - gate-scope'] : []),
+    `approval_status: ${approvalStatus}`,
     '      </textarea>',
     '      <button type="button" data-feedback-trigger>Slide feedback</button>',
     '    </section>',
@@ -239,6 +243,54 @@ describe('audit-briefing-slides fixture trees', () => {
     assert.match(result.stdout, /Print CSS: 1 decks, DRIFT/);
     assert.match(result.stderr, /Embedded content in briefing-slides\/unsafe-structure\.html/);
     assert.match(result.stderr, /Missing data-briefing-slide roots/);
+  });
+
+  it('passes on a labeled-partial deck emitting partial status and preserving uncovered gates', () => {
+    const root = makeTempProject();
+    writeDeck(root, 'partial.html', validDeck({
+      mainAttrs: 'data-partial-deck',
+      approvalStatus: 'partial',
+      includeUnanswered: true
+    }));
+
+    const result = runAudit(root);
+
+    assert.equal(result.stderr, '');
+    assert.equal(result.status, 0, [result.stdout, result.stderr].filter(Boolean).join('\n'));
+    assert.match(result.stdout, /Partial deck status: 1 decks, exact/);
+    assert.match(result.stdout, /Gate parity \(best-effort\): no notes/);
+  });
+
+  it('fails when a partial deck emits ready-for-agent-review', () => {
+    const root = makeTempProject();
+    writeDeck(root, 'partial-ready.html', validDeck({
+      mainAttrs: 'data-partial-deck',
+      approvalStatus: 'ready-for-agent-review',
+      includeUnanswered: true
+    }));
+
+    const result = runAudit(root);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /Partial deck status: 1 decks, DRIFT/);
+    assert.match(result.stderr, /Partial deck status drift:/);
+    assert.match(result.stderr, /Partial deck emits ready-for-agent-review in briefing-slides\/partial-ready\.html/);
+    assert.match(result.stderr, /Missing partial approval_status in briefing-slides\/partial-ready\.html/);
+  });
+
+  it('fails when a partial deck omits unanswered_required_questions', () => {
+    const root = makeTempProject();
+    writeDeck(root, 'partial-no-unanswered.html', validDeck({
+      mainAttrs: 'data-partial-deck',
+      approvalStatus: 'partial',
+      includeUnanswered: false
+    }));
+
+    const result = runAudit(root);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /Partial deck status: 1 decks, DRIFT/);
+    assert.match(result.stderr, /Missing unanswered_required_questions in briefing-slides\/partial-no-unanswered\.html/);
   });
 
   it('fails on double-escaped YAML newline joins', () => {

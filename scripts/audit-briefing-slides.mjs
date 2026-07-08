@@ -63,6 +63,12 @@ const footerDiagnostics = [];
 const sidecarDiagnostics = [];
 const yamlJoinDiagnostics = [];
 const gateBorderDiagnostics = [];
+const partialDiagnostics = [];
+const parityNotes = [];
+
+const DENSE_REF_RE = /href\s*=\s*(["'])((?:\.\.\/)?(?:alignment|interrogation)\/[^"'#]+\.html)(?:#[^"']*)?\1/gi;
+const DENSE_REQUIRED_GATE_RE =
+  /<(?:input|select|textarea)\b[^>]*(?:\brequired\b|\bdata-question-id\b|\bdata-gate\b|\bdata-gate-type\b|\bdata-approval-effect\b|\bdata-required-gate\b)/i;
 
 function hasAttribute(tag, attribute) {
   return new RegExp(`\\b${attribute}(?:\\s*=|\\s|/?>)`, "i").test(tag);
@@ -347,6 +353,47 @@ for (const file of pages) {
       );
     }
   }
+
+  // Briefing-first: partial decks vs full-review decks.
+  // A full-review deck must carry data-full-deck-yaml (enforced globally above)
+  // and may emit ready-for-agent-review. A deck lacking full gate coverage must
+  // be explicitly labeled partial, emit a partial/incomplete status, and preserve
+  // the required gates it does not cover in unanswered_required_questions.
+  const isPartial = /\bdata-partial-deck(?:\s*=|\s|\/?>)/i.test(html);
+  if (isPartial) {
+    if (/\bready-for-agent-review\b/i.test(html)) {
+      partialDiagnostics.push(
+        `Partial deck emits ready-for-agent-review in ${rel} - a deck marked data-partial-deck must emit a partial/incomplete approval_status and must never emit ready-for-agent-review.`,
+      );
+    }
+    if (!/\bapproval_status\s*:\s*(?:partial|incomplete)\b/i.test(html)) {
+      partialDiagnostics.push(
+        `Missing partial approval_status in ${rel} - a data-partial-deck deck must emit approval_status: partial or approval_status: incomplete.`,
+      );
+    }
+    if (!/\bunanswered_required_questions\s*:/i.test(html)) {
+      partialDiagnostics.push(
+        `Missing unanswered_required_questions in ${rel} - a partial deck must preserve the required gates it does not cover in unanswered_required_questions.`,
+      );
+    }
+  }
+
+  // Cross-page gate parity (best-effort, non-failing): if a referenced dense page
+  // resolves locally and appears to carry required gates while the deck covers none
+  // and is not labeled partial, note it for manual follow-up.
+  const deckRequiredSlides = slides.filter((slide) => containsRequiredGateQuestion(slide.content)).length;
+  for (const match of html.matchAll(DENSE_REF_RE)) {
+    const ref = match[2];
+    const resolved = resolve(briefingDir, ref);
+    if (!existsSync(resolved)) continue;
+    const denseHtml = readFileSync(resolved, "utf8");
+    if (DENSE_REQUIRED_GATE_RE.test(denseHtml) && deckRequiredSlides === 0 && !isPartial) {
+      parityNotes.push(
+        `Best-effort gate parity in ${rel} - referenced dense page ${ref} appears to carry required gates, but the deck has no required-gate slides and is not labeled data-partial-deck. Cover the gates or mark the deck partial.`,
+      );
+    }
+    break;
+  }
 }
 
 console.log(`Active decks: ${activeDecks.length}`);
@@ -362,6 +409,8 @@ console.log(`Footer controls: ${pages.length} pages, ${footerDiagnostics.length 
 console.log(`YAML sidecar links: ${pages.length} pages, ${sidecarDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Compiled-YAML newline join: ${pages.length} pages, ${yamlJoinDiagnostics.length ? "DRIFT" : "exact"}`);
 console.log(`Required gate borders: ${activeDecks.length} decks, ${gateBorderDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Partial deck status: ${activeDecks.length} decks, ${partialDiagnostics.length ? "DRIFT" : "exact"}`);
+console.log(`Gate parity (best-effort): ${parityNotes.length ? `${parityNotes.length} note(s)` : "no notes"}`);
 
 const groups = [
   ["Viewport drift:", viewportDiagnostics],
@@ -376,6 +425,7 @@ const groups = [
   ["YAML sidecar link drift:", sidecarDiagnostics],
   ["Compiled-YAML newline join drift:", yamlJoinDiagnostics],
   ["Required gate border drift:", gateBorderDiagnostics],
+  ["Partial deck status drift:", partialDiagnostics],
 ];
 let failed = false;
 for (const [title, diagnostics] of groups) {
@@ -384,5 +434,10 @@ for (const [title, diagnostics] of groups) {
   console.error("");
   console.error(title);
   for (const diagnostic of diagnostics) console.error(`  - ${diagnostic}`);
+}
+if (parityNotes.length) {
+  console.error("");
+  console.error("Gate parity notes (best-effort, non-failing):");
+  for (const note of parityNotes) console.error(`  - ${note}`);
 }
 if (failed) process.exit(1);

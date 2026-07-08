@@ -2,7 +2,7 @@
 name: create-briefing-slides
 description: Create or amend a self-contained PowerPoint-like HTML briefing slide deck for alignment pages, interrogation questions, research findings, framework/workshop artifacts, specs, reports, or documentation plans. Use when Claude should make review material more visual and navigable while preserving dense alignment/interrogation pages and source documents as linked references instead of auto-opening them.
 type: ops
-version: v0.1
+version: v0.0
 release_lane: canary
 required_conventions: [briefing-slides]
 argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]"
@@ -13,8 +13,6 @@ argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/pa
 Invoke as `/create-briefing-slides`.
 
 Create a self-contained HTML slide deck that becomes the primary opened review surface for dense research, interrogation, alignment, framework, workshop, spec, report, or documentation-creation artifacts. Follow the shared briefing-slides convention via the packaged convention resolver: source checkouts load `docs/briefing-slides-convention.md`, and packaged installs load `assets/briefing-slides-convention.md`.
-
-**Briefing-first review surface (canary).** On the canary lane, this is the review surface producing skills adopt at each interrogation and alignment step. Because this skill's `briefing-slides` convention is canary-only, its presence is the lane signal: where it is installed, a producing skill first authors its dense `interrogation/*.html` / `alignment/*.html` page inline (via the shared interrogation-page / alignment-page conventions), then builds a `briefing-slides/<skill>-<topic>.html` deck as the **primary** review surface, **auto-opens only the deck**, and links the dense pages/sources as drill-down references. The dense page remains canonical and is the fallback surface. Follow the **Briefing-First Review Surface** and **Gate Parity And Partial Decks** sections of the convention: the deck's compiled YAML routes back to the producing command with `reference_pages` / `source_artifacts`, preserves unanswered gates and slide feedback, and is marked ready only when every required gate is approved. Where the convention is absent (stable), the dense page stays the primary review surface and no briefing behavior applies.
 
 ## Workflow
 

@@ -46,7 +46,7 @@ For skills where external data, repo artifacts, or research sources are primary,
 
 **Phase 3 - Findings validation.** Before building the alignment page, present the 3-5 most important findings inline as the final message text of their own turn and ask the user to validate or correct critical assumptions in the next turn. This is a brief checkpoint, not a deep interview.
 
-**Phase 4 - Alignment page.** Build the alignment page with the validated findings.
+**Phase 4 - Alignment page.** Build the alignment page with the validated findings. When a briefing-slides review-surface convention is installed, it defines the primary review surface and the open step; follow it. Otherwise the dense page is the primary review surface.
 
 **Scoped-intake examples:** `competitive-analysis`, `customer-feedback`, `lean-canvas`, `positioning`, `value-prop-canvas`, `experiment`, `growth-model`, `hook-model`, `pmf-assessment`, `burn-rate`, `platform-strategy`, `risk-register`, `runway-model`, `retro`, `devtool-adoption`, `devtool-monetization`, `devtool-positioning`, `devtool-user-map`, `game-audience`, `game-comparables`, `game-fantasy`, `game-genre-map`, `game-launch`, `game-prototype-test`, `game-store-page-test`, `youtube-concept-research`, `content-programming`, `creator-positioning`, `product-led-media-map`, `series-spec`, `brainstorm`.
 
