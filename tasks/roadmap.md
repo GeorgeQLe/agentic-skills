@@ -2,7 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Active Skill Cut
+## Current Implementation - skillpacks 0.1.22-experimental.1 canary closeout
+
+### Goal
+
+Close out the already-published `skillpacks` / `@glexcorp/gskp` canary release `0.1.22-experimental.1` by committing the matching canary source state on `master`, tagging it, pushing it, and recording published-package verification evidence without moving `latest`.
+
+### Plan
+
+- [x] Recreate the canary source state for `packages/skillpacks` at `0.1.22-experimental.1`.
+- [x] Regenerate `packages/skillpacks/dist/skillpacks-manifest.json` with `SKILLPACKS_PACKAGE_LANE=canary`.
+- [x] Verify package metadata and manifest metadata both report `0.1.22-experimental.1` / `canary`.
+- [x] Run pre-commit build and diff checks.
+- [x] Commit `Release skillpacks 0.1.22-experimental.1`, tag `skillpacks-v0.1.22-experimental.1`, and push `master` plus the tag.
+- [x] Confirm npm dist-tag parity for both package names.
+- [x] Run published canary smoke checks from disposable temp directories.
+- [x] Record closeout evidence in task/history docs.
+
+### Acceptance Criteria
+
+- [x] `packages/skillpacks/package.json` version is `0.1.22-experimental.1`.
+- [x] `packages/skillpacks/dist/skillpacks-manifest.json` package metadata is `{ "version": "0.1.22-experimental.1", "release_lane": "canary" }`.
+- [x] `skillpacks@experimental` and `@glexcorp/gskp@experimental` both resolve to `0.1.22-experimental.1`.
+- [x] `skillpacks@latest` and `@glexcorp/gskp@latest` both remain `0.1.21`.
+- [x] No stable `v0.1.22` tag is created and npm `latest` is not moved.
+
+### Verification
+
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] Package and manifest metadata check for `0.1.22-experimental.1` / `canary`
+- [x] `git diff --check`
+- [x] `npm view skillpacks dist-tags --json`
+- [x] `npm view @glexcorp/gskp dist-tags --json`
+- [x] `npx -y --package skillpacks@experimental -- skillpacks list`
+- [x] `npx -y --package @glexcorp/gskp@experimental -- skillpacks list`
+- [x] `npx -y --package skillpacks@experimental -- skillpacks install code-quality`
+- [x] `npx -y --package skillpacks@experimental -- skillpacks install quality-sweep`
+- [x] `node scripts/audit-task-docs.mjs`
+
+### Review
+
+Recreated the canary source state for the already-published `0.1.22-experimental.1` npm packages. Commit `6de131fdf4bc9dee16444d410c565b37e62be3bf` updates `packages/skillpacks/package.json` and the generated manifest to `0.1.22-experimental.1` / `canary`, including the canary-only briefing-slide entries. Tag `skillpacks-v0.1.22-experimental.1` points at that source-state commit.
+
+Published registry checks confirmed both package names have `experimental: 0.1.22-experimental.1` and `latest: 0.1.21`. Published canary smoke checks passed for both package names' `list` command, the `code-quality` pack install, and the `quality-sweep` single-skill install from disposable directories under `/private/tmp/skillpacks-canary-smoke-20260708-093240`.
+
+No stable `v0.1.22` tag was created, and npm `latest` was not moved. Closeout evidence is recorded in `tasks/history.md` and `tasks/ship-manifest-2026-07-08-skillpacks-0.1.22-experimental.1-canary-closeout.md`.
+
+Task-doc audit passed with zero failures and zero warnings; it reported only the active canary closeout task and two unchecked recurring advisory items.
+
+## Historical Implementation - Active Skill Cut
 
 ### Goal
 

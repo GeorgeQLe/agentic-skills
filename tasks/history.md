@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-08 - skillpacks 0.1.22-experimental.1 canary closeout
+
+- Recreated the already-published canary source state for `skillpacks` / `@glexcorp/gskp` by committing `packages/skillpacks/package.json` and `packages/skillpacks/dist/skillpacks-manifest.json` at `0.1.22-experimental.1` with manifest release lane `canary`.
+- Created tag `skillpacks-v0.1.22-experimental.1` at source-state commit `6de131fdf4bc9dee16444d410c565b37e62be3bf`.
+- Confirmed npm dist-tags for both package names: `experimental` points to `0.1.22-experimental.1` and `latest` remains `0.1.21`.
+- Published canary smoke checks passed for `skillpacks list`, `@glexcorp/gskp` list, `code-quality` pack install, and `quality-sweep` single-skill install from disposable temp directories.
+- No stable `v0.1.22` tag was created, and npm `latest` was not moved.
+- Manifest: `tasks/ship-manifest-2026-07-08-skillpacks-0.1.22-experimental.1-canary-closeout.md`.
+
 ## 2026-07-07 - Dirty worktree prompt-history closeout
 
 - Cleaned the dirty worktree left by untracked prompt-history artifacts.
