@@ -168,6 +168,25 @@
     .banner-pass { background: #eafaf6; border-color: #b6e6da; color: #0b7a72; }
     .banner-pass .banner-dot { background: #12a594; box-shadow: 0 0 0 4px rgba(18,165,148,.18); }
     .banner small { font-weight: 600; color: inherit; opacity: .82; font-size: 13px; }
+    .compile { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-sm); }
+    .compile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 700;
+      border-radius: 9px; padding: 10px 18px; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #255bc4; }
+    .btn-ghost { border: 1px solid var(--line-strong); background: #fff; color: var(--ink-soft); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-status { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .yaml-out {
+      display: none; margin-top: 14px; width: 100%; min-height: 260px; resize: vertical;
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.5; color: #274069;
+      background: #f7f9fd; border: 1px solid var(--line-strong); border-radius: 10px; padding: 14px;
+      white-space: pre;
+    }
+    .yaml-out.show { display: block; }
     @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 28px 18px 48px; } }
   </style>
 </head>
@@ -220,7 +239,7 @@
       <h2>Round 1 &middot; Assumptions manifest</h2>
       <p class="intro" style="font-size:16px;margin-bottom:18px;">Before asking anything open-ended, the skill states back what it already believes &mdash; each row tagged by where the belief came from. These are <strong>intake hypotheses, not findings</strong>: confirm what holds, correct what's wrong, flag what needs research. Nothing here is canonical.</p>
 
-      <div class="card assume" data-assume>
+      <div class="card assume" data-assume data-source="prompt" data-claim="Target branch is the first-value onboarding flow">
         <div class="assume-head">
           <strong>Target branch is the first-value onboarding flow</strong>
           <span class="tag tag-prompt">from prompt</span>
@@ -238,7 +257,7 @@
         </div>
       </div>
 
-      <div class="card assume" data-assume>
+      <div class="card assume" data-assume data-source="repo" data-claim="research/positioning.md is the binding upstream artifact">
         <div class="assume-head">
           <strong>research/positioning.md is the binding upstream artifact</strong>
           <span class="tag tag-repo">from repo</span>
@@ -256,7 +275,7 @@
         </div>
       </div>
 
-      <div class="card assume" data-assume>
+      <div class="card assume" data-assume data-source="inferred" data-claim="The primary persona is a returning power user">
         <div class="assume-head">
           <strong>The primary persona is a returning power user</strong>
           <span class="tag tag-inferred">inferred</span>
@@ -279,7 +298,7 @@
       <h2>Open question &middot; recommend and override</h2>
       <p class="intro" style="font-size:16px;margin-bottom:18px;">At least one input each round must be <strong>genuinely open</strong> &mdash; not a disguised yes/no. The skill may still offer a recommended answer with its confidence, but the user can override freely. This is where new uncertainty actually gets reduced.</p>
 
-      <div class="card q" data-openq>
+      <div class="card q" data-openq data-question="What is the first-success moment this flow should deliver?" data-confidence="medium">
         <strong>What is the first-success moment this flow should deliver?</strong>
         <div class="reco">
           <div class="reco-head">
@@ -303,6 +322,19 @@
         <span class="banner-dot"></span>
         <span data-gate-text>Confidence gate: 4 open items &mdash; stay in stage zero</span>
         <small data-gate-detail>3 assumptions to resolve &middot; 1 required answer empty</small>
+      </div>
+    </section>
+
+    <section>
+      <h2>Compile responses</h2>
+      <p class="intro" style="font-size:16px;margin-bottom:18px;">This is the round's payoff: the page compiles every assumption decision and open answer into a captured-answers YAML. The user copies it, clears context, and pastes it into a fresh session &mdash; a new agent reads the sidecar, runs the confidence gate, and either emits the next round or advances to stage one. That paste-forward is the whole Research Session Loop.</p>
+      <div class="compile" data-sidecar="research/_working/interrogation-example-r1.yaml">
+        <div class="compile-actions">
+          <button type="button" class="btn btn-primary" data-compile-btn>Compile responses</button>
+          <button type="button" class="btn btn-ghost" data-copy-btn hidden>Copy YAML</button>
+          <span class="copy-status" data-copy-status></span>
+        </div>
+        <textarea class="yaml-out" data-yaml readonly aria-label="Compiled captured-answers YAML"></textarea>
       </div>
     </section>
   </main>
@@ -379,6 +411,81 @@
       }
 
       recompute();
+
+      // --- Compile responses → captured-answers YAML ---
+      var COMMAND = "/user-flow-map onboarding --resume-interrogation r1";
+      var compileWrap = document.querySelector(".compile");
+      var compileBtn = document.querySelector("[data-compile-btn]");
+      var copyBtn = document.querySelector("[data-copy-btn]");
+      var copyStatus = document.querySelector("[data-copy-status]");
+      var yamlOut = document.querySelector("[data-yaml]");
+      var sidecar = compileWrap.getAttribute("data-sidecar");
+
+      function q(s) { return '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s+/g, " ").trim() + '"'; }
+
+      function buildYaml() {
+        var lines = [];
+        lines.push("# Invoke with: " + COMMAND);
+        lines.push("command: " + q(COMMAND));
+        lines.push("interrogation_page: interrogation/example-r1-onboarding.html");
+        lines.push("round: 1");
+
+        var openAssume = 0, emptyReq = 0;
+        document.querySelectorAll("[data-assume]").forEach(function (r) { if (r.getAttribute("data-state") !== "confirm") openAssume++; });
+        document.querySelectorAll("[data-required]").forEach(function (f) { if (!f.value.trim()) emptyReq++; });
+        var passed = (openAssume + emptyReq) === 0;
+
+        lines.push("round_status: " + (passed ? "complete" : "partial"));
+        lines.push("gate_state: " + (passed ? "coverage-checkpoint" : "continue"));
+
+        lines.push("assumptions:");
+        document.querySelectorAll("[data-assume]").forEach(function (row) {
+          var decision = row.getAttribute("data-state") || "pending";
+          lines.push("  - source: " + q(row.getAttribute("data-source")));
+          lines.push("    claim: " + q(row.getAttribute("data-claim")));
+          lines.push("    decision: " + q(decision));
+          if (decision === "correct") {
+            var corr = row.querySelector("[data-correction] textarea");
+            lines.push("    correction: " + q(corr && corr.value ? corr.value : ""));
+          }
+        });
+
+        lines.push("open_answers:");
+        document.querySelectorAll("[data-openq]").forEach(function (block) {
+          var field = block.querySelector("[data-open-input]");
+          var reco = block.querySelector("[data-reco-text]");
+          lines.push("  - question: " + q(block.getAttribute("data-question")));
+          lines.push("    answer: " + q(field && field.value ? field.value : ""));
+          lines.push("    recommended_answer: " + q(reco ? reco.textContent : ""));
+          lines.push("    agent_confidence: " + q(block.getAttribute("data-confidence")));
+        });
+
+        lines.push("gate_answers: []");
+        lines.push("answer_sidecar: " + sidecar);
+        lines.push("agent_routing:");
+        lines.push("  command: " + q(COMMAND));
+        return lines.join("\n") + "\n";
+      }
+
+      function tryCopy() {
+        var text = yamlOut.value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(
+            function () { copyStatus.textContent = "Copied"; },
+            function () { yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy"; }
+          );
+        } else {
+          yamlOut.focus(); yamlOut.select(); copyStatus.textContent = "Select text to copy";
+        }
+      }
+
+      compileBtn.addEventListener("click", function () {
+        yamlOut.value = buildYaml();
+        yamlOut.classList.add("show");
+        copyBtn.hidden = false;
+        tryCopy();
+      });
+      copyBtn.addEventListener("click", tryCopy);
     })();
   </script>
 </body>
