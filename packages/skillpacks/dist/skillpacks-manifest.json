@@ -2,10 +2,10 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.21",
-    "release_lane": "stable"
+    "version": "0.1.22-experimental.1",
+    "release_lane": "canary"
   },
-  "source_fingerprint": "21f700744352aa8e8d7c20c7ea3e0ae9a1ff35bc669f25e1142ddbb3ff911605",
+  "source_fingerprint": "08d39ef740aa8477a72f87c68cd3c7e09504265fbfb14897ac039bc92e62912d",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1506,6 +1506,26 @@
       "deck_memberships": []
     },
     {
+      "id": "base-claude-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "briefing-slides"
+      ],
+      "path": "packs/base/claude/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "e98292157fc21389ba69d5c0efcd29983cd572b66ec81bcf12509581031a150a",
+      "archive_versions": [],
+      "command": "/create-briefing-slides",
+      "deck_memberships": []
+    },
+    {
       "id": "base-claude-fork-idea-branch",
       "name": "fork-idea-branch",
       "scope": "base",
@@ -1921,6 +1941,26 @@
         "v0.2"
       ],
       "command": "$create-alignment-page",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-create-briefing-slides",
+      "name": "create-briefing-slides",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "release_lane": "canary",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [
+        "briefing-slides"
+      ],
+      "path": "packs/base/codex/create-briefing-slides/SKILL.md",
+      "installable": true,
+      "content_sha256": "56570949b07a0e500421c011dc47073904a1026560524b0d18d0d390993419fe",
+      "archive_versions": [],
+      "command": "$create-briefing-slides",
       "deck_memberships": []
     },
     {
