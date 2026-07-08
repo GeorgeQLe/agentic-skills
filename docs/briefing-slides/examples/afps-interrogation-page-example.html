@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS Interrogation Page Example</title>
+  <style>
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; color: #18202f; background: #f6f8fb; }
+    main { max-width: 980px; margin: 0 auto; padding: 28px; }
+    h1 { margin: 0 0 8px; font-size: clamp(32px, 5vw, 56px); line-height: 1.05; }
+    h2 { margin-top: 28px; }
+    p { color: #617089; line-height: 1.45; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .card { background: #fff; border: 1px solid #d9e0ea; border-radius: 8px; padding: 14px; }
+    .card strong { display: block; margin-bottom: 8px; }
+    label { display: block; margin: 10px 0 4px; color: #617089; font-size: 13px; font-weight: 700; }
+    textarea, select, input[type="text"] { width: 100%; border: 1px solid #d9e0ea; border-radius: 7px; padding: 9px; font: inherit; }
+    textarea { min-height: 76px; }
+    code { background: #eef3fa; padding: 2px 5px; border-radius: 5px; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } main { padding: 18px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a></p>
+    <h1>Interrogation Page Example</h1>
+    <p>This documentation-only example shows the shape an AFPS skill can use before committing to deep research, design, or implementation. A real active page would live under <code>interrogation/</code> and follow the bundled interrogation-page convention for the producing skill.</p>
+
+    <section>
+      <h2>Purpose</h2>
+      <div class="grid">
+        <div class="card"><strong>Confidence gate</strong><p>Confirm the agent understands the user's goal, available evidence, risk, and unresolved assumptions before creating canonical artifacts.</p></div>
+        <div class="card"><strong>Open inputs</strong><p>Ask genuinely answerable questions, not fake confirmations. Every round should reduce uncertainty.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Example Question Groups</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Scope</strong>
+          <label>Which AFPS branch is this skill operating on?</label>
+          <input type="text" data-open-input placeholder="Example: first-value onboarding flow">
+        </div>
+        <div class="card">
+          <strong>Evidence</strong>
+          <label>What upstream artifact should be treated as binding?</label>
+          <select data-open-input>
+            <option>research/positioning.md</option>
+            <option>design/flow-tree-topic.yaml</option>
+            <option>prototypes/topic/consolidated/</option>
+          </select>
+        </div>
+        <div class="card">
+          <strong>Risk</strong>
+          <label>What assumption would make this skill's output wrong?</label>
+          <textarea data-open-input placeholder="Describe the risky assumption"></textarea>
+        </div>
+        <div class="card">
+          <strong>Exit gate</strong>
+          <label>What must be true before the skill advances?</label>
+          <textarea data-open-input placeholder="Example: persona, primary task, and first-success moment are confirmed"></textarea>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

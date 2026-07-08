@@ -219,7 +219,7 @@
     </div>
     <div class="controls">
       <button id="prevBtn" type="button">Prev</button>
-      <span class="counter" id="counter">Slide 1 / 17</span>
+      <span class="counter" id="counter">Slide 1 / 13</span>
       <button id="nextBtn" type="button">Next</button>
     </div>
   </div>
@@ -390,59 +390,7 @@
         <footer class="refbar"><small>Series use</small><div class="chips"><span class="chip">one skill per episode</span><span class="chip">same five-question frame</span></div></footer>
       </article>
 
-      <article class="slide" id="slide-13" data-title="Interrogation pages">
-        <header><div class="eyebrow">Review surfaces</div><h2>Interrogation pages are the pre-work confidence gate.</h2></header>
-        <div class="content grid-3">
-          <div class="card"><strong>Purpose</strong><p>They test whether the agent understands scope, assumptions, evidence, and unresolved questions before deep work begins.</p></div>
-          <div class="card"><strong>What users see</strong><p>Open questions, evidence gaps, confidence checks, and a clear pass/fail gate for moving into research, design, or execution.</p></div>
-          <div class="card"><strong>Where they fit</strong><p>Most useful for high-risk AFPS steps: research synthesis, flow mapping, UX branching, UI specification, and production spec extraction.</p></div>
-          <div class="card"><strong>Not a replacement</strong><p>The interrogation page does not become the canonical artifact. It clears the path for the producing skill to continue safely.</p></div>
-          <div class="card"><strong>Series angle</strong><p>Explain this as the agent asking better questions before spending context, time, or writes on the wrong target.</p></div>
-          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">Open the AFPS interrogation page example</a>.</p></div>
-        </div>
-        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">interrogation example</a><a class="chip" href="../docs/interrogation-page-convention.md">convention</a></div></footer>
-      </article>
-
-      <article class="slide" id="slide-14" data-title="Alignment pages">
-        <header><div class="eyebrow">Review surfaces</div><h2>Alignment pages are the dense approval surface for decisions and artifacts.</h2></header>
-        <div class="content grid-3">
-          <div class="card"><strong>Purpose</strong><p>They preserve evidence, recommendation, tradeoffs, risks, proposed writes, and approval gates in a reviewable HTML surface.</p></div>
-          <div class="card"><strong>What users see</strong><p>Structured findings, matrices, decisions, file paths, routing, and controls for approve, revise, or clarify.</p></div>
-          <div class="card"><strong>Where they fit</strong><p>Before canonical research, design, spec, documentation, or consolidation outputs are finalized.</p></div>
-          <div class="card"><strong>Confirmed state</strong><p>After approved YAML, the page records the approval and the producing skill writes or updates the canonical artifact.</p></div>
-          <div class="card"><strong>Series angle</strong><p>Explain this as the durable review room where AFPS avoids vague "sounds good" approvals.</p></div>
-          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-alignment-page-example.html">Open the AFPS alignment page example</a>.</p></div>
-        </div>
-        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-alignment-page-example.html">alignment example</a><a class="chip" href="../docs/alignment-page-convention.md">convention</a></div></footer>
-      </article>
-
-      <article class="slide" id="slide-15" data-title="YAML handoffs and orchestrators">
-        <header><div class="eyebrow">Routing mechanics</div><h2>YAML handoffs make approval portable; orchestrators keep long workflows ordered.</h2></header>
-        <div class="content grid-3">
-          <div class="card"><strong>YAML handoffs</strong><p>Compiled YAML carries command, briefing slide path, references, gate answers, slide feedback, annotations, marks, and approval status.</p></div>
-          <div class="card"><strong>Approval rule</strong><p><code>ready-for-agent-review</code> should only appear when required gates approve and no unresolved revise or clarification feedback remains.</p></div>
-          <div class="card"><strong>Orchestrators</strong><p>Skills like <code>customer-discovery</code>, <code>positioning</code>, <code>user-flow-map</code>, and <code>research-roadmap</code> own multi-session routing.</p></div>
-          <div class="card"><strong>What they prevent</strong><p>No ad hoc next step, no duplicated framework work, no hidden state, and no accidental jump from idea to build.</p></div>
-          <div class="card"><strong>Series angle</strong><p>Explain orchestrators as the skills that keep AFPS from becoming a pile of disconnected prompts.</p></div>
-          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">Open the YAML and orchestrator example</a>.</p></div>
-        </div>
-        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">YAML/orchestrator example</a><a class="chip" href="../docs/orchestrator-convention.md">orchestrator convention</a></div></footer>
-      </article>
-
-      <article class="slide" id="slide-16" data-title="Design tree">
-        <header><div class="eyebrow">Product-design lineage</div><h2>The design tree keeps branches, approvals, stale states, and prototype work connected.</h2></header>
-        <div class="content grid-3">
-          <div class="card"><strong>Root</strong><p><code>user-flow-map</code> creates the flow root and named user-flow branches.</p></div>
-          <div class="card"><strong>Branches</strong><p><code>ux-variations</code> grows progression branches; <code>ui-interview</code> grows UI experiment branches.</p></div>
-          <div class="card"><strong>Substrate</strong><p><code>state-model</code> can attach logical state and command contracts before UX branches re-skin the same domain.</p></div>
-          <div class="card"><strong>Build path</strong><p><code>build-ui-screens</code> and <code>logic-wiring</code> turn approved branches into walkable prototype evidence.</p></div>
-          <div class="card"><strong>Modify-back</strong><p>UAT, consolidation, or spec work can reopen upstream branches instead of burying flaws in downstream artifacts.</p></div>
-          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md#design-tree-shape">Open the design-tree example</a>.</p></div>
-        </div>
-        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/design-tree-loop-convention.md">design-tree convention</a><a class="chip" href="../design/flow-tree.schema.json">flow-tree schema</a></div></footer>
-      </article>
-
-      <article class="slide" id="slide-17" data-title="References and response compiler">
+      <article class="slide" id="slide-13" data-title="References and response compiler">
         <header><div class="eyebrow">Review handoff</div><h2>References and compiled review YAML.</h2></header>
         <div class="content grid-2">
           <div class="card">
@@ -452,9 +400,6 @@
               <a class="chip" href="../docs/decks.md">decks</a>
               <a class="chip" href="../docs/skill-next-step-contracts.md">next-step contracts</a>
               <a class="chip" href="../docs/briefing-slides-convention.md">briefing convention</a>
-              <a class="chip" href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">interrogation example</a>
-              <a class="chip" href="../docs/briefing-slides/examples/afps-alignment-page-example.html">alignment example</a>
-              <a class="chip" href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">YAML/design tree example</a>
             </div>
           </div>
           <div class="card">
@@ -515,9 +460,6 @@
       'docs/decks.md',
       'docs/skill-next-step-contracts.md',
       'docs/briefing-slides-convention.md',
-      'docs/briefing-slides/examples/afps-interrogation-page-example.html',
-      'docs/briefing-slides/examples/afps-alignment-page-example.html',
-      'docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md',
       'packs/base/claude/idea-scope-brief/SKILL.md',
       'packs/business-research/claude/customer-discovery/SKILL.md',
       'packs/business-research/claude/competitive-analysis/SKILL.md',

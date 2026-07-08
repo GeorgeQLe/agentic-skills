@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS Alignment Page Example</title>
+  <style>
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; color: #18202f; background: #f8fafc; }
+    main { max-width: 1060px; margin: 0 auto; padding: 28px; }
+    h1 { margin: 0 0 8px; font-size: clamp(32px, 5vw, 56px); line-height: 1.05; }
+    h2 { margin-top: 28px; }
+    p { color: #617089; line-height: 1.45; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .card { background: #fff; border: 1px solid #d9e0ea; border-radius: 8px; padding: 14px; }
+    .card strong { display: block; margin-bottom: 8px; }
+    .gate { border-left: 4px solid #2364aa; }
+    code { background: #eef3fa; padding: 2px 5px; border-radius: 5px; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } main { padding: 18px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="../../../briefing-slides/afps-skill-overviews.html">Back to AFPS skill overview deck</a></p>
+    <h1>Alignment Page Example</h1>
+    <p>This documentation-only example shows the dense review surface a producing AFPS skill can create before canonical writes or major handoffs. A real active page would live under <code>alignment/</code> and follow the shared alignment-page convention.</p>
+
+    <section>
+      <h2>What The Page Preserves</h2>
+      <div class="grid">
+        <div class="card"><strong>Source evidence</strong><p>Links to research, design, prototype, spec, task, or code artifacts used by the skill.</p></div>
+        <div class="card"><strong>Recommendation</strong><p>Shows the proposed output or route with rationale and known tradeoffs.</p></div>
+        <div class="card"><strong>Risks</strong><p>Makes assumptions and unresolved uncertainty visible before approval.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Example Gates</h2>
+      <div class="grid">
+        <div class="card gate"><strong>Scope gate</strong><p>Approve the target branch, artifact path, and expected output.</p></div>
+        <div class="card gate"><strong>Evidence gate</strong><p>Confirm the evidence is sufficient or identify missing sources.</p></div>
+        <div class="card gate"><strong>Artifact gate</strong><p>Approve final canonical writes and downstream routing.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Example Handoff</h2>
+      <div class="card">
+        <strong>Next work</strong>
+        <p>After approval, the producing skill writes canonical artifacts, updates the page to confirmed, then emits a route such as <code>$ux-variations [specific-user-flow]</code> or <code>$research-roadmap --post-prototype</code>.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
