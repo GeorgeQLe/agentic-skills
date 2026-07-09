@@ -337,10 +337,10 @@ export function buildOverviewsDeck(manifest, buildDeck) {
   const slides = [
     {
       archetype: "hero", title: "AFPS skill overview",
-      eyebrow: "Briefing series", heading: "AFPS skill decks",
-      lead: "One slide-first map of every skill deck across the Business, Devtool, and Game deliberate pipelines and the VARD/ORD rapid feeders.",
+      eyebrow: "Briefing series", heading: "AFPS skill briefings",
+      lead: "One slide-first map of every skill across the Business, Devtool, and Game deliberate decks and the VARD/ORD rapid feeder decks.",
       meta: [
-        { cap: "Skill decks", value: String(manifest.decks.length), tone: "teal" },
+        { cap: "Skill briefings", value: String(manifest.decks.length), tone: "teal" },
         { cap: "Deliberate", value: "Business · Devtool · Game" },
         { cap: "Rapid", value: "VARD · ORD", tone: "violet" },
       ],
@@ -358,21 +358,21 @@ export function buildOverviewsDeck(manifest, buildDeck) {
     },
     {
       archetype: "flowDiagram", title: "Business AFPS",
-      eyebrow: `Business AFPS · ${count("business")} decks`, heading: "Deliberate business pipeline",
+      eyebrow: `Business AFPS · ${count("business")} skills`, heading: "Deliberate business pipeline",
       nodes: CHAINS.business.phases,
       note: CHAINS.business.full,
       refs: [R("decks", "../docs/decks.md")],
     },
     {
       archetype: "flowDiagram", title: "Devtool AFPS",
-      eyebrow: `Devtool AFPS · ${count("devtool")} decks`, heading: "Deliberate devtool pipeline",
+      eyebrow: `Devtool AFPS · ${count("devtool")} skills`, heading: "Deliberate devtool pipeline",
       nodes: CHAINS.devtool.phases,
       note: CHAINS.devtool.full,
       refs: [R("decks", "../docs/decks.md")],
     },
     {
       archetype: "flowDiagram", title: "Game AFPS",
-      eyebrow: `Game AFPS · ${count("game")} decks`, heading: "Deliberate game pipeline",
+      eyebrow: `Game AFPS · ${count("game")} skills`, heading: "Deliberate game pipeline",
       nodes: CHAINS.game.phases,
       note: CHAINS.game.full,
       refs: [R("decks", "../docs/decks.md")],
@@ -399,7 +399,7 @@ export function buildOverviewsDeck(manifest, buildDeck) {
         name: "overview_accurate",
         question: "Does this overview accurately map the AFPS deck families and their canonical chains?",
         options: [{ value: "approve", label: "Approve" }, { value: "revise", label: "Revise" }],
-        why: "Approving confirms the series map before individual skill decks are reviewed.",
+        why: "Approving confirms the series map before individual skill briefings are reviewed.",
       },
       refs: [R("decks", "../docs/decks.md"), R("index", "../briefing-slides/index.html")],
     },
