@@ -1742,6 +1742,22 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Fix: [^\n]*refresh/);
   });
 
+  it('does not require convention docs after all managed installs are removed', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'game',
+      enabled_packs: [],
+      skill_pack_version: 1
+    });
+
+    const { exitCode, stdout } = await runSkillpacksRaw(dir, ['doctor']);
+
+    assert.equal(exitCode, 0);
+    assert.match(stdout, /\(no managed skill installs found\)/);
+    assert.doesNotMatch(stdout, /Convention doc drift/);
+    assert.doesNotMatch(stdout, /missing  \.agents\/skillpacks\/docs/);
+  });
+
   it('keeps plain doctor read-only for skill roots and agent docs', async () => {
     const dir = makeTempProject();
     await runSkillpacks(dir, ['install', 'quality-sweep']);

@@ -121,19 +121,20 @@ capture_cli_in() {
 
 assert_metadata() {
   local metadata_json=$1
-  local versions_json=$2
-  METADATA_JSON=$metadata_json VERSIONS_JSON=$versions_json node - "$PACKAGE_NAME" "$EXPECTED_VERSION" "$EXPECTED_LICENSE" "$EXPECTED_DIST_TAG" <<'NODE'
+  local dist_tag_json=$2
+  local versions_json=$3
+  METADATA_JSON=$metadata_json DIST_TAG_JSON=$dist_tag_json VERSIONS_JSON=$versions_json node - "$PACKAGE_NAME" "$EXPECTED_VERSION" "$EXPECTED_LICENSE" "$EXPECTED_DIST_TAG" <<'NODE'
 const metadata = JSON.parse(process.env.METADATA_JSON);
+const distTagVersion = JSON.parse(process.env.DIST_TAG_JSON);
 const versions = JSON.parse(process.env.VERSIONS_JSON);
 const [packageName, expectedVersion, expectedLicense, expectedDistTag] = process.argv.slice(2);
-const distTagKey = `dist-tags.${expectedDistTag}`;
 const failures = [];
 
 if (metadata.version !== expectedVersion) {
   failures.push(`${packageName}@${expectedDistTag} version expected ${expectedVersion}, got ${metadata.version}`);
 }
-if (metadata[distTagKey] !== expectedVersion) {
-  failures.push(`${packageName} ${expectedDistTag} dist-tag expected ${expectedVersion}, got ${metadata[distTagKey]}`);
+if (distTagVersion !== expectedVersion) {
+  failures.push(`${packageName} ${expectedDistTag} dist-tag expected ${expectedVersion}, got ${distTagVersion}`);
 }
 if (metadata.license !== expectedLicense) {
   failures.push(`${packageName} license expected ${expectedLicense}, got ${metadata.license}`);
@@ -162,17 +163,22 @@ verify_metadata_with_retries() {
   local metadata_ok=0
   local mismatch
   local metadata_json=""
+  local dist_tag_json=""
   local versions_json=""
+  local tag_spec="$PACKAGE_NAME@$EXPECTED_DIST_TAG"
 
   for ((attempt = 1; attempt <= VERIFY_PUBLISHED_ATTEMPTS; attempt++)); do
     metadata_json=""
+    dist_tag_json=""
     versions_json=""
 
-    if ! metadata_json=$(npm view "$PACKAGE_NAME" version license "dist-tags.$EXPECTED_DIST_TAG" --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
-      last_metadata_output="npm view metadata check failed for $PACKAGE_NAME: ${metadata_json}"
+    if ! metadata_json=$(npm view "$tag_spec" version license --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+      last_metadata_output="npm view metadata check failed for $tag_spec: ${metadata_json}"
+    elif ! dist_tag_json=$(npm view "$PACKAGE_NAME" "dist-tags.$EXPECTED_DIST_TAG" --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+      last_metadata_output="npm view dist-tag check failed for $PACKAGE_NAME@$EXPECTED_DIST_TAG: ${dist_tag_json}"
     elif ! versions_json=$(npm view "$PACKAGE_NAME" versions --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
       last_metadata_output="npm view versions check failed for $PACKAGE_NAME: ${versions_json}"
-    elif metadata_output=$(assert_metadata "$metadata_json" "$versions_json" 2>&1); then
+    elif metadata_output=$(assert_metadata "$metadata_json" "$dist_tag_json" "$versions_json" 2>&1); then
       printf '%s\n' "$metadata_output"
       metadata_ok=1
       break

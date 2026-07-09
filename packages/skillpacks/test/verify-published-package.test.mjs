@@ -55,13 +55,19 @@ version_for_count() {
   fi
 }
 
-if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == "version" && "$4" == "license" && "$5" == dist-tags.* ]]; then
+if [[ "$1" == "view" && "$2" == skillpacks@* && "$3" == "version" && "$4" == "license" ]]; then
   count=$(read_count)
   count=$((count + 1))
   printf '%s\\n' "$count" > "$count_file"
   current_version=$(version_for_count "$count")
-  tag_key="$5"
-  printf '{"version":"%s","license":"MIT","%s":"%s"}\\n' "$current_version" "$tag_key" "$current_version"
+  printf '{"version":"%s","license":"MIT"}\\n' "$current_version"
+  exit 0
+fi
+
+if [[ "$1" == "view" && "$2" == "skillpacks" && "$3" == dist-tags.* ]]; then
+  count=$(read_count)
+  current_version=$(version_for_count "$count")
+  printf '"%s"\\n' "$current_version"
   exit 0
 fi
 
@@ -302,7 +308,8 @@ test("published-package verification checks a non-latest dist-tag when requested
 
   assert.equal(result.status, 0, result.output);
   assert.match(result.output, /ok metadata: skillpacks@experimental=9\.9\.9, license=MIT/);
-  assert.match(result.npmCalls, /^view skillpacks version license dist-tags\.experimental/m);
+  assert.match(result.npmCalls, /^view skillpacks@experimental version license/m);
+  assert.match(result.npmCalls, /^view skillpacks dist-tags\.experimental/m);
   assert.match(result.npxArgCalls, /--package skillpacks@experimental/);
 });
 

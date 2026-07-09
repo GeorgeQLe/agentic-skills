@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout
+
+- Confirmed `skillpacks@experimental` and `@glexcorp/gskp@experimental` both point to `0.1.22-experimental.4`; `latest` remains `0.1.21` for both package names.
+- Committed the exact published package/manifest source state as `125dfea0b Release skillpacks 0.1.22-experimental.4` and created local tag `skillpacks-v0.1.22-experimental.4` on that commit.
+- Published canary smoke checks passed for both package names' `list` and `--version` commands, plus `skillpacks@experimental install code-quality` and `install quality-sweep` from isolated temp directories.
+- Full published verifier initially exposed two follow-up bugs: non-`latest` metadata verification compared against npm `latest`, and `doctor` reported missing convention docs after a deck-backed pack was fully removed.
+- Patched the verifier to query `package@dist-tag` metadata and check the dist-tag pointer separately; patched `doctor` to skip convention-doc drift checks when the project config has no enabled packs, enabled skills, or base skills and no managed docs directory exists.
+- Verification passed: focused verifier tests, focused lifecycle tests, full package Node suite, canary `build:check`, canary `verify:package`, task-doc audit, and diff hygiene.
+- Manifest: `tasks/ship-manifest-2026-07-09-skillpacks-0.1.22-experimental.4-canary-closeout.md`.
+
 ## 2026-07-09 - Briefing-first review surface convention
 
 - Implemented briefing-first review behavior at the shared convention layer: dense `interrogation/*.html` and `alignment/*.html` pages are written first as canonical backup/reference surfaces, then `briefing-slides/*.html` is built and opened as the primary review surface whenever the canary `briefing-slides` convention asset is present.

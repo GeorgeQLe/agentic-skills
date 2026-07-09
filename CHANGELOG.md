@@ -16,6 +16,11 @@ Keep this file updated before every npm package publish.
 - Documented experimental package usage through `skillpacks@experimental` and `@glexcorp/gskp@experimental`, plus dist-tag parity validation.
 - Added a `publish-canary` post-sync command helper that prints the experimental canary release checklist.
 
+### Fixed
+
+- Fixed published-package verification for non-`latest` dist-tags by resolving metadata from `package@dist-tag` and checking the dist-tag pointer separately.
+- Fixed `doctor` so an empty project config left after removing all managed installs does not report missing convention docs as drift.
+
 ## [0.1.20] - 2026-07-02
 
 Prepared for the next publish attempt for both `skillpacks` and `@glexcorp/gskp`.

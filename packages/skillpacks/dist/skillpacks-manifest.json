@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.4",
     "release_lane": "canary"
   },
-  "source_fingerprint": "54e582c5408e15026e4c025f23a42c9eb5af93d172c7be59ff4671d892494921",
+  "source_fingerprint": "69cb3cf5d511655e20476d9fcebeeeeeb242e3f7235b9f035df7d7d143f09cc4",
   "packs": [
     {
       "name": "agent-bridge",

@@ -805,6 +805,20 @@ function baseSkillsEnabled(config) {
   return config?.base_skills === true;
 }
 
+function hasManagedInstallIntent(config) {
+  if (!config) {
+    return false;
+  }
+  if (enabledPacks(config).length > 0 || baseSkillsEnabled(config)) {
+    return true;
+  }
+  return Boolean(
+    config.enabled_skills
+      && typeof config.enabled_skills === 'object'
+      && Object.keys(config.enabled_skills).length > 0
+  );
+}
+
 function pinnedVersions(config) {
   return config?.pinned_versions && typeof config.pinned_versions === 'object'
     ? config.pinned_versions
@@ -2298,8 +2312,9 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
     console.log('  (no managed skill installs found)');
   }
 
+  const projectConfig = readProjectConfig(projectRoot);
   const shouldCheckConventionDocs = found
-    || Boolean(readProjectConfig(projectRoot))
+    || hasManagedInstallIntent(projectConfig)
     || existsSync(managedConventionDocsDir(projectRoot));
   if (shouldCheckConventionDocs) {
     console.log('Convention doc drift (.agents/skillpacks/docs):');
