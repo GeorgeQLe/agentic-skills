@@ -4,11 +4,54 @@
 
 ### Status
 
-No active executable task is promoted in this file. The briefing-first review surface convention work was implemented, verified, committed, and pushed on 2026-07-09; see `tasks/history.md` and `tasks/ship-manifest-2026-07-09-briefing-first-review-surface.md`.
+No active executable task is promoted in this file. The `skillpacks` `0.1.22-experimental.5` canary source closeout was verified, committed, tagged, and pushed on 2026-07-09; see `tasks/history.md` and `tasks/ship-manifest-2026-07-09-skillpacks-0.1.22-experimental.5-canary-closeout.md`.
 
 ### Next Work
 
 - [ ] None promoted.
+
+## Historical Implementation - skillpacks 0.1.22-experimental.5 canary closeout
+
+### Goal
+
+Close out the already-published `skillpacks` / `@glexcorp/gskp` canary release `0.1.22-experimental.5` by committing the matching source package metadata, verifying published smoke behavior, and preserving a clean handoff state.
+
+### Plan
+
+- [x] Confirm npm registry metadata for both package names and the `experimental` dist-tag.
+- [x] Validate the source package/manifest metadata and canary package staging boundary.
+- [x] Smoke-check the published canary package names.
+- [x] Recheck the deck-backed remove/doctor path that failed in `0.1.22-experimental.4`.
+- [x] Record closeout evidence in task history and a ship manifest.
+
+### Acceptance Criteria
+
+- [x] `packages/skillpacks/package.json` version is `0.1.22-experimental.5`.
+- [x] `packages/skillpacks/dist/skillpacks-manifest.json` package metadata is `{ "version": "0.1.22-experimental.5", "release_lane": "canary" }`.
+- [x] `skillpacks@experimental` and `@glexcorp/gskp@experimental` both resolve to `0.1.22-experimental.5`.
+- [x] `skillpacks@latest` and `@glexcorp/gskp@latest` both remain `0.1.21`.
+- [x] The published `.5` canary no longer reports convention-doc drift after installing and removing a deck-backed pack.
+
+### Verification
+
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `npm view skillpacks dist-tags --json`
+- [x] `npm view @glexcorp/gskp dist-tags --json`
+- [x] `npm view skillpacks@0.1.22-experimental.5 version`
+- [x] `npm view @glexcorp/gskp@0.1.22-experimental.5 version`
+- [x] `npx -y --prefer-online --package skillpacks@experimental --cache /tmp/skillpacks-npm-cache -- skillpacks --version`
+- [x] `npx -y --prefer-online --package @glexcorp/gskp@experimental --cache /tmp/skillpacks-npm-cache -- skillpacks --version`
+- [x] `npx -y --prefer-online --package skillpacks@experimental --cache /tmp/skillpacks-npm-cache -- skillpacks list`
+- [x] `npx -y --prefer-online --package @glexcorp/gskp@experimental --cache /tmp/skillpacks-npm-cache -- skillpacks list`
+- [x] Published `skillpacks@experimental` deck-backed `install-deck game-afps` -> `remove game` -> `doctor`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+
+### Review
+
+The source tree now matches the published `0.1.22-experimental.5` canary package metadata for both the package manifest and generated skillpacks manifest. Registry checks confirmed the `experimental` dist-tag moved to `.5` for both package names while `latest` stayed on `0.1.21`.
+
+Published smoke checks passed for both package names' version and list commands. The targeted deck-backed install/remove/doctor smoke check passed against `skillpacks@experimental`, proving the source fix recorded in the `.4` closeout is present in the published `.5` canary.
 
 ## Historical Implementation - Briefing Slide Required Gate Border Convention
 

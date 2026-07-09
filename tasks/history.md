@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout
+
+- Confirmed npm now reports `skillpacks@experimental` and `@glexcorp/gskp@experimental` at `0.1.22-experimental.5`; `latest` remains `0.1.21` for both package names.
+- Committed the matching source package/manifest metadata bump from `0.1.22-experimental.4` to `0.1.22-experimental.5`.
+- Verified canary package consistency with `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`.
+- Published smoke checks passed for both package names' `--version` and `list` commands. A targeted deck-backed install/remove/doctor smoke check passed against `skillpacks@experimental`, confirming the `.4` post-remove doctor false-positive is fixed in the published `.5` canary.
+- Manifest: `tasks/ship-manifest-2026-07-09-skillpacks-0.1.22-experimental.5-canary-closeout.md`.
+
 ## 2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout
 
 - Confirmed `skillpacks@experimental` and `@glexcorp/gskp@experimental` both point to `0.1.22-experimental.4`; `latest` remains `0.1.21` for both package names.

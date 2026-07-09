@@ -6,6 +6,24 @@
 
 No active executable task is promoted in `tasks/todo.md`.
 
+## Historical Implementation - skillpacks 0.1.22-experimental.5 canary closeout
+
+### Goal
+
+Close out the already-published `skillpacks` / `@glexcorp/gskp` canary release `0.1.22-experimental.5` by committing the matching source package metadata and verifying published canary smoke behavior.
+
+### Plan
+
+- [x] Confirm npm registry metadata for both package names and the `experimental` dist-tag.
+- [x] Validate source package/manifest metadata with canary package staging.
+- [x] Smoke-check the published canary package names.
+- [x] Recheck the deck-backed remove/doctor path that failed in `0.1.22-experimental.4`.
+- [x] Record closeout evidence and ship the source state.
+
+### Review
+
+Source package metadata and the generated manifest now record `0.1.22-experimental.5` / `canary`. Npm registry checks confirmed both package names' `experimental` dist-tags point to `.5` and both `latest` tags remain `0.1.21`. Published smoke checks passed for version/list behavior and for deck-backed install/remove followed by `doctor`.
+
 ## Historical Implementation - Briefing-First Review Surface Convention
 
 ### Goal
