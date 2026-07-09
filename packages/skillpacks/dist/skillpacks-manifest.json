@@ -2,7 +2,7 @@
   "schema_version": 1,
   "package": {
     "name": "skillpacks",
-    "version": "0.1.22-experimental.3",
+    "version": "0.1.22-experimental.4",
     "release_lane": "canary"
   },
   "source_fingerprint": "54e582c5408e15026e4c025f23a42c9eb5af93d172c7be59ff4671d892494921",
