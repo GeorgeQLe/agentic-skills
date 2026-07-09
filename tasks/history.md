@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-09 - Briefing-first review surface convention
+
+- Implemented briefing-first review behavior at the shared convention layer: dense `interrogation/*.html` and `alignment/*.html` pages are written first as canonical backup/reference surfaces, then `briefing-slides/*.html` is built and opened as the primary review surface whenever the canary `briefing-slides` convention asset is present.
+- Tightened alignment and interrogation browser-open rules to preserve dense-page fallback behavior when the briefing-slides asset is absent, and to route briefing-deck compiled YAML back to the producing skill rather than `create-briefing-slides`.
+- Added `scripts/skill-convention-bundle-audit.mjs` canaries so briefing-first dense-backup wording must remain present in the briefing, alignment, and interrogation conventions.
+- Verified convention audits, briefing-slide audit, stable and canary package build checks, canary package asset contents, representative skill inheritance, task-doc audit, and diff hygiene.
+- Shipped source changes as `dc8fc4e76 Implement briefing-first review conventions`; closeout prompt-history/task-doc wrap-up shipped separately.
+- Manifest: `tasks/ship-manifest-2026-07-09-briefing-first-review-surface.md`.
+
 ## 2026-07-09 - Briefing-slides Phase 2: deck manifest + batch regenerate
 
 - Added `scripts/extract-deck-manifest.mjs` (read-only, re-runnable) to parse the 42 legacy hand-authored skill decks into `briefing-slides/_deck-manifest.json` — the committed, hand-editable source of truth. 42 decks extracted, no anchor gaps; 7 brancher next-step divergences logged and preserved (not auto-rewritten).

@@ -1,49 +1,14 @@
 # Current Task
 
-## Current Implementation - Briefing-First Review Surface Convention
+## Current Implementation - No Active Task
 
-### Goal
+### Status
 
-Make briefing slides the primary opened review surface whenever the canary `briefing-slides` convention is installed, while preserving dense `interrogation/*.html` and `alignment/*.html` pages as mandatory canonical backup/reference artifacts written first.
+No active executable task is promoted in this file. The briefing-first review surface convention work was implemented, verified, committed, and pushed on 2026-07-09; see `tasks/history.md` and `tasks/ship-manifest-2026-07-09-briefing-first-review-surface.md`.
 
-### Execution Profile
+### Next Work
 
-- Parallel mode: serial
-- Reason: package `build`/`build:check` write/read shared `packages/skillpacks/build` and may refresh `dist` outputs; run package checks serially and inspect pre-existing package metadata edits before staging.
-
-### Plan
-
-- [x] Inspect current briefing, alignment, and interrogation convention wording plus generator/audit surfaces.
-- [x] Patch shared convention docs so dense HTML pages are produced first, decks are produced second, only decks are opened when the briefing convention exists, and compiled YAML routes back to the producing skill.
-- [x] Extend convention bundle audit canaries to fail when briefing-first dense-backup language disappears.
-- [x] Regenerate or verify packaged/runtime convention copies as needed without adding `briefing-slides` to every producer skill.
-- [x] Run convention audits, package build checks, package-content checks, and spot-check inherited skill behavior.
-- [x] Record verification results, review diffs, commit, and push intended changes.
-
-### Acceptance Criteria
-
-- [x] The briefing convention explicitly defines the dense-page-first, deck-open-first workflow.
-- [x] Alignment and interrogation conventions describe dense pages as canonical backup/reference surfaces when a briefing deck exists and preserve dense-page open fallback when the briefing convention asset is absent.
-- [x] Static audits enforce canary briefing-first wording in the relevant shared docs/assets.
-- [x] Canary package contents include briefing-slide convention assets and briefing-first alignment/interrogation assets.
-- [x] Representative research and product-design skills inherit the behavior through shared conventions without direct `required_conventions` churn.
-
-### Verification
-
-- [x] `node scripts/skill-convention-bundle-audit.mjs`
-- [x] `node scripts/audit-briefing-slides.mjs`
-- [x] `npm --workspace packages/skillpacks run build:check` (passed after temporarily generating a stable-lane manifest; final source restored to canary)
-- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
-- [x] Package asset content checks for briefing/alignment/interrogation convention assets.
-- [x] Spot-check one research framework subskill and one product-design skill.
-
-### Review
-
-Updated the shared briefing-slides convention so the workflow is explicit: dense `interrogation/*.html` and `alignment/*.html` pages are written and verified first, remain canonical backup/reference surfaces, and then the briefing deck is built and opened as the primary review surface when the canary convention is installed. The deck YAML routing now explicitly goes back to the producing command, not `create-briefing-slides`.
-
-Replaced the vague alignment/interrogation browser-open language with concrete briefing-first branches: if the `briefing-slides` convention asset exists, build/open only the deck and link the dense page; if the asset is absent, open the dense page as before. Added canary checks to `scripts/skill-convention-bundle-audit.mjs` so the dense-backup/deck-open wording cannot disappear silently.
-
-Package verification used the existing canary source state (`0.1.22-experimental.3`). Stable `build:check` passed in a temporary stable-manifest state, then the manifest was restored and verified in canary mode. The canary package build includes `assets/briefing-slides-convention.md`, and the built alignment/interrogation convention assets contain the new briefing-first fallback language. Spot checks confirmed `porter-five-forces` and `idea-scope-brief` still inherit through `alignment-page` and `interrogation-page` only.
+- [ ] None promoted.
 
 ## Historical Implementation - Briefing Slide Required Gate Border Convention
 
