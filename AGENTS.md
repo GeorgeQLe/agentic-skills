@@ -1,10 +1,10 @@
-<!-- provision-agentic-config v0.13 -->
 ## Repo-Specific: Do Not Install Skills In This Directory
 
 **This repository IS the skillpacks source of truth, so skill installation does not work here.** In this directory specifically, never run `npx skillpacks install <pack-or-skill>`, `npx skillpacks init`, `npx skillpacks which`, or any other skillpacks install/package command to obtain or enable a skill — it does not work in this repo and is never the correct fix. Every skill already exists in-tree at `packs/<pack>/{claude,codex}/<skill>/SKILL.md`. To use a skill, run it directly from its written convention in `packs/**` (or the runtime `.codex/skills/**` / `.claude/skills/**` copies produced by `scripts/pack.sh refresh`).
 
 This overrides every instruction below (and any routing from `$ship`, Missing Skill Fallback, Cross-Pack Routing, or a recommended-next-command handoff) that would tell you to run or suggest an `npx skillpacks install`/`init` command as a prerequisite for an unavailable or not-enabled pack. In this repo, treat the skill as present in-tree and run it from its source SKILL.md instead of recommending an install. The only skillpacks-related command used here is `scripts/pack.sh refresh`, which republishes the local runtime skill copies from source — it is not an install.
 
+<!-- provision-agentic-config v0.15 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -50,6 +50,14 @@ This overrides every instruction below (and any routing from `$ship`, Missing Sk
 - Zero context switching required from the user
 - Go fix failing tests without being told how
 
+### 7. Monorepo Parallel-Work Safety
+- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
+- All dependency changes must be pre-staged in a single serial session before parallel work begins
+- Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
+- Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
+- Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
+- If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
+
 ### Missing Skill Fallback
 - If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
 - Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
@@ -73,15 +81,20 @@ This overrides every instruction below (and any routing from `$ship`, Missing Sk
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
-### Alignment Page Convention
-- The alignment-page convention is **bundled per-skill** as `ALIGNMENT-PAGE.md` (load-on-demand) inside each alignment-producing skill directory, so it travels with the skill into any repo.
-- It is authored canonically in `docs/alignment-page-convention.md` (between the `alignment-convention` markers) and propagated by `scripts/upgrade-alignment-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated `ALIGNMENT-PAGE.md`.
-- A skill's `## Alignment Page` section is a short stub that points at the sibling `ALIGNMENT-PAGE.md`; codex bundled files use the same content as claude.
-- Direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
+### Shipping Contract Convention
 
-### Interrogation Page Convention
-- The stage-zero **interrogation page** archetype is authored canonically in `docs/interrogation-page-convention.md` (between the `interrogation-convention` markers) and bundled per-skill as `INTERROGATION-PAGE.md` by `scripts/upgrade-interrogation-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated bundle.
-- Direct edits to active `interrogation/*.html` pages made without invoking a skill must pass `node scripts/audit-interrogation-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs --dir interrogation`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
+When a skill says "Follow the shared shipping contract convention", apply these rules:
+
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+
+### Alignment Page Convention
+- The alignment-page convention is shared through the packaged convention resolver: source checkouts load `docs/alignment-page-convention.md`, packaged installs load `assets/alignment-page-convention.md`, and older installed skills may fall back to a sibling `ALIGNMENT-PAGE.md` if present.
+- It is authored canonically in `docs/alignment-page-convention.md` (between the `alignment-convention` markers) and validated by `scripts/upgrade-alignment-page.mjs`. Edit the convention there and re-run the generator; legacy sibling bundles are regenerated only with `--legacy-bundles`.
+- A skill's `## Alignment Page` section is a short stub that names the shared resolver and output path; codex bundled files use the same content as claude.
+- Direct edits to active `alignment/*.html` pages made without invoking a skill must pass `node scripts/audit-alignment-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.
 
 ## Task Management
 
@@ -130,3 +143,9 @@ fi
 - The `UtilBindVsockAnyPort: socket failed 1` failure can happen before Windows opens a UNC path. For browser-targeted HTML pages, retry with the `file://wsl.localhost/<distro>/...` PowerShell URI before using editor fallbacks.
 
 Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.
+
+## Repo-Specific Workflow Notes
+
+### Interrogation Page Convention
+- The stage-zero **interrogation page** archetype is authored canonically in `docs/interrogation-page-convention.md` (between the `interrogation-convention` markers) and bundled per-skill as `INTERROGATION-PAGE.md` by `scripts/upgrade-interrogation-page.mjs`. Edit the convention there and re-run the generator; never hand-edit a generated bundle.
+- Direct edits to active `interrogation/*.html` pages made without invoking a skill must pass `node scripts/audit-interrogation-pages.mjs` (exit 0) before commit. TTS-include diagnostics route to `node scripts/inject-tts.mjs --dir interrogation`; all other diagnostics are manual fixes. Archived pages under `docs/history/archive/` are out of scope.

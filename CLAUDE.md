@@ -1,10 +1,10 @@
-<!-- provision-agentic-config v0.13 -->
 ## Repo-Specific: Do Not Install Skills In This Directory
 
 **This repository IS the skillpacks source of truth, so skill installation does not work here.** In this directory specifically, never run `npx skillpacks install <pack-or-skill>`, `npx skillpacks init`, `npx skillpacks which`, or any other skillpacks install/package command to obtain or enable a skill — it does not work in this repo and is never the correct fix. Every skill already exists in-tree at `packs/<pack>/{claude,codex}/<skill>/SKILL.md`. To use a skill, run it directly from its written convention in `packs/**` (or the runtime `.codex/skills/**` / `.claude/skills/**` copies produced by `scripts/pack.sh refresh`).
 
 This overrides every instruction below (and any routing from `/ship`, Missing Skill Fallback, Cross-Pack Routing, or a recommended-next-command handoff) that would tell you to run or suggest an `npx skillpacks install`/`init` command as a prerequisite for an unavailable or not-enabled pack. In this repo, treat the skill as present in-tree and run it from its source SKILL.md instead of recommending an install. The only skillpacks-related command used here is `scripts/pack.sh refresh`, which republishes the local runtime skill copies from source — it is not an install.
 
+<!-- provision-agentic-config v0.15 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -50,6 +50,14 @@ This overrides every instruction below (and any routing from `/ship`, Missing Sk
 - Zero context switching required from the user
 - Go fix failing tests without being told how
 
+### 7. Monorepo Parallel-Work Safety
+- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
+- All dependency changes must be pre-staged in a single serial session before parallel work begins
+- Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
+- Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
+- Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
+- If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
+
 ### Missing Skill Fallback
 - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
 - If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
@@ -79,6 +87,15 @@ This overrides every instruction below (and any routing from `/ship`, Missing Sk
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
+### Shipping Contract Convention
+
+When a skill says "Follow the shared shipping contract convention", apply these rules:
+
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
@@ -97,8 +114,6 @@ This overrides every instruction below (and any routing from `/ship`, Missing Sk
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
-- **Concurrent-Session Working Tree**: Another Claude/Codex session may be working this repo in parallel on a shared working tree. After running a repo-wide operation (e.g. `scripts/pack.sh refresh`), do NOT `git restore`/delete unexpected `git status` entries you did not create — they may be a concurrent session's uncommitted work, and cleaning them up silently reverts and deletes that work. Scope any post-op cleanup to your own task paths only, and commit your own new files promptly rather than relying on the working tree surviving.
-- **Skillpacks Manifest Is Index-Generated**: `packages/skillpacks/dist/skillpacks-manifest.json` (and the `build-package.mjs` source fingerprint) are generated from the **git index**, not the working tree. Regeneration therefore never captures another session's unstaged edits on the shared tree. Workflow: `git add` your skill edits **before** running `npm run build` (or `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs`), then `git add` the regenerated manifest and commit source + manifest **together** in one atomic commit. `build:check` validates the committed manifest against the index, so a clean checkout (index == HEAD) always passes. The public skills-catalog export under `exports/skills-catalog/v1/` follows the same index-sourced skill/package inputs and is validated with `scripts/validate-skills-catalog-export.sh`. The Skills Showcase app and benchmark run outputs live in separate repositories and are not regenerated during normal package shipping here.
 
 ## Windows/WSL File Opening
 - On Windows machines running WSL, convert Linux paths before opening files from shell commands:
@@ -128,6 +143,11 @@ fi
 - The `UtilBindVsockAnyPort: socket failed 1` failure can happen before Windows opens a UNC path. For browser-targeted HTML pages, retry with the `file://wsl.localhost/<distro>/...` PowerShell URI before using editor fallbacks.
 
 Provisioned artifact: ./CLAUDE.md. Source: workflow.md. Verification: block appears exactly once.
+
+## Repo-Specific Workflow Notes
+
+- **Concurrent-Session Working Tree**: Another Claude/Codex session may be working this repo in parallel on a shared working tree. After running a repo-wide operation (e.g. `scripts/pack.sh refresh`), do NOT `git restore`/delete unexpected `git status` entries you did not create — they may be a concurrent session's uncommitted work, and cleaning them up silently reverts and deletes that work. Scope any post-op cleanup to your own task paths only, and commit your own new files promptly rather than relying on the working tree surviving.
+- **Skillpacks Manifest Is Index-Generated**: `packages/skillpacks/dist/skillpacks-manifest.json` (and the `build-package.mjs` source fingerprint) are generated from the **git index**, not the working tree. Regeneration therefore never captures another session's unstaged edits on the shared tree. Workflow: `git add` your skill edits **before** running `npm run build` (or `node packages/skillpacks/scripts/build-skillpacks-manifest.mjs`), then `git add` the regenerated manifest and commit source + manifest **together** in one atomic commit. `build:check` validates the committed manifest against the index, so a clean checkout (index == HEAD) always passes. The public skills-catalog export under `exports/skills-catalog/v1/` follows the same index-sourced skill/package inputs and is validated with `scripts/validate-skills-catalog-export.sh`. The Skills Showcase app and benchmark run outputs live in separate repositories and are not regenerated during normal package shipping here.
 
 ## Shared Skill Conventions
 
