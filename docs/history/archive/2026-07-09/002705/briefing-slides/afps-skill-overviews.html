@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS Skill Overview Briefing</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #131a29;
+      --ink-soft: #35415a;
+      --muted: #5b6a82;
+      --faint: #8695ac;
+      --line: #e4e9f1;
+      --line-strong: #cdd8e8;
+      --paper: #fcfdff;
+      --panel: #ffffff;
+      --accent: #2f6ae0;
+      --accent-2: #0ea5a3;
+      --blue: #2f6ae0;
+      --teal: #0e9aa0;
+      --green: #17915a;
+      --gold: #b07714;
+      --red: #cf4257;
+      --violet: #6f57d6;
+      --sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+      --shadow-sm: 0 1px 2px rgba(19,26,41,.05), 0 1px 3px rgba(19,26,41,.04);
+      --shadow-md: 0 6px 16px -6px rgba(19,26,41,.12), 0 2px 6px -2px rgba(19,26,41,.08);
+      --shadow-lg: 0 30px 70px -24px rgba(19,26,41,.34), 0 10px 28px -16px rgba(19,26,41,.20);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      background:
+        radial-gradient(900px 520px at 6% -14%, rgba(47,106,224,.11), transparent 62%),
+        radial-gradient(820px 480px at 106% -8%, rgba(14,165,163,.10), transparent 58%),
+        linear-gradient(180deg, #eef3fb 0%, #f5f8fc 44%, #eef2f8 100%);
+      background-attachment: fixed;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 2px; }
+    a:focus-visible, button:focus-visible, select:focus-visible,
+    textarea:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 20px;
+      border-bottom: 1px solid rgba(19,26,41,.08);
+      background: rgba(250,252,255,.72);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand::before {
+      content: "";
+      width: 22px; height: 22px;
+      flex: none;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 4px 12px -3px rgba(47,106,224,.5), inset 0 1px 0 rgba(255,255,255,.4);
+    }
+    .brand strong { font-size: 15px; white-space: nowrap; letter-spacing: -.01em; }
+    .brand span { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .controls { display: flex; align-items: center; gap: 8px; }
+    button {
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: var(--ink-soft);
+      border-radius: 9px;
+      padding: 8px 13px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+    }
+    button:hover { border-color: var(--accent); color: var(--accent); box-shadow: var(--shadow-sm); }
+    button:active { transform: translateY(1px); }
+    .counter {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      font-size: 12.5px;
+      min-width: 96px;
+      text-align: center;
+    }
+    .progress { height: 5px; background: rgba(19,26,41,.06); }
+    .progress div {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 12px rgba(47,106,224,.55);
+      border-radius: 0 4px 4px 0;
+      transition: width .28s cubic-bezier(.22,.61,.36,1);
+    }
+    .shell {
+      min-height: calc(100vh - 59px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 244px;
+      gap: 16px;
+      padding: 15px;
+    }
+    .stage {
+      min-height: calc(100vh - 86px);
+      display: grid;
+      place-items: center;
+    }
+    .slide {
+      display: none;
+      position: relative;
+      width: min(1360px, 100%);
+      min-height: min(760px, calc(100vh - 112px));
+      max-height: calc(100vh - 112px);
+      background: var(--paper);
+      border: 1px solid rgba(19,26,41,.07);
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      padding: clamp(28px, 2.8vw, 48px);
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2) 55%, transparent 92%);
+    }
+    .slide.active {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 20px;
+      animation: rise .5s cubic-bezier(.22,.61,.36,1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px) scale(.994); }
+      to { opacity: 1; transform: none; }
+    }
+    header { display: grid; gap: 13px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-weight: 800;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 24px; height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+    h1, h2 { margin: 0; line-height: 1.03; letter-spacing: -.022em; font-weight: 800; text-wrap: balance; color: var(--ink); }
+    h1 { font-size: clamp(40px, 6vw, 76px); max-width: 18ch; }
+    h2 { font-size: clamp(30px, 4.4vw, 56px); max-width: 24ch; }
+    .lead { color: var(--muted); font-size: clamp(18px, 2.2vw, 26px); line-height: 1.4; max-width: 62ch; margin: 0; }
+    .content { min-height: 0; display: grid; gap: 16px; align-content: start; overflow: auto; scrollbar-gutter: stable; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .card, .skill-card, .phase {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 17px 19px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover, .skill-card:hover, .phase:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+    .skill-card { min-height: 146px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 9px; }
+    .skill-card strong { font-size: 18.5px; line-height: 1.16; letter-spacing: -.01em; }
+    .skill-card p, .card p, .phase p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.45; }
+    .skill-card a {
+      justify-self: start;
+      margin-top: 2px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .skill-card a::after { content: "↗"; font-size: 12px; opacity: .8; }
+    .skill-card a:hover { text-decoration: none; }
+    .card strong, .phase strong { letter-spacing: -.01em; font-size: 16.5px; }
+    .badge-row, .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .badge, .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 11px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--muted);
+      background: #eef2f8;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .01em;
+      transition: color .15s ease, border-color .15s ease, background .15s ease;
+    }
+    a.chip:hover { border-color: var(--accent); color: var(--accent); background: #eaf1fd; text-decoration: none; }
+    .badge.research { color: var(--blue); border-color: #bcd3f4; background: #edf4ff; }
+    .badge.planning { color: var(--violet); border-color: #cec6f0; background: #f2f0ff; }
+    .badge.execution { color: var(--green); border-color: #b9dcca; background: #ecf9f1; }
+    .badge.analysis { color: var(--gold); border-color: #e6d3a4; background: #fdf6e6; }
+    .badge.shipping, .badge.ops, .badge.review { color: var(--red); border-color: #eec3c9; background: #fdeff1; }
+    .timeline { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .phase { display: grid; align-content: start; border-top: 3px solid var(--accent); border-radius: 12px 12px 14px 14px; }
+    .phase:nth-child(2) { border-top-color: var(--teal); }
+    .phase:nth-child(3) { border-top-color: var(--green); }
+    .phase:nth-child(4) { border-top-color: var(--gold); }
+    .phase:nth-child(5) { border-top-color: var(--violet); }
+    .phase strong { display: block; margin-bottom: 11px; font-size: 16px; }
+    .phase code {
+      display: block;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: #2a3f66;
+      background: #f2f6fc;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 11px 12px;
+      white-space: normal;
+    }
+    code {
+      font-family: var(--mono);
+      font-size: .88em;
+      background: #eef2f8;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: #274069;
+    }
+    .refbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+    .refbar small { color: var(--faint); text-transform: uppercase; letter-spacing: .11em; font-size: 10.5px; font-weight: 700; }
+    .review {
+      background: rgba(252,253,255,.78);
+      backdrop-filter: blur(14px) saturate(1.3);
+      -webkit-backdrop-filter: blur(14px) saturate(1.3);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: var(--shadow-md);
+      align-self: start;
+      position: sticky;
+      top: 70px;
+      max-height: calc(100vh - 92px);
+      overflow: auto;
+    }
+    .review h3 { margin: 0 0 10px; font-size: 15px; letter-spacing: -.01em; }
+    .review label { display: block; margin: 11px 0 4px; color: var(--muted); font-size: 11.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
+    .review select, .review textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px;
+      font: inherit;
+      font-size: 12.5px;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .review select:focus, .review textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,106,224,.14); outline: none; }
+    .review textarea { min-height: 66px; resize: vertical; }
+    .review .radio { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 12.5px; margin: 8px 0 0; }
+    .review .radio input { width: auto; accent-color: var(--accent); }
+    #copySlideBtn, #copyAllBtn, #compileDeckBtn {
+      width: 100%;
+      margin-top: 10px;
+      border: 0;
+      color: #fff;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 18px -8px rgba(47,106,224,.7);
+    }
+    #copySlideBtn:hover, #copyAllBtn:hover, #compileDeckBtn:hover {
+      color: #fff;
+      filter: brightness(1.05);
+      box-shadow: 0 10px 22px -8px rgba(47,106,224,.8);
+    }
+    .review pre, .yaml-box {
+      white-space: pre-wrap;
+      overflow: auto;
+      max-height: 190px;
+      background: #0f1729;
+      color: #dbe4f5;
+      border: 1px solid #1e293b;
+      border-radius: 11px;
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.45;
+      margin-top: 6px;
+    }
+    .filmstrip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .dot {
+      width: 25px;
+      height: 25px;
+      border-radius: 8px;
+      padding: 0;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--muted);
+      border: 1px solid var(--line-strong);
+      background: #fff;
+    }
+    .dot:hover { border-color: var(--accent); color: var(--accent); }
+    .dot.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 5px 13px -4px rgba(47,106,224,.5);
+    }
+    .matrix { display: grid; gap: 8px; }
+    .row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px; align-items: start; }
+    .row strong { font-size: 13px; }
+    .row span { color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .big-number {
+      font-size: clamp(54px, 8vw, 104px);
+      font-weight: 850;
+      line-height: 1;
+      letter-spacing: -.03em;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .warning { border-left: 3px solid var(--gold); border-color: #f0e3bf; background: linear-gradient(180deg, #fffdf6, #fffaef); }
+    .warning:hover { border-color: #e8d49f; }
+    .hidden-textarea { position: fixed; left: -9999px; top: 0; }
+    /* YouTube "Like · Subscribe · 🔔" CTA (title slide only) */
+    .yt-cta {
+      position: relative;
+      display: inline-flex;
+      justify-self: start;
+      width: fit-content;
+      gap: 10px;
+      align-items: center;
+      margin-top: 4px;
+      padding: 6px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .yt-cta:hover, .yt-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
+    }
+    .yt-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      background: #eef2f8;
+      color: var(--ink-soft);
+      box-shadow: var(--shadow-sm);
+      transform-origin: center;
+      animation: ytPress 4.5s ease-in-out infinite;
+    }
+    .yt-like { width: 96px; animation-delay: .09s; }
+    .yt-sub {
+      width: 116px;
+      background: var(--red);
+      color: #fff;
+      letter-spacing: .01em;
+      box-shadow: 0 2px 8px -2px rgba(207,66,87,.5);
+      animation-delay: 1.26s;
+    }
+    .yt-bell { width: 52px; font-size: 17px; animation-delay: 2.61s; }
+    @keyframes ytPress {
+      0%, 100% { transform: scale(1); filter: none; }
+      3%  { transform: scale(.93); filter: brightness(1.12); }
+      6%  { transform: scale(1.04); }
+      9%  { transform: scale(1); filter: none; }
+    }
+    .yt-cursor {
+      position: absolute;
+      top: 62%;
+      left: 16%;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      filter: drop-shadow(0 1px 1px rgba(19,26,41,.35));
+      transform: translate(-4px, 0);
+      animation: ytCursor 4.5s ease-in-out infinite;
+    }
+    .yt-cursor svg { display: block; width: 100%; height: 100%; }
+    @keyframes ytCursor {
+      0%   { left: 18%; transform: translate(-4px, 0) scale(1); }
+      5%   { left: 18%; transform: translate(-4px, 3px) scale(.86); }
+      10%  { left: 18%; transform: translate(-4px, 0) scale(1); }
+      26%  { left: 57%; transform: translate(-4px, 0) scale(1); }
+      31%  { left: 57%; transform: translate(-4px, 3px) scale(.86); }
+      36%  { left: 57%; transform: translate(-4px, 0) scale(1); }
+      56%  { left: 87%; transform: translate(-4px, 0) scale(1); }
+      61%  { left: 87%; transform: translate(-4px, 3px) scale(.86); }
+      66%  { left: 87%; transform: translate(-4px, 0) scale(1); }
+      100% { left: 18%; transform: translate(-4px, 0) scale(1); }
+    }
+    @media (min-width: 981px) and (max-height: 820px) {
+      .slide { padding: clamp(22px, 2.4vw, 34px); }
+      h1 { font-size: clamp(34px, 4.6vw, 58px); }
+      h2 { font-size: clamp(26px, 3.4vw, 44px); }
+      .lead { font-size: clamp(16px, 1.9vw, 21px); }
+      .content { gap: 13px; }
+      .grid-2, .grid-3 { gap: 13px; }
+      .grid-4 { gap: 11px; }
+      .card, .skill-card, .phase { padding: 13px 15px; border-radius: 13px; }
+      .skill-card { min-height: 124px; gap: 7px; }
+      .skill-card strong { font-size: 16.5px; }
+      .skill-card p, .card p, .phase p { font-size: 13.5px; line-height: 1.4; }
+      .card strong, .phase strong { font-size: 15px; }
+      .phase code { font-size: 11.5px; padding: 9px 10px; }
+      .big-number { font-size: clamp(46px, 6vw, 78px); }
+    }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .review { position: static; max-height: none; }
+      .slide { max-height: none; min-height: auto; }
+      .grid-3, .grid-4, .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: auto; min-height: 54px; flex-wrap: wrap; padding: 10px 14px; }
+      .shell { padding: 12px; }
+      .grid-2, .grid-3, .grid-4, .timeline, .row { grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+      h2 { font-size: 29px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .slide.active { animation: none; }
+      * { transition-duration: .01ms !important; }
+      .yt-cursor { display: none; }
+      .yt-pill, .yt-cta { animation: none; }
+    }
+    @media print {
+      body { background: #fff; }
+      .topbar, .progress, .review { display: none; }
+      .shell { display: block; padding: 0; }
+      .stage { display: block; min-height: 0; }
+      .slide, .slide.active {
+        display: block;
+        box-shadow: none;
+        border: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        max-height: none;
+        page-break-after: always;
+        animation: none;
+      }
+      .slide::before { display: none; }
+      .card:hover, .skill-card:hover, .phase:hover { transform: none; box-shadow: var(--shadow-sm); }
+      .yt-cursor { display: none; }
+      .yt-pill, .yt-cta { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <strong>AFPS Skill Overview Briefing</strong>
+      <span>Business AFPS, Devtool AFPS, Game AFPS, VARD, and ORD</span>
+    </div>
+    <div class="controls">
+      <button id="prevBtn" type="button">Prev</button>
+      <span class="counter" id="counter">Slide 1 / 17</span>
+      <button id="nextBtn" type="button">Next</button>
+    </div>
+  </div>
+  <div class="progress"><div id="progressFill"></div></div>
+
+  <main class="shell">
+    <section class="stage" id="stage">
+      <article class="slide active" id="slide-1" data-title="Series overview">
+        <header>
+          <div class="eyebrow">Series deck</div>
+          <h1>What each AFPS skill does, when it appears, and what people can expect.</h1>
+          <a class="yt-cta" href="https://www.youtube.com/@georgele" target="_blank"
+             rel="noopener noreferrer" aria-label="Subscribe to @georgele on YouTube">
+            <span class="yt-pill yt-like">👍 Like</span>
+            <span class="yt-pill yt-sub">Subscribe</span>
+            <span class="yt-pill yt-bell" aria-hidden="true">🔔</span>
+            <span class="yt-cursor" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 2v18l4.2-4.2 2.6 6 2.9-1.2-2.5-5.8H19z" fill="#1b2333" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+        </header>
+        <div class="content grid-3">
+          <div class="card"><div class="big-number">43</div><p>Named skills covered across deliberate and rapid AFPS decks.</p></div>
+          <div class="card"><strong>Primary promise</strong><p>Each skill creates the next evidence layer, review artifact, prototype proof, spec, or execution step.</p></div>
+          <div class="card"><strong>Series framing</strong><p>Explain one skill at a time: trigger, input, session feel, artifact, and downstream route.</p></div>
+          <div class="card warning"><strong>Normal design route</strong><p>User-flow map -> optional state model -> UX variations -> UI interview. Requirements-only and layout-mode are explicit detours.</p></div>
+          <div class="card"><strong>Review habit</strong><p>Dense artifacts stay canonical. Slides are the navigable overview layer.</p></div>
+          <div class="card"><strong>Audience expectation</strong><p>AFPS is deliberate: research first, prototype proof next, production spec after evidence.</p></div>
+        </div>
+        <footer class="refbar"><small>Primary sources</small><div class="chips"><a class="chip" href="../docs/canonical-workflow-report.md">workflow report</a><a class="chip" href="../docs/decks.md">decks</a><a class="chip" href="../docs/skill-next-step-contracts.md">route contract</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-2" data-title="Canonical business flow">
+        <header>
+          <div class="eyebrow">Business AFPS</div>
+          <h2>The deliberate business route moves from uncertainty to production-ready work.</h2>
+        </header>
+        <div class="content timeline">
+          <div class="phase"><strong>1. Concept and market</strong><p><code>idea-scope-brief -> customer-discovery -> competitive-analysis -> journey-map -> positioning</code></p></div>
+          <div class="phase"><strong>2. Product shape</strong><p><code>user-flow-map -> state-model optional -> ux-variations -> ui-interview</code></p></div>
+          <div class="phase"><strong>3. Prototype proof</strong><p><code>build-ui-screens / logic-wiring -> uat -> consolidate-prototypes</code></p></div>
+          <div class="phase"><strong>4. Production handoff</strong><p><code>research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec</code></p></div>
+          <div class="phase"><strong>5. Execution</strong><p><code>roadmap -> plan-phase -> exec -> ship -> ship-end</code></p></div>
+        </div>
+        <footer class="refbar"><small>Route note</small><div class="chips"><a class="chip" href="../docs/skill-next-step-contracts.md">current next-step contract</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-3" data-title="Concept and market skills">
+        <header><div class="eyebrow">Business AFPS phase 1</div><h2>Concept and market skills establish who, why, against what, and where the product wins.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>idea-scope-brief</strong><p>Shapes a rough idea into a scoped brief before research, UX, specs, or implementation.</p><a href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>customer-discovery</strong><p>Bootstraps ICP candidates, runs discovery frameworks, and synthesizes customer evidence.</p><a href="../packs/business-research/claude/customer-discovery/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>competitive-analysis</strong><p>Selects market-analysis frameworks and synthesizes the competitive landscape.</p><a href="../packs/business-research/claude/competitive-analysis/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>journey-map</strong><p>Maps lifecycle and task flow so product choices follow customer reality.</p><a href="../packs/customer-lifecycle/claude/journey-map/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>positioning</strong><p>Frames the product's market category, alternatives, value wedge, and narrative.</p><a href="../packs/business-research/claude/positioning/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>These are evidence-heavy, approval-gated sessions. The visible output is not code; it is confidence, direction, and canonical research.</p></div>
+        </div>
+        <footer class="refbar"><small>Source artifacts</small><div class="chips"><a class="chip" href="../packs/business-research/PACK.md">business-research pack</a><a class="chip" href="../packs/customer-lifecycle/PACK.md">customer-lifecycle pack</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-4" data-title="Product shape skills">
+        <header><div class="eyebrow">Business AFPS phase 2</div><h2>Product-shape skills turn the market thesis into branches people can inspect.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>user-flow-map</strong><p>Creates flow structure: entry points, decisions, states, channels, surfaces, and failure paths.</p><a href="../packs/product-design/claude/user-flow-map/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>state-model</strong><p>Optional logical substrate: entities, states, commands, events, policies, and contracts.</p><a href="../packs/product-design/claude/state-model/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>ux-variations</strong><p>Expands one user flow into alternate progression branches before a UI direction locks.</p><a href="../packs/product-design/claude/ux-variations/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>ui-interview</strong><p>Defines human-visible UI page by page: hierarchy, controls, states, responsive behavior, and details.</p><a href="../packs/product-design/claude/ui-interview/SKILL.md">SKILL.md</a></div>
+          <div class="card warning"><strong>Detour modes</strong><p><code>ui-interview --requirements-only</code> and <code>ux-variations --layout-mode</code> are for fixed content/data contracts and layout-only alternatives.</p></div>
+          <div class="card"><strong>What people should expect</strong><p>Branching, review pages, explicit approval, and a design tree that can be modified without losing lineage.</p></div>
+        </div>
+        <footer class="refbar"><small>Design tree source</small><div class="chips"><a class="chip" href="../packs/product-design/claude/user-flow-map/SKILL.md">user-flow-map</a><a class="chip" href="../packs/product-design/claude/ux-variations/SKILL.md">ux-variations</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-5" data-title="Prototype proof skills">
+        <header><div class="eyebrow">Business AFPS phase 3</div><h2>Prototype skills make branches tangible enough to compare before production specs.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge execution">execution</span></div><strong>build-ui-screens</strong><p>Builds visual screens for one approved UI branch using fake, fixture, local, or in-memory data.</p><a href="../packs/product-design/claude/build-ui-screens/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge execution">execution</span></div><strong>logic-wiring</strong><p>Connects screens and channel behaviors into a clickable, state-backed prototype.</p><a href="../packs/product-design/claude/logic-wiring/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>uat</strong><p>Creates user acceptance journeys, acceptance criteria, and evidence capture for variants.</p><a href="../packs/product-testing/claude/uat/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>consolidate-prototypes</strong><p>Converges evaluated branches into one approved MVP and writes AFPS graduation evidence.</p><a href="../packs/product-design/claude/consolidate-prototypes/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>Disposable prototypes, hands-on comparison, keep/reject decisions, and explicit MVP scope.</p></div>
+          <div class="card"><strong>Series angle</strong><p>This is where AFPS visibly differs from direct-to-spec work: evidence is made reviewable before implementation locks.</p></div>
+        </div>
+        <footer class="refbar"><small>Proof gate</small><div class="chips"><a class="chip" href="../packs/product-design/claude/consolidate-prototypes/SKILL.md">consolidation</a><a class="chip" href="../packs/product-testing/claude/uat/SKILL.md">UAT</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-6" data-title="Production handoff skills">
+        <header><div class="eyebrow">Business AFPS phase 4</div><h2>Production handoff skills refresh research and translate the chosen prototype into a buildable spec.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>research-roadmap</strong><p>Scans research and documentation health, then maintains a priority documentation queue.</p><a href="../packs/research-admin/claude/research-roadmap/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>spec-interview</strong><p>Walks the consolidated prototype and channel behavior to extract production requirements.</p><a href="../packs/product-design/claude/spec-interview/SKILL.md">SKILL.md</a></div>
+          <div class="card warning"><strong>Gate to explain</strong><p><code>spec-interview</code> expects a consolidated prototype, AFPS graduation, and no unchecked post-prototype blockers.</p></div>
+          <div class="card"><strong>What people should expect</strong><p>Less ideation, more extraction: decisions become acceptance criteria, data contracts, and implementation scope.</p></div>
+          <div class="card"><strong>Post-spec pass</strong><p><code>research-roadmap --post-spec</code> checks whether spec decisions stale or contradict upstream research.</p></div>
+          <div class="card"><strong>Outcome</strong><p>A production spec that is ready to sequence into phases instead of a loose wishlist.</p></div>
+        </div>
+        <footer class="refbar"><small>Spec gate</small><div class="chips"><a class="chip" href="../packs/product-design/claude/spec-interview/SKILL.md">spec-interview</a><a class="chip" href="../docs/production-ready-approval.md">production approval</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-7" data-title="Execution skills">
+        <header><div class="eyebrow">Business AFPS phase 5</div><h2>Execution skills convert the production spec into work, then close the loop cleanly.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>roadmap</strong><p>Scans task health, builds or updates the roadmap, and maintains a priority queue.</p><a href="../packs/agent-work-admin/claude/roadmap/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>plan-phase</strong><p>Decomposes one roadmap phase into implementation steps, tests, and file-level detail.</p><a href="../packs/agent-work-admin/claude/plan-phase/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge execution">execution</span></div><strong>exec</strong><p>Executes the next approved step or phase and verifies the result against the plan.</p><a href="../packs/exec-loop/claude/exec/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge shipping">shipping</span></div><strong>ship</strong><p>Ships current work, updates docs, commits, pushes, deploys when applicable, and plans continuation.</p><a href="../packs/exec-loop/claude/ship/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge shipping">shipping</span></div><strong>ship-end</strong><p>Wraps the session: updates docs, commits, and pushes intended tracked changes.</p><a href="../packs/exec-loop/claude/ship-end/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>Disciplined phase work, verification before done, and repo state kept shippable.</p></div>
+        </div>
+        <footer class="refbar"><small>Execution sources</small><div class="chips"><a class="chip" href="../packs/agent-work-admin/PACK.md">agent-work-admin</a><a class="chip" href="../packs/exec-loop/PACK.md">exec-loop</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-8" data-title="Devtool AFPS skills">
+        <header><div class="eyebrow">Devtool AFPS</div><h2>Devtool AFPS uses the same deliberate tempo with developer-specific proof.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>devtool-positioning</strong><p>Positions developer products by workflow, ecosystem, trust, alternatives, and switching cost.</p><a href="../packs/devtool/claude/devtool-positioning/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>devtool-adoption</strong><p>Plans adoption loops, examples, templates, community motion, and proof artifacts.</p><a href="../packs/devtool/claude/devtool-adoption/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>devtool-dx-journey</strong><p>Analyzes install, quickstart, first success, debugging, and production adoption.</p><a href="../packs/devtool/claude/devtool-dx-journey/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge review">review</span></div><strong>devtool-docs-audit</strong><p>Audits docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths.</p><a href="../packs/devtool/claude/devtool-docs-audit/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>devtool-monetization</strong><p>Designs pricing, packaging, open-source strategy, limits, and team conversion.</p><a href="../packs/devtool/claude/devtool-monetization/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>More attention to docs, examples, integrations, OSS trust, and developer adoption than generic business AFPS.</p></div>
+        </div>
+        <footer class="refbar"><small>Canonical chain</small><div class="chips"><a class="chip" href="../docs/decks.md">docs/decks.md</a><a class="chip" href="../packs/devtool/PACK.md">devtool pack</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-9" data-title="Game AFPS skills">
+        <header><div class="eyebrow">Game AFPS 1/2</div><h2>Game AFPS starts with audience, fantasy, genre, comparable titles, and loop proof.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-audience</strong><p>Identifies player segments by taste, behavior, platform, genre affinity, and motivation.</p><a href="../packs/game/claude/game-audience/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-fantasy</strong><p>Defines emotional promise, player fantasy, vibe references, and hook.</p><a href="../packs/game/claude/game-fantasy/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-genre-map</strong><p>Maps genre conventions, expectations, review complaints, and anti-patterns.</p><a href="../packs/game/claude/game-genre-map/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-comparables</strong><p>Researches comparable titles, tags, prices, player signals, and positioning patterns.</p><a href="../packs/game/claude/game-comparables/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>game-core-loop</strong><p>Analyzes moment-to-moment, session, progression, and retention loops.</p><a href="../packs/game/claude/game-core-loop/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>Playability evidence replaces generic product evidence. The early question is not just "who buys?" but "what feels worth replaying?"</p></div>
+        </div>
+        <footer class="refbar"><small>Game deck</small><div class="chips"><a class="chip" href="../docs/decks.md">docs/decks.md</a><a class="chip" href="../packs/game/claude/game-workflow/SKILL.md">game-workflow</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-10" data-title="Game validation and launch">
+        <header><div class="eyebrow">Game AFPS 2/2</div><h2>Game validation proves the loop, tests the store promise, then sequences launch.</h2></header>
+        <div class="content grid-3">
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>game-prototype-test</strong><p>Designs playable prototype tests and success criteria for fun, clarity, and replay.</p><a href="../packs/game/claude/game-prototype-test/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>game-playtest-metrics</strong><p>Defines metrics for time-to-fun, replay, confusion, quit points, sharing, and retention.</p><a href="../packs/game/claude/game-playtest-metrics/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-store-page-test</strong><p>Plans Steam/store page, capsule, trailer, screenshot, tag, and wishlist validation.</p><a href="../packs/game/claude/game-store-page-test/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>game-launch</strong><p>Plans launch, festivals, creator outreach, demo timing, community, and wishlist targets.</p><a href="../packs/game/claude/game-launch/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge planning">planning</span></div><strong>game-roadmap</strong><p>Sequences prototype, vertical slice, demo, store page, festival, launch, and post-launch milestones.</p><a href="../packs/game/claude/game-roadmap/SKILL.md">SKILL.md</a></div>
+          <div class="card"><strong>What people should expect</strong><p>Concrete playtest loops, storefront evidence, launch timing, and milestone discipline.</p></div>
+        </div>
+        <footer class="refbar"><small>Game proof</small><div class="chips"><a class="chip" href="../packs/game/claude/game-workflow/SKILL.md">game-workflow</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-11" data-title="Rapid feeder skills">
+        <header><div class="eyebrow">VARD and ORD</div><h2>Rapid decks ship small bets first, then graduate traction into deliberate AFPS.</h2></header>
+        <div class="content grid-4">
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>vard-scan</strong><p>Scans for viral app opportunities from trends, gaps, and user pain.</p><a href="../packs/vard/claude/vard-scan/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>vard-align</strong><p>Runs quick feasibility and novelty checks for this week's build.</p><a href="../packs/vard/claude/vard-align/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge ops">ops</span></div><strong>vard-ship</strong><p>Deploys the app, creates landing page, sets analytics, and logs shipment.</p><a href="../packs/vard/claude/vard-ship/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge ops">ops</span></div><strong>vard-traction</strong><p>Checks traction and recommends iterate, graduate, or archive.</p><a href="../packs/vard/claude/vard-traction/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge research">research</span></div><strong>ord-scan</strong><p>Scans for OSS opportunities from npm gaps, GitHub trends, and developer pain.</p><a href="../packs/ord/claude/ord-scan/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge analysis">analysis</span></div><strong>ord-align</strong><p>Validates namespace, existing solutions, feasibility, and build worthiness.</p><a href="../packs/ord/claude/ord-align/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge ops">ops</span></div><strong>ord-ship</strong><p>Publishes to npm, creates README, sets up repo, and logs shipment.</p><a href="../packs/ord/claude/ord-ship/SKILL.md">SKILL.md</a></div>
+          <div class="skill-card"><div class="badge-row"><span class="badge ops">ops</span></div><strong>ord-traction</strong><p>Checks package adoption and recommends iterate, graduate, or archive.</p><a href="../packs/ord/claude/ord-traction/SKILL.md">SKILL.md</a></div>
+        </div>
+        <footer class="refbar"><small>Graduation</small><div class="chips"><span class="chip">VARD -> Business AFPS</span><span class="chip">ORD -> Devtool AFPS</span><a class="chip" href="../docs/decks.md">deck docs</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-12" data-title="Series episode template">
+        <header><div class="eyebrow">Content template</div><h2>Use the same episode structure for every skill so the series compounds.</h2></header>
+        <div class="content grid-2">
+          <div class="card"><strong>1. Trigger</strong><p>When do you run this skill, and what should already exist?</p></div>
+          <div class="card"><strong>2. Inputs</strong><p>Which research, design, prototype, spec, or task artifacts does it read?</p></div>
+          <div class="card"><strong>3. Session feel</strong><p>Interview, research synthesis, branch planning, build loop, audit, or shipping pass?</p></div>
+          <div class="card"><strong>4. Output</strong><p>What file, page, deck, prototype, queue, or commit does it produce?</p></div>
+          <div class="card"><strong>5. Handoff</strong><p>Which skill normally comes next, and what gates can block it?</p></div>
+          <div class="card"><strong>6. Mistakes to avoid</strong><p>Show the common wrong route: skipping research, skipping UAT, spec too early, or building without approval.</p></div>
+        </div>
+        <footer class="refbar"><small>Series use</small><div class="chips"><span class="chip">one skill per episode</span><span class="chip">same five-question frame</span></div></footer>
+      </article>
+
+      <article class="slide" id="slide-13" data-title="Interrogation pages">
+        <header><div class="eyebrow">Review surfaces</div><h2>Interrogation pages are the pre-work confidence gate.</h2></header>
+        <div class="content grid-3">
+          <div class="card"><strong>Purpose</strong><p>They test whether the agent understands scope, assumptions, evidence, and unresolved questions before deep work begins.</p></div>
+          <div class="card"><strong>What users see</strong><p>Open questions, evidence gaps, confidence checks, and a clear pass/fail gate for moving into research, design, or execution.</p></div>
+          <div class="card"><strong>Where they fit</strong><p>Most useful for high-risk AFPS steps: research synthesis, flow mapping, UX branching, UI specification, and production spec extraction.</p></div>
+          <div class="card"><strong>Not a replacement</strong><p>The interrogation page does not become the canonical artifact. It clears the path for the producing skill to continue safely.</p></div>
+          <div class="card"><strong>Series angle</strong><p>Explain this as the agent asking better questions before spending context, time, or writes on the wrong target.</p></div>
+          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">Open the AFPS interrogation page example</a>.</p></div>
+        </div>
+        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">interrogation example</a><a class="chip" href="../docs/interrogation-page-convention.md">convention</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-14" data-title="Alignment pages">
+        <header><div class="eyebrow">Review surfaces</div><h2>Alignment pages are the dense approval surface for decisions and artifacts.</h2></header>
+        <div class="content grid-3">
+          <div class="card"><strong>Purpose</strong><p>They preserve evidence, recommendation, tradeoffs, risks, proposed writes, and approval gates in a reviewable HTML surface.</p></div>
+          <div class="card"><strong>What users see</strong><p>Structured findings, matrices, decisions, file paths, routing, and controls for approve, revise, or clarify.</p></div>
+          <div class="card"><strong>Where they fit</strong><p>Before canonical research, design, spec, documentation, or consolidation outputs are finalized.</p></div>
+          <div class="card"><strong>Confirmed state</strong><p>After approved YAML, the page records the approval and the producing skill writes or updates the canonical artifact.</p></div>
+          <div class="card"><strong>Series angle</strong><p>Explain this as the durable review room where AFPS avoids vague "sounds good" approvals.</p></div>
+          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-alignment-page-example.html">Open the AFPS alignment page example</a>.</p></div>
+        </div>
+        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-alignment-page-example.html">alignment example</a><a class="chip" href="../docs/alignment-page-convention.md">convention</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-15" data-title="YAML handoffs and orchestrators">
+        <header><div class="eyebrow">Routing mechanics</div><h2>YAML handoffs make approval portable; orchestrators keep long workflows ordered.</h2></header>
+        <div class="content grid-3">
+          <div class="card"><strong>YAML handoffs</strong><p>Compiled YAML carries command, briefing slide path, references, gate answers, slide feedback, annotations, marks, and approval status.</p></div>
+          <div class="card"><strong>Approval rule</strong><p><code>ready-for-agent-review</code> should only appear when required gates approve and no unresolved revise or clarification feedback remains.</p></div>
+          <div class="card"><strong>Orchestrators</strong><p>Skills like <code>customer-discovery</code>, <code>positioning</code>, <code>user-flow-map</code>, and <code>research-roadmap</code> own multi-session routing.</p></div>
+          <div class="card"><strong>What they prevent</strong><p>No ad hoc next step, no duplicated framework work, no hidden state, and no accidental jump from idea to build.</p></div>
+          <div class="card"><strong>Series angle</strong><p>Explain orchestrators as the skills that keep AFPS from becoming a pile of disconnected prompts.</p></div>
+          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">Open the YAML and orchestrator example</a>.</p></div>
+        </div>
+        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">YAML/orchestrator example</a><a class="chip" href="../docs/orchestrator-convention.md">orchestrator convention</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-16" data-title="Design tree">
+        <header><div class="eyebrow">Product-design lineage</div><h2>The design tree keeps branches, approvals, stale states, and prototype work connected.</h2></header>
+        <div class="content grid-3">
+          <div class="card"><strong>Root</strong><p><code>user-flow-map</code> creates the flow root and named user-flow branches.</p></div>
+          <div class="card"><strong>Branches</strong><p><code>ux-variations</code> grows progression branches; <code>ui-interview</code> grows UI experiment branches.</p></div>
+          <div class="card"><strong>Substrate</strong><p><code>state-model</code> can attach logical state and command contracts before UX branches re-skin the same domain.</p></div>
+          <div class="card"><strong>Build path</strong><p><code>build-ui-screens</code> and <code>logic-wiring</code> turn approved branches into walkable prototype evidence.</p></div>
+          <div class="card"><strong>Modify-back</strong><p>UAT, consolidation, or spec work can reopen upstream branches instead of burying flaws in downstream artifacts.</p></div>
+          <div class="card"><strong>Example</strong><p><a href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md#design-tree-shape">Open the design-tree example</a>.</p></div>
+        </div>
+        <footer class="refbar"><small>Dense reference</small><div class="chips"><a class="chip" href="../docs/design-tree-loop-convention.md">design-tree convention</a><a class="chip" href="../design/flow-tree.schema.json">flow-tree schema</a></div></footer>
+      </article>
+
+      <article class="slide" id="slide-17" data-title="References and response compiler">
+        <header><div class="eyebrow">Review handoff</div><h2>References and compiled review YAML.</h2></header>
+        <div class="content grid-2">
+          <div class="card">
+            <strong>Dense references</strong>
+            <div class="chips" style="margin-top:10px">
+              <a class="chip" href="../docs/canonical-workflow-report.md">canonical workflow report</a>
+              <a class="chip" href="../docs/decks.md">decks</a>
+              <a class="chip" href="../docs/skill-next-step-contracts.md">next-step contracts</a>
+              <a class="chip" href="../docs/briefing-slides-convention.md">briefing convention</a>
+              <a class="chip" href="../docs/briefing-slides/examples/afps-interrogation-page-example.html">interrogation example</a>
+              <a class="chip" href="../docs/briefing-slides/examples/afps-alignment-page-example.html">alignment example</a>
+              <a class="chip" href="../docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md">YAML/design tree example</a>
+            </div>
+          </div>
+          <div class="card">
+            <strong>Required approval gate</strong>
+            <p>Approve the skill coverage and series framing before turning this into per-skill individual decks or recording scripts.</p>
+          </div>
+          <div class="card">
+            <strong>Compile all feedback</strong>
+            <p>Use the button below to generate YAML that can be pasted back into Codex for revisions.</p>
+            <button id="compileDeckBtn" type="button">Compile Full Deck YAML</button>
+          </div>
+          <div class="card">
+            <strong>Copy fallback</strong>
+            <p>If clipboard permission is blocked, select the generated YAML below.</p>
+          </div>
+        </div>
+        <footer class="refbar"><small>YAML output</small><div class="chips"><span class="chip">owning command: $create-briefing-slides</span></div></footer>
+      </article>
+    </section>
+
+    <aside class="review" aria-label="Slide review controls">
+      <h3 id="reviewTitle">Slide review</h3>
+      <div class="filmstrip" id="filmstrip"></div>
+      <label>Slide mark</label>
+      <select id="markInput">
+        <option value="">none</option>
+        <option value="important">important</option>
+        <option value="question">question</option>
+        <option value="approved">approved</option>
+        <option value="skip">skip</option>
+      </select>
+      <label>Feedback type</label>
+      <select id="feedbackType">
+        <option value="">none</option>
+        <option value="emphasize">emphasize</option>
+        <option value="revise">revise</option>
+        <option value="needs-clarification">needs-clarification</option>
+      </select>
+      <label>Slide notes</label>
+      <textarea id="notesInput" placeholder="Add slide-specific notes"></textarea>
+      <label>Coverage approval</label>
+      <label class="radio"><input type="radio" name="coverage" value="approved"> Coverage is approved</label>
+      <label class="radio"><input type="radio" name="coverage" value="revise"> Revise coverage or grouping</label>
+      <button id="copySlideBtn" type="button">Copy Slide YAML</button>
+      <button id="copyAllBtn" type="button">Copy All Feedback YAML</button>
+      <label>Compiled YAML</label>
+      <pre id="yamlOutput">Use the copy buttons to compile review YAML.</pre>
+    </aside>
+  </main>
+  <textarea class="hidden-textarea" id="fallbackCopy" readonly></textarea>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const stateKey = 'afps-skill-overviews-review-state';
+    const currentKey = 'afps-skill-overviews-current';
+    const references = [
+      'docs/canonical-workflow-report.md',
+      'docs/decks.md',
+      'docs/skill-next-step-contracts.md',
+      'docs/briefing-slides-convention.md',
+      'docs/briefing-slides/examples/afps-interrogation-page-example.html',
+      'docs/briefing-slides/examples/afps-alignment-page-example.html',
+      'docs/briefing-slides/examples/afps-yaml-orchestrator-design-tree-example.md',
+      'packs/base/claude/idea-scope-brief/SKILL.md',
+      'packs/business-research/claude/customer-discovery/SKILL.md',
+      'packs/business-research/claude/competitive-analysis/SKILL.md',
+      'packs/customer-lifecycle/claude/journey-map/SKILL.md',
+      'packs/business-research/claude/positioning/SKILL.md',
+      'packs/product-design/claude/user-flow-map/SKILL.md',
+      'packs/product-design/claude/state-model/SKILL.md',
+      'packs/product-design/claude/ux-variations/SKILL.md',
+      'packs/product-design/claude/ui-interview/SKILL.md',
+      'packs/product-design/claude/build-ui-screens/SKILL.md',
+      'packs/product-design/claude/logic-wiring/SKILL.md',
+      'packs/product-testing/claude/uat/SKILL.md',
+      'packs/product-design/claude/consolidate-prototypes/SKILL.md',
+      'packs/research-admin/claude/research-roadmap/SKILL.md',
+      'packs/product-design/claude/spec-interview/SKILL.md',
+      'packs/agent-work-admin/claude/roadmap/SKILL.md',
+      'packs/agent-work-admin/claude/plan-phase/SKILL.md',
+      'packs/exec-loop/claude/exec/SKILL.md',
+      'packs/exec-loop/claude/ship/SKILL.md',
+      'packs/exec-loop/claude/ship-end/SKILL.md',
+      'packs/devtool/claude/devtool-positioning/SKILL.md',
+      'packs/devtool/claude/devtool-adoption/SKILL.md',
+      'packs/devtool/claude/devtool-dx-journey/SKILL.md',
+      'packs/devtool/claude/devtool-docs-audit/SKILL.md',
+      'packs/devtool/claude/devtool-monetization/SKILL.md',
+      'packs/game/claude/game-audience/SKILL.md',
+      'packs/game/claude/game-fantasy/SKILL.md',
+      'packs/game/claude/game-genre-map/SKILL.md',
+      'packs/game/claude/game-comparables/SKILL.md',
+      'packs/game/claude/game-core-loop/SKILL.md',
+      'packs/game/claude/game-prototype-test/SKILL.md',
+      'packs/game/claude/game-playtest-metrics/SKILL.md',
+      'packs/game/claude/game-store-page-test/SKILL.md',
+      'packs/game/claude/game-launch/SKILL.md',
+      'packs/game/claude/game-roadmap/SKILL.md',
+      'packs/vard/claude/vard-scan/SKILL.md',
+      'packs/vard/claude/vard-align/SKILL.md',
+      'packs/vard/claude/vard-ship/SKILL.md',
+      'packs/vard/claude/vard-traction/SKILL.md',
+      'packs/ord/claude/ord-scan/SKILL.md',
+      'packs/ord/claude/ord-align/SKILL.md',
+      'packs/ord/claude/ord-ship/SKILL.md',
+      'packs/ord/claude/ord-traction/SKILL.md'
+    ];
+    let state = JSON.parse(localStorage.getItem(stateKey) || '{}');
+    let current = Math.max(0, Math.min(slides.length - 1, Number(location.hash.replace('#slide-', '')) - 1 || Number(localStorage.getItem(currentKey) || 0)));
+
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const reviewTitle = document.getElementById('reviewTitle');
+    const markInput = document.getElementById('markInput');
+    const feedbackType = document.getElementById('feedbackType');
+    const notesInput = document.getElementById('notesInput');
+    const yamlOutput = document.getElementById('yamlOutput');
+
+    function saveState() {
+      localStorage.setItem(stateKey, JSON.stringify(state));
+      localStorage.setItem(currentKey, String(current));
+    }
+
+    function slideState(id) {
+      state[id] ||= { mark: '', feedback_type: '', notes: '', coverage: '' };
+      return state[id];
+    }
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === current));
+      counter.textContent = `Slide ${current + 1} / ${slides.length}`;
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+      location.hash = `slide-${current + 1}`;
+      const active = slides[current];
+      const entry = slideState(active.id);
+      reviewTitle.textContent = active.dataset.title || `Slide ${current + 1}`;
+      markInput.value = entry.mark || '';
+      feedbackType.value = entry.feedback_type || '';
+      notesInput.value = entry.notes || '';
+      document.querySelectorAll('input[name="coverage"]').forEach((input) => { input.checked = input.value === entry.coverage; });
+      document.querySelectorAll('.dot').forEach((button, i) => button.classList.toggle('active', i === current));
+      saveState();
+    }
+
+    function updateActiveState(field, value) {
+      const entry = slideState(slides[current].id);
+      entry[field] = value;
+      saveState();
+    }
+
+    function yamlEscape(value) {
+      return String(value || '').replace(/"/g, '\\"');
+    }
+
+    function compileYaml(scope) {
+      const entries = slides.map((slide, index) => ({ slide, index, entry: slideState(slide.id) }));
+      const selected = scope === 'slide' ? [entries[current]] : entries;
+      const unanswered = entries.filter(({ entry }) => !entry.coverage).map(({ slide }) => slide.id);
+      const hasBlocking = entries.some(({ entry }) => entry.coverage === 'revise' || entry.feedback_type === 'revise' || entry.feedback_type === 'needs-clarification');
+      const allApproved = entries.every(({ entry }) => entry.coverage === 'approved');
+      const approval = allApproved && !hasBlocking ? 'ready-for-agent-review' : 'not-approved';
+      const lines = [
+        '# Invoke with: $create-briefing-slides',
+        'command: "$create-briefing-slides"',
+        'briefing_slides: briefing-slides/afps-skill-overviews.html',
+        'reference_pages:'
+      ];
+      references.forEach((ref) => lines.push(`  - ${ref}`));
+      lines.push('source_artifacts:');
+      references.forEach((ref) => lines.push(`  - ${ref}`));
+      lines.push('gate_answers:');
+      entries.forEach(({ slide, entry }) => {
+        if (entry.coverage) lines.push(`  - slide: ${slide.id}`, `    question: "coverage approval"`, `    answer: "${yamlEscape(entry.coverage)}"`);
+      });
+      lines.push('slide_feedback:');
+      selected.forEach(({ slide, entry }) => {
+        if (entry.feedback_type || entry.notes) {
+          lines.push(`  - slide: ${slide.id}`, `    title: "${yamlEscape(slide.dataset.title)}"`, `    type: "${yamlEscape(entry.feedback_type || 'note')}"`, `    note: "${yamlEscape(entry.notes)}"`);
+        }
+      });
+      lines.push('annotations:');
+      selected.forEach(({ slide, entry }) => {
+        if (entry.notes) lines.push(`  - slide: ${slide.id}`, `    note: "${yamlEscape(entry.notes)}"`);
+      });
+      lines.push('marked_slides:');
+      selected.forEach(({ slide, entry }) => {
+        if (entry.mark) lines.push(`  - slide: ${slide.id}`, `    status: "${yamlEscape(entry.mark)}"`);
+      });
+      lines.push('unanswered_required_questions:');
+      unanswered.forEach((id) => lines.push(`  - ${id}`));
+      lines.push(`approval_status: ${approval}`);
+      return lines.join('\n');
+    }
+
+    async function copyText(text) {
+      yamlOutput.textContent = text;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const fallback = document.getElementById('fallbackCopy');
+        fallback.value = text;
+        fallback.select();
+      }
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => showSlide(current - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => showSlide(current + 1));
+    document.getElementById('stage').addEventListener('click', (event) => {
+      if (event.target.id === 'stage') showSlide(current + 1);
+    });
+    markInput.addEventListener('change', (event) => updateActiveState('mark', event.target.value));
+    feedbackType.addEventListener('change', (event) => updateActiveState('feedback_type', event.target.value));
+    notesInput.addEventListener('input', (event) => updateActiveState('notes', event.target.value));
+    document.querySelectorAll('input[name="coverage"]').forEach((input) => {
+      input.addEventListener('change', (event) => updateActiveState('coverage', event.target.value));
+    });
+    document.getElementById('copySlideBtn').addEventListener('click', () => copyText(compileYaml('slide')));
+    document.getElementById('copyAllBtn').addEventListener('click', () => copyText(compileYaml('all')));
+    document.getElementById('compileDeckBtn').addEventListener('click', () => copyText(compileYaml('all')));
+    document.addEventListener('keydown', (event) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(document.activeElement.tagName)) return;
+      if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D' || event.key === ' ') showSlide(current + 1);
+      if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') showSlide(current - 1);
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+    });
+
+    const filmstrip = document.getElementById('filmstrip');
+    slides.forEach((slide, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'dot';
+      button.textContent = String(index + 1);
+      button.title = slide.dataset.title || `Slide ${index + 1}`;
+      button.setAttribute('aria-label', `Go to slide ${index + 1}: ${button.title}`);
+      button.addEventListener('click', () => showSlide(index));
+      filmstrip.appendChild(button);
+    });
+    showSlide(current);
+  </script>
+</body>
+</html>

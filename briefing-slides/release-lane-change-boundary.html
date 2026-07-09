@@ -3,708 +3,1314 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Release Lane Change Boundary - Briefing Slides</title>
+<title>Release Lane Change Boundary — briefing</title>
 <style>
+/* ==========================================================================
+   Briefing Deck — theme-aware design system (base chrome + archetype toolbox)
+   Single source of truth for every generated briefing-slides deck and the
+   living style-guide gallery. Authored here; injected verbatim by
+   scripts/generate-briefing-decks.mjs. Do not hand-edit generated decks.
+   ========================================================================== */
+
+/* --- Design tokens -------------------------------------------------------- */
 :root {
+  color-scheme: light dark;
+  /* Light = refreshed warm paper */
+  --bg: #f3f0e9;
+  --bg-2: #ece7db;
+  --surface: #ffffff;
+  --surface-2: #faf8f2;
+  --surface-3: #f2eee4;
+  --border: #e0dacb;
+  --border-strong: #cfc7b3;
+  --text: #18202f;
+  --text-2: #38414f;
+  --muted: #5f6a78;
+  --faint: #8a93a0;
+  --accent: #2f6bd6;
+  --accent-soft: #e7f0fd;
+  --teal: #0f8a80;
+  --teal-soft: #e2f4f1;
+  --violet: #6d54e0;
+  --violet-soft: #eee9ff;
+  --green: #1f9d57;
+  --green-soft: #e4f6ea;
+  --gold: #b5860f;
+  --gold-soft: #fbf1d8;
+  --red: #d64545;
+  --red-soft: #fcecec;
+  --gate-unanswered: #f85149;
+  --gate-answered: #3fb950;
+  --shadow: 0 20px 50px rgba(24, 32, 47, 0.14);
+  --shadow-soft: 0 6px 18px rgba(24, 32, 47, 0.08);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sidebar-w: min(28rem, 100vw);
+  --slide-scale: 1;
+  font-family: var(--sans);
+}
+
+/* Dark = alignment-page palette. System-preference default … */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --bg-2: #010409;
+    --surface: #161b22;
+    --surface-2: #1c2230;
+    --surface-3: #232b3a;
+    --border: #30363d;
+    --border-strong: #3d444d;
+    --text: #c9d1d9;
+    --text-2: #adbac7;
+    --muted: #8b949e;
+    --faint: #6e7681;
+    --accent: #58a6ff;
+    --accent-soft: #16273f;
+    --teal: #39c5bb;
+    --teal-soft: #123230;
+    --violet: #bc8cff;
+    --violet-soft: #241a3a;
+    --green: #3fb950;
+    --green-soft: #12271b;
+    --gold: #d29922;
+    --gold-soft: #2b2410;
+    --red: #f85149;
+    --red-soft: #2d1517;
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* … explicit toggle always wins over the system preference. */
+:root[data-theme="dark"] {
   --bg: #0d1117;
-  --stage: #11151d;
-  --slide: #f7f9fc;
-  --ink: #172033;
-  --muted: #5d687a;
-  --line: #d8dee8;
-  --blue: #2563eb;
-  --green: #15803d;
-  --amber: #b45309;
-  --red: #b91c1c;
-  --panel: #ffffff;
-  --dark-panel: #171d27;
-  --sidebar: 360px;
+  --bg-2: #010409;
+  --surface: #161b22;
+  --surface-2: #1c2230;
+  --surface-3: #232b3a;
+  --border: #30363d;
+  --border-strong: #3d444d;
+  --text: #c9d1d9;
+  --text-2: #adbac7;
+  --muted: #8b949e;
+  --faint: #6e7681;
+  --accent: #58a6ff;
+  --accent-soft: #16273f;
+  --teal: #39c5bb;
+  --teal-soft: #123230;
+  --violet: #bc8cff;
+  --violet-soft: #241a3a;
+  --green: #3fb950;
+  --green-soft: #12271b;
+  --gold: #d29922;
+  --gold-soft: #2b2410;
+  --red: #f85149;
+  --red-soft: #2d1517;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
+:root[data-theme="light"] {
+  --bg: #f3f0e9;
+  --bg-2: #ece7db;
+  --surface: #ffffff;
+  --surface-2: #faf8f2;
+  --surface-3: #f2eee4;
+  --border: #e0dacb;
+  --border-strong: #cfc7b3;
+  --text: #18202f;
+  --text-2: #38414f;
+  --muted: #5f6a78;
+  --faint: #8a93a0;
+  --accent: #2f6bd6;
+  --accent-soft: #e7f0fd;
+  --teal: #0f8a80;
+  --teal-soft: #e2f4f1;
+  --violet: #6d54e0;
+  --violet-soft: #eee9ff;
+  --green: #1f9d57;
+  --green-soft: #e4f6ea;
+  --gold: #b5860f;
+  --gold-soft: #fbf1d8;
+  --red: #d64545;
+  --red-soft: #fcecec;
+  --shadow: 0 20px 50px rgba(24, 32, 47, 0.14);
+  --shadow-soft: 0 6px 18px rgba(24, 32, 47, 0.08);
+}
+
 * { box-sizing: border-box; }
-body {
+
+html, body {
   margin: 0;
+  min-height: 100%;
   background: var(--bg);
-  color: #e8edf6;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  letter-spacing: 0;
-  overflow: hidden;
+  color: var(--text);
 }
-button, input, textarea { font: inherit; }
-button {
-  min-height: 42px;
-  border: 1px solid #354152;
-  border-radius: 6px;
-  background: #161d28;
-  color: #e8edf6;
-  padding: 8px 12px;
-  cursor: pointer;
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  font-family: var(--sans);
 }
-button:hover { border-color: #6aa7ff; }
-a { color: var(--blue); }
-.topbar, .footer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 20;
+
+a { color: var(--accent); }
+
+/* --- Topbar --------------------------------------------------------------- */
+.deck-topbar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: rgba(13, 17, 23, .94);
-  border-color: #263140;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.1rem;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
 }
-.topbar {
-  top: 0;
-  border-bottom: 1px solid #263140;
+.deck-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
-.footer {
-  bottom: 0;
-  border-top: 1px solid #263140;
+.deck-brand small {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.8rem;
 }
-.title { font-weight: 700; color: #fff; }
-.spacer { flex: 1; }
-.counter { color: #aeb8c7; min-width: 76px; text-align: center; }
-.progress {
-  height: 6px;
-  width: min(260px, 22vw);
+.topbar-right { display: flex; align-items: center; gap: 0.9rem; }
+.deck-progress {
+  width: min(24rem, 34vw);
+  height: 0.42rem;
   border-radius: 999px;
-  background: #263140;
+  background: var(--bg-2);
   overflow: hidden;
 }
-.progress span {
+.deck-progress > span {
   display: block;
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, #3b82f6, #22c55e);
-}
-.deck {
-  height: 100vh;
-  padding: 66px 16px 82px;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(37, 99, 235, .16), transparent 30%),
-    radial-gradient(circle at 80% 80%, rgba(21, 128, 61, .12), transparent 28%),
-    var(--stage);
-}
-.slide {
-  display: none;
-  width: min(1180px, calc(100vw - 40px));
-  aspect-ratio: 16 / 9;
-  max-height: calc(100vh - 160px);
-  background: var(--slide);
-  color: var(--ink);
-  border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
-  padding: clamp(22px, 3vw, 44px);
-  overflow: hidden;
-  position: relative;
-}
-.slide.active { display: flex; flex-direction: column; }
-.eyebrow {
-  color: var(--blue);
-  font-size: clamp(.72rem, .9vw, .9rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-h1, h2 {
-  margin: 0;
-  color: #0f172a;
-  line-height: 1.05;
-}
-h1 { font-size: clamp(2.2rem, 5vw, 4.6rem); max-width: 900px; }
-h2 { font-size: clamp(1.7rem, 3.1vw, 3rem); }
-h3 { margin: 0 0 8px; color: #0f172a; font-size: clamp(.98rem, 1.35vw, 1.25rem); }
-p { margin: 8px 0; }
-.lede {
-  margin-top: 18px;
-  max-width: 720px;
-  color: var(--muted);
-  font-size: clamp(1rem, 1.45vw, 1.35rem);
-}
-.slide-body {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  gap: 16px;
-  align-content: center;
-  margin-top: 18px;
-}
-.two { grid-template-columns: 1fr 1fr; }
-.three { grid-template-columns: repeat(3, 1fr); }
-.four { grid-template-columns: repeat(4, 1fr); }
-.card, .callout, .matrix, .gate {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 14px;
-}
-.card strong, .callout strong { color: #0f172a; }
-.card p, .callout p, .gate p { color: var(--muted); }
-.metric {
-  display: flex;
-  flex-direction: column;
-  min-height: 116px;
-  justify-content: center;
-}
-.metric strong { font-size: clamp(1.4rem, 2.4vw, 2.3rem); color: var(--blue); }
-.metric span { color: var(--muted); }
-.badge {
-  display: inline-flex;
-  min-height: 26px;
-  align-items: center;
   border-radius: 999px;
-  padding: 2px 9px;
-  font-size: .78rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 5px 6px 0;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  transition: width 180ms ease;
 }
-.b-blue { background: var(--blue); }
-.b-green { background: var(--green); }
-.b-amber { background: var(--amber); }
-.b-red { background: var(--red); }
-.lane-row {
-  display: grid;
-  grid-template-columns: 170px 1fr 1fr;
-  gap: 8px;
-  align-items: stretch;
-}
-.lane-row > div {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  padding: 12px;
-}
-.lane-row .lane-name { font-weight: 800; color: #0f172a; }
-.recommended { border: 2px solid rgba(21, 128, 61, .7); }
-.warning { border: 2px solid rgba(180, 83, 9, .7); }
-.compact-list {
-  margin: 0;
-  padding-left: 18px;
+[data-slide-counter] {
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  font-size: 0.85rem;
   color: var(--muted);
+  white-space: nowrap;
 }
-.compact-list li { margin: 4px 0; }
-.ref-chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 30px;
+.icon-btn {
+  min-height: 2rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #eef4ff;
-  color: #1d4ed8;
-  padding: 4px 10px;
-  text-decoration: none;
-  font-size: .86rem;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
   font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
 }
-.filmstrip {
-  display: flex;
-  gap: 6px;
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- Stage + slide shell -------------------------------------------------- */
+.deck-stage { position: relative; min-height: 0; }
+[data-briefing-slide] {
+  display: none;
+  min-height: calc(100vh - 8.1rem);
+  padding: 1.4rem 1.2rem;
+}
+[data-briefing-slide].active {
+  display: grid;
   align-items: center;
-  overflow-x: auto;
-  max-width: 44vw;
+  justify-items: center;
 }
-.dot {
-  min-width: 34px;
-  min-height: 34px;
-  padding: 0;
-  border-radius: 6px;
-  color: #aeb8c7;
+.slide-card {
+  position: relative;
+  width: min(1320px, 100%);
+  overflow: visible;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.9rem 3.1rem;
+  transform-origin: top center;
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
 }
-.dot.active { background: #2563eb; color: #fff; border-color: #6aa7ff; }
-.feedback-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: min(var(--sidebar), 100vw);
-  height: 100vh;
-  background: #101722;
-  border-left: 1px solid #354152;
-  transform: translateX(100%);
-  transition: transform .18s ease;
-  z-index: 40;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Full-bleed variants opt out of the card chrome. */
+[data-briefing-slide].bleed .slide-card {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
 }
-.feedback-panel.open { transform: translateX(0); }
-.feedback-panel h2 { color: #fff; font-size: 1.2rem; }
-.feedback-panel textarea {
-  width: 100%;
-  min-height: 110px;
-  border: 1px solid #354152;
-  border-radius: 6px;
-  background: #0d1117;
-  color: #e8edf6;
-  padding: 10px;
+
+.eyebrow {
+  margin: 0;
+  color: var(--teal);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
 }
-.mark-row, .feedback-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.selected { border-color: #6aa7ff; background: #1d2a3c; }
-.yaml-box {
-  min-height: 150px;
-  resize: vertical;
-  font-size: .82rem;
+.slide-card h1, .slide-card h2, .slide-card h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.05; }
+.slide-card h1 { font-size: clamp(3.4rem, 6.6vw, 5.4rem); }
+.slide-card h2 { font-size: clamp(2.5rem, 4.8vw, 3.8rem); }
+.slide-card h3 { font-size: 1.5rem; }
+.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  line-height: 1.42;
+  max-width: 62ch;
 }
-.gate label {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin: 8px 0;
-  color: #334155;
+.slide-note { margin: 0; color: var(--faint); font-size: 1rem; }
+
+/* --- Chips + badges ------------------------------------------------------- */
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  min-height: 1.75rem; padding: 0.2rem 0.7rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font-size: 0.9rem; font-weight: 700; text-decoration: none;
 }
-.gate input { margin-top: 3px; }
-.small { font-size: .86rem; color: var(--muted); }
-@media (max-width: 820px) {
-  .slide { width: min(100vw - 20px, 760px); max-height: calc(100vh - 154px); padding: 20px; }
-  .two, .three, .four { grid-template-columns: 1fr; }
-  .slide-body { align-content: start; gap: 10px; }
-  .card, .callout, .matrix, .gate { padding: 10px; }
-  .lane-row { grid-template-columns: 1fr; }
-  .filmstrip { max-width: 36vw; }
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.55rem; }
-  .lede { font-size: 1rem; }
+a.chip:hover { border-color: var(--accent); color: var(--accent); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 0.12rem 0.55rem; border-radius: 999px;
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.02em;
+  border: 1px solid var(--border);
 }
+.badge.research   { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.badge.planning   { color: var(--violet); border-color: var(--violet); background: var(--violet-soft); }
+.badge.execution  { color: var(--green);  border-color: var(--green);  background: var(--green-soft); }
+.badge.analysis   { color: var(--gold);   border-color: var(--gold);   background: var(--gold-soft); }
+.badge.shipping,
+.badge.ops,
+.badge.review     { color: var(--red);    border-color: var(--red);    background: var(--red-soft); }
+
+/* --- Refined feature cards ------------------------------------------------ */
+.card-grid { display: grid; gap: 0.85rem; }
+.card-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.card-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1rem 0.95rem 1.15rem;
+  overflow: hidden;
+}
+.card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--accent);
+}
+.card.teal::before { background: var(--teal); }
+.card.violet::before { background: var(--violet); }
+.card.green::before { background: var(--green); }
+.card.gold::before { background: var(--gold); }
+.card.red::before { background: var(--red); }
+.card .kicker {
+  display: flex; align-items: center; gap: 0.45rem;
+  font-weight: 800; font-size: 1.22rem; margin-bottom: 0.35rem;
+}
+.card .ic { font-size: 1.4rem; line-height: 1; }
+.card p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.42; }
+
+/* --- Section divider ------------------------------------------------------ */
+.divider {
+  display: grid; gap: 0.9rem; justify-items: center; text-align: center;
+  padding: clamp(2rem, 8vh, 5rem) 1rem;
+  background:
+    radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+    var(--surface);
+  border-radius: var(--radius);
+}
+.divider .kwill { font-size: clamp(2.8rem, 6.4vw, 4.6rem); font-weight: 850; letter-spacing: -0.03em; }
+.divider .idx { font-family: var(--mono); color: var(--accent); font-weight: 800; letter-spacing: 0.1em; }
+
+/* --- Statement / pull-quote ----------------------------------------------- */
+.statement { display: grid; gap: 1.1rem; }
+.statement blockquote {
+  margin: 0; font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+  font-weight: 750; line-height: 1.18; letter-spacing: -0.02em;
+}
+.statement blockquote .hl { color: var(--accent); }
+.statement cite { color: var(--muted); font-style: normal; font-weight: 700; }
+.statement .bar { width: 3.2rem; height: 4px; border-radius: 999px; background: var(--accent); }
+
+/* --- Big-number stats ----------------------------------------------------- */
+.stat-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.1rem; }
+.stat {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; display: grid; gap: 0.35rem;
+}
+.stat .num { font-size: clamp(2.8rem, 6vw, 4.4rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
+.stat .num .unit { font-size: 0.45em; color: var(--muted); font-weight: 800; margin-left: 0.15em; }
+.stat .cap { color: var(--muted); font-weight: 700; font-size: 1.12rem; }
+.stat.teal .num { color: var(--teal); }
+.stat.violet .num { color: var(--violet); }
+.stat.green .num { color: var(--green); }
+.stat.gold .num { color: var(--gold); }
+.stat .spark { margin-top: 0.2rem; }
+
+/* --- Split two-panel ------------------------------------------------------ */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.panel {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1.05rem 1.15rem; display: grid; gap: 0.6rem; align-content: start;
+  background: var(--surface-2);
+}
+.panel .head { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; }
+.panel .head .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; }
+.panel.pos { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 45%, var(--border)); }
+.panel.pos .dot { background: var(--green); }
+.panel.neg { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 45%, var(--border)); }
+.panel.neg .dot { background: var(--red); }
+.panel ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.45rem; }
+.panel li { color: var(--text-2); font-size: 1.15rem; line-height: 1.4; }
+
+/* --- Comparison matrix ---------------------------------------------------- */
+.matrix { width: 100%; border-collapse: collapse; font-size: 1.12rem; }
+.matrix th, .matrix td { padding: 0.85rem 0.95rem; text-align: left; border-bottom: 1px solid var(--border); }
+.matrix thead th {
+  background: var(--surface-3); color: var(--text);
+  font-weight: 800; border-bottom: 2px solid var(--border-strong);
+}
+.matrix tbody th { font-weight: 750; color: var(--text-2); }
+.matrix .cell { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 750; }
+.matrix .cell.yes { color: var(--green); }
+.matrix .cell.no { color: var(--red); }
+.matrix .cell.partial { color: var(--gold); }
+.matrix tr:last-child td, .matrix tr:last-child th { border-bottom: 0; }
+
+/* --- Scorecard / weighted options ----------------------------------------- */
+.scorecard { display: grid; gap: 0.7rem; }
+.option {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.75rem 0.95rem; background: var(--surface-2);
+}
+.option .name { font-weight: 800; font-size: 1.12rem; }
+.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.3rem; color: var(--accent); }
+.option .track { grid-column: 1 / -1; height: 0.5rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.option .track > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
+.option.win { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+.option.win .score { color: var(--green); }
+
+/* --- Timeline / stepper --------------------------------------------------- */
+.timeline { display: grid; gap: 0; }
+.timeline .step {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.9rem;
+  padding-bottom: 1rem; position: relative;
+}
+.timeline .step:not(:last-child)::before {
+  content: ""; position: absolute; left: 1.25rem; top: 2.6rem; bottom: -0.1rem;
+  width: 2px; background: var(--border-strong);
+}
+.timeline .num {
+  width: 2.5rem; height: 2.5rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 850; font-size: 1.05rem;
+  background: var(--accent); color: #fff; z-index: 1;
+}
+.timeline .step.teal .num { background: var(--teal); }
+.timeline .step.violet .num { background: var(--violet); }
+.timeline .body { display: grid; gap: 0.25rem; padding-top: 0.2rem; }
+.timeline .body strong { font-size: 1.3rem; }
+.timeline .body p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.4; }
+
+/* --- Flow / pipeline (sketchy SVG) ---------------------------------------- */
+.flow { display: grid; gap: 0.6rem; }
+.flow svg { width: 100%; height: auto; }
+/* Sketch filter on the node boxes only — thin connectors stay crisp so their
+   stems don't get shredded by the displacement map. */
+.flow .node-fill { filter: url(#deckSketch); fill: var(--surface-2); stroke: var(--accent); stroke-width: 2.4; }
+.flow .node-fill.teal { stroke: var(--teal); }
+.flow .node-fill.violet { stroke: var(--violet); }
+.flow .node-fill.green { stroke: var(--green); }
+.flow .edge { stroke: var(--faint); stroke-width: 3.2; fill: none; }
+.flow .edge.head { fill: var(--faint); stroke: none; }
+.flow text { font-family: var(--sans); fill: var(--text); font-weight: 800; font-size: 18px; }
+.flow text.sub { fill: var(--muted); font-weight: 650; }
+
+/* --- Kanban / register board ---------------------------------------------- */
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.85rem; }
+.column { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
+.column > h4 { margin: 0 0 0.1rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
+.column > h4 .count { color: var(--faint); }
+.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.55rem 0.7rem; font-size: 1.06rem; line-height: 1.36; }
+.ticket.risk { border-left-color: var(--red); }
+.ticket.assumption { border-left-color: var(--gold); }
+.ticket.question { border-left-color: var(--violet); }
+
+/* --- Annotated anatomy / focal -------------------------------------------- */
+.anatomy { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1.1rem; align-items: center; }
+.anatomy .focal { background: var(--surface-3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem; display: grid; place-items: center; min-height: 12rem; }
+.anatomy .callouts { display: grid; gap: 0.6rem; }
+.anatomy .callout { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start; }
+.anatomy .pin { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 850; font-size: 0.78rem; border: 1px solid var(--accent); }
+.anatomy .callout p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.anatomy .callout strong { font-size: 0.92rem; }
+
+/* --- Layered stack bands -------------------------------------------------- */
+.stack { display: grid; gap: 0.45rem; }
+.band {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.9rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem; background: var(--surface-2);
+}
+.band .lyr { font-family: var(--mono); font-size: 0.72rem; color: var(--faint); font-weight: 800; }
+.band .lbl strong { font-size: 1.2rem; }
+.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 1rem; }
+.band .tag { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
+.band:nth-child(1) { background: color-mix(in srgb, var(--accent) 9%, var(--surface-2)); }
+.band:nth-child(2) { background: color-mix(in srgb, var(--teal) 9%, var(--surface-2)); }
+.band:nth-child(3) { background: color-mix(in srgb, var(--violet) 9%, var(--surface-2)); }
+.band:nth-child(4) { background: color-mix(in srgb, var(--green) 9%, var(--surface-2)); }
+
+/* --- Chart slide ---------------------------------------------------------- */
+.chart { display: grid; gap: 0.7rem; }
+.chart .plot { width: 100%; }
+.chart svg { width: 100%; height: auto; overflow: visible; }
+.chart .bar-rect { fill: var(--accent); }
+.chart .bar-rect.teal { fill: var(--teal); }
+.chart .bar-rect.violet { fill: var(--violet); }
+.chart .axis { stroke: var(--border-strong); stroke-width: 1; }
+.chart .grid-line { stroke: var(--border); stroke-width: 1; }
+.chart text { fill: var(--muted); font-size: 0.72rem; font-family: var(--sans); }
+.chart text.val { fill: var(--text); font-weight: 800; }
+.chart .fallback-table { display: none; }
+.chart details.fallback { font-size: 0.8rem; color: var(--muted); }
+.chart details.fallback table { border-collapse: collapse; margin-top: 0.4rem; }
+.chart details.fallback td, .chart details.fallback th { border: 1px solid var(--border); padding: 0.25rem 0.5rem; }
+
+/* --- Meter / gauge row ---------------------------------------------------- */
+.meters { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.1rem; }
+.gauge { display: grid; gap: 0.5rem; justify-items: center; text-align: center; }
+.gauge svg { width: 8.5rem; height: auto; }
+.gauge .arc-bg { fill: none; stroke: var(--bg-2); stroke-width: 10; stroke-linecap: round; }
+.gauge .arc-fg { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; }
+.gauge .arc-fg.green { stroke: var(--green); }
+.gauge .arc-fg.gold { stroke: var(--gold); }
+.gauge .gval { font-size: 1.5rem; font-weight: 850; }
+.gauge .glbl { color: var(--muted); font-weight: 700; font-size: 0.85rem; }
+
+/* --- References slide ----------------------------------------------------- */
+.ref-list { display: grid; gap: 0.55rem; }
+.ref-item {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.7rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem; background: var(--surface-2); text-decoration: none; color: inherit;
+}
+.ref-item:hover { border-color: var(--accent); }
+.ref-item .rk { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--faint); text-transform: uppercase; }
+.ref-item .rt { font-weight: 750; font-size: 1.18rem; }
+.ref-item .rp { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+.provenance { border-top: 1px dashed var(--border); padding-top: 0.7rem; margin-top: 0.4rem; }
+.provenance small { color: var(--faint); font-weight: 700; }
+.provenance a { color: var(--muted); font-size: 0.8rem; }
+
+/* --- Compiler / response slide -------------------------------------------- */
+.compiler { display: grid; gap: 0.7rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.btn {
+  min-height: 2.3rem; padding: 0 0.9rem; border-radius: 8px;
+  border: 1px solid var(--border-strong); background: var(--surface);
+  color: var(--text); font: inherit; font-weight: 750; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { color: #fff; filter: brightness(1.06); }
+pre.yaml, textarea.yaml, .copy-fallback {
+  width: 100%; max-height: 13rem; overflow: auto; margin: 0;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: #0b1220; color: #e6edf6;
+  padding: 0.8rem 0.9rem; font-family: var(--mono); font-size: 0.76rem; line-height: 1.4;
+  white-space: pre-wrap;
+}
+textarea.yaml { resize: vertical; min-height: 8rem; }
+.copy-fallback { display: none; min-height: 6rem; }
+
+/* --- Inline gate ---------------------------------------------------------- */
+.gate { display: grid; gap: 0.7rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0.9rem 1rem; background: var(--surface-2); }
+.gate .q { font-weight: 800; font-size: 1.25rem; }
+.gate .opts { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; font-size: 1.12rem; color: var(--text-2); }
+.gate textarea { width: 100%; min-height: 3.4rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; padding: 0.5rem; resize: vertical; }
+.gate .why { margin: 0; color: var(--muted); font-size: 0.82rem; }
+
+/* Required-gate slide-level border states (static-audit anchors). */
+[data-required-gate-slide][data-gate-status="unanswered"] .slide-card { border: 3px solid #f85149; }
+[data-required-gate-slide][data-gate-status="answered"] .slide-card { border: 3px solid #3fb950; }
+[data-required-gate-slide][data-gate-status="unanswered"] .gate-flag { color: #f85149; }
+[data-required-gate-slide][data-gate-status="answered"] .gate-flag { color: #3fb950; }
+.gate-flag { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 800; font-size: 0.78rem; }
+
+/* --- Per-slide feedback trigger ------------------------------------------- */
+.fb-trigger {
+  position: absolute; top: 0.8rem; right: 0.9rem;
+  min-height: 1.7rem; padding: 0.15rem 0.6rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font: inherit; font-size: 0.72rem; font-weight: 750; cursor: pointer;
+}
+.fb-trigger:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- Feedback sidebar ----------------------------------------------------- */
+.fb-panel {
+  position: fixed; top: 0; right: 0; z-index: 30;
+  width: var(--sidebar-w); height: 100vh;
+  display: grid; grid-template-rows: auto 1fr;
+  background: var(--surface); border-left: 1px solid var(--border);
+  box-shadow: -18px 0 42px rgba(0, 0, 0, 0.22);
+  transform: translateX(100%); transition: transform 200ms ease;
+}
+.fb-panel.open { transform: translateX(0); }
+.fb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.fb-head p { margin: 0; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
+.fb-head h3 { margin: 0.2rem 0 0; font-size: 1.15rem; }
+.fb-body { min-height: 0; overflow: auto; padding: 1rem; display: grid; gap: 1rem; }
+.fb-sec { display: grid; gap: 0.55rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border); }
+.fb-sec:last-child { border-bottom: 0; padding-bottom: 0; }
+.fb-sec h4 { margin: 0; font-size: 0.95rem; }
+.fb-sec label { display: grid; gap: 0.3rem; font-weight: 700; font-size: 0.85rem; }
+.fb-sec select, .fb-sec textarea { width: 100%; border: 1px solid var(--border); border-radius: 7px; background: var(--surface-2); color: var(--text); font: inherit; font-size: 0.85rem; padding: 0.5rem; }
+.fb-sec textarea { min-height: 4rem; resize: vertical; }
+.fb-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+@media (min-width: 861px) {
+  .deck-topbar, .deck-stage, .deck-footer { transition: margin-right 200ms ease; }
+  body.fb-open .deck-topbar, body.fb-open .deck-stage, body.fb-open .deck-footer { margin-right: var(--sidebar-w); }
+  body.fb-open .slide-card { transform: scale(var(--slide-scale)); }
+}
+
+/* --- Footer / filmstrip --------------------------------------------------- */
+.deck-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.55rem 1.1rem; border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+.filmstrip { display: flex; flex-wrap: wrap; gap: 0.3rem; max-width: 60%; }
+.filmstrip button {
+  min-width: 2rem; min-height: 2rem; padding: 0 0.4rem;
+  border: 1.5px solid var(--border); border-radius: 6px;
+  background: var(--surface); color: var(--muted);
+  font: inherit; font-weight: 800; font-size: 0.75rem; cursor: pointer;
+}
+.filmstrip button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.filmstrip button.gate-unanswered { border-color: var(--gate-unanswered); }
+.filmstrip button.gate-answered { border-color: var(--gate-answered); }
+.footer-nav { display: flex; align-items: center; gap: 0.5rem; }
+.footer-nav [data-slide-counter] { margin: 0 0.3rem; }
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 860px) {
+  body { display: block; }
+  .fb-panel { width: 100vw; }
+  .slide-card { transform: none !important; max-height: none; }
+  [data-briefing-slide] { min-height: auto; padding: 0.9rem; }
+  [data-briefing-slide].active { justify-items: stretch; }
+  .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+  .split, .anatomy { grid-template-columns: 1fr; }
+  .stat-row, .board, .meters { grid-auto-flow: row; }
+  .deck-progress { width: 40vw; }
+  .filmstrip { max-width: 100%; }
+}
+
+/* --- Print: one slide per page ------------------------------------------- */
 @media print {
-  body { overflow: visible; background: #fff; }
-  .topbar, .footer, .feedback-panel { display: none; }
-  .deck { display: block; height: auto; padding: 0; background: #fff; }
-  .slide { display: flex !important; width: 100%; max-height: none; box-shadow: none; page-break-after: always; border: 1px solid #ddd; }
+  body { display: block; background: #fff; color: #000; }
+  .deck-topbar, .deck-footer, .fb-panel, .fb-trigger, .icon-btn { display: none !important; }
+  [data-briefing-slide] { display: block !important; min-height: auto; page-break-after: always; padding: 0; }
+  .slide-card { box-shadow: none; border: 1px solid #ccc; max-height: none; transform: none !important; }
+  .btn-row { display: none !important; }
 }
+
 </style>
 </head>
 <body>
-<div class="topbar">
-  <span class="title">Release Lane Change Boundary</span>
-  <a class="ref-chip" href="../alignment/release-lane-change-boundary.html">Dense alignment page</a>
-  <span class="spacer"></span>
-  <button id="prev-top" type="button" aria-label="Previous slide">Prev</button>
-  <button id="next-top" type="button" aria-label="Next slide">Next</button>
-</div>
-
-<main class="deck" id="deck">
-  <section class="slide active" data-title="Title">
-    <div class="eyebrow">Alignment briefing slides</div>
-    <h1>Keep canary and general-release edits separate</h1>
-    <p class="lede">A slide review surface for deciding how future skill, convention, package, and task changes declare their release lane before implementation.</p>
-    <div class="slide-body three">
-      <div class="metric card"><strong>1</strong><span>canonical skill tree by default</span></div>
-      <div class="metric card"><strong>5</strong><span>release lanes to standardize</span></div>
-      <div class="metric card"><strong>1</strong><span>audit gate to keep lanes honest</span></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="deckSketch" x="-2%" y="-2%" width="104%" height="104%">
+    <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="3" seed="7" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+<header class="deck-topbar">
+  <div class="deck-brand"><span>Release Lane Change Boundary</span><small>Alignment briefing · release lanes</small></div>
+  <div class="topbar-right">
+    <span data-slide-counter>1 / 10</span>
+    <div class="deck-progress" data-slide-progress aria-label="Deck progress"><span></span></div>
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">☽ Dark</button>
+  </div>
+</header>
+<main class="deck-stage">
+<section data-briefing-slide id="slide-1" data-slide-title="Title">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Alignment briefing slides</p>
+  <h1>Keep canary and general-release edits separate</h1>
+  <p class="lead">A slide review surface for deciding how future skill, convention, package, and task changes declare their release lane before implementation.</p>
+  <div class="stat-row" style="grid-auto-columns:auto"><div class="stat teal" style="padding:.7rem .9rem"><div class="cap">Default</div><div style="font-weight:800;font-size:1.05rem">1 canonical skill tree</div></div><div class="stat " style="padding:.7rem .9rem"><div class="cap">Standardize</div><div style="font-weight:800;font-size:1.05rem">5 release lanes</div></div><div class="stat violet" style="padding:.7rem .9rem"><div class="cap">Keep honest</div><div style="font-weight:800;font-size:1.05rem">1 audit gate</div></div></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">dense alignment page</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-2" data-slide-title="Problem">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Problem</p><h2>The failure is lane mixing, not interrogation-specific</h2>
+  <div class="split">
+    <div class="panel pos">
+      <div class="head"><span class="dot"></span>Observed risk</div>
+      <ul><li>A general <code>master</code> edit can inherit canary-only conventions when the task plan mixes release lanes.</li></ul>
     </div>
-  </section>
-
-  <section class="slide" data-title="Problem">
-    <div class="eyebrow">Problem</div>
-    <h2>The failure is lane mixing, not interrogation-specific</h2>
-    <div class="slide-body two">
-      <div class="callout warning">
-        <strong>Observed risk</strong>
-        <p>A general `master` edit can inherit canary-only conventions when the task plan mixes release lanes.</p>
-      </div>
-      <div class="card">
-        <strong>Broader blast radius</strong>
-        <ul class="compact-list">
-          <li>Skill frontmatter and conventions</li>
-          <li>Generator registries and package exports</li>
-          <li>Task docs and handoff language</li>
-          <li>Canary publish or promotion metadata</li>
-        </ul>
-      </div>
+    <div class="panel neg">
+      <div class="head"><span class="dot"></span>Broader blast radius</div>
+      <ul><li>Skill frontmatter and conventions</li><li>Generator registries and package exports</li><li>Task docs and handoff language</li><li>Canary publish or promotion metadata</li></ul>
     </div>
-  </section>
-
-  <section class="slide" data-title="Principles">
-    <div class="eyebrow">Boundary principles</div>
-    <h2>Separate the lane before touching source</h2>
-    <div class="slide-body four">
-      <div class="card"><span class="badge b-blue">1</span><strong>Declare lane first</strong><p>Every non-trivial task states its release lane before implementation.</p></div>
-      <div class="card"><span class="badge b-green">2</span><strong>One source truth</strong><p>Canonical skills stay in `packs/**` unless a promotion says otherwise.</p></div>
-      <div class="card"><span class="badge b-amber">3</span><strong>Promotion is explicit</strong><p>Canary behavior graduates only through a named promotion task.</p></div>
-      <div class="card"><span class="badge b-red">4</span><strong>Audit disallowed surfaces</strong><p>General edits fail if canary-only surfaces appear.</p></div>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-3" data-slide-title="Principles">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Boundary principles</p><h2>Separate the lane before touching source</h2>
+  <div class="card-grid cols-4">
+    
+    <div class="card ">
+      <div class="kicker"><span class="ic">1</span>Declare lane first</div>
+      <p>Every non-trivial task states its release lane before implementation.</p>
     </div>
-  </section>
-
-  <section class="slide" data-title="COAs">
-    <div class="eyebrow">Courses of action</div>
-    <h2>Four practical options</h2>
-    <div class="slide-body two">
-      <div class="card"><strong>A. Task metadata only</strong><p>Fast and visible, but too soft without enforcement.</p></div>
-      <div class="card recommended"><strong>B. Lane contract + audit</strong><p>Standardized fields plus mechanical checks. Recommended default.</p></div>
-      <div class="card"><strong>C. Canary overlays</strong><p>Useful for long-running experiments without duplicating skill trees.</p></div>
-      <div class="card warning"><strong>D. Separate full source trees</strong><p>Visible boundary, but high drift and hard promotion mechanics.</p></div>
+    <div class="card teal">
+      <div class="kicker"><span class="ic">2</span>One source truth</div>
+      <p>Canonical skills stay in <code>packs/**</code> unless a promotion says otherwise.</p>
     </div>
-  </section>
-
-  <section class="slide" data-title="Directory Split">
-    <div class="eyebrow">Directory split question</div>
-    <h2>Do not split full skill directories by default</h2>
-    <div class="slide-body two">
-      <div class="card warning">
-        <strong>Why not</strong>
-        <ul class="compact-list">
-          <li>Duplicated mirror files</li>
-          <li>Duplicated archives and changelogs</li>
-          <li>Ambiguous package staging</li>
-          <li>Manual promotion diffing</li>
-        </ul>
-      </div>
-      <div class="card recommended">
-        <strong>Preferred boundary</strong>
-        <p>Use one canonical source tree, release-lane metadata, branch policy, audit enforcement, and optional overlays for long-lived experiments.</p>
-      </div>
+    <div class="card gold">
+      <div class="kicker"><span class="ic">3</span>Promotion is explicit</div>
+      <p>Canary behavior graduates only through a named promotion task.</p>
     </div>
-  </section>
-
-  <section class="slide" data-title="Lane Contract">
-    <div class="eyebrow">Recommended standard</div>
-    <h2>Release-lane contract + audit</h2>
-    <div class="slide-body">
-      <div class="lane-row">
-        <div class="lane-name">general</div>
-        <div>Branch: `master`</div>
-        <div>Disallow canary conventions and experimental review surfaces.</div>
-      </div>
-      <div class="lane-row">
-        <div class="lane-name">canary</div>
-        <div>Branch: `canary/&lt;name&gt;`</div>
-        <div>No general release impact until promotion.</div>
-      </div>
-      <div class="lane-row">
-        <div class="lane-name">promotion</div>
-        <div>Branch: `master`</div>
-        <div>Names source canary commit and accepted behavior.</div>
-      </div>
+    <div class="card violet">
+      <div class="kicker"><span class="ic">4</span>Audit disallowed surfaces</div>
+      <p>General edits fail if canary-only surfaces appear.</p>
     </div>
-  </section>
-
-  <section class="slide" data-title="Implementation">
-    <div class="eyebrow">Implementation shape</div>
-    <h2>Minimal durable pieces</h2>
-    <div class="slide-body three">
-      <div class="card"><strong>1. Convention doc</strong><p>`docs/release-lane-convention.md` defines lanes, branch rules, allowed and disallowed surfaces.</p></div>
-      <div class="card"><strong>2. Task block</strong><p>`tasks/todo.md` includes a required `### Release Lane` block for non-trivial work.</p></div>
-      <div class="card"><strong>3. Audit script</strong><p>`scripts/audit-release-lane.mjs` validates active lane, branch, and touched surfaces.</p></div>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-4" data-slide-title="COAs">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Courses of action</p><h2>Four practical options</h2>
+  <div class="scorecard">
+    
+    <div class="option win">
+      <div class="name">B. Lane contract + audit <span class="badge execution">recommended</span></div>
+      <div class="score">recommended</div>
+      <div class="track"><span style="width:92%"></span></div>
     </div>
-  </section>
-
-  <section class="slide" data-title="Decision Gates">
-    <div class="eyebrow">Review gates</div>
-    <h2>Decisions to approve</h2>
-    <div class="slide-body three">
-      <div class="gate" data-gate="release-lane-standard">
-        <h3>Gate 1</h3>
-        <p>Require a release-lane block for future non-trivial tasks?</p>
-        <label><input type="radio" name="gate-standard" value="approve"> Approve</label>
-        <label><input type="radio" name="gate-standard" value="revise"> Revise</label>
-        <label><input type="radio" name="gate-standard" value="reject"> Reject</label>
-      </div>
-      <div class="gate" data-gate="audit-enforcement">
-        <h3>Gate 2</h3>
-        <p>Add mechanical audit enforcement?</p>
-        <label><input type="radio" name="gate-audit" value="approve"> Approve</label>
-        <label><input type="radio" name="gate-audit" value="defer"> Defer audit</label>
-        <label><input type="radio" name="gate-audit" value="reject"> Reject</label>
-      </div>
-      <div class="gate" data-gate="directory-policy">
-        <h3>Gate 3</h3>
-        <p>Avoid separate full source trees by default?</p>
-        <label><input type="radio" name="gate-directory" value="approve"> Approve</label>
-        <label><input type="radio" name="gate-directory" value="explore"> Explore split</label>
-        <label><input type="radio" name="gate-directory" value="reject"> Reject</label>
-      </div>
+    <div class="option ">
+      <div class="name">C. Canary overlays</div>
+      <div class="score">situational</div>
+      <div class="track"><span style="width:62%"></span></div>
     </div>
-  </section>
-
-  <section class="slide" data-title="References">
-    <div class="eyebrow">References</div>
-    <h2>Dense sources remain canonical</h2>
-    <div class="slide-body two">
-      <div class="card">
-        <strong>Primary review page</strong>
-        <p><a href="../alignment/release-lane-change-boundary.html">alignment/release-lane-change-boundary.html</a></p>
-      </div>
-      <div class="card">
-        <strong>Convention source</strong>
-        <p><a href="../docs/briefing-slides-convention.md">docs/briefing-slides-convention.md</a></p>
-      </div>
-      <div class="card">
-        <strong>Task record</strong>
-        <p><a href="../tasks/todo.md">tasks/todo.md</a></p>
-      </div>
-      <div class="card">
-        <strong>Lesson learned</strong>
-        <p><a href="../tasks/lessons.md">tasks/lessons.md</a></p>
-      </div>
+    <div class="option ">
+      <div class="name">A. Task metadata only</div>
+      <div class="score">too soft</div>
+      <div class="track"><span style="width:40%"></span></div>
     </div>
-  </section>
-
-  <section class="slide" data-title="Compile YAML">
-    <div class="eyebrow">Handoff</div>
-    <h2>Compile slide review YAML</h2>
-    <div class="slide-body two">
-      <div class="card">
-        <strong>What this routes to</strong>
-        <p>Use the compiled YAML to implement the approved release-lane convention and audit gate.</p>
-        <label for="decision-notes" class="small">Decision notes</label>
-        <textarea id="decision-notes" placeholder="Add field changes, audit scope changes, or promotion constraints."></textarea>
-      </div>
-      <div class="card">
-        <button id="compile" type="button">Compile Responses</button>
-        <button id="copy-yaml" type="button">Copy YAML</button>
-        <p id="yaml-status" class="small" aria-live="polite"></p>
-        <textarea id="compiled-yaml" class="yaml-box" readonly aria-label="Compiled YAML"></textarea>
-      </div>
+    <div class="option ">
+      <div class="name">D. Separate full source trees</div>
+      <div class="score">high drift</div>
+      <div class="track"><span style="width:24%"></span></div>
     </div>
-  </section>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-5" data-slide-title="Directory Split">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Directory split question</p><h2>Do not split full skill directories by default</h2>
+  <div class="split">
+    <div class="panel pos">
+      <div class="head"><span class="dot"></span>Why not</div>
+      <ul><li>Duplicated mirror files</li><li>Duplicated archives and changelogs</li><li>Ambiguous package staging</li><li>Manual promotion diffing</li></ul>
+    </div>
+    <div class="panel neg">
+      <div class="head"><span class="dot"></span>Preferred boundary</div>
+      <ul><li>One canonical source tree</li><li>Release-lane metadata + branch policy</li><li>Audit enforcement</li><li>Optional overlays for long-lived experiments</li></ul>
+    </div>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-6" data-slide-title="Lane Contract">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Recommended standard</p><h2>Release-lane contract + audit</h2>
+  <table class="matrix">
+    <thead><tr><th>Lane</th><th>Branch</th><th>Contract</th></tr></thead>
+    <tbody><tr><th>general</th><td>`master`</td><td>Disallow canary conventions and experimental review surfaces.</td></tr><tr><th>canary</th><td>`canary/&lt;name&gt;`</td><td>No general release impact until promotion.</td></tr><tr><th>promotion</th><td>`master`</td><td>Names source canary commit and accepted behavior.</td></tr></tbody>
+  </table>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-7" data-slide-title="Implementation">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Implementation shape</p><h2>Minimal durable pieces</h2>
+  <div class="timeline">
+    
+    <div class="step ">
+      <div class="num">1</div>
+      <div class="body"><strong>Convention doc</strong><p><code>docs/release-lane-convention.md</code> defines lanes, branch rules, allowed and disallowed surfaces.</p></div>
+    </div>
+    <div class="step teal">
+      <div class="num">2</div>
+      <div class="body"><strong>Task block</strong><p><code>tasks/todo.md</code> includes a required <code>### Release Lane</code> block for non-trivial work.</p></div>
+    </div>
+    <div class="step violet">
+      <div class="num">3</div>
+      <div class="body"><strong>Audit script</strong><p><code>scripts/audit-release-lane.mjs</code> validates active lane, branch, and touched surfaces.</p></div>
+    </div>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-8" data-slide-title="Decision Gates">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Review gates</p><h2>Decisions to approve</h2>
+  <div class="card-grid cols-3">
+    
+    <div class="card teal">
+      <div class="kicker"><span class="ic">①</span>Release-lane standard</div>
+      <p>Require a release-lane block for future non-trivial tasks?</p>
+    </div>
+    <div class="card violet">
+      <div class="kicker"><span class="ic">②</span>Audit enforcement</div>
+      <p>Add mechanical audit enforcement?</p>
+    </div>
+    <div class="card ">
+      <div class="kicker"><span class="ic">③</span>Directory policy</div>
+      <p>Avoid separate full source trees by default?</p>
+    </div>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-9" data-slide-title="References" data-references-slide>
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">References</p>
+  <h2>Dense sources remain canonical</h2>
+  <div class="ref-list">
+    
+    <a class="ref-item" data-reference-chip href="../alignment/release-lane-change-boundary.html">
+      <span class="rk">page</span>
+      <span class="rt">Release-lane alignment page</span>
+      <span class="rp">alignment/release-lane-change-boundary.html</span>
+    </a>
+    <a class="ref-item" data-reference-chip href="../docs/briefing-slides-convention.md">
+      <span class="rk">doc</span>
+      <span class="rt">Briefing-slides convention</span>
+      <span class="rp">docs/briefing-slides-convention.md</span>
+    </a>
+    <a class="ref-item" data-reference-chip href="../tasks/todo.md">
+      <span class="rk">task</span>
+      <span class="rt">Task record</span>
+      <span class="rp">tasks/todo.md</span>
+    </a>
+    <a class="ref-item" data-reference-chip href="../tasks/lessons.md">
+      <span class="rk">doc</span>
+      <span class="rt">Lessons learned</span>
+      <span class="rp">tasks/lessons.md</span>
+    </a>
+  </div>
+  
+  </div>
+</section>
+<section data-briefing-slide id="slide-10" data-slide-title="Compile YAML" data-required-gate-slide data-gate-status="unanswered">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Handoff</p>
+  <h2>Compile slide review YAML</h2>
+  
+  <div class="gate">
+    <div class="q">Adopt the release-lane contract + audit gate (lane block for non-trivial tasks, mechanical enforcement, no default source-tree split)?</div>
+    <div class="opts">
+      <label><input type="radio" required data-gate-answer name="release_lane_standard" value="approve"> Approve</label><label><input type="radio" required data-gate-answer name="release_lane_standard" value="revise"> Revise</label><label><input type="radio" required data-gate-answer name="release_lane_standard" value="reject"> Reject</label>
+    </div>
+    <textarea placeholder="Rationale (optional)" aria-label="Gate rationale"></textarea>
+    <p class="why">Approving routes the compiled YAML to implement the release-lane convention and audit gate.</p>
+    <span class="gate-flag">● gate status reflects the slide border</span>
+  </div>
+  <div class="compiler">
+    <div class="btn-row">
+      <button class="btn primary" type="button" data-deck-compile>Compile full-deck YAML</button>
+      <button class="btn" type="button" data-deck-copy>Copy YAML</button>
+    </div>
+    <pre class="yaml" data-full-deck-yaml aria-live="polite"># Compile the review payload from deck controls.
+# command / briefing_slides / slide_feedback / approval_status are emitted here.</pre>
+    <textarea class="copy-fallback" data-deck-fallback readonly aria-label="Copy fallback"></textarea>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../alignment/release-lane-change-boundary.html">alignment</a><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  </div>
+</section>
 </main>
-
-<div class="footer">
-  <button id="prev" type="button">Prev</button>
-  <button id="next" type="button">Next</button>
-  <span class="counter" id="counter">1 / 10</span>
-  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
-  <div class="filmstrip" id="filmstrip" aria-label="Slide navigation"></div>
-  <span class="spacer"></span>
-  <button id="feedback-open" type="button">Feedback</button>
-</div>
-
-<aside class="feedback-panel" id="feedback-panel" aria-label="Slide feedback" aria-hidden="true">
-  <div class="mark-row">
-    <h2 id="feedback-title">Slide feedback</h2>
-    <span class="spacer"></span>
-    <button id="feedback-close" type="button">Close</button>
-  </div>
-  <div>
-    <strong>Feedback</strong>
-    <div class="feedback-row" id="feedback-buttons">
-      <button type="button" data-feedback="emphasize">Emphasize</button>
-      <button type="button" data-feedback="revise">Revise</button>
-      <button type="button" data-feedback="needs-clarification">Clarify</button>
-      <button type="button" data-feedback="clear">Clear</button>
+<aside class="fb-panel" data-slide-feedback-panel aria-label="Slide feedback sidebar" aria-hidden="true">
+    <div class="fb-head">
+      <div>
+        <p data-fb-meta>Slide 1</p>
+        <h3 data-fb-title>Slide</h3>
+      </div>
+      <button class="btn" type="button" data-fb-close aria-label="Close feedback sidebar">Close</button>
     </div>
-  </div>
-  <div>
-    <strong>Mark</strong>
-    <div class="mark-row" id="mark-buttons">
-      <button type="button" data-mark="important">Important</button>
-      <button type="button" data-mark="question">Question</button>
-      <button type="button" data-mark="approved">Approved</button>
-      <button type="button" data-mark="skip">Skip</button>
-      <button type="button" data-mark="clear">Clear</button>
+    <div class="fb-body">
+      <section class="fb-sec">
+        <h4>Slide review</h4>
+        <label>Feedback
+          <select data-fb-feedback>
+            <option value="">No feedback</option>
+            <option value="emphasize">Emphasize</option>
+            <option value="revise">Revise</option>
+            <option value="needs-clarification">Needs clarification</option>
+          </select>
+        </label>
+        <label>Mark
+          <select data-fb-mark>
+            <option value="">Unmarked</option>
+            <option value="important">Important</option>
+            <option value="question">Question</option>
+            <option value="approved">Approved</option>
+            <option value="skip">Skip</option>
+          </select>
+        </label>
+        <label>Annotation
+          <textarea data-fb-note placeholder="Note for this slide"></textarea>
+        </label>
+        <div class="fb-actions">
+          <button class="btn" type="button" data-fb-copy-title>Copy title</button>
+          <button class="btn" type="button" data-fb-copy-refs>Copy references</button>
+        </div>
+      </section>
+      <section class="fb-sec">
+        <h4>Slide feedback YAML</h4>
+        <div class="fb-actions">
+          <button class="btn" type="button" data-fb-compile>Compile slide YAML</button>
+          <button class="btn" type="button" data-fb-copy>Copy slide YAML</button>
+        </div>
+        <pre class="yaml" data-slide-feedback-yaml aria-live="polite"># Compile YAML for the active slide.</pre>
+        <textarea class="copy-fallback" data-fb-fallback readonly aria-label="Sidebar copy fallback"></textarea>
+      </section>
     </div>
+  </aside>
+<footer class="deck-footer" data-briefing-footer>
+  <nav class="filmstrip" data-filmstrip aria-label="Slide filmstrip"></nav>
+  <div class="footer-nav">
+    <button class="btn" type="button" data-slide-prev aria-label="Previous slide">‹ Prev</button>
+    <span data-slide-counter>1 / 10</span>
+    <button class="btn" type="button" data-slide-next aria-label="Next slide">Next ›</button>
   </div>
-  <label for="annotation"><strong>Annotation</strong></label>
-  <textarea id="annotation" placeholder="Notes for this slide"></textarea>
-  <button id="compile-slide" type="button">Compile Slide YAML</button>
-  <textarea id="slide-yaml" class="yaml-box" readonly aria-label="Slide YAML"></textarea>
-</aside>
-
+</footer>
+<script>window.__BRIEFING_DECK__ = {"slug":"release-lane-change-boundary","command":"$create-briefing-slides","briefingPath":"briefing-slides/release-lane-change-boundary.html","references":["alignment/release-lane-change-boundary.html","docs/briefing-slides-convention.md","tasks/todo.md","tasks/lessons.md"],"sourceArtifacts":["alignment/release-lane-change-boundary.html","docs/briefing-slides-convention.md","tasks/todo.md","tasks/lessons.md"]};</script>
 <script>
-const slides = [...document.querySelectorAll(".slide")];
-const stateKey = "release-lane-briefing-slides";
-let current = Number(location.hash.replace("#slide-", "")) - 1;
-if (!Number.isInteger(current) || current < 0 || current >= slides.length) {
-  current = Number(localStorage.getItem(stateKey + ":current") || 0);
-}
-if (current < 0 || current >= slides.length) current = 0;
+/* ==========================================================================
+   Briefing Deck — runtime chrome (nav, filmstrip, theme, feedback sidebar,
+   inline gates, YAML compilers). Self-contained, no external deps; works from
+   file://. Reads per-deck config from window.__BRIEFING_DECK__.
+   Authored directly and injected verbatim by generate-briefing-decks.mjs.
+   ========================================================================== */
+(function () {
+  "use strict";
+  var CFG = window.__BRIEFING_DECK__ || {};
+  var COMMAND = CFG.command || "$create-briefing-slides";
+  var DECK_PATH = CFG.briefingPath || "briefing-slides/deck.html";
+  var REFERENCES = CFG.references || [];
+  var SOURCES = CFG.sourceArtifacts || REFERENCES;
+  var SLUG = CFG.slug || "briefing-deck";
+  var STATE_KEY = "briefing:" + SLUG + ":state";
+  var POS_KEY = "briefing:" + SLUG + ":pos";
+  var THEME_KEY = "briefing:theme";
 
-const review = JSON.parse(localStorage.getItem(stateKey + ":review") || "{}");
-const counter = document.getElementById("counter");
-const progress = document.getElementById("progress");
-const filmstrip = document.getElementById("filmstrip");
-const panel = document.getElementById("feedback-panel");
-const annotation = document.getElementById("annotation");
-const slideYaml = document.getElementById("slide-yaml");
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
-slides.forEach((slide, index) => {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "dot";
-  button.textContent = String(index + 1);
-  button.title = slide.dataset.title || `Slide ${index + 1}`;
-  button.addEventListener("click", () => show(index));
-  filmstrip.appendChild(button);
-});
+  var slides = $$("[data-briefing-slide]");
+  var counters = $$("[data-slide-counter]");
+  var progressFill = $("[data-slide-progress] > span");
+  var filmstrip = $("[data-filmstrip]");
+  var panel = $("[data-slide-feedback-panel]");
+  var topbar = $(".deck-topbar");
+  var footer = $(".deck-footer");
+  var state = readJSON(STATE_KEY, {});
+  var current = 0;
+  var fitFrame = 0;
+  var mq = window.matchMedia("(max-width: 860px)");
 
-function slideRecord(index = current) {
-  const key = String(index + 1);
-  review[key] ||= { feedback: "", mark: "", annotation: "" };
-  return review[key];
-}
-
-function saveReview() {
-  localStorage.setItem(stateKey + ":review", JSON.stringify(review));
-}
-
-function show(index) {
-  current = Math.max(0, Math.min(slides.length - 1, index));
-  slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
-  [...filmstrip.children].forEach((button, i) => button.classList.toggle("active", i === current));
-  counter.textContent = `${current + 1} / ${slides.length}`;
-  progress.style.width = `${((current + 1) / slides.length) * 100}%`;
-  localStorage.setItem(stateKey + ":current", String(current));
-  history.replaceState(null, "", `#slide-${current + 1}`);
-  syncPanel();
-}
-
-function next() { show(current + 1); }
-function prev() { show(current - 1); }
-
-document.getElementById("next").addEventListener("click", next);
-document.getElementById("prev").addEventListener("click", prev);
-document.getElementById("next-top").addEventListener("click", next);
-document.getElementById("prev-top").addEventListener("click", prev);
-
-document.addEventListener("keydown", (event) => {
-  const tag = event.target.tagName;
-  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-  if (event.key === "ArrowRight" || event.key === " " || event.key.toLowerCase() === "d") next();
-  if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") prev();
-  if (event.key === "Home") show(0);
-  if (event.key === "End") show(slides.length - 1);
-  if (event.key === "Escape") closePanel();
-});
-
-document.getElementById("deck").addEventListener("click", (event) => {
-  if (!event.target.classList.contains("deck")) return;
-  next();
-});
-
-function openPanel() {
-  panel.classList.add("open");
-  panel.setAttribute("aria-hidden", "false");
-  syncPanel();
-}
-function closePanel() {
-  panel.classList.remove("open");
-  panel.setAttribute("aria-hidden", "true");
-}
-document.getElementById("feedback-open").addEventListener("click", openPanel);
-document.getElementById("feedback-close").addEventListener("click", closePanel);
-
-function syncPanel() {
-  const rec = slideRecord();
-  document.getElementById("feedback-title").textContent = `Slide ${current + 1}: ${slides[current].dataset.title}`;
-  annotation.value = rec.annotation || "";
-  document.querySelectorAll("[data-feedback]").forEach((button) => {
-    button.classList.toggle("selected", button.dataset.feedback === rec.feedback);
-  });
-  document.querySelectorAll("[data-mark]").forEach((button) => {
-    button.classList.toggle("selected", button.dataset.mark === rec.mark);
-  });
-  compileSlideYaml();
-}
-
-document.getElementById("feedback-buttons").addEventListener("click", (event) => {
-  const value = event.target.dataset.feedback;
-  if (!value) return;
-  slideRecord().feedback = value === "clear" ? "" : value;
-  saveReview();
-  syncPanel();
-});
-document.getElementById("mark-buttons").addEventListener("click", (event) => {
-  const value = event.target.dataset.mark;
-  if (!value) return;
-  slideRecord().mark = value === "clear" ? "" : value;
-  saveReview();
-  syncPanel();
-});
-annotation.addEventListener("input", () => {
-  slideRecord().annotation = annotation.value;
-  saveReview();
-  compileSlideYaml();
-});
-
-function selected(name) {
-  const input = document.querySelector(`input[name="${name}"]:checked`);
-  return input ? input.value : "";
-}
-function quote(value) {
-  return JSON.stringify(String(value || ""));
-}
-function gateAnswers() {
-  return [
-    ["release_lane_standard", "gate-standard"],
-    ["audit_enforcement", "gate-audit"],
-    ["directory_policy", "gate-directory"]
-  ].map(([gate, name]) => ({ gate, answer: selected(name) }));
-}
-function approvalStatus() {
-  const answers = gateAnswers();
-  const missing = answers.filter((item) => !item.answer);
-  const blockers = answers.filter((item) => item.answer === "reject" || item.answer === "explore" || item.answer === "defer");
-  return { missing, blockers, approval: missing.length || blockers.length ? "not-approved" : "ready-for-agent-review" };
-}
-function compileSlideYaml() {
-  const rec = slideRecord();
-  const lines = [
-    "# Invoke with: review release-lane briefing slides",
-    'command: "review release-lane briefing slides"',
-    "briefing_slides: briefing-slides/release-lane-change-boundary.html",
-    `slide: ${current + 1}`,
-    "slide_title: " + quote(slides[current].dataset.title),
-    "feedback: " + quote(rec.feedback),
-    "mark: " + quote(rec.mark),
-    "annotation: " + quote(rec.annotation)
-  ];
-  slideYaml.value = lines.join("\n");
-  return slideYaml.value;
-}
-function compileAllYaml() {
-  const status = approvalStatus();
-  const notes = document.getElementById("decision-notes").value.trim();
-  const slideFeedback = Object.entries(review).filter(([, rec]) => rec.feedback || rec.mark || rec.annotation);
-  const lines = [
-    "# Invoke with: implement release-lane convention",
-    'command: "implement release-lane convention"',
-    "briefing_slides: briefing-slides/release-lane-change-boundary.html",
-    "reference_pages:",
-    "  - alignment/release-lane-change-boundary.html",
-    "source_artifacts:",
-    "  - docs/briefing-slides-convention.md",
-    "  - tasks/todo.md",
-    "approval_status: " + status.approval,
-    "unanswered_required_questions:",
-    ...status.missing.map((item) => "  - " + item.gate),
-    "gate_answers:",
-    ...gateAnswers().flatMap((item) => [
-      "  - gate: " + item.gate,
-      "    answer: " + quote(item.answer)
-    ]),
-    "slide_feedback:",
-    ...slideFeedback.flatMap(([slide, rec]) => [
-      "  - slide: " + slide,
-      "    feedback: " + quote(rec.feedback),
-      "    mark: " + quote(rec.mark),
-      "    annotation: " + quote(rec.annotation)
-    ]),
-    "decision_notes: " + quote(notes)
-  ];
-  const output = lines.join("\n");
-  document.getElementById("compiled-yaml").value = output;
-  document.getElementById("yaml-status").textContent = status.approval === "ready-for-agent-review" ? "Compiled: ready for agent review." : "Compiled: not approved or incomplete.";
-  return output;
-}
-document.getElementById("compile-slide").addEventListener("click", compileSlideYaml);
-document.getElementById("compile").addEventListener("click", compileAllYaml);
-document.getElementById("copy-yaml").addEventListener("click", async () => {
-  const output = document.getElementById("compiled-yaml").value || compileAllYaml();
-  try {
-    await navigator.clipboard.writeText(output);
-    document.getElementById("yaml-status").textContent = "Copied YAML.";
-  } catch {
-    const area = document.getElementById("compiled-yaml");
-    area.focus();
-    area.select();
-    document.getElementById("yaml-status").textContent = "Clipboard blocked; YAML selected.";
+  function readJSON(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || "null") || fallback; }
+    catch (e) { return fallback; }
   }
-});
-document.querySelectorAll(".gate input").forEach((input) => input.addEventListener("change", compileAllYaml));
-show(current);
+  function persist() {
+    try {
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+      localStorage.setItem(POS_KEY, String(current));
+    } catch (e) {}
+  }
+
+  slides.forEach(function (slide, i) {
+    if (!slide.id) slide.id = "slide-" + (i + 1);
+  });
+
+  function slideId(i) { return slides[i].id; }
+  function slideTitle(i) { return slides[i].getAttribute("data-slide-title") || slides[i].id; }
+  function slideState(id) { state[id] = state[id] || {}; return state[id]; }
+
+  /* --- Theme --------------------------------------------------------------- */
+  function currentTheme() {
+    var explicit = document.documentElement.getAttribute("data-theme");
+    if (explicit) return explicit;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    $$("[data-theme-toggle]").forEach(function (btn) {
+      btn.textContent = theme === "dark" ? "☀ Light" : "☽ Dark";
+      btn.setAttribute("aria-label", "Switch to " + (theme === "dark" ? "light" : "dark") + " theme");
+    });
+  }
+  (function initTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    if (saved) applyTheme(saved);
+    else applyTheme(currentTheme());
+  })();
+  $$("[data-theme-toggle]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    });
+  });
+
+  /* --- Navigation ---------------------------------------------------------- */
+  function showSlide(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach(function (slide, i) { slide.classList.toggle("active", i === current); });
+    counters.forEach(function (c) { c.textContent = (current + 1) + " / " + slides.length; });
+    if (progressFill) progressFill.style.width = (((current + 1) / slides.length) * 100) + "%";
+    if (filmstrip) {
+      Array.prototype.forEach.call(filmstrip.children, function (btn, i) {
+        btn.classList.toggle("active", i === current);
+      });
+    }
+    try { history.replaceState(null, "", "#slide-" + (current + 1)); } catch (e) {}
+    persist();
+    syncPanel();
+    scheduleFit();
+  }
+
+  function initialIndex() {
+    var fromHash = parseInt(String(location.hash).replace("#slide-", ""), 10);
+    if (fromHash && fromHash >= 1 && fromHash <= slides.length) return fromHash - 1;
+    var saved = parseInt(localStorage.getItem(POS_KEY) || "0", 10);
+    return isNaN(saved) ? 0 : saved;
+  }
+
+  $$("[data-slide-prev]").forEach(function (b) { b.addEventListener("click", function () { showSlide(current - 1); }); });
+  $$("[data-slide-next]").forEach(function (b) { b.addEventListener("click", function () { showSlide(current + 1); }); });
+
+  function isEditing(el) {
+    return el && (["INPUT", "TEXTAREA", "SELECT"].indexOf(el.tagName) !== -1 || el.isContentEditable);
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && panel && panel.classList.contains("open")) { e.preventDefault(); closePanel(); return; }
+    if (isEditing(e.target)) return;
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    var k = e.key.toLowerCase();
+    if (k === "arrowleft" || k === "a") { e.preventDefault(); showSlide(current - 1); }
+    else if (k === "arrowright" || k === "d" || e.key === " ") { e.preventDefault(); showSlide(current + 1); }
+    else if (k === "home") { e.preventDefault(); showSlide(0); }
+    else if (k === "end") { e.preventDefault(); showSlide(slides.length - 1); }
+  });
+
+  var stage = $(".deck-stage");
+  if (stage) {
+    stage.addEventListener("click", function (e) {
+      var activeSlide = e.target.closest("[data-briefing-slide].active");
+      if (!activeSlide && e.target !== stage) return;
+      if (e.target.closest(".slide-card")) return;
+      showSlide(current + 1);
+    });
+  }
+
+  /* --- Filmstrip (only when > 5 slides) ------------------------------------ */
+  if (filmstrip) {
+    if (slides.length > 5) {
+      slides.forEach(function (slide, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = String(i + 1);
+        b.title = slideTitle(i);
+        b.setAttribute("aria-label", "Go to slide " + (i + 1) + ": " + slideTitle(i));
+        b.addEventListener("click", function () { showSlide(i); });
+        filmstrip.appendChild(b);
+      });
+    } else {
+      filmstrip.style.display = "none";
+    }
+  }
+
+  /* --- Inline gates -------------------------------------------------------- */
+  function gateGroupsIn(slide) {
+    var names = {};
+    $$("[data-gate-answer]", slide).forEach(function (input) {
+      if (input.name) names[input.name] = true;
+    });
+    return Object.keys(names);
+  }
+  function gateAnswer(name) { return (state.gates || {})[name] || ""; }
+  function refreshGateStatus(slide) {
+    if (!slide.hasAttribute("data-required-gate-slide")) return;
+    var groups = gateGroupsIn(slide);
+    var answered = groups.length > 0 && groups.every(function (n) { return !!gateAnswer(n); });
+    slide.setAttribute("data-gate-status", answered ? "answered" : "unanswered");
+    if (filmstrip && filmstrip.children.length) {
+      var idx = slides.indexOf(slide);
+      var btn = filmstrip.children[idx];
+      if (btn) {
+        btn.classList.toggle("gate-answered", answered);
+        btn.classList.toggle("gate-unanswered", !answered);
+      }
+    }
+  }
+  $$("[data-gate-answer]").forEach(function (input) {
+    if (input.type === "radio" && gateAnswer(input.name) === input.value) input.checked = true;
+    input.addEventListener("change", function () {
+      state.gates = state.gates || {};
+      state.gates[input.name] = input.value;
+      persist();
+      var slide = input.closest("[data-briefing-slide]");
+      if (slide) refreshGateStatus(slide);
+    });
+  });
+  slides.forEach(refreshGateStatus);
+
+  /* --- Feedback sidebar ---------------------------------------------------- */
+  var pMeta = panel && $("[data-fb-meta]", panel);
+  var pTitle = panel && $("[data-fb-title]", panel);
+  var pFeedback = panel && $("[data-fb-feedback]", panel);
+  var pMark = panel && $("[data-fb-mark]", panel);
+  var pNote = panel && $("[data-fb-note]", panel);
+  var pYaml = panel && $("[data-slide-feedback-yaml]", panel);
+
+  function syncPanel() {
+    if (!panel) return;
+    var id = slideId(current);
+    var s = slideState(id);
+    if (pMeta) pMeta.textContent = "Slide " + (current + 1) + " / " + slides.length;
+    if (pTitle) pTitle.textContent = slideTitle(current);
+    if (pFeedback) pFeedback.value = s.feedback || "";
+    if (pMark) pMark.value = s.mark || "";
+    if (pNote) pNote.value = s.annotation || "";
+  }
+  function openPanel() {
+    if (!panel) return;
+    syncPanel();
+    document.body.classList.add("fb-open");
+    panel.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
+    scheduleFit();
+  }
+  function closePanel() {
+    if (!panel) return;
+    document.body.classList.remove("fb-open");
+    panel.classList.remove("open");
+    panel.setAttribute("aria-hidden", "true");
+    scheduleFit();
+  }
+  $$("[data-feedback-trigger]").forEach(function (t) {
+    t.addEventListener("click", function () {
+      var slide = t.closest("[data-briefing-slide]");
+      if (slide) { var i = slides.indexOf(slide); if (i !== -1 && i !== current) showSlide(i); }
+      openPanel();
+    });
+  });
+  $$("[data-fb-close]").forEach(function (b) { b.addEventListener("click", closePanel); });
+  function updateReview(key, value) { slideState(slideId(current))[key] = value; persist(); }
+  if (pFeedback) pFeedback.addEventListener("input", function () { updateReview("feedback", pFeedback.value); });
+  if (pMark) pMark.addEventListener("input", function () { updateReview("mark", pMark.value); });
+  if (pNote) pNote.addEventListener("input", function () { updateReview("annotation", pNote.value); });
+
+  /* --- Slide-fit scaling when sidebar open --------------------------------- */
+  function num(styles, prop) { return parseFloat(styles.getPropertyValue(prop)) || 0; }
+  function recalcFit() {
+    if (!panel) return;
+    var open = document.body.classList.contains("fb-open");
+    if (!open || mq.matches) { document.documentElement.style.setProperty("--slide-scale", "1"); return; }
+    var slide = slides[current];
+    var card = slide && slide.querySelector(".slide-card");
+    if (!card) return;
+    var cs = getComputedStyle(slide);
+    var padX = num(cs, "padding-left") + num(cs, "padding-right");
+    var padY = num(cs, "padding-top") + num(cs, "padding-bottom");
+    var pw = panel.getBoundingClientRect().width;
+    var th = topbar ? topbar.getBoundingClientRect().height : 0;
+    var fh = footer ? footer.getBoundingClientRect().height : 0;
+    var availW = Math.max(1, window.innerWidth - pw - padX);
+    var availH = Math.max(1, window.innerHeight - th - fh - padY);
+    var cw = Math.max(1, card.offsetWidth);
+    var ch = Math.max(1, card.offsetHeight);
+    var scale = Math.min(1, availW / cw, availH / ch);
+    document.documentElement.style.setProperty("--slide-scale", scale.toFixed(4));
+  }
+  function scheduleFit() { window.cancelAnimationFrame(fitFrame); fitFrame = window.requestAnimationFrame(recalcFit); }
+  window.addEventListener("resize", scheduleFit);
+  mq.addEventListener("change", scheduleFit);
+
+  /* --- Clipboard ----------------------------------------------------------- */
+  function copyText(text, fallback) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        if (fallback) fallback.style.display = "none";
+      }, function () { showFallback(text, fallback); });
+    } else { showFallback(text, fallback); }
+  }
+  function showFallback(text, fallback) {
+    if (!fallback) return;
+    fallback.value = text; fallback.style.display = "block"; fallback.focus(); fallback.select();
+  }
+
+  /* --- YAML compilers ------------------------------------------------------ */
+  function yq(v) { return JSON.stringify(String(v == null ? "" : v)); }
+
+  function compileSlideYaml() {
+    var id = slideId(current);
+    var s = slideState(id);
+    var lines = [
+      "# Invoke with: " + COMMAND,
+      "command: " + yq(COMMAND),
+      "briefing_slides: " + DECK_PATH,
+      "slide: " + yq(id),
+      "slide_title: " + yq(slideTitle(current)),
+      "slide_feedback:",
+      "  status: " + yq(s.feedback || ""),
+      "  mark: " + yq(s.mark || ""),
+      "  annotation: " + yq(s.annotation || ""),
+      "approval_status: " + (s.feedback && ["revise", "needs-clarification"].indexOf(s.feedback) !== -1 ? "not-approved" : "review-pending")
+    ];
+    return lines.join("\n");
+  }
+
+  function allGateEntries() {
+    var out = [];
+    slides.forEach(function (slide) {
+      gateGroupsIn(slide).forEach(function (name) { out.push({ gate: name, answer: gateAnswer(name) }); });
+    });
+    return out;
+  }
+  function stateEntries(field) {
+    return Object.keys(state).filter(function (id) {
+      return id.indexOf("slide-") === 0 && state[id] && state[id][field];
+    }).map(function (id) { return { id: id, value: state[id][field] }; });
+  }
+  function titleForId(id) {
+    var el = document.getElementById(id);
+    return el ? (el.getAttribute("data-slide-title") || id) : id;
+  }
+
+  function compileDeckYaml() {
+    var gates = allGateEntries();
+    var unanswered = gates.filter(function (g) { return !g.answer; }).map(function (g) { return g.gate; });
+    var blocking = Object.keys(state).some(function (id) {
+      return state[id] && ["revise", "needs-clarification"].indexOf(state[id].feedback) !== -1;
+    });
+    var approved = gates.length > 0 && unanswered.length === 0 &&
+      gates.every(function (g) { return g.answer === "approve"; }) && !blocking;
+    var fb = stateEntries("feedback");
+    var notes = stateEntries("annotation");
+    var marks = stateEntries("mark");
+    var lines = [
+      "# Invoke with: " + COMMAND,
+      "command: " + yq(COMMAND),
+      "briefing_slides: " + DECK_PATH,
+      "reference_pages:"
+    ];
+    REFERENCES.forEach(function (r) { lines.push("  - " + r); });
+    if (!REFERENCES.length) lines.push("  []");
+    lines.push("source_artifacts:");
+    SOURCES.forEach(function (r) { lines.push("  - " + r); });
+    if (!SOURCES.length) lines.push("  []");
+    lines.push("gate_answers:");
+    if (gates.length) gates.forEach(function (g) { lines.push("  " + g.gate + ": " + yq(g.answer)); });
+    else lines.push("  []");
+    lines.push("slide_feedback:");
+    if (fb.length) fb.forEach(function (e) {
+      lines.push("  - slide: " + yq(e.id));
+      lines.push("    slide_title: " + yq(titleForId(e.id)));
+      lines.push("    feedback: " + yq(e.value));
+    }); else lines.push("  []");
+    lines.push("annotations:");
+    if (notes.length) notes.forEach(function (e) {
+      lines.push("  - slide: " + yq(e.id));
+      lines.push("    note: " + yq(e.value));
+    }); else lines.push("  []");
+    lines.push("marked_slides:");
+    if (marks.length) marks.forEach(function (e) {
+      lines.push("  - slide: " + yq(e.id));
+      lines.push("    status: " + yq(e.value));
+    }); else lines.push("  []");
+    lines.push("unanswered_required_questions:");
+    if (unanswered.length) unanswered.forEach(function (q) { lines.push("  - " + q); });
+    else lines.push("  []");
+    lines.push("approval_status: " + (approved ? "ready-for-agent-review" : "not-approved"));
+    return lines.join("\n");
+  }
+
+  // Per-slide feedback YAML controls in the sidebar.
+  $$("[data-fb-compile]").forEach(function (b) {
+    b.addEventListener("click", function () { if (pYaml) pYaml.textContent = compileSlideYaml(); });
+  });
+  $$("[data-fb-copy]").forEach(function (b) {
+    b.addEventListener("click", function () { copyText(compileSlideYaml(), $("[data-fb-fallback]")); });
+  });
+  $$("[data-fb-copy-title]").forEach(function (b) {
+    b.addEventListener("click", function () { copyText(slideTitle(current), $("[data-fb-fallback]")); });
+  });
+  $$("[data-fb-copy-refs]").forEach(function (b) {
+    b.addEventListener("click", function () { copyText(REFERENCES.join("\n"), $("[data-fb-fallback]")); });
+  });
+
+  // Full-deck compiler on the response slide.
+  var deckYamlOut = $("[data-full-deck-yaml]");
+  $$("[data-deck-compile]").forEach(function (b) {
+    b.addEventListener("click", function () { if (deckYamlOut) deckYamlOut.textContent = compileDeckYaml(); });
+  });
+  $$("[data-deck-copy]").forEach(function (b) {
+    b.addEventListener("click", function () { copyText(compileDeckYaml(), $("[data-deck-fallback]")); });
+  });
+
+  /* --- Boot ---------------------------------------------------------------- */
+  showSlide(initialIndex());
+})();
+
 </script>
 </body>
 </html>

@@ -253,4 +253,161 @@ const createBriefingSlides = {
   ],
 };
 
-export const FLAGSHIP_DECKS = [ideaScopeBrief, createBriefingSlides];
+// Standalone (non-AFPS-series) briefing that predates the redesign. Converted to
+// the shared visual system so the whole folder passes the audit; content is
+// preserved from the prior hand-authored release-lane deck.
+const releaseLaneChangeBoundary = {
+  slug: "release-lane-change-boundary",
+  title: "Release Lane Change Boundary",
+  subtitle: "Alignment briefing · release lanes",
+  command: "$create-briefing-slides",
+  briefingPath: "briefing-slides/release-lane-change-boundary.html",
+  references: [
+    "alignment/release-lane-change-boundary.html",
+    "docs/briefing-slides-convention.md",
+    "tasks/todo.md",
+    "tasks/lessons.md",
+  ],
+  slides: [
+    {
+      archetype: "hero",
+      title: "Title",
+      eyebrow: "Alignment briefing slides",
+      heading: "Keep canary and general-release edits separate",
+      lead: "A slide review surface for deciding how future skill, convention, package, and task changes declare their release lane before implementation.",
+      meta: [
+        { cap: "Default", value: "1 canonical skill tree", tone: "teal" },
+        { cap: "Standardize", value: "5 release lanes" },
+        { cap: "Keep honest", value: "1 audit gate", tone: "violet" },
+      ],
+      refs: [R("dense alignment page", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "splitPanel",
+      title: "Problem",
+      eyebrow: "Problem",
+      heading: "The failure is lane mixing, not interrogation-specific",
+      left: {
+        title: "Observed risk",
+        items: ["A general `master` edit can inherit canary-only conventions when the task plan mixes release lanes."],
+      },
+      right: {
+        title: "Broader blast radius",
+        items: [
+          "Skill frontmatter and conventions",
+          "Generator registries and package exports",
+          "Task docs and handoff language",
+          "Canary publish or promotion metadata",
+        ],
+      },
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "featureCards",
+      title: "Principles",
+      eyebrow: "Boundary principles",
+      heading: "Separate the lane before touching source",
+      cols: 4,
+      cards: [
+        { ic: "1", title: "Declare lane first", body: "Every non-trivial task states its release lane before implementation.", tone: "" },
+        { ic: "2", title: "One source truth", body: "Canonical skills stay in `packs/**` unless a promotion says otherwise.", tone: "teal" },
+        { ic: "3", title: "Promotion is explicit", body: "Canary behavior graduates only through a named promotion task.", tone: "gold" },
+        { ic: "4", title: "Audit disallowed surfaces", body: "General edits fail if canary-only surfaces appear.", tone: "violet" },
+      ],
+      refs: [R("convention", "../docs/briefing-slides-convention.md")],
+    },
+    {
+      archetype: "scorecard",
+      title: "COAs",
+      eyebrow: "Courses of action",
+      heading: "Four practical options",
+      options: [
+        { name: "B. Lane contract + audit", score: "recommended", pct: 92, win: true },
+        { name: "C. Canary overlays", score: "situational", pct: 62 },
+        { name: "A. Task metadata only", score: "too soft", pct: 40 },
+        { name: "D. Separate full source trees", score: "high drift", pct: 24 },
+      ],
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "splitPanel",
+      title: "Directory Split",
+      eyebrow: "Directory split question",
+      heading: "Do not split full skill directories by default",
+      left: {
+        title: "Why not",
+        items: ["Duplicated mirror files", "Duplicated archives and changelogs", "Ambiguous package staging", "Manual promotion diffing"],
+      },
+      right: {
+        title: "Preferred boundary",
+        items: ["One canonical source tree", "Release-lane metadata + branch policy", "Audit enforcement", "Optional overlays for long-lived experiments"],
+      },
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "comparisonMatrix",
+      title: "Lane Contract",
+      eyebrow: "Recommended standard",
+      heading: "Release-lane contract + audit",
+      columns: ["Lane", "Branch", "Contract"],
+      rows: [
+        ["general", "`master`", "Disallow canary conventions and experimental review surfaces."],
+        ["canary", "`canary/<name>`", "No general release impact until promotion."],
+        ["promotion", "`master`", "Names source canary commit and accepted behavior."],
+      ],
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "timeline",
+      title: "Implementation",
+      eyebrow: "Implementation shape",
+      heading: "Minimal durable pieces",
+      steps: [
+        { title: "Convention doc", body: "`docs/release-lane-convention.md` defines lanes, branch rules, allowed and disallowed surfaces." },
+        { title: "Task block", body: "`tasks/todo.md` includes a required `### Release Lane` block for non-trivial work." },
+        { title: "Audit script", body: "`scripts/audit-release-lane.mjs` validates active lane, branch, and touched surfaces." },
+      ],
+      refs: [R("convention", "../docs/briefing-slides-convention.md")],
+    },
+    {
+      archetype: "featureCards",
+      title: "Decision Gates",
+      eyebrow: "Review gates",
+      heading: "Decisions to approve",
+      cols: 3,
+      cards: [
+        { ic: "①", title: "Release-lane standard", body: "Require a release-lane block for future non-trivial tasks?", tone: "teal" },
+        { ic: "②", title: "Audit enforcement", body: "Add mechanical audit enforcement?", tone: "violet" },
+        { ic: "③", title: "Directory policy", body: "Avoid separate full source trees by default?", tone: "" },
+      ],
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html")],
+    },
+    {
+      archetype: "references",
+      title: "References",
+      eyebrow: "References",
+      heading: "Dense sources remain canonical",
+      items: [
+        { kind: "page", title: "Release-lane alignment page", href: "../alignment/release-lane-change-boundary.html" },
+        { kind: "doc", title: "Briefing-slides convention", href: "../docs/briefing-slides-convention.md" },
+        { kind: "task", title: "Task record", href: "../tasks/todo.md" },
+        { kind: "doc", title: "Lessons learned", href: "../tasks/lessons.md" },
+      ],
+    },
+    {
+      archetype: "compiler",
+      title: "Compile YAML",
+      eyebrow: "Handoff",
+      heading: "Compile slide review YAML",
+      gate: {
+        name: "release_lane_standard",
+        question: "Adopt the release-lane contract + audit gate (lane block for non-trivial tasks, mechanical enforcement, no default source-tree split)?",
+        options: [{ value: "approve", label: "Approve" }, { value: "revise", label: "Revise" }, { value: "reject", label: "Reject" }],
+        why: "Approving routes the compiled YAML to implement the release-lane convention and audit gate.",
+      },
+      refs: [R("alignment", "../alignment/release-lane-change-boundary.html"), R("convention", "../docs/briefing-slides-convention.md")],
+    },
+  ],
+};
+
+export const FLAGSHIP_DECKS = [ideaScopeBrief, createBriefingSlides, releaseLaneChangeBoundary];

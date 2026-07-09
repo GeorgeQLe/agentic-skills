@@ -1,0 +1,2653 @@
+{
+  "_comment": "Source of truth for briefing-slides skill decks. Hand-editable. Regenerate decks with `node scripts/generate-briefing-decks.mjs`. Re-extract from legacy decks with `node scripts/extract-deck-manifest.mjs` (overwrites this file).",
+  "generated_from": "briefing-slides/afps-skill-*.html (legacy template) + index.html grouping + SKILL.md frontmatter",
+  "deck_count": 42,
+  "decks": [
+    {
+      "slug": "customer-discovery",
+      "command": "$customer-discovery",
+      "title": "customer-discovery",
+      "subtitle": "Business AFPS / Concept and market",
+      "tier": "research",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 1,
+      "blurb": "Define ICP and customer evidence before market decisions.",
+      "chips": [
+        "concept",
+        "research"
+      ],
+      "skillPath": "packs/business-research/claude/customer-discovery/SKILL.md",
+      "nextSkill": "competitive-analysis",
+      "lead": "Orchestrator — detect pre-product vs product-exists mode, bootstrap ICP candidates, recommend customer-discovery frameworks, synthesize outputs into unified ICP research",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a concept exists and before market, journey, or UX decisions harden.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "ICP candidates and customer evidence synthesized into research.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a concept exists and before market, journey, or UX decisions harden.",
+          "after": "competitive-analysis",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/business-research/claude/customer-discovery/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from customer-discovery.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "competitive-analysis",
+      "command": "$competitive-analysis",
+      "title": "competitive-analysis",
+      "subtitle": "Business AFPS / Concept and market",
+      "tier": "research",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 2,
+      "blurb": "Map alternatives, competitors, differentiation, and risks.",
+      "chips": [
+        "concept",
+        "research"
+      ],
+      "skillPath": "packs/business-research/claude/competitive-analysis/SKILL.md",
+      "nextSkill": "journey-map",
+      "lead": "Orchestrator — select competitive-analysis frameworks, run them inline one per session, and synthesize market landscape findings",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after customer discovery to understand alternatives and positioning constraints.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A market landscape, competitor set, differentiation evidence, and risk notes.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after customer discovery to understand alternatives and positioning constraints.",
+          "after": "journey-map",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/business-research/claude/competitive-analysis/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from competitive-analysis.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "journey-map",
+      "command": "$journey-map",
+      "title": "journey-map",
+      "subtitle": "Business AFPS / Concept and market",
+      "tier": "research",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 3,
+      "blurb": "Turn customer stages and task flow into lifecycle evidence.",
+      "chips": [
+        "concept",
+        "lifecycle"
+      ],
+      "skillPath": "packs/customer-lifecycle/claude/journey-map/SKILL.md",
+      "nextSkill": "positioning",
+      "lead": "Orchestrator — detect pre-product vs product-exists mode, recommend journey-mapping frameworks, synthesize outputs into unified lifecycle overview",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use before positioning or UX when customer stages, jobs, and blockers need clarity.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Lifecycle and task-flow evidence that informs product shape and optional growth detours.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use before positioning or UX when customer stages, jobs, and blockers need clarity.",
+          "after": "positioning",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/customer-lifecycle/claude/journey-map/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from journey-map.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "positioning",
+      "command": "$positioning",
+      "title": "positioning",
+      "subtitle": "Business AFPS / Concept and market",
+      "tier": "research",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 4,
+      "blurb": "Lock category, value wedge, alternatives, and narrative.",
+      "chips": [
+        "concept",
+        "research"
+      ],
+      "skillPath": "packs/business-research/claude/positioning/SKILL.md",
+      "nextSkill": "user-flow-map",
+      "lead": "Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after discovery, competition, and journey evidence exist.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Market category, value wedge, alternatives, narrative, and direction for product flow.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after discovery, competition, and journey evidence exist.",
+          "after": "user-flow-map",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/business-research/claude/positioning/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from positioning.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "user-flow-map",
+      "command": "$user-flow-map",
+      "title": "user-flow-map",
+      "subtitle": "Business AFPS / Product shape",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 5,
+      "blurb": "Create the design-tree root: flows, surfaces, channels, and branches.",
+      "chips": [
+        "product shape",
+        "planning"
+      ],
+      "skillPath": "packs/product-design/claude/user-flow-map/SKILL.md",
+      "nextSkill": "state-model or ux-variations",
+      "lead": "Turn a high-level product concept, positioned goal, or goal sequence into flow and surface structure with entry points, decisions/actions/states, branches, channels, failure paths, and low-fidelity UI-candidate guidance before UX/UI/spec/prototype work",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after positioning to turn product direction into a design-tree root.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Flow structure with entry points, surfaces, states, channels, branches, and failures.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after positioning to turn product direction into a design-tree root.",
+          "after": "state-model or ux-variations",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/user-flow-map/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from user-flow-map.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "state-model",
+      "command": "$state-model",
+      "title": "state-model",
+      "subtitle": "Business AFPS / Product shape",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 6,
+      "blurb": "Model entities, state machines, events, commands, and contracts.",
+      "chips": [
+        "product shape",
+        "optional"
+      ],
+      "skillPath": "packs/product-design/claude/state-model/SKILL.md",
+      "nextSkill": "ux-variations",
+      "lead": "Orchestrator — author the flow-anchored logical domain model (entities, state machines, events/commands, read models, policies, logical contracts) from an approved user-flow map, running one domain-modeling framework per session, before UX variation work",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after user-flow-map when domain state or logic is non-trivial.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A logical substrate: entities, state machines, events, commands, policies, and contracts.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after user-flow-map when domain state or logic is non-trivial.",
+          "after": "ux-variations",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/state-model/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from state-model.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "ux-variations",
+      "command": "$ux-variations [specific-user-flow]",
+      "title": "ux-variations",
+      "subtitle": "Business AFPS / Product shape",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 7,
+      "blurb": "Explore alternate progression branches for one named user flow.",
+      "chips": [
+        "product shape",
+        "planning"
+      ],
+      "skillPath": "packs/product-design/claude/ux-variations/SKILL.md",
+      "nextSkill": "ui-interview",
+      "lead": "Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when a mapped flow needs alternatives before visual decisions lock.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Multiple progression branches for a named user flow before one becomes a UI direction.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when a mapped flow needs alternatives before visual decisions lock.",
+          "after": "ui-interview",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/ux-variations/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ux-variations.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "ui-interview",
+      "command": "$ui-interview [specific-ux-variation]",
+      "title": "ui-interview",
+      "subtitle": "Business AFPS / Product shape",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 8,
+      "blurb": "Specify visual UI details for a selected UX variation.",
+      "chips": [
+        "product shape",
+        "planning"
+      ],
+      "skillPath": "packs/product-design/claude/ui-interview/SKILL.md",
+      "nextSkill": "build-ui-screens or user-flow-map --prototype-build-plan",
+      "lead": "Interview human-visible UI page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, diagnostics/audit screens, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a UX variation branch is ready for visual treatment.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A page-by-page UI spec with layout, controls, responsive behavior, and visual states.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a UX variation branch is ready for visual treatment.",
+          "after": "build-ui-screens or user-flow-map --prototype-build-plan",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/ui-interview/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ui-interview.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "build-ui-screens",
+      "command": "$build-ui-screens",
+      "title": "build-ui-screens",
+      "subtitle": "Business AFPS / Prototype proof",
+      "tier": "execution",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 9,
+      "blurb": "Build visual screens for an approved UI branch.",
+      "chips": [
+        "prototype",
+        "execution"
+      ],
+      "skillPath": "packs/product-design/claude/build-ui-screens/SKILL.md",
+      "nextSkill": "logic-wiring",
+      "lead": "Build the visual UI screens for one approved UI branch as an ordered element-batch loop — one flow step at a time, with a per-batch visual checkpoint and a minimum-UI stop — using fake, fixture, local, or in-memory data, then hand the screens to logic-wiring to make them clickable.",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a UI branch is approved and needs concrete screens before wiring.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Visual screens for one approved UI branch, built with local or fixture data.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a UI branch is approved and needs concrete screens before wiring.",
+          "after": "logic-wiring",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/build-ui-screens/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from build-ui-screens.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "execution"
+    },
+    {
+      "slug": "logic-wiring",
+      "command": "$logic-wiring",
+      "title": "logic-wiring",
+      "subtitle": "Business AFPS / Prototype proof",
+      "tier": "execution",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 10,
+      "blurb": "Wire screens and channel behavior into a clickable prototype.",
+      "chips": [
+        "prototype",
+        "execution"
+      ],
+      "skillPath": "packs/product-design/claude/logic-wiring/SKILL.md",
+      "nextSkill": "uat",
+      "lead": "Wire approved UI screens and channel behaviors into a clickable, state-backed prototype — make visual screens from build-ui-screens reachable and interactive, plus runnable logic for CLI/API/infra projects, so each variation's surfaces can be walked end-to-end before consolidation",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when approved screens or non-visual channels need to become walkable.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A clickable, state-backed prototype with reachable screens and channel behavior.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when approved screens or non-visual channels need to become walkable.",
+          "after": "uat",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/logic-wiring/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from logic-wiring.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "execution"
+    },
+    {
+      "slug": "uat",
+      "command": "$uat --variant-evaluation",
+      "title": "uat",
+      "subtitle": "Business AFPS / Prototype proof",
+      "tier": "analysis",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 11,
+      "blurb": "Define acceptance journeys and evidence capture for variant evaluation.",
+      "chips": [
+        "prototype",
+        "analysis"
+      ],
+      "skillPath": "packs/product-testing/claude/uat/SKILL.md",
+      "nextSkill": "consolidate-prototypes",
+      "lead": "Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after variants are built enough to evaluate hands-on.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Role-based acceptance journeys, comparison criteria, and evidence capture.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after variants are built enough to evaluate hands-on.",
+          "after": "consolidate-prototypes",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-testing/claude/uat/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from uat.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "consolidate-prototypes",
+      "command": "$consolidate-prototypes",
+      "title": "consolidate-prototypes",
+      "subtitle": "Business AFPS / Prototype proof",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 12,
+      "blurb": "Converge evaluated branches into one approved MVP.",
+      "chips": [
+        "prototype",
+        "planning"
+      ],
+      "skillPath": "packs/product-design/claude/consolidate-prototypes/SKILL.md",
+      "nextSkill": "research-roadmap --post-prototype",
+      "lead": "Converge evaluated prototype branches into one approved MVP, resolve UAT findings, hand off to post-prototype research, and let spec-interview own production-ready approval",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use only after UAT evidence and branch-scope decisions exist.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A consolidated MVP, keep/reject decisions, UAT resolution, and AFPS graduation document.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use only after UAT evidence and branch-scope decisions exist.",
+          "after": "research-roadmap --post-prototype",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/consolidate-prototypes/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from consolidate-prototypes.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "research-roadmap",
+      "command": "$research-roadmap",
+      "title": "research-roadmap",
+      "subtitle": "Business AFPS / Production handoff",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 13,
+      "blurb": "Scan research and documentation health, then route cleanup.",
+      "chips": [
+        "handoff",
+        "planning"
+      ],
+      "skillPath": "packs/research-admin/claude/research-roadmap/SKILL.md",
+      "nextSkill": "spec-interview or roadmap depending on mode",
+      "lead": "Scan research and documentation health, then maintain a priority documentation queue",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after prototype consolidation, after spec, or whenever research/doc health needs reconciliation.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A prioritized documentation/research queue and routing recommendation.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after prototype consolidation, after spec, or whenever research/doc health needs reconciliation.",
+          "after": "spec-interview or roadmap depending on mode",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/research-admin/claude/research-roadmap/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from research-roadmap.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "spec-interview",
+      "command": "$spec-interview",
+      "title": "spec-interview",
+      "subtitle": "Business AFPS / Production handoff",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 14,
+      "blurb": "Extract a production spec from the consolidated prototype.",
+      "chips": [
+        "handoff",
+        "planning"
+      ],
+      "skillPath": "packs/product-design/claude/spec-interview/SKILL.md",
+      "nextSkill": "research-roadmap --post-spec",
+      "lead": "Post-prototype production deep dive — walks through consolidated route/screen realizations and channel behavior to extract production specifications",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a consolidated prototype, AFPS graduation, and post-prototype blockers are clear.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A production implementation specification extracted from the consolidated prototype.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a consolidated prototype, AFPS graduation, and post-prototype blockers are clear.",
+          "after": "research-roadmap --post-spec",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/product-design/claude/spec-interview/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from spec-interview.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "roadmap",
+      "command": "$roadmap",
+      "title": "roadmap",
+      "subtitle": "Business AFPS / Execution",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 15,
+      "blurb": "Sequence specs and repo state into phased work.",
+      "chips": [
+        "execution",
+        "planning"
+      ],
+      "skillPath": "packs/agent-work-admin/claude/roadmap/SKILL.md",
+      "nextSkill": "plan-phase",
+      "lead": "Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when production specs exist or task pipeline health needs routing.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A phased roadmap or priority queue based on specs, tasks, docs, and repo state.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when production specs exist or task pipeline health needs routing.",
+          "after": "plan-phase",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/agent-work-admin/claude/roadmap/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from roadmap.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "plan-phase",
+      "command": "$plan-phase N",
+      "title": "plan-phase",
+      "subtitle": "Business AFPS / Execution",
+      "tier": "planning",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 16,
+      "blurb": "Break one roadmap phase into implementable steps.",
+      "chips": [
+        "execution",
+        "planning"
+      ],
+      "skillPath": "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+      "nextSkill": "exec",
+      "lead": "Decompose a single roadmap phase into implementation steps, tests, and file-level detail",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when a roadmap phase is ready to break into executable work.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Implementation steps, test plan, and file-level detail for one roadmap phase.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when a roadmap phase is ready to break into executable work.",
+          "after": "exec",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from plan-phase.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "exec",
+      "command": "$exec",
+      "title": "exec",
+      "subtitle": "Business AFPS / Execution",
+      "tier": "execution",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 17,
+      "blurb": "Execute the next approved implementation step or phase.",
+      "chips": [
+        "execution",
+        "build"
+      ],
+      "skillPath": "packs/exec-loop/claude/exec/SKILL.md",
+      "nextSkill": "ship or next exec step",
+      "lead": "Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when tasks are planned and the next implementation step is clear.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "The next approved implementation step or phase completed and verified.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when tasks are planned and the next implementation step is clear.",
+          "after": "ship or next exec step",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/exec-loop/claude/exec/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from exec.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "execution"
+    },
+    {
+      "slug": "ship",
+      "command": "$ship",
+      "title": "ship",
+      "subtitle": "Business AFPS / Execution",
+      "tier": "shipping",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 18,
+      "blurb": "Ship current work with docs, commit, push, and optional deploy.",
+      "chips": [
+        "execution",
+        "shipping"
+      ],
+      "skillPath": "packs/exec-loop/claude/ship/SKILL.md",
+      "nextSkill": "ship-end or next planned step",
+      "lead": "Ship current work (update docs, commit, push, deploy) and optionally plan the next step",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when finished work needs to be shipped and possibly deployed.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Current work shipped with docs, commit, push, and optional deploy/next-step planning.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when finished work needs to be shipped and possibly deployed.",
+          "after": "ship-end or next planned step",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/exec-loop/claude/ship/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ship.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "shipping"
+    },
+    {
+      "slug": "ship-end",
+      "command": "$ship-end",
+      "title": "ship-end",
+      "subtitle": "Business AFPS / Execution",
+      "tier": "shipping",
+      "deckFamily": "Business AFPS",
+      "familyKey": "business",
+      "familyOrder": 1,
+      "order": 19,
+      "blurb": "Close the session with docs, commit, push, and handoff state.",
+      "chips": [
+        "execution",
+        "shipping"
+      ],
+      "skillPath": "packs/exec-loop/claude/ship-end/SKILL.md",
+      "nextSkill": "none or next session route",
+      "lead": "Wrap up the current session — update docs, commit, and push",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use at the end of a mutation session.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Session wrap-up with docs, commit, push, and clean handoff state.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use at the end of a mutation session.",
+          "after": "none or next session route",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/exec-loop/claude/ship-end/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ship-end.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "shipping"
+    },
+    {
+      "slug": "devtool-positioning",
+      "command": "$devtool-positioning",
+      "title": "devtool-positioning",
+      "subtitle": "Devtool AFPS / Developer product proof",
+      "tier": "research",
+      "deckFamily": "Devtool AFPS",
+      "familyKey": "devtool",
+      "familyOrder": 2,
+      "order": 0,
+      "blurb": "Position developer tools by workflow, ecosystem, trust, and switching cost.",
+      "chips": [
+        "devtool",
+        "research"
+      ],
+      "skillPath": "packs/devtool/claude/devtool-positioning/SKILL.md",
+      "nextSkill": "devtool-adoption",
+      "lead": "Use only for developer-facing products; position against alternatives by workflow, ecosystem, trust, and switching cost",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use for developer-facing products, CLIs, libraries, SDKs, and OSS tools.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Developer-specific positioning against alternatives, workflow fit, ecosystem, and trust.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use for developer-facing products, CLIs, libraries, SDKs, and OSS tools.",
+          "after": "devtool-adoption",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/devtool/claude/devtool-positioning/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from devtool-positioning.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "devtool-adoption",
+      "command": "$devtool-adoption",
+      "title": "devtool-adoption",
+      "subtitle": "Devtool AFPS / Developer product proof",
+      "tier": "research",
+      "deckFamily": "Devtool AFPS",
+      "familyKey": "devtool",
+      "familyOrder": 2,
+      "order": 1,
+      "blurb": "Plan examples, templates, proof artifacts, community, and adoption loops.",
+      "chips": [
+        "devtool",
+        "research"
+      ],
+      "skillPath": "packs/devtool/claude/devtool-adoption/SKILL.md",
+      "nextSkill": "devtool-dx-journey",
+      "lead": "Use only for developer-facing products; plan adoption loops, examples, templates, community, and proof artifacts",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after positioning when the question is how developers discover and adopt the tool.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Adoption loops, examples, templates, community motions, and proof artifacts.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after positioning when the question is how developers discover and adopt the tool.",
+          "after": "devtool-dx-journey",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/devtool/claude/devtool-adoption/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from devtool-adoption.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "devtool-dx-journey",
+      "command": "$devtool-dx-journey",
+      "title": "devtool-dx-journey",
+      "subtitle": "Devtool AFPS / Developer product proof",
+      "tier": "analysis",
+      "deckFamily": "Devtool AFPS",
+      "familyKey": "devtool",
+      "familyOrder": 2,
+      "order": 2,
+      "blurb": "Analyze install, quickstart, first success, debugging, and production adoption.",
+      "chips": [
+        "devtool",
+        "analysis"
+      ],
+      "skillPath": "packs/devtool/claude/devtool-dx-journey/SKILL.md",
+      "nextSkill": "devtool-docs-audit",
+      "lead": "Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when the adoption path needs workflow-level diagnosis.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A developer journey through install, quickstart, first success, debugging, and production use.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when the adoption path needs workflow-level diagnosis.",
+          "after": "devtool-docs-audit",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/devtool/claude/devtool-dx-journey/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from devtool-dx-journey.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "devtool-docs-audit",
+      "command": "$devtool-docs-audit",
+      "title": "devtool-docs-audit",
+      "subtitle": "Devtool AFPS / Developer product proof",
+      "tier": "review",
+      "deckFamily": "Devtool AFPS",
+      "familyKey": "devtool",
+      "familyOrder": 2,
+      "order": 3,
+      "blurb": "Audit quickstarts, examples, API reference, troubleshooting, and migration paths.",
+      "chips": [
+        "devtool",
+        "review"
+      ],
+      "skillPath": "packs/devtool/claude/devtool-docs-audit/SKILL.md",
+      "nextSkill": "devtool-monetization",
+      "lead": "Use only for developer-facing products; audit docs for quickstart clarity, examples, API reference, troubleshooting, and migration paths",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when documentation is a primary adoption or trust surface.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Docs findings for quickstart clarity, examples, API reference, troubleshooting, and migration.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when documentation is a primary adoption or trust surface.",
+          "after": "devtool-monetization",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/devtool/claude/devtool-docs-audit/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from devtool-docs-audit.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "review"
+    },
+    {
+      "slug": "devtool-monetization",
+      "command": "$devtool-monetization",
+      "title": "devtool-monetization",
+      "subtitle": "Devtool AFPS / Developer product proof",
+      "tier": "research",
+      "deckFamily": "Devtool AFPS",
+      "familyKey": "devtool",
+      "familyOrder": 2,
+      "order": 4,
+      "blurb": "Design pricing, packaging, OSS strategy, limits, and team conversion.",
+      "chips": [
+        "devtool",
+        "research"
+      ],
+      "skillPath": "packs/devtool/claude/devtool-monetization/SKILL.md",
+      "nextSkill": "roadmap or Business AFPS if enterprise demand appears",
+      "lead": "Use only for developer-facing products; design pricing, packaging, limits, open-source strategy, and team conversion",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when a developer tool needs a sustainable business model.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Pricing, packaging, limits, OSS strategy, and team-conversion recommendations.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when a developer tool needs a sustainable business model.",
+          "after": "roadmap or Business AFPS if enterprise demand appears",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/devtool/claude/devtool-monetization/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from devtool-monetization.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-audience",
+      "command": "$game-audience",
+      "title": "game-audience",
+      "subtitle": "Game AFPS / Audience and fantasy",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 0,
+      "blurb": "Identify player segments by taste, behavior, platform, genre affinity, and motivation.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-audience/SKILL.md",
+      "nextSkill": "game-fantasy",
+      "lead": "Use only for video game projects; identify player segments by taste, behavior, platform, genre affinity, and motivation",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use at the start of deliberate game validation.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Player segments by taste, behavior, platform, genre affinity, and motivation.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use at the start of deliberate game validation.",
+          "after": "game-fantasy",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-audience/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-audience.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-fantasy",
+      "command": "$game-fantasy",
+      "title": "game-fantasy",
+      "subtitle": "Game AFPS / Audience and fantasy",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 1,
+      "blurb": "Define emotional promise, player fantasy, vibe references, and hook.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-fantasy/SKILL.md",
+      "nextSkill": "game-genre-map",
+      "lead": "Use only for video game projects; define the emotional promise, player fantasy, vibe references, and hook",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after audience clarity to define what the game promises emotionally.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Emotional promise, player fantasy, vibe references, and hook.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after audience clarity to define what the game promises emotionally.",
+          "after": "game-genre-map",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-fantasy/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-fantasy.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-genre-map",
+      "command": "$game-genre-map",
+      "title": "game-genre-map",
+      "subtitle": "Game AFPS / Audience and fantasy",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 2,
+      "blurb": "Map genre conventions, expectations, complaints, and anti-patterns.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-genre-map/SKILL.md",
+      "nextSkill": "game-comparables",
+      "lead": "Use only for video game projects; map genre conventions, player expectations, review complaints, and anti-patterns",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when genre expectations will affect design and marketing.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Genre conventions, player expectations, review complaints, and anti-patterns.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when genre expectations will affect design and marketing.",
+          "after": "game-comparables",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-genre-map/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-genre-map.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-comparables",
+      "command": "$game-comparables",
+      "title": "game-comparables",
+      "subtitle": "Game AFPS / Audience and fantasy",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 3,
+      "blurb": "Research comparable titles, tags, prices, player signals, and positioning.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-comparables/SKILL.md",
+      "nextSkill": "game-core-loop",
+      "lead": "Use only for video game projects; research comparable titles, tags, prices, player signals, and positioning patterns",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use before core-loop validation to ground the game in real market references.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Comparable titles, tags, prices, player signals, and positioning patterns.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use before core-loop validation to ground the game in real market references.",
+          "after": "game-core-loop",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-comparables/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-comparables.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-core-loop",
+      "command": "$game-core-loop",
+      "title": "game-core-loop",
+      "subtitle": "Game AFPS / Loop and playtest proof",
+      "tier": "analysis",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 4,
+      "blurb": "Analyze moment-to-moment, session, progression, and retention loops.",
+      "chips": [
+        "game",
+        "analysis"
+      ],
+      "skillPath": "packs/game/claude/game-core-loop/SKILL.md",
+      "nextSkill": "game-prototype-test",
+      "lead": "Use only for video game projects; analyze moment-to-moment, session, progression, and retention loops",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when the play loop needs to be made explicit before testing.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Moment-to-moment, session, progression, and retention loop analysis.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when the play loop needs to be made explicit before testing.",
+          "after": "game-prototype-test",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-core-loop/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-core-loop.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "game-prototype-test",
+      "command": "$game-prototype-test",
+      "title": "game-prototype-test",
+      "subtitle": "Game AFPS / Loop and playtest proof",
+      "tier": "planning",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 5,
+      "blurb": "Design playable prototype tests for fun, clarity, and replay.",
+      "chips": [
+        "game",
+        "planning"
+      ],
+      "skillPath": "packs/game/claude/game-prototype-test/SKILL.md",
+      "nextSkill": "game-playtest-metrics",
+      "lead": "Use only for video game projects; design playable prototype tests and success criteria for fun, clarity, and replay",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use before running or judging playable tests.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Prototype tests and success criteria for fun, clarity, replay, and learning.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use before running or judging playable tests.",
+          "after": "game-playtest-metrics",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-prototype-test/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-prototype-test.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "game-playtest-metrics",
+      "command": "$game-playtest-metrics",
+      "title": "game-playtest-metrics",
+      "subtitle": "Game AFPS / Loop and playtest proof",
+      "tier": "analysis",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 6,
+      "blurb": "Define metrics for time-to-fun, replay, confusion, quit points, and retention.",
+      "chips": [
+        "game",
+        "analysis"
+      ],
+      "skillPath": "packs/game/claude/game-playtest-metrics/SKILL.md",
+      "nextSkill": "game-store-page-test",
+      "lead": "Use only for video game projects; define playtest metrics for time-to-fun, replay, confusion, quit points, sharing, and retention",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when playtest evidence needs to become measurable.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Metrics for time-to-fun, replay, confusion, quit points, sharing, and retention.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when playtest evidence needs to become measurable.",
+          "after": "game-store-page-test",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-playtest-metrics/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-playtest-metrics.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "game-store-page-test",
+      "command": "$game-store-page-test",
+      "title": "game-store-page-test",
+      "subtitle": "Game AFPS / Launch proof",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 7,
+      "blurb": "Plan store-page, capsule, trailer, screenshot, tag, and wishlist validation.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-store-page-test/SKILL.md",
+      "nextSkill": "game-launch",
+      "lead": "Use only for video game projects; plan Steam/store page, capsule, trailer, screenshot, tag, and wishlist validation",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use before launch planning to test the storefront promise.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Store page, capsule, trailer, screenshot, tag, and wishlist validation plan.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use before launch planning to test the storefront promise.",
+          "after": "game-launch",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-store-page-test/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-store-page-test.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-launch",
+      "command": "$game-launch",
+      "title": "game-launch",
+      "subtitle": "Game AFPS / Launch proof",
+      "tier": "research",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 8,
+      "blurb": "Plan festivals, creator outreach, demo timing, community, and wishlist targets.",
+      "chips": [
+        "game",
+        "research"
+      ],
+      "skillPath": "packs/game/claude/game-launch/SKILL.md",
+      "nextSkill": "game-roadmap",
+      "lead": "Use only for video game projects; plan Steam launch, festivals, creator outreach, demo timing, community, and wishlist targets",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when launch timing and distribution need deliberate sequencing.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Festival, creator outreach, demo timing, community, launch, and wishlist plan.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when launch timing and distribution need deliberate sequencing.",
+          "after": "game-roadmap",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-launch/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-launch.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "game-roadmap",
+      "command": "$game-roadmap",
+      "title": "game-roadmap",
+      "subtitle": "Game AFPS / Launch proof",
+      "tier": "planning",
+      "deckFamily": "Game AFPS",
+      "familyKey": "game",
+      "familyOrder": 3,
+      "order": 9,
+      "blurb": "Sequence prototype, vertical slice, demo, store page, launch, and post-launch.",
+      "chips": [
+        "game",
+        "planning"
+      ],
+      "skillPath": "packs/game/claude/game-roadmap/SKILL.md",
+      "nextSkill": "execution phase",
+      "lead": "Use only for video game projects; sequence prototype, vertical slice, demo, store page, festival, launch, and post-launch milestones",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after game validation and launch evidence are ready to sequence.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Milestones for prototype, vertical slice, demo, store page, festival, launch, and post-launch.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after game validation and launch evidence are ready to sequence.",
+          "after": "execution phase",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/game/claude/game-roadmap/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from game-roadmap.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "planning"
+    },
+    {
+      "slug": "vard-scan",
+      "command": "$vard-scan",
+      "title": "vard-scan",
+      "subtitle": "VARD / Rapid business experiment",
+      "tier": "research",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 0,
+      "blurb": "Scan for viral app opportunities from trends, gaps, and user pain.",
+      "chips": [
+        "VARD",
+        "research"
+      ],
+      "skillPath": "packs/vard/claude/vard-scan/SKILL.md",
+      "nextSkill": "vard-align",
+      "lead": "Scan for viral app opportunities from trends, gaps, and user pain points",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when looking for a fast business/consumer app experiment.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Viral app opportunities from trends, gaps, and user pain points.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when looking for a fast business/consumer app experiment.",
+          "after": "vard-align",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/vard/claude/vard-scan/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from vard-scan.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "vard-align",
+      "command": "$vard-align",
+      "title": "vard-align",
+      "subtitle": "VARD / Rapid business experiment",
+      "tier": "analysis",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 1,
+      "blurb": "Run quick feasibility and novelty checks for this week's build.",
+      "chips": [
+        "VARD",
+        "analysis"
+      ],
+      "skillPath": "packs/vard/claude/vard-align/SKILL.md",
+      "nextSkill": "vard-ship",
+      "lead": "Quick feasibility and novelty check — go/no-go decision for this week's build",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a candidate rapid app idea exists.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A go/no-go feasibility and novelty check for this week's build.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a candidate rapid app idea exists.",
+          "after": "vard-ship",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/vard/claude/vard-align/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from vard-align.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "vard-ship",
+      "command": "$vard-ship",
+      "title": "vard-ship",
+      "subtitle": "VARD / Rapid business experiment",
+      "tier": "ops",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 2,
+      "blurb": "Deploy the app, create landing page, set analytics, and log shipment.",
+      "chips": [
+        "VARD",
+        "ops"
+      ],
+      "skillPath": "packs/vard/claude/vard-ship/SKILL.md",
+      "nextSkill": "vard-traction",
+      "lead": "Deploy the app, create landing page, set up analytics, and log the shipment",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after a VARD idea passes alignment and is ready to ship fast.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A deployed app, landing page, analytics, and shipment log.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after a VARD idea passes alignment and is ready to ship fast.",
+          "after": "vard-traction",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/vard/claude/vard-ship/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from vard-ship.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "ops"
+    },
+    {
+      "slug": "vard-traction",
+      "command": "$vard-traction",
+      "title": "vard-traction",
+      "subtitle": "VARD / Rapid business experiment",
+      "tier": "ops",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 3,
+      "blurb": "Check traction and recommend iterate, graduate, or archive.",
+      "chips": [
+        "VARD",
+        "ops"
+      ],
+      "skillPath": "packs/vard/claude/vard-traction/SKILL.md",
+      "nextSkill": "iterate, Business AFPS, or archive",
+      "lead": "Check post-launch traction for a shipped VARD app and recommend iterate, graduate, or archive",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after the shipped VARD app has initial signal.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A traction readout and recommendation to iterate, graduate, or archive.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after the shipped VARD app has initial signal.",
+          "after": "iterate, Business AFPS, or archive",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/vard/claude/vard-traction/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from vard-traction.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "ops"
+    },
+    {
+      "slug": "ord-scan",
+      "command": "$ord-scan",
+      "title": "ord-scan",
+      "subtitle": "ORD / Rapid OSS experiment",
+      "tier": "research",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 4,
+      "blurb": "Scan npm gaps, GitHub trends, and developer pain for OSS opportunities.",
+      "chips": [
+        "ORD",
+        "research"
+      ],
+      "skillPath": "packs/ord/claude/ord-scan/SKILL.md",
+      "nextSkill": "ord-align",
+      "lead": "Scan for OSS tool opportunities from npm gaps, GitHub trends, and developer pain points",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use when looking for a fast developer-tool package experiment.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "OSS tool opportunities from npm gaps, GitHub trends, and developer pain points.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use when looking for a fast developer-tool package experiment.",
+          "after": "ord-align",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/ord/claude/ord-scan/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ord-scan.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "research"
+    },
+    {
+      "slug": "ord-align",
+      "command": "$ord-align",
+      "title": "ord-align",
+      "subtitle": "ORD / Rapid OSS experiment",
+      "tier": "analysis",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 5,
+      "blurb": "Validate namespace, existing solutions, and feasibility before building.",
+      "chips": [
+        "ORD",
+        "analysis"
+      ],
+      "skillPath": "packs/ord/claude/ord-align/SKILL.md",
+      "nextSkill": "ord-ship",
+      "lead": "Validate whether an OSS tool is worth building through staged namespace, existing-solution, and feasibility review",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after an ORD candidate tool exists.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Namespace, existing-solution, and feasibility review before building.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after an ORD candidate tool exists.",
+          "after": "ord-ship",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/ord/claude/ord-align/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ord-align.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "analysis"
+    },
+    {
+      "slug": "ord-ship",
+      "command": "$ord-ship",
+      "title": "ord-ship",
+      "subtitle": "ORD / Rapid OSS experiment",
+      "tier": "ops",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 6,
+      "blurb": "Publish to npm, create README, set up repo, and log shipment.",
+      "chips": [
+        "ORD",
+        "ops"
+      ],
+      "skillPath": "packs/ord/claude/ord-ship/SKILL.md",
+      "nextSkill": "ord-traction",
+      "lead": "Publish to npm, create README, set up repo, and log the shipment",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after an ORD tool passes alignment and is ready to publish.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "A published npm package, README, repo setup, and shipment log.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after an ORD tool passes alignment and is ready to publish.",
+          "after": "ord-traction",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/ord/claude/ord-ship/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ord-ship.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "ops"
+    },
+    {
+      "slug": "ord-traction",
+      "command": "$ord-traction",
+      "title": "ord-traction",
+      "subtitle": "ORD / Rapid OSS experiment",
+      "tier": "ops",
+      "deckFamily": "Rapid Feeders",
+      "familyKey": "rapid",
+      "familyOrder": 4,
+      "order": 7,
+      "blurb": "Check adoption and recommend iterate, graduate, or archive.",
+      "chips": [
+        "ORD",
+        "ops"
+      ],
+      "skillPath": "packs/ord/claude/ord-traction/SKILL.md",
+      "nextSkill": "iterate, Devtool AFPS, or archive",
+      "lead": "Check post-launch adoption for a published ORD package and recommend iterate, graduate, or archive",
+      "beats": {
+        "whenToUse": {
+          "runWhen": "Use after the published package has initial adoption signal.",
+          "doNotExpect": "This is not a shortcut around its upstream evidence. If required artifacts are missing, the skill should route to the prerequisite instead.",
+          "primaryInput": "Current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.",
+          "primaryQuestion": "What decision, artifact, or proof does this step need to make safe before the next skill?"
+        },
+        "expect": {
+          "output": "Adoption review for downloads, stars, issues, and graduation readiness.",
+          "detailLives": "Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.",
+          "qualityBar": "The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.",
+          "humanReview": "Expect either a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill."
+        },
+        "handoff": {
+          "before": "Use after the published package has initial adoption signal.",
+          "after": "iterate, Devtool AFPS, or archive",
+          "seriesPoint": "Explain why this skill exists as a boundary: what risk it burns down before the next AFPS step."
+        }
+      },
+      "references": [
+        "packs/ord/claude/ord-traction/SKILL.md",
+        "docs/decks.md",
+        "docs/skill-next-step-contracts.md",
+        "docs/briefing-slides-convention.md",
+        "briefing-slides/afps-skill-overviews.html"
+      ],
+      "gate": {
+        "question": "Approve whether this deck accurately explains what people can expect from ord-traction.",
+        "options": [
+          {
+            "value": "approve",
+            "label": "Approve"
+          },
+          {
+            "value": "revise",
+            "label": "Revise"
+          },
+          {
+            "value": "needs-clarification",
+            "label": "Needs clarification"
+          }
+        ]
+      },
+      "skillType": "ops"
+    }
+  ]
+}

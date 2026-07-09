@@ -1,312 +1,825 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Briefing Slides Index</title>
-  <style>
-    :root {
-      --ink: #18202f;
-      --muted: #647089;
-      --line: #d9e0ea;
-      --paper: #fbfcff;
-      --panel: #ffffff;
-      --blue: #2364aa;
-      --teal: #0f8b8d;
-      --green: #2f7d4f;
-      --gold: #9a6a10;
-      --violet: #6653a6;
-      --red: #b33a3a;
-      --shadow: 0 14px 38px rgba(24, 32, 47, .1);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(180deg, #eef5ff, #fbfcff 36%, #f4f7fb);
-    }
-    a { color: inherit; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    header {
-      padding: clamp(22px, 4vw, 42px);
-      border-bottom: 1px solid var(--line);
-      background: rgba(251, 252, 255, .88);
-    }
-    .eyebrow {
-      color: var(--teal);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-    h1 {
-      margin: 0;
-      max-width: 980px;
-      font-size: clamp(34px, 6vw, 68px);
-      line-height: 1.04;
-      letter-spacing: 0;
-    }
-    .lead {
-      margin: 14px 0 0;
-      max-width: 850px;
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 21px);
-      line-height: 1.4;
-    }
-    main {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 18px;
-    }
-    .toolbar {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: center;
-      margin: 0 0 18px;
-    }
-    input[type="search"] {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      color: var(--ink);
-      padding: 12px 14px;
-      font: inherit;
-      box-shadow: var(--shadow);
-    }
-    .count {
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    section {
-      margin: 22px 0;
-    }
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: end;
-      margin-bottom: 10px;
-    }
-    h2 {
-      margin: 0;
-      font-size: clamp(22px, 3vw, 32px);
-      letter-spacing: 0;
-    }
-    .section-head span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .card {
-      display: grid;
-      gap: 9px;
-      min-height: 136px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 13px;
-      box-shadow: 0 8px 24px rgba(24, 32, 47, .06);
-    }
-    .card:hover {
-      border-color: #aab8cb;
-      box-shadow: var(--shadow);
-    }
-    .card strong {
-      font-size: 17px;
-      line-height: 1.2;
-    }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 22px;
-      padding: 3px 7px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: #f7f9fc;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .business { border-left: 4px solid var(--blue); }
-    .devtool { border-left: 4px solid var(--teal); }
-    .game { border-left: 4px solid var(--green); }
-    .rapid { border-left: 4px solid var(--gold); }
-    .other { border-left: 4px solid var(--violet); }
-    .empty {
-      display: none;
-      padding: 18px;
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, .7);
-    }
-    footer {
-      margin: 28px 0 10px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    @media (max-width: 920px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 620px) {
-      main { padding: 12px; }
-      .toolbar { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr; }
-      .section-head { align-items: start; flex-direction: column; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Briefing Slides Index</title>
+<style>
+/* ==========================================================================
+   Briefing Deck — theme-aware design system (base chrome + archetype toolbox)
+   Single source of truth for every generated briefing-slides deck and the
+   living style-guide gallery. Authored here; injected verbatim by
+   scripts/generate-briefing-decks.mjs. Do not hand-edit generated decks.
+   ========================================================================== */
+
+/* --- Design tokens -------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+  /* Light = refreshed warm paper */
+  --bg: #f3f0e9;
+  --bg-2: #ece7db;
+  --surface: #ffffff;
+  --surface-2: #faf8f2;
+  --surface-3: #f2eee4;
+  --border: #e0dacb;
+  --border-strong: #cfc7b3;
+  --text: #18202f;
+  --text-2: #38414f;
+  --muted: #5f6a78;
+  --faint: #8a93a0;
+  --accent: #2f6bd6;
+  --accent-soft: #e7f0fd;
+  --teal: #0f8a80;
+  --teal-soft: #e2f4f1;
+  --violet: #6d54e0;
+  --violet-soft: #eee9ff;
+  --green: #1f9d57;
+  --green-soft: #e4f6ea;
+  --gold: #b5860f;
+  --gold-soft: #fbf1d8;
+  --red: #d64545;
+  --red-soft: #fcecec;
+  --gate-unanswered: #f85149;
+  --gate-answered: #3fb950;
+  --shadow: 0 20px 50px rgba(24, 32, 47, 0.14);
+  --shadow-soft: 0 6px 18px rgba(24, 32, 47, 0.08);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sidebar-w: min(28rem, 100vw);
+  --slide-scale: 1;
+  font-family: var(--sans);
+}
+
+/* Dark = alignment-page palette. System-preference default … */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --bg-2: #010409;
+    --surface: #161b22;
+    --surface-2: #1c2230;
+    --surface-3: #232b3a;
+    --border: #30363d;
+    --border-strong: #3d444d;
+    --text: #c9d1d9;
+    --text-2: #adbac7;
+    --muted: #8b949e;
+    --faint: #6e7681;
+    --accent: #58a6ff;
+    --accent-soft: #16273f;
+    --teal: #39c5bb;
+    --teal-soft: #123230;
+    --violet: #bc8cff;
+    --violet-soft: #241a3a;
+    --green: #3fb950;
+    --green-soft: #12271b;
+    --gold: #d29922;
+    --gold-soft: #2b2410;
+    --red: #f85149;
+    --red-soft: #2d1517;
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* … explicit toggle always wins over the system preference. */
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-2: #010409;
+  --surface: #161b22;
+  --surface-2: #1c2230;
+  --surface-3: #232b3a;
+  --border: #30363d;
+  --border-strong: #3d444d;
+  --text: #c9d1d9;
+  --text-2: #adbac7;
+  --muted: #8b949e;
+  --faint: #6e7681;
+  --accent: #58a6ff;
+  --accent-soft: #16273f;
+  --teal: #39c5bb;
+  --teal-soft: #123230;
+  --violet: #bc8cff;
+  --violet-soft: #241a3a;
+  --green: #3fb950;
+  --green-soft: #12271b;
+  --gold: #d29922;
+  --gold-soft: #2b2410;
+  --red: #f85149;
+  --red-soft: #2d1517;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme="light"] {
+  --bg: #f3f0e9;
+  --bg-2: #ece7db;
+  --surface: #ffffff;
+  --surface-2: #faf8f2;
+  --surface-3: #f2eee4;
+  --border: #e0dacb;
+  --border-strong: #cfc7b3;
+  --text: #18202f;
+  --text-2: #38414f;
+  --muted: #5f6a78;
+  --faint: #8a93a0;
+  --accent: #2f6bd6;
+  --accent-soft: #e7f0fd;
+  --teal: #0f8a80;
+  --teal-soft: #e2f4f1;
+  --violet: #6d54e0;
+  --violet-soft: #eee9ff;
+  --green: #1f9d57;
+  --green-soft: #e4f6ea;
+  --gold: #b5860f;
+  --gold-soft: #fbf1d8;
+  --red: #d64545;
+  --red-soft: #fcecec;
+  --shadow: 0 20px 50px rgba(24, 32, 47, 0.14);
+  --shadow-soft: 0 6px 18px rgba(24, 32, 47, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  font-family: var(--sans);
+}
+
+a { color: var(--accent); }
+
+/* --- Topbar --------------------------------------------------------------- */
+.deck-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.1rem;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+}
+.deck-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.deck-brand small {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.topbar-right { display: flex; align-items: center; gap: 0.9rem; }
+.deck-progress {
+  width: min(24rem, 34vw);
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.deck-progress > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  transition: width 180ms ease;
+}
+[data-slide-counter] {
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.icon-btn {
+  min-height: 2rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- Stage + slide shell -------------------------------------------------- */
+.deck-stage { position: relative; min-height: 0; }
+[data-briefing-slide] {
+  display: none;
+  min-height: calc(100vh - 8.1rem);
+  padding: 1.4rem 1.2rem;
+}
+[data-briefing-slide].active {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.slide-card {
+  position: relative;
+  width: min(1320px, 100%);
+  overflow: visible;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.9rem 3.1rem;
+  transform-origin: top center;
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+}
+/* Full-bleed variants opt out of the card chrome. */
+[data-briefing-slide].bleed .slide-card {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--teal);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.slide-card h1, .slide-card h2, .slide-card h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.05; }
+.slide-card h1 { font-size: clamp(3.4rem, 6.6vw, 5.4rem); }
+.slide-card h2 { font-size: clamp(2.5rem, 4.8vw, 3.8rem); }
+.slide-card h3 { font-size: 1.5rem; }
+.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  line-height: 1.42;
+  max-width: 62ch;
+}
+.slide-note { margin: 0; color: var(--faint); font-size: 1rem; }
+
+/* --- Chips + badges ------------------------------------------------------- */
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  min-height: 1.75rem; padding: 0.2rem 0.7rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font-size: 0.9rem; font-weight: 700; text-decoration: none;
+}
+a.chip:hover { border-color: var(--accent); color: var(--accent); }
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 0.12rem 0.55rem; border-radius: 999px;
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.02em;
+  border: 1px solid var(--border);
+}
+.badge.research   { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.badge.planning   { color: var(--violet); border-color: var(--violet); background: var(--violet-soft); }
+.badge.execution  { color: var(--green);  border-color: var(--green);  background: var(--green-soft); }
+.badge.analysis   { color: var(--gold);   border-color: var(--gold);   background: var(--gold-soft); }
+.badge.shipping,
+.badge.ops,
+.badge.review     { color: var(--red);    border-color: var(--red);    background: var(--red-soft); }
+
+/* --- Refined feature cards ------------------------------------------------ */
+.card-grid { display: grid; gap: 0.85rem; }
+.card-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.card-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1rem 0.95rem 1.15rem;
+  overflow: hidden;
+}
+.card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--accent);
+}
+.card.teal::before { background: var(--teal); }
+.card.violet::before { background: var(--violet); }
+.card.green::before { background: var(--green); }
+.card.gold::before { background: var(--gold); }
+.card.red::before { background: var(--red); }
+.card .kicker {
+  display: flex; align-items: center; gap: 0.45rem;
+  font-weight: 800; font-size: 1.22rem; margin-bottom: 0.35rem;
+}
+.card .ic { font-size: 1.4rem; line-height: 1; }
+.card p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.42; }
+
+/* --- Section divider ------------------------------------------------------ */
+.divider {
+  display: grid; gap: 0.9rem; justify-items: center; text-align: center;
+  padding: clamp(2rem, 8vh, 5rem) 1rem;
+  background:
+    radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%),
+    var(--surface);
+  border-radius: var(--radius);
+}
+.divider .kwill { font-size: clamp(2.8rem, 6.4vw, 4.6rem); font-weight: 850; letter-spacing: -0.03em; }
+.divider .idx { font-family: var(--mono); color: var(--accent); font-weight: 800; letter-spacing: 0.1em; }
+
+/* --- Statement / pull-quote ----------------------------------------------- */
+.statement { display: grid; gap: 1.1rem; }
+.statement blockquote {
+  margin: 0; font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+  font-weight: 750; line-height: 1.18; letter-spacing: -0.02em;
+}
+.statement blockquote .hl { color: var(--accent); }
+.statement cite { color: var(--muted); font-style: normal; font-weight: 700; }
+.statement .bar { width: 3.2rem; height: 4px; border-radius: 999px; background: var(--accent); }
+
+/* --- Big-number stats ----------------------------------------------------- */
+.stat-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.1rem; }
+.stat {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; display: grid; gap: 0.35rem;
+}
+.stat .num { font-size: clamp(2.8rem, 6vw, 4.4rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
+.stat .num .unit { font-size: 0.45em; color: var(--muted); font-weight: 800; margin-left: 0.15em; }
+.stat .cap { color: var(--muted); font-weight: 700; font-size: 1.12rem; }
+.stat.teal .num { color: var(--teal); }
+.stat.violet .num { color: var(--violet); }
+.stat.green .num { color: var(--green); }
+.stat.gold .num { color: var(--gold); }
+.stat .spark { margin-top: 0.2rem; }
+
+/* --- Split two-panel ------------------------------------------------------ */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.panel {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1.05rem 1.15rem; display: grid; gap: 0.6rem; align-content: start;
+  background: var(--surface-2);
+}
+.panel .head { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; }
+.panel .head .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; }
+.panel.pos { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 45%, var(--border)); }
+.panel.pos .dot { background: var(--green); }
+.panel.neg { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 45%, var(--border)); }
+.panel.neg .dot { background: var(--red); }
+.panel ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.45rem; }
+.panel li { color: var(--text-2); font-size: 1.15rem; line-height: 1.4; }
+
+/* --- Comparison matrix ---------------------------------------------------- */
+.matrix { width: 100%; border-collapse: collapse; font-size: 1.12rem; }
+.matrix th, .matrix td { padding: 0.85rem 0.95rem; text-align: left; border-bottom: 1px solid var(--border); }
+.matrix thead th {
+  background: var(--surface-3); color: var(--text);
+  font-weight: 800; border-bottom: 2px solid var(--border-strong);
+}
+.matrix tbody th { font-weight: 750; color: var(--text-2); }
+.matrix .cell { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 750; }
+.matrix .cell.yes { color: var(--green); }
+.matrix .cell.no { color: var(--red); }
+.matrix .cell.partial { color: var(--gold); }
+.matrix tr:last-child td, .matrix tr:last-child th { border-bottom: 0; }
+
+/* --- Scorecard / weighted options ----------------------------------------- */
+.scorecard { display: grid; gap: 0.7rem; }
+.option {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.75rem 0.95rem; background: var(--surface-2);
+}
+.option .name { font-weight: 800; font-size: 1.12rem; }
+.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.3rem; color: var(--accent); }
+.option .track { grid-column: 1 / -1; height: 0.5rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.option .track > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
+.option.win { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+.option.win .score { color: var(--green); }
+
+/* --- Timeline / stepper --------------------------------------------------- */
+.timeline { display: grid; gap: 0; }
+.timeline .step {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.9rem;
+  padding-bottom: 1rem; position: relative;
+}
+.timeline .step:not(:last-child)::before {
+  content: ""; position: absolute; left: 1.25rem; top: 2.6rem; bottom: -0.1rem;
+  width: 2px; background: var(--border-strong);
+}
+.timeline .num {
+  width: 2.5rem; height: 2.5rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 850; font-size: 1.05rem;
+  background: var(--accent); color: #fff; z-index: 1;
+}
+.timeline .step.teal .num { background: var(--teal); }
+.timeline .step.violet .num { background: var(--violet); }
+.timeline .body { display: grid; gap: 0.25rem; padding-top: 0.2rem; }
+.timeline .body strong { font-size: 1.3rem; }
+.timeline .body p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.4; }
+
+/* --- Flow / pipeline (sketchy SVG) ---------------------------------------- */
+.flow { display: grid; gap: 0.6rem; }
+.flow svg { width: 100%; height: auto; }
+/* Sketch filter on the node boxes only — thin connectors stay crisp so their
+   stems don't get shredded by the displacement map. */
+.flow .node-fill { filter: url(#deckSketch); fill: var(--surface-2); stroke: var(--accent); stroke-width: 2.4; }
+.flow .node-fill.teal { stroke: var(--teal); }
+.flow .node-fill.violet { stroke: var(--violet); }
+.flow .node-fill.green { stroke: var(--green); }
+.flow .edge { stroke: var(--faint); stroke-width: 3.2; fill: none; }
+.flow .edge.head { fill: var(--faint); stroke: none; }
+.flow text { font-family: var(--sans); fill: var(--text); font-weight: 800; font-size: 18px; }
+.flow text.sub { fill: var(--muted); font-weight: 650; }
+
+/* --- Kanban / register board ---------------------------------------------- */
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.85rem; }
+.column { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
+.column > h4 { margin: 0 0 0.1rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
+.column > h4 .count { color: var(--faint); }
+.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.55rem 0.7rem; font-size: 1.06rem; line-height: 1.36; }
+.ticket.risk { border-left-color: var(--red); }
+.ticket.assumption { border-left-color: var(--gold); }
+.ticket.question { border-left-color: var(--violet); }
+
+/* --- Annotated anatomy / focal -------------------------------------------- */
+.anatomy { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1.1rem; align-items: center; }
+.anatomy .focal { background: var(--surface-3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.2rem; display: grid; place-items: center; min-height: 12rem; }
+.anatomy .callouts { display: grid; gap: 0.6rem; }
+.anatomy .callout { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start; }
+.anatomy .pin { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 850; font-size: 0.78rem; border: 1px solid var(--accent); }
+.anatomy .callout p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.anatomy .callout strong { font-size: 0.92rem; }
+
+/* --- Layered stack bands -------------------------------------------------- */
+.stack { display: grid; gap: 0.45rem; }
+.band {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.9rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem; background: var(--surface-2);
+}
+.band .lyr { font-family: var(--mono); font-size: 0.72rem; color: var(--faint); font-weight: 800; }
+.band .lbl strong { font-size: 1.2rem; }
+.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 1rem; }
+.band .tag { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
+.band:nth-child(1) { background: color-mix(in srgb, var(--accent) 9%, var(--surface-2)); }
+.band:nth-child(2) { background: color-mix(in srgb, var(--teal) 9%, var(--surface-2)); }
+.band:nth-child(3) { background: color-mix(in srgb, var(--violet) 9%, var(--surface-2)); }
+.band:nth-child(4) { background: color-mix(in srgb, var(--green) 9%, var(--surface-2)); }
+
+/* --- Chart slide ---------------------------------------------------------- */
+.chart { display: grid; gap: 0.7rem; }
+.chart .plot { width: 100%; }
+.chart svg { width: 100%; height: auto; overflow: visible; }
+.chart .bar-rect { fill: var(--accent); }
+.chart .bar-rect.teal { fill: var(--teal); }
+.chart .bar-rect.violet { fill: var(--violet); }
+.chart .axis { stroke: var(--border-strong); stroke-width: 1; }
+.chart .grid-line { stroke: var(--border); stroke-width: 1; }
+.chart text { fill: var(--muted); font-size: 0.72rem; font-family: var(--sans); }
+.chart text.val { fill: var(--text); font-weight: 800; }
+.chart .fallback-table { display: none; }
+.chart details.fallback { font-size: 0.8rem; color: var(--muted); }
+.chart details.fallback table { border-collapse: collapse; margin-top: 0.4rem; }
+.chart details.fallback td, .chart details.fallback th { border: 1px solid var(--border); padding: 0.25rem 0.5rem; }
+
+/* --- Meter / gauge row ---------------------------------------------------- */
+.meters { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 1.1rem; }
+.gauge { display: grid; gap: 0.5rem; justify-items: center; text-align: center; }
+.gauge svg { width: 8.5rem; height: auto; }
+.gauge .arc-bg { fill: none; stroke: var(--bg-2); stroke-width: 10; stroke-linecap: round; }
+.gauge .arc-fg { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; }
+.gauge .arc-fg.green { stroke: var(--green); }
+.gauge .arc-fg.gold { stroke: var(--gold); }
+.gauge .gval { font-size: 1.5rem; font-weight: 850; }
+.gauge .glbl { color: var(--muted); font-weight: 700; font-size: 0.85rem; }
+
+/* --- References slide ----------------------------------------------------- */
+.ref-list { display: grid; gap: 0.55rem; }
+.ref-item {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 0.7rem; align-items: center;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem; background: var(--surface-2); text-decoration: none; color: inherit;
+}
+.ref-item:hover { border-color: var(--accent); }
+.ref-item .rk { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--faint); text-transform: uppercase; }
+.ref-item .rt { font-weight: 750; font-size: 1.18rem; }
+.ref-item .rp { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+.provenance { border-top: 1px dashed var(--border); padding-top: 0.7rem; margin-top: 0.4rem; }
+.provenance small { color: var(--faint); font-weight: 700; }
+.provenance a { color: var(--muted); font-size: 0.8rem; }
+
+/* --- Compiler / response slide -------------------------------------------- */
+.compiler { display: grid; gap: 0.7rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.btn {
+  min-height: 2.3rem; padding: 0 0.9rem; border-radius: 8px;
+  border: 1px solid var(--border-strong); background: var(--surface);
+  color: var(--text); font: inherit; font-weight: 750; cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { color: #fff; filter: brightness(1.06); }
+pre.yaml, textarea.yaml, .copy-fallback {
+  width: 100%; max-height: 13rem; overflow: auto; margin: 0;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: #0b1220; color: #e6edf6;
+  padding: 0.8rem 0.9rem; font-family: var(--mono); font-size: 0.76rem; line-height: 1.4;
+  white-space: pre-wrap;
+}
+textarea.yaml { resize: vertical; min-height: 8rem; }
+.copy-fallback { display: none; min-height: 6rem; }
+
+/* --- Inline gate ---------------------------------------------------------- */
+.gate { display: grid; gap: 0.7rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0.9rem 1rem; background: var(--surface-2); }
+.gate .q { font-weight: 800; font-size: 1.25rem; }
+.gate .opts { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; font-size: 1.12rem; color: var(--text-2); }
+.gate textarea { width: 100%; min-height: 3.4rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; padding: 0.5rem; resize: vertical; }
+.gate .why { margin: 0; color: var(--muted); font-size: 0.82rem; }
+
+/* Required-gate slide-level border states (static-audit anchors). */
+[data-required-gate-slide][data-gate-status="unanswered"] .slide-card { border: 3px solid #f85149; }
+[data-required-gate-slide][data-gate-status="answered"] .slide-card { border: 3px solid #3fb950; }
+[data-required-gate-slide][data-gate-status="unanswered"] .gate-flag { color: #f85149; }
+[data-required-gate-slide][data-gate-status="answered"] .gate-flag { color: #3fb950; }
+.gate-flag { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 800; font-size: 0.78rem; }
+
+/* --- Per-slide feedback trigger ------------------------------------------- */
+.fb-trigger {
+  position: absolute; top: 0.8rem; right: 0.9rem;
+  min-height: 1.7rem; padding: 0.15rem 0.6rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font: inherit; font-size: 0.72rem; font-weight: 750; cursor: pointer;
+}
+.fb-trigger:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- Feedback sidebar ----------------------------------------------------- */
+.fb-panel {
+  position: fixed; top: 0; right: 0; z-index: 30;
+  width: var(--sidebar-w); height: 100vh;
+  display: grid; grid-template-rows: auto 1fr;
+  background: var(--surface); border-left: 1px solid var(--border);
+  box-shadow: -18px 0 42px rgba(0, 0, 0, 0.22);
+  transform: translateX(100%); transition: transform 200ms ease;
+}
+.fb-panel.open { transform: translateX(0); }
+.fb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.fb-head p { margin: 0; color: var(--muted); font-size: 0.8rem; font-weight: 750; }
+.fb-head h3 { margin: 0.2rem 0 0; font-size: 1.15rem; }
+.fb-body { min-height: 0; overflow: auto; padding: 1rem; display: grid; gap: 1rem; }
+.fb-sec { display: grid; gap: 0.55rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border); }
+.fb-sec:last-child { border-bottom: 0; padding-bottom: 0; }
+.fb-sec h4 { margin: 0; font-size: 0.95rem; }
+.fb-sec label { display: grid; gap: 0.3rem; font-weight: 700; font-size: 0.85rem; }
+.fb-sec select, .fb-sec textarea { width: 100%; border: 1px solid var(--border); border-radius: 7px; background: var(--surface-2); color: var(--text); font: inherit; font-size: 0.85rem; padding: 0.5rem; }
+.fb-sec textarea { min-height: 4rem; resize: vertical; }
+.fb-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+@media (min-width: 861px) {
+  .deck-topbar, .deck-stage, .deck-footer { transition: margin-right 200ms ease; }
+  body.fb-open .deck-topbar, body.fb-open .deck-stage, body.fb-open .deck-footer { margin-right: var(--sidebar-w); }
+  body.fb-open .slide-card { transform: scale(var(--slide-scale)); }
+}
+
+/* --- Footer / filmstrip --------------------------------------------------- */
+.deck-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.55rem 1.1rem; border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+.filmstrip { display: flex; flex-wrap: wrap; gap: 0.3rem; max-width: 60%; }
+.filmstrip button {
+  min-width: 2rem; min-height: 2rem; padding: 0 0.4rem;
+  border: 1.5px solid var(--border); border-radius: 6px;
+  background: var(--surface); color: var(--muted);
+  font: inherit; font-weight: 800; font-size: 0.75rem; cursor: pointer;
+}
+.filmstrip button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.filmstrip button.gate-unanswered { border-color: var(--gate-unanswered); }
+.filmstrip button.gate-answered { border-color: var(--gate-answered); }
+.footer-nav { display: flex; align-items: center; gap: 0.5rem; }
+.footer-nav [data-slide-counter] { margin: 0 0.3rem; }
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 860px) {
+  body { display: block; }
+  .fb-panel { width: 100vw; }
+  .slide-card { transform: none !important; max-height: none; }
+  [data-briefing-slide] { min-height: auto; padding: 0.9rem; }
+  [data-briefing-slide].active { justify-items: stretch; }
+  .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+  .split, .anatomy { grid-template-columns: 1fr; }
+  .stat-row, .board, .meters { grid-auto-flow: row; }
+  .deck-progress { width: 40vw; }
+  .filmstrip { max-width: 100%; }
+}
+
+/* --- Print: one slide per page ------------------------------------------- */
+@media print {
+  body { display: block; background: #fff; color: #000; }
+  .deck-topbar, .deck-footer, .fb-panel, .fb-trigger, .icon-btn { display: none !important; }
+  [data-briefing-slide] { display: block !important; min-height: auto; page-break-after: always; padding: 0; }
+  .slide-card { box-shadow: none; border: 1px solid #ccc; max-height: none; transform: none !important; }
+  .btn-row { display: none !important; }
+}
+
+
+/* --- index catalog layer (reuses base tokens) --------------------------- */
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); }
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: none; }
+.index-hero { padding: clamp(1.4rem, 4vw, 2.8rem) clamp(1rem, 4vw, 2.6rem) 1.2rem; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+.index-hero .eyebrow { color: var(--teal); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; }
+.index-hero h1 { margin: 0.3rem 0 0; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.04; letter-spacing: -0.01em; max-width: 60rem; }
+.index-hero p { margin: 0.7rem 0 0; max-width: 52rem; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.45; }
+main.index-main { max-width: 78rem; margin: 0 auto; padding: 1.2rem clamp(1rem, 4vw, 2.6rem) 3rem; }
+.index-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.8rem; align-items: center; margin: 1rem 0 0.4rem; }
+.index-toolbar input[type="search"] { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); padding: 0.7rem 0.9rem; font: inherit; box-shadow: var(--shadow-soft); }
+.index-count { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+.index-empty { display: none; padding: 1.1rem; border: 1px dashed var(--border); border-radius: var(--radius-sm); color: var(--muted); background: var(--surface-2); margin-top: 0.8rem; }
+section[data-section] { margin: 1.5rem 0; }
+.section-head { display: flex; justify-content: space-between; gap: 0.8rem; align-items: end; margin-bottom: 0.6rem; }
+.section-head h2 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.9rem); letter-spacing: -0.01em; }
+.section-head span { color: var(--muted); font-size: 0.82rem; }
+.index-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; }
+.index-grid .card { display: grid; gap: 0.5rem; align-content: start; min-height: 8.5rem; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.85rem 0.9rem; box-shadow: var(--shadow-soft); transition: border-color 120ms ease, transform 120ms ease; }
+.index-grid .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.index-grid .card strong { font-size: 1.05rem; line-height: 1.2; }
+.index-grid .card p { margin: 0; color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+.card.business { border-left-color: var(--accent); }
+.card.devtool  { border-left-color: var(--teal); }
+.card.game     { border-left-color: var(--green); }
+.card.rapid    { border-left-color: var(--gold); }
+.card.other    { border-left-color: var(--violet); }
+.index-footer { margin: 2rem 0 0.6rem; color: var(--muted); font-size: 0.82rem; }
+@media (max-width: 60rem) { .index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 40rem) { .index-grid { grid-template-columns: 1fr; } .index-toolbar { grid-template-columns: 1fr; } .section-head { flex-direction: column; align-items: start; } }
+@media print { .deck-topbar, .index-toolbar { display: none; } }
+
+</style>
 </head>
 <body>
-  <header>
-    <div class="eyebrow">Briefing slides</div>
-    <h1>Index of slide-first review decks.</h1>
-    <p class="lead">Use this page to open the AFPS series overview, individual skill decks, rapid feeder decks, and existing briefing-slide artifacts.</p>
-  </header>
-  <main>
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="Search decks by skill, deck, phase, or filename" aria-label="Search briefing slide decks">
-      <div class="count" id="count">46 decks</div>
-    </div>
-    <div class="empty" id="empty">No matching briefing decks.</div>
+<header class="deck-topbar">
+  <div class="deck-brand"><span>Briefing Slides</span><small>slide-first review decks</small></div>
+  <div class="topbar-right">
+    <span class="index-count" id="index-count">46 decks</span>
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">☽ Dark</button>
+  </div>
+</header>
+<section class="index-hero">
+  <div class="eyebrow">Briefing slides</div>
+  <h1>Index of slide-first review decks.</h1>
+  <p>Open the AFPS series overview, individual skill decks, rapid feeder decks, and standalone briefing artifacts. All links are repo-relative and work from <code>file://</code>.</p>
+</section>
+<main class="index-main">
+  <div class="index-toolbar">
+    <input id="index-search" type="search" placeholder="Search decks by skill, deck, phase, or filename" aria-label="Search briefing slide decks">
+    <div class="index-count" id="index-count-2" aria-hidden="true"></div>
+  </div>
+  <div class="index-empty" id="index-empty">No matching briefing decks.</div>
 
     <section data-section>
       <div class="section-head"><h2>AFPS Overview</h2><span>1 deck</span></div>
-      <div class="grid">
-        <a class="card business" href="afps-skill-overviews.html" data-card data-text="afps overview business devtool game vard ord canonical flow">
-          <strong>AFPS Skill Overview</strong>
-          <p>Series-wide map of Business AFPS, Devtool AFPS, Game AFPS, VARD, and ORD.</p>
-          <div class="chips"><span class="chip">overview</span><span class="chip">13 slides</span></div>
-        </a>
+      <div class="index-grid">
+        <a class="card business" href="afps-skill-overviews.html" data-card data-text="afps skill overview business overview 8 slides series-wide map of business afps, devtool afps, game afps, vard, and ord."><strong>AFPS Skill Overview</strong><p>Series-wide map of Business AFPS, Devtool AFPS, Game AFPS, VARD, and ORD.</p><div class="chips"><span class="chip">overview</span><span class="chip">8 slides</span></div></a>
       </div>
     </section>
 
     <section data-section>
       <div class="section-head"><h2>Business AFPS</h2><span>20 decks</span></div>
-      <div class="grid">
-        <a class="card business" href="afps-skill-idea-scope-brief.html" data-card data-text="business afps concept market idea-scope-brief planning"><strong>idea-scope-brief</strong><p>Shape a rough product idea into a scoped brief.</p><div class="chips"><span class="chip">concept</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-customer-discovery.html" data-card data-text="business afps concept market customer-discovery research"><strong>customer-discovery</strong><p>Define ICP and customer evidence before market decisions.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
-        <a class="card business" href="afps-skill-competitive-analysis.html" data-card data-text="business afps concept market competitive-analysis research"><strong>competitive-analysis</strong><p>Map alternatives, competitors, differentiation, and risks.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
-        <a class="card business" href="afps-skill-journey-map.html" data-card data-text="business afps concept market journey-map lifecycle research"><strong>journey-map</strong><p>Turn customer stages and task flow into lifecycle evidence.</p><div class="chips"><span class="chip">concept</span><span class="chip">lifecycle</span></div></a>
-        <a class="card business" href="afps-skill-positioning.html" data-card data-text="business afps concept market positioning research"><strong>positioning</strong><p>Lock category, value wedge, alternatives, and narrative.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
-        <a class="card business" href="afps-skill-user-flow-map.html" data-card data-text="business afps product shape user-flow-map planning"><strong>user-flow-map</strong><p>Create the design-tree root: flows, surfaces, channels, and branches.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-state-model.html" data-card data-text="business afps product shape state-model planning"><strong>state-model</strong><p>Model entities, state machines, events, commands, and contracts.</p><div class="chips"><span class="chip">product shape</span><span class="chip">optional</span></div></a>
-        <a class="card business" href="afps-skill-ux-variations.html" data-card data-text="business afps product shape ux-variations planning"><strong>ux-variations</strong><p>Explore alternate progression branches for one named user flow.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-ui-interview.html" data-card data-text="business afps product shape ui-interview planning"><strong>ui-interview</strong><p>Specify visual UI details for a selected UX variation.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-build-ui-screens.html" data-card data-text="business afps prototype proof build-ui-screens execution"><strong>build-ui-screens</strong><p>Build visual screens for an approved UI branch.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
-        <a class="card business" href="afps-skill-logic-wiring.html" data-card data-text="business afps prototype proof logic-wiring execution"><strong>logic-wiring</strong><p>Wire screens and channel behavior into a clickable prototype.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
-        <a class="card business" href="afps-skill-uat.html" data-card data-text="business afps prototype proof uat analysis variant evaluation"><strong>uat</strong><p>Define acceptance journeys and evidence capture for variant evaluation.</p><div class="chips"><span class="chip">prototype</span><span class="chip">analysis</span></div></a>
-        <a class="card business" href="afps-skill-consolidate-prototypes.html" data-card data-text="business afps prototype proof consolidate-prototypes planning"><strong>consolidate-prototypes</strong><p>Converge evaluated branches into one approved MVP.</p><div class="chips"><span class="chip">prototype</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-research-roadmap.html" data-card data-text="business afps production handoff research-roadmap planning docs"><strong>research-roadmap</strong><p>Scan research and documentation health, then route cleanup.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-spec-interview.html" data-card data-text="business afps production handoff spec-interview planning"><strong>spec-interview</strong><p>Extract a production spec from the consolidated prototype.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-roadmap.html" data-card data-text="business afps execution roadmap planning"><strong>roadmap</strong><p>Sequence specs and repo state into phased work.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-plan-phase.html" data-card data-text="business afps execution plan-phase planning"><strong>plan-phase</strong><p>Break one roadmap phase into implementable steps.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
-        <a class="card business" href="afps-skill-exec.html" data-card data-text="business afps execution exec implementation"><strong>exec</strong><p>Execute the next approved implementation step or phase.</p><div class="chips"><span class="chip">execution</span><span class="chip">build</span></div></a>
-        <a class="card business" href="afps-skill-ship.html" data-card data-text="business afps execution ship shipping"><strong>ship</strong><p>Ship current work with docs, commit, push, and optional deploy.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
-        <a class="card business" href="afps-skill-ship-end.html" data-card data-text="business afps execution ship-end shipping wrap"><strong>ship-end</strong><p>Close the session with docs, commit, push, and handoff state.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
+      <div class="index-grid">
+        <a class="card business" href="afps-skill-idea-scope-brief.html" data-card data-text="idea-scope-brief business concept planning shape a rough product idea into a scoped brief."><strong>idea-scope-brief</strong><p>Shape a rough product idea into a scoped brief.</p><div class="chips"><span class="chip">concept</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-customer-discovery.html" data-card data-text="customer-discovery business concept research define icp and customer evidence before market decisions."><strong>customer-discovery</strong><p>Define ICP and customer evidence before market decisions.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-competitive-analysis.html" data-card data-text="competitive-analysis business concept research map alternatives, competitors, differentiation, and risks."><strong>competitive-analysis</strong><p>Map alternatives, competitors, differentiation, and risks.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-journey-map.html" data-card data-text="journey-map business concept lifecycle turn customer stages and task flow into lifecycle evidence."><strong>journey-map</strong><p>Turn customer stages and task flow into lifecycle evidence.</p><div class="chips"><span class="chip">concept</span><span class="chip">lifecycle</span></div></a>
+        <a class="card business" href="afps-skill-positioning.html" data-card data-text="positioning business concept research lock category, value wedge, alternatives, and narrative."><strong>positioning</strong><p>Lock category, value wedge, alternatives, and narrative.</p><div class="chips"><span class="chip">concept</span><span class="chip">research</span></div></a>
+        <a class="card business" href="afps-skill-user-flow-map.html" data-card data-text="user-flow-map business product shape planning create the design-tree root: flows, surfaces, channels, and branches."><strong>user-flow-map</strong><p>Create the design-tree root: flows, surfaces, channels, and branches.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-state-model.html" data-card data-text="state-model business product shape optional model entities, state machines, events, commands, and contracts."><strong>state-model</strong><p>Model entities, state machines, events, commands, and contracts.</p><div class="chips"><span class="chip">product shape</span><span class="chip">optional</span></div></a>
+        <a class="card business" href="afps-skill-ux-variations.html" data-card data-text="ux-variations business product shape planning explore alternate progression branches for one named user flow."><strong>ux-variations</strong><p>Explore alternate progression branches for one named user flow.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-ui-interview.html" data-card data-text="ui-interview business product shape planning specify visual ui details for a selected ux variation."><strong>ui-interview</strong><p>Specify visual UI details for a selected UX variation.</p><div class="chips"><span class="chip">product shape</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-build-ui-screens.html" data-card data-text="build-ui-screens business prototype execution build visual screens for an approved ui branch."><strong>build-ui-screens</strong><p>Build visual screens for an approved UI branch.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
+        <a class="card business" href="afps-skill-logic-wiring.html" data-card data-text="logic-wiring business prototype execution wire screens and channel behavior into a clickable prototype."><strong>logic-wiring</strong><p>Wire screens and channel behavior into a clickable prototype.</p><div class="chips"><span class="chip">prototype</span><span class="chip">execution</span></div></a>
+        <a class="card business" href="afps-skill-uat.html" data-card data-text="uat business prototype analysis define acceptance journeys and evidence capture for variant evaluation."><strong>uat</strong><p>Define acceptance journeys and evidence capture for variant evaluation.</p><div class="chips"><span class="chip">prototype</span><span class="chip">analysis</span></div></a>
+        <a class="card business" href="afps-skill-consolidate-prototypes.html" data-card data-text="consolidate-prototypes business prototype planning converge evaluated branches into one approved mvp."><strong>consolidate-prototypes</strong><p>Converge evaluated branches into one approved MVP.</p><div class="chips"><span class="chip">prototype</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-research-roadmap.html" data-card data-text="research-roadmap business handoff planning scan research and documentation health, then route cleanup."><strong>research-roadmap</strong><p>Scan research and documentation health, then route cleanup.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-spec-interview.html" data-card data-text="spec-interview business handoff planning extract a production spec from the consolidated prototype."><strong>spec-interview</strong><p>Extract a production spec from the consolidated prototype.</p><div class="chips"><span class="chip">handoff</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-roadmap.html" data-card data-text="roadmap business execution planning sequence specs and repo state into phased work."><strong>roadmap</strong><p>Sequence specs and repo state into phased work.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-plan-phase.html" data-card data-text="plan-phase business execution planning break one roadmap phase into implementable steps."><strong>plan-phase</strong><p>Break one roadmap phase into implementable steps.</p><div class="chips"><span class="chip">execution</span><span class="chip">planning</span></div></a>
+        <a class="card business" href="afps-skill-exec.html" data-card data-text="exec business execution build execute the next approved implementation step or phase."><strong>exec</strong><p>Execute the next approved implementation step or phase.</p><div class="chips"><span class="chip">execution</span><span class="chip">build</span></div></a>
+        <a class="card business" href="afps-skill-ship.html" data-card data-text="ship business execution shipping ship current work with docs, commit, push, and optional deploy."><strong>ship</strong><p>Ship current work with docs, commit, push, and optional deploy.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
+        <a class="card business" href="afps-skill-ship-end.html" data-card data-text="ship-end business execution shipping close the session with docs, commit, push, and handoff state."><strong>ship-end</strong><p>Close the session with docs, commit, push, and handoff state.</p><div class="chips"><span class="chip">execution</span><span class="chip">shipping</span></div></a>
       </div>
     </section>
 
     <section data-section>
       <div class="section-head"><h2>Devtool AFPS</h2><span>5 decks</span></div>
-      <div class="grid">
-        <a class="card devtool" href="afps-skill-devtool-positioning.html" data-card data-text="devtool afps devtool-positioning research"><strong>devtool-positioning</strong><p>Position developer tools by workflow, ecosystem, trust, and switching cost.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
-        <a class="card devtool" href="afps-skill-devtool-adoption.html" data-card data-text="devtool afps devtool-adoption research"><strong>devtool-adoption</strong><p>Plan examples, templates, proof artifacts, community, and adoption loops.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
-        <a class="card devtool" href="afps-skill-devtool-dx-journey.html" data-card data-text="devtool afps devtool-dx-journey analysis"><strong>devtool-dx-journey</strong><p>Analyze install, quickstart, first success, debugging, and production adoption.</p><div class="chips"><span class="chip">devtool</span><span class="chip">analysis</span></div></a>
-        <a class="card devtool" href="afps-skill-devtool-docs-audit.html" data-card data-text="devtool afps devtool-docs-audit review docs"><strong>devtool-docs-audit</strong><p>Audit quickstarts, examples, API reference, troubleshooting, and migration paths.</p><div class="chips"><span class="chip">devtool</span><span class="chip">review</span></div></a>
-        <a class="card devtool" href="afps-skill-devtool-monetization.html" data-card data-text="devtool afps devtool-monetization research pricing"><strong>devtool-monetization</strong><p>Design pricing, packaging, OSS strategy, limits, and team conversion.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+      <div class="index-grid">
+        <a class="card devtool" href="afps-skill-devtool-positioning.html" data-card data-text="devtool-positioning devtool devtool research position developer tools by workflow, ecosystem, trust, and switching cost."><strong>devtool-positioning</strong><p>Position developer tools by workflow, ecosystem, trust, and switching cost.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-adoption.html" data-card data-text="devtool-adoption devtool devtool research plan examples, templates, proof artifacts, community, and adoption loops."><strong>devtool-adoption</strong><p>Plan examples, templates, proof artifacts, community, and adoption loops.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-dx-journey.html" data-card data-text="devtool-dx-journey devtool devtool analysis analyze install, quickstart, first success, debugging, and production adoption."><strong>devtool-dx-journey</strong><p>Analyze install, quickstart, first success, debugging, and production adoption.</p><div class="chips"><span class="chip">devtool</span><span class="chip">analysis</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-docs-audit.html" data-card data-text="devtool-docs-audit devtool devtool review audit quickstarts, examples, api reference, troubleshooting, and migration paths."><strong>devtool-docs-audit</strong><p>Audit quickstarts, examples, API reference, troubleshooting, and migration paths.</p><div class="chips"><span class="chip">devtool</span><span class="chip">review</span></div></a>
+        <a class="card devtool" href="afps-skill-devtool-monetization.html" data-card data-text="devtool-monetization devtool devtool research design pricing, packaging, oss strategy, limits, and team conversion."><strong>devtool-monetization</strong><p>Design pricing, packaging, OSS strategy, limits, and team conversion.</p><div class="chips"><span class="chip">devtool</span><span class="chip">research</span></div></a>
       </div>
     </section>
 
     <section data-section>
       <div class="section-head"><h2>Game AFPS</h2><span>10 decks</span></div>
-      <div class="grid">
-        <a class="card game" href="afps-skill-game-audience.html" data-card data-text="game afps game-audience research"><strong>game-audience</strong><p>Identify player segments by taste, behavior, platform, genre affinity, and motivation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-fantasy.html" data-card data-text="game afps game-fantasy research"><strong>game-fantasy</strong><p>Define emotional promise, player fantasy, vibe references, and hook.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-genre-map.html" data-card data-text="game afps game-genre-map research"><strong>game-genre-map</strong><p>Map genre conventions, expectations, complaints, and anti-patterns.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-comparables.html" data-card data-text="game afps game-comparables research"><strong>game-comparables</strong><p>Research comparable titles, tags, prices, player signals, and positioning.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-core-loop.html" data-card data-text="game afps game-core-loop analysis"><strong>game-core-loop</strong><p>Analyze moment-to-moment, session, progression, and retention loops.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
-        <a class="card game" href="afps-skill-game-prototype-test.html" data-card data-text="game afps game-prototype-test planning"><strong>game-prototype-test</strong><p>Design playable prototype tests for fun, clarity, and replay.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
-        <a class="card game" href="afps-skill-game-playtest-metrics.html" data-card data-text="game afps game-playtest-metrics analysis"><strong>game-playtest-metrics</strong><p>Define metrics for time-to-fun, replay, confusion, quit points, and retention.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
-        <a class="card game" href="afps-skill-game-store-page-test.html" data-card data-text="game afps game-store-page-test research store"><strong>game-store-page-test</strong><p>Plan store-page, capsule, trailer, screenshot, tag, and wishlist validation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-launch.html" data-card data-text="game afps game-launch research"><strong>game-launch</strong><p>Plan festivals, creator outreach, demo timing, community, and wishlist targets.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
-        <a class="card game" href="afps-skill-game-roadmap.html" data-card data-text="game afps game-roadmap planning"><strong>game-roadmap</strong><p>Sequence prototype, vertical slice, demo, store page, launch, and post-launch.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
+      <div class="index-grid">
+        <a class="card game" href="afps-skill-game-audience.html" data-card data-text="game-audience game game research identify player segments by taste, behavior, platform, genre affinity, and motivation."><strong>game-audience</strong><p>Identify player segments by taste, behavior, platform, genre affinity, and motivation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-fantasy.html" data-card data-text="game-fantasy game game research define emotional promise, player fantasy, vibe references, and hook."><strong>game-fantasy</strong><p>Define emotional promise, player fantasy, vibe references, and hook.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-genre-map.html" data-card data-text="game-genre-map game game research map genre conventions, expectations, complaints, and anti-patterns."><strong>game-genre-map</strong><p>Map genre conventions, expectations, complaints, and anti-patterns.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-comparables.html" data-card data-text="game-comparables game game research research comparable titles, tags, prices, player signals, and positioning."><strong>game-comparables</strong><p>Research comparable titles, tags, prices, player signals, and positioning.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-core-loop.html" data-card data-text="game-core-loop game game analysis analyze moment-to-moment, session, progression, and retention loops."><strong>game-core-loop</strong><p>Analyze moment-to-moment, session, progression, and retention loops.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
+        <a class="card game" href="afps-skill-game-prototype-test.html" data-card data-text="game-prototype-test game game planning design playable prototype tests for fun, clarity, and replay."><strong>game-prototype-test</strong><p>Design playable prototype tests for fun, clarity, and replay.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
+        <a class="card game" href="afps-skill-game-playtest-metrics.html" data-card data-text="game-playtest-metrics game game analysis define metrics for time-to-fun, replay, confusion, quit points, and retention."><strong>game-playtest-metrics</strong><p>Define metrics for time-to-fun, replay, confusion, quit points, and retention.</p><div class="chips"><span class="chip">game</span><span class="chip">analysis</span></div></a>
+        <a class="card game" href="afps-skill-game-store-page-test.html" data-card data-text="game-store-page-test game game research plan store-page, capsule, trailer, screenshot, tag, and wishlist validation."><strong>game-store-page-test</strong><p>Plan store-page, capsule, trailer, screenshot, tag, and wishlist validation.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-launch.html" data-card data-text="game-launch game game research plan festivals, creator outreach, demo timing, community, and wishlist targets."><strong>game-launch</strong><p>Plan festivals, creator outreach, demo timing, community, and wishlist targets.</p><div class="chips"><span class="chip">game</span><span class="chip">research</span></div></a>
+        <a class="card game" href="afps-skill-game-roadmap.html" data-card data-text="game-roadmap game game planning sequence prototype, vertical slice, demo, store page, launch, and post-launch."><strong>game-roadmap</strong><p>Sequence prototype, vertical slice, demo, store page, launch, and post-launch.</p><div class="chips"><span class="chip">game</span><span class="chip">planning</span></div></a>
       </div>
     </section>
 
     <section data-section>
       <div class="section-head"><h2>Rapid Feeders</h2><span>8 decks</span></div>
-      <div class="grid">
-        <a class="card rapid" href="afps-skill-vard-scan.html" data-card data-text="rapid feeder vard vard-scan research"><strong>vard-scan</strong><p>Scan for viral app opportunities from trends, gaps, and user pain.</p><div class="chips"><span class="chip">VARD</span><span class="chip">research</span></div></a>
-        <a class="card rapid" href="afps-skill-vard-align.html" data-card data-text="rapid feeder vard vard-align analysis"><strong>vard-align</strong><p>Run quick feasibility and novelty checks for this week's build.</p><div class="chips"><span class="chip">VARD</span><span class="chip">analysis</span></div></a>
-        <a class="card rapid" href="afps-skill-vard-ship.html" data-card data-text="rapid feeder vard vard-ship ops"><strong>vard-ship</strong><p>Deploy the app, create landing page, set analytics, and log shipment.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
-        <a class="card rapid" href="afps-skill-vard-traction.html" data-card data-text="rapid feeder vard vard-traction ops"><strong>vard-traction</strong><p>Check traction and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
-        <a class="card rapid" href="afps-skill-ord-scan.html" data-card data-text="rapid feeder ord ord-scan research"><strong>ord-scan</strong><p>Scan npm gaps, GitHub trends, and developer pain for OSS opportunities.</p><div class="chips"><span class="chip">ORD</span><span class="chip">research</span></div></a>
-        <a class="card rapid" href="afps-skill-ord-align.html" data-card data-text="rapid feeder ord ord-align analysis"><strong>ord-align</strong><p>Validate namespace, existing solutions, and feasibility before building.</p><div class="chips"><span class="chip">ORD</span><span class="chip">analysis</span></div></a>
-        <a class="card rapid" href="afps-skill-ord-ship.html" data-card data-text="rapid feeder ord ord-ship ops"><strong>ord-ship</strong><p>Publish to npm, create README, set up repo, and log shipment.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
-        <a class="card rapid" href="afps-skill-ord-traction.html" data-card data-text="rapid feeder ord ord-traction ops"><strong>ord-traction</strong><p>Check adoption and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
+      <div class="index-grid">
+        <a class="card rapid" href="afps-skill-vard-scan.html" data-card data-text="vard-scan rapid vard research scan for viral app opportunities from trends, gaps, and user pain."><strong>vard-scan</strong><p>Scan for viral app opportunities from trends, gaps, and user pain.</p><div class="chips"><span class="chip">VARD</span><span class="chip">research</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-align.html" data-card data-text="vard-align rapid vard analysis run quick feasibility and novelty checks for this week's build."><strong>vard-align</strong><p>Run quick feasibility and novelty checks for this week's build.</p><div class="chips"><span class="chip">VARD</span><span class="chip">analysis</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-ship.html" data-card data-text="vard-ship rapid vard ops deploy the app, create landing page, set analytics, and log shipment."><strong>vard-ship</strong><p>Deploy the app, create landing page, set analytics, and log shipment.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-vard-traction.html" data-card data-text="vard-traction rapid vard ops check traction and recommend iterate, graduate, or archive."><strong>vard-traction</strong><p>Check traction and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">VARD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-scan.html" data-card data-text="ord-scan rapid ord research scan npm gaps, github trends, and developer pain for oss opportunities."><strong>ord-scan</strong><p>Scan npm gaps, GitHub trends, and developer pain for OSS opportunities.</p><div class="chips"><span class="chip">ORD</span><span class="chip">research</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-align.html" data-card data-text="ord-align rapid ord analysis validate namespace, existing solutions, and feasibility before building."><strong>ord-align</strong><p>Validate namespace, existing solutions, and feasibility before building.</p><div class="chips"><span class="chip">ORD</span><span class="chip">analysis</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-ship.html" data-card data-text="ord-ship rapid ord ops publish to npm, create readme, set up repo, and log shipment."><strong>ord-ship</strong><p>Publish to npm, create README, set up repo, and log shipment.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
+        <a class="card rapid" href="afps-skill-ord-traction.html" data-card data-text="ord-traction rapid ord ops check adoption and recommend iterate, graduate, or archive."><strong>ord-traction</strong><p>Check adoption and recommend iterate, graduate, or archive.</p><div class="chips"><span class="chip">ORD</span><span class="chip">ops</span></div></a>
       </div>
     </section>
 
     <section data-section>
       <div class="section-head"><h2>Other Briefing Decks</h2><span>2 decks</span></div>
-      <div class="grid">
-        <a class="card other" href="create-briefing-slides.html" data-card data-text="other create-briefing-slides convention skill"><strong>create-briefing-slides</strong><p>Deck explaining the briefing-slide skill and review convention.</p><div class="chips"><span class="chip">ops</span><span class="chip">reference</span></div></a>
-        <a class="card other" href="release-lane-change-boundary.html" data-card data-text="other release-lane-change-boundary"><strong>release-lane-change-boundary</strong><p>Existing briefing-slide artifact outside the AFPS skill series.</p><div class="chips"><span class="chip">reference</span></div></a>
+      <div class="index-grid">
+        <a class="card other" href="create-briefing-slides.html" data-card data-text="create-briefing-slides other ops reference deck explaining the briefing-slide skill and review convention."><strong>create-briefing-slides</strong><p>Deck explaining the briefing-slide skill and review convention.</p><div class="chips"><span class="chip">ops</span><span class="chip">reference</span></div></a>
+        <a class="card other" href="release-lane-change-boundary.html" data-card data-text="release-lane-change-boundary other reference existing briefing-slide artifact outside the afps skill series."><strong>release-lane-change-boundary</strong><p>Existing briefing-slide artifact outside the AFPS skill series.</p><div class="chips"><span class="chip">reference</span></div></a>
       </div>
     </section>
+  <footer class="index-footer">
+    Index links are repo-relative and intended to work from <code>file://</code>. Dense source artifacts remain in their original docs, research, pack, and skill files.
+  </footer>
+</main>
+<script>
 
-    <footer>
-      Index links are repo-relative and intended to work from <code>file://</code>. Dense source artifacts remain in their original docs, research, pack, and skill files.
-    </footer>
-  </main>
+(function () {
+  var KEY = "briefing:theme";
+  function resolve() {
+    var explicit = document.documentElement.getAttribute("data-theme");
+    if (explicit) return explicit;
+    try { var saved = localStorage.getItem(KEY); if (saved) return saved; } catch (e) {}
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function apply(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll("[data-theme-toggle]"), function (btn) {
+      btn.textContent = theme === "dark" ? "☀ Light" : "☽ Dark";
+    });
+  }
+  apply(resolve());
+  Array.prototype.forEach.call(document.querySelectorAll("[data-theme-toggle]"), function (btn) {
+    btn.addEventListener("click", function () {
+      apply(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    });
+  });
+  var search = document.getElementById("index-search");
+  var count = document.getElementById("index-count");
+  var empty = document.getElementById("index-empty");
+  var cards = Array.prototype.slice.call(document.querySelectorAll("[data-card]"));
+  var sections = Array.prototype.slice.call(document.querySelectorAll("[data-section]"));
+  function update() {
+    var q = search.value.trim().toLowerCase();
+    var visible = 0;
+    cards.forEach(function (card) {
+      var text = ((card.textContent || "") + " " + (card.getAttribute("data-text") || "")).toLowerCase();
+      var match = !q || text.indexOf(q) !== -1;
+      card.style.display = match ? "" : "none";
+      if (match) visible += 1;
+    });
+    sections.forEach(function (section) {
+      var has = Array.prototype.some.call(section.querySelectorAll("[data-card]"), function (c) { return c.style.display !== "none"; });
+      section.style.display = has ? "" : "none";
+    });
+    count.textContent = visible + " deck" + (visible === 1 ? "" : "s");
+    empty.style.display = visible === 0 ? "block" : "none";
+  }
+  if (search) { search.addEventListener("input", update); update(); }
+})();
 
-  <script>
-    const search = document.getElementById('search');
-    const count = document.getElementById('count');
-    const empty = document.getElementById('empty');
-    const cards = Array.from(document.querySelectorAll('[data-card]'));
-    const sections = Array.from(document.querySelectorAll('[data-section]'));
-
-    function update() {
-      const query = search.value.trim().toLowerCase();
-      let visible = 0;
-      cards.forEach((card) => {
-        const text = `${card.textContent} ${card.dataset.text || ''}`.toLowerCase();
-        const match = !query || text.includes(query);
-        card.style.display = match ? '' : 'none';
-        if (match) visible += 1;
-      });
-      sections.forEach((section) => {
-        const hasVisible = Array.from(section.querySelectorAll('[data-card]')).some((card) => card.style.display !== 'none');
-        section.style.display = hasVisible ? '' : 'none';
-      });
-      count.textContent = `${visible} deck${visible === 1 ? '' : 's'}`;
-      empty.style.display = visible === 0 ? 'block' : 'none';
-    }
-
-    search.addEventListener('input', update);
-    update();
-  </script>
+</script>
 </body>
 </html>

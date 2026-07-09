@@ -18,12 +18,28 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  manifestToDeck,
+  deckArchetypeSequence,
+  buildOverviewsDeck,
+  parseIndexSections,
+  renderIndex,
+} from "./briefing-deck-manifest.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = dirname(__dirname);
 const BRIEFING_DIR = `${REPO}/briefing-slides`;
+const MANIFEST_PATH = `${BRIEFING_DIR}/_deck-manifest.json`;
 const BASE_CSS = readFileSync(`${__dirname}/briefing-deck-base.css`, "utf8");
 const CHROME_JS = readFileSync(`${__dirname}/briefing-deck-chrome.js`, "utf8");
+
+function loadManifest() {
+  if (!existsSync(MANIFEST_PATH)) {
+    console.error(`Missing ${MANIFEST_PATH.replace(REPO + "/", "")}. Run: node scripts/extract-deck-manifest.mjs`);
+    process.exit(1);
+  }
+  return JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
+}
 
 // --- tiny helpers -----------------------------------------------------------
 const esc = (s) =>
@@ -748,11 +764,65 @@ function writeDeck(filename, html) {
   return filename;
 }
 
+// ============================================================================
+// BATCH — regenerate every deck from the manifest + flagships + gallery +
+// overviews + a restyled theme-aware index. This is the default (no-arg) mode.
+// ============================================================================
+async function runBatch({ auditVariety } = {}) {
+  const manifest = loadManifest();
+  const { FLAGSHIP_DECKS } = await import("./briefing-deck-flagships.mjs");
+
+  // Capture the current index catalog BEFORE archiving/overwriting it.
+  const indexHtml = existsSync(`${BRIEFING_DIR}/index.html`)
+    ? readFileSync(`${BRIEFING_DIR}/index.html`, "utf8")
+    : "";
+  const indexSections = parseIndexSections(indexHtml);
+
+  // Archive every current deck (copies; originals stay in place).
+  const allHtml = readdirSync(BRIEFING_DIR).filter((f) => f.endsWith(".html")).sort();
+  const out = archiveExisting(allHtml);
+
+  // 1) Manifest-driven skill decks with rotating archetypes.
+  manifest.decks.forEach((entry, i) => {
+    const deck = manifestToDeck(entry, i);
+    writeDeck(`afps-skill-${entry.slug}.html`, buildDeck(deck));
+    if (auditVariety) {
+      console.log(`  variety[${String(i).padStart(2)}] ${entry.slug.padEnd(24)} ${deckArchetypeSequence(entry, i).join(" · ")}`);
+    }
+  });
+  console.log(`manifest -> ${manifest.decks.length} skill decks (afps-skill-*.html)`);
+
+  // 2) Flagship (bespoke) decks — idea-scope-brief, create-briefing-slides, release-lane.
+  for (const deck of FLAGSHIP_DECKS) {
+    writeDeck(`${deck.slug}.html`, buildDeck(deck));
+  }
+  console.log(`flagships -> ${FLAGSHIP_DECKS.map((d) => d.slug).join(", ")}`);
+
+  // 3) Living style-guide gallery.
+  writeDeck("slide-template-gallery.html", galleryDeck());
+  console.log("gallery -> briefing-slides/slide-template-gallery.html");
+
+  // 4) Manifest-derived overviews deck.
+  const overviews = buildOverviewsDeck(manifest, buildDeck);
+  writeDeck("afps-skill-overviews.html", overviews);
+  const overviewsSlideCount = (overviews.match(/<section\b[^>]*\bdata-briefing-slide/g) || []).length;
+  console.log("overviews -> briefing-slides/afps-skill-overviews.html");
+
+  // 5) Restyled theme-aware index catalog (mirrors the current section layout).
+  writeDeck("index.html", renderIndex(indexSections, BASE_CSS, { overviewsSlideCount }));
+  console.log("index -> briefing-slides/index.html");
+
+  if (out) console.log(`archived prior decks to ${out.replace(REPO + "/", "")}`);
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   const wantGallery = argv.includes("--gallery");
   const wantFlagships = argv.includes("--flagships");
+  const wantManifest = argv.includes("--manifest") || argv.includes("--batch");
+  const auditVariety = argv.includes("--audit-variety");
   const deckArg = argv.includes("--deck") ? argv[argv.indexOf("--deck") + 1] : null;
+  const targeted = wantGallery || wantFlagships || deckArg;
 
   if (wantGallery) {
     const out = archiveExisting(["slide-template-gallery.html"]);
@@ -774,15 +844,25 @@ async function main() {
 
   if (deckArg) {
     const { FLAGSHIP_DECKS } = await import("./briefing-deck-flagships.mjs");
-    const deck = FLAGSHIP_DECKS.find((d) => d.slug === deckArg);
-    if (!deck) { console.error(`No deck named ${deckArg}`); process.exit(1); }
-    archiveExisting([`${deck.slug}.html`]);
-    writeDeck(`${deck.slug}.html`, buildDeck(deck));
-    console.log(`deck    -> briefing-slides/${deck.slug}.html`);
+    let deck = FLAGSHIP_DECKS.find((d) => d.slug === deckArg || d.slug === `afps-skill-${deckArg}`);
+    let filename = deck ? `${deck.slug}.html` : null;
+    if (!deck) {
+      const manifest = loadManifest();
+      const idx = manifest.decks.findIndex((e) => e.slug === deckArg || `afps-skill-${e.slug}` === deckArg);
+      if (idx >= 0) {
+        deck = manifestToDeck(manifest.decks[idx], idx);
+        filename = `afps-skill-${manifest.decks[idx].slug}.html`;
+      }
+    }
+    if (!deck) { console.error(`No deck named ${deckArg} in flagships or manifest`); process.exit(1); }
+    archiveExisting([filename]);
+    writeDeck(filename, buildDeck(deck));
+    console.log(`deck    -> briefing-slides/${filename}`);
   }
 
-  if (!wantGallery && !wantFlagships && !deckArg) {
-    console.log("Usage: node scripts/generate-briefing-decks.mjs [--gallery] [--flagships] [--deck <slug>]");
+  // Default (no targeted flag) or explicit --manifest/--batch: full regenerate.
+  if (!targeted || wantManifest) {
+    await runBatch({ auditVariety });
   }
 }
 
