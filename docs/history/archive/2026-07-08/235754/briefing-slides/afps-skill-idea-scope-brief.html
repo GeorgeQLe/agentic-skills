@@ -231,16 +231,16 @@ a { color: var(--accent); }
 }
 .slide-card {
   position: relative;
-  width: min(1320px, 100%);
+  width: min(1240px, 100%);
   overflow: visible;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 2.9rem 3.1rem;
+  padding: 2.5rem 2.7rem;
   transform-origin: top center;
   display: grid;
-  gap: 1.5rem;
+  gap: 1.3rem;
   align-content: start;
 }
 /* Full-bleed variants opt out of the card chrome. */
@@ -253,23 +253,23 @@ a { color: var(--accent); }
 .eyebrow {
   margin: 0;
   color: var(--teal);
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 .slide-card h1, .slide-card h2, .slide-card h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.05; }
-.slide-card h1 { font-size: clamp(3.4rem, 6.6vw, 5.4rem); }
-.slide-card h2 { font-size: clamp(2.5rem, 4.8vw, 3.8rem); }
-.slide-card h3 { font-size: 1.5rem; }
+.slide-card h1 { font-size: clamp(2.9rem, 6vw, 4.6rem); }
+.slide-card h2 { font-size: clamp(2.15rem, 4.2vw, 3.2rem); }
+.slide-card h3 { font-size: 1.32rem; }
 .lead {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-size: clamp(1.18rem, 2vw, 1.6rem);
   line-height: 1.42;
   max-width: 62ch;
 }
-.slide-note { margin: 0; color: var(--faint); font-size: 1rem; }
+.slide-note { margin: 0; color: var(--faint); font-size: 0.92rem; }
 
 /* --- Chips + badges ------------------------------------------------------- */
 .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
@@ -278,7 +278,7 @@ a { color: var(--accent); }
   min-height: 1.75rem; padding: 0.2rem 0.7rem;
   border: 1px solid var(--border); border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: 0.9rem; font-weight: 700; text-decoration: none;
+  font-size: 0.82rem; font-weight: 700; text-decoration: none;
 }
 a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .badge {
@@ -319,10 +319,10 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .card.red::before { background: var(--red); }
 .card .kicker {
   display: flex; align-items: center; gap: 0.45rem;
-  font-weight: 800; font-size: 1.22rem; margin-bottom: 0.35rem;
+  font-weight: 800; font-size: 1.08rem; margin-bottom: 0.35rem;
 }
-.card .ic { font-size: 1.4rem; line-height: 1; }
-.card p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.42; }
+.card .ic { font-size: 1.2rem; line-height: 1; }
+.card p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.42; }
 
 /* --- Section divider ------------------------------------------------------ */
 .divider {
@@ -333,13 +333,13 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
     var(--surface);
   border-radius: var(--radius);
 }
-.divider .kwill { font-size: clamp(2.8rem, 6.4vw, 4.6rem); font-weight: 850; letter-spacing: -0.03em; }
+.divider .kwill { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
 .divider .idx { font-family: var(--mono); color: var(--accent); font-weight: 800; letter-spacing: 0.1em; }
 
 /* --- Statement / pull-quote ----------------------------------------------- */
 .statement { display: grid; gap: 1.1rem; }
 .statement blockquote {
-  margin: 0; font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+  margin: 0; font-size: clamp(1.6rem, 3.8vw, 2.6rem);
   font-weight: 750; line-height: 1.18; letter-spacing: -0.02em;
 }
 .statement blockquote .hl { color: var(--accent); }
@@ -352,9 +352,9 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   background: var(--surface-2); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; display: grid; gap: 0.35rem;
 }
-.stat .num { font-size: clamp(2.8rem, 6vw, 4.4rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
+.stat .num { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
 .stat .num .unit { font-size: 0.45em; color: var(--muted); font-weight: 800; margin-left: 0.15em; }
-.stat .cap { color: var(--muted); font-weight: 700; font-size: 1.12rem; }
+.stat .cap { color: var(--muted); font-weight: 700; font-size: 1rem; }
 .stat.teal .num { color: var(--teal); }
 .stat.violet .num { color: var(--violet); }
 .stat.green .num { color: var(--green); }
@@ -375,11 +375,11 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .panel.neg { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 45%, var(--border)); }
 .panel.neg .dot { background: var(--red); }
 .panel ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.45rem; }
-.panel li { color: var(--text-2); font-size: 1.15rem; line-height: 1.4; }
+.panel li { color: var(--text-2); font-size: 1.02rem; line-height: 1.4; }
 
 /* --- Comparison matrix ---------------------------------------------------- */
-.matrix { width: 100%; border-collapse: collapse; font-size: 1.12rem; }
-.matrix th, .matrix td { padding: 0.85rem 0.95rem; text-align: left; border-bottom: 1px solid var(--border); }
+.matrix { width: 100%; border-collapse: collapse; font-size: 1rem; }
+.matrix th, .matrix td { padding: 0.75rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border); }
 .matrix thead th {
   background: var(--surface-3); color: var(--text);
   font-weight: 800; border-bottom: 2px solid var(--border-strong);
@@ -398,8 +398,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 0.75rem 0.95rem; background: var(--surface-2);
 }
-.option .name { font-weight: 800; font-size: 1.12rem; }
-.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.3rem; color: var(--accent); }
+.option .name { font-weight: 800; }
+.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.15rem; color: var(--accent); }
 .option .track { grid-column: 1 / -1; height: 0.5rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
 .option .track > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
 .option.win { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
@@ -412,19 +412,19 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   padding-bottom: 1rem; position: relative;
 }
 .timeline .step:not(:last-child)::before {
-  content: ""; position: absolute; left: 1.25rem; top: 2.6rem; bottom: -0.1rem;
+  content: ""; position: absolute; left: 1.1rem; top: 2.3rem; bottom: -0.1rem;
   width: 2px; background: var(--border-strong);
 }
 .timeline .num {
-  width: 2.5rem; height: 2.5rem; border-radius: 50%;
-  display: grid; place-items: center; font-weight: 850; font-size: 1.05rem;
+  width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 850; font-size: 0.98rem;
   background: var(--accent); color: #fff; z-index: 1;
 }
 .timeline .step.teal .num { background: var(--teal); }
 .timeline .step.violet .num { background: var(--violet); }
 .timeline .body { display: grid; gap: 0.25rem; padding-top: 0.2rem; }
-.timeline .body strong { font-size: 1.3rem; }
-.timeline .body p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.4; }
+.timeline .body strong { font-size: 1.15rem; }
+.timeline .body p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.4; }
 
 /* --- Flow / pipeline (sketchy SVG) ---------------------------------------- */
 .flow { display: grid; gap: 0.6rem; }
@@ -437,15 +437,15 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .flow .node-fill.green { stroke: var(--green); }
 .flow .edge { stroke: var(--faint); stroke-width: 3.2; fill: none; }
 .flow .edge.head { fill: var(--faint); stroke: none; }
-.flow text { font-family: var(--sans); fill: var(--text); font-weight: 800; font-size: 18px; }
+.flow text { font-family: var(--sans); fill: var(--text); font-weight: 800; font-size: 16px; }
 .flow text.sub { fill: var(--muted); font-weight: 650; }
 
 /* --- Kanban / register board ---------------------------------------------- */
 .board { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.85rem; }
 .column { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
-.column > h4 { margin: 0 0 0.1rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
+.column > h4 { margin: 0 0 0.1rem; font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
 .column > h4 .count { color: var(--faint); }
-.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.55rem 0.7rem; font-size: 1.06rem; line-height: 1.36; }
+.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.55rem 0.7rem; font-size: 0.95rem; line-height: 1.36; }
 .ticket.risk { border-left-color: var(--red); }
 .ticket.assumption { border-left-color: var(--gold); }
 .ticket.question { border-left-color: var(--violet); }
@@ -467,8 +467,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   padding: 0.7rem 1rem; background: var(--surface-2);
 }
 .band .lyr { font-family: var(--mono); font-size: 0.72rem; color: var(--faint); font-weight: 800; }
-.band .lbl strong { font-size: 1.2rem; }
-.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 1rem; }
+.band .lbl strong { font-size: 1.08rem; }
+.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.92rem; }
 .band .tag { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
 .band:nth-child(1) { background: color-mix(in srgb, var(--accent) 9%, var(--surface-2)); }
 .band:nth-child(2) { background: color-mix(in srgb, var(--teal) 9%, var(--surface-2)); }
@@ -511,8 +511,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 }
 .ref-item:hover { border-color: var(--accent); }
 .ref-item .rk { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--faint); text-transform: uppercase; }
-.ref-item .rt { font-weight: 750; font-size: 1.18rem; }
-.ref-item .rp { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+.ref-item .rt { font-weight: 750; font-size: 1.05rem; }
+.ref-item .rp { font-family: var(--mono); font-size: 0.82rem; color: var(--muted); }
 .provenance { border-top: 1px dashed var(--border); padding-top: 0.7rem; margin-top: 0.4rem; }
 .provenance small { color: var(--faint); font-weight: 700; }
 .provenance a { color: var(--muted); font-size: 0.8rem; }
@@ -540,9 +540,9 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
 
 /* --- Inline gate ---------------------------------------------------------- */
 .gate { display: grid; gap: 0.7rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0.9rem 1rem; background: var(--surface-2); }
-.gate .q { font-weight: 800; font-size: 1.25rem; }
+.gate .q { font-weight: 800; font-size: 1.1rem; }
 .gate .opts { display: flex; flex-wrap: wrap; gap: 0.9rem; }
-.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; font-size: 1.12rem; color: var(--text-2); }
+.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; font-size: 1rem; color: var(--text-2); }
 .gate textarea { width: 100%; min-height: 3.4rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; padding: 0.5rem; resize: vertical; }
 .gate .why { margin: 0; color: var(--muted); font-size: 0.82rem; }
 
@@ -735,7 +735,7 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
   <p class="eyebrow">Concept &amp; market</p><h2>Handoff and next route</h2>
-  <div class="flow"><svg viewBox="0 0 904 156" width="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Flow: Rough idea then idea-scope-brief then customer-discovery"><rect class="node-fill" x="10" y="26" width="240" height="104" rx="14"/><text x="130" y="74" text-anchor="middle">Rough idea</text><text class="sub" x="130" y="100" text-anchor="middle" font-size="14">before</text><line class="edge" x1="256" y1="78" x2="316" y2="78"/><polygon class="edge head" points="316,70 328,78 316,86"/><rect class="node-fill teal" x="332" y="26" width="240" height="104" rx="14"/><text x="452" y="74" text-anchor="middle">idea-scope-brief</text><text class="sub" x="452" y="100" text-anchor="middle" font-size="14">scoped brief</text><line class="edge" x1="578" y1="78" x2="638" y2="78"/><polygon class="edge head" points="638,70 650,78 638,86"/><rect class="node-fill violet" x="654" y="26" width="240" height="104" rx="14"/><text x="774" y="74" text-anchor="middle">customer-discovery</text><text class="sub" x="774" y="100" text-anchor="middle" font-size="14">after</text></svg></div>
+  <div class="flow"><svg viewBox="0 0 844 148" width="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Flow: Rough idea then idea-scope-brief then customer-discovery"><rect class="node-fill" x="10" y="26" width="224" height="96" rx="14"/><text x="122" y="70" text-anchor="middle">Rough idea</text><text class="sub" x="122" y="96" text-anchor="middle" font-size="13">before</text><line class="edge" x1="240" y1="74" x2="294" y2="74"/><polygon class="edge head" points="294,66 306,74 294,82"/><rect class="node-fill teal" x="310" y="26" width="224" height="96" rx="14"/><text x="422" y="70" text-anchor="middle">idea-scope-brief</text><text class="sub" x="422" y="96" text-anchor="middle" font-size="13">scoped brief</text><line class="edge" x1="540" y1="74" x2="594" y2="74"/><polygon class="edge head" points="594,66 606,74 594,82"/><rect class="node-fill violet" x="610" y="26" width="224" height="96" rx="14"/><text x="722" y="70" text-anchor="middle">customer-discovery</text><text class="sub" x="722" y="96" text-anchor="middle" font-size="13">after</text></svg></div>
   <p class="slide-note">Series talking point: explain why this skill exists as a boundary — what risk it burns down before the next AFPS step.</p>
   <div class="chips"><a class="chip" data-reference-chip href="../docs/skill-next-step-contracts.md">skill-next-step-contracts</a><a class="chip" data-reference-chip href="../docs/decks.md">decks</a></div>
   </div>

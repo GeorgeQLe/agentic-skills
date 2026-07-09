@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>idea-scope-brief — briefing</title>
+<title>Create Briefing Slides — briefing</title>
 <style>
 /* ==========================================================================
    Briefing Deck — theme-aware design system (base chrome + archetype toolbox)
@@ -231,16 +231,16 @@ a { color: var(--accent); }
 }
 .slide-card {
   position: relative;
-  width: min(1320px, 100%);
+  width: min(1140px, 100%);
   overflow: visible;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 2.9rem 3.1rem;
+  padding: 2rem 2.2rem;
   transform-origin: top center;
   display: grid;
-  gap: 1.5rem;
+  gap: 1.05rem;
   align-content: start;
 }
 /* Full-bleed variants opt out of the card chrome. */
@@ -253,32 +253,32 @@ a { color: var(--accent); }
 .eyebrow {
   margin: 0;
   color: var(--teal);
-  font-size: 0.92rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
 }
-.slide-card h1, .slide-card h2, .slide-card h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.05; }
-.slide-card h1 { font-size: clamp(3.4rem, 6.6vw, 5.4rem); }
-.slide-card h2 { font-size: clamp(2.5rem, 4.8vw, 3.8rem); }
-.slide-card h3 { font-size: 1.5rem; }
+.slide-card h1, .slide-card h2, .slide-card h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.06; }
+.slide-card h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.slide-card h2 { font-size: clamp(1.7rem, 3.4vw, 2.55rem); }
+.slide-card h3 { font-size: 1.12rem; }
 .lead {
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+  font-size: clamp(1rem, 1.6vw, 1.28rem);
   line-height: 1.42;
-  max-width: 62ch;
+  max-width: 60ch;
 }
-.slide-note { margin: 0; color: var(--faint); font-size: 1rem; }
+.slide-note { margin: 0; color: var(--faint); font-size: 0.82rem; }
 
 /* --- Chips + badges ------------------------------------------------------- */
 .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
 .chip {
   display: inline-flex; align-items: center; gap: 0.3rem;
-  min-height: 1.75rem; padding: 0.2rem 0.7rem;
+  min-height: 1.55rem; padding: 0.15rem 0.6rem;
   border: 1px solid var(--border); border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: 0.9rem; font-weight: 700; text-decoration: none;
+  font-size: 0.74rem; font-weight: 700; text-decoration: none;
 }
 a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .badge {
@@ -319,10 +319,10 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .card.red::before { background: var(--red); }
 .card .kicker {
   display: flex; align-items: center; gap: 0.45rem;
-  font-weight: 800; font-size: 1.22rem; margin-bottom: 0.35rem;
+  font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem;
 }
-.card .ic { font-size: 1.4rem; line-height: 1; }
-.card p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.42; }
+.card .ic { font-size: 1.05rem; line-height: 1; }
+.card p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.4; }
 
 /* --- Section divider ------------------------------------------------------ */
 .divider {
@@ -333,13 +333,13 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
     var(--surface);
   border-radius: var(--radius);
 }
-.divider .kwill { font-size: clamp(2.8rem, 6.4vw, 4.6rem); font-weight: 850; letter-spacing: -0.03em; }
+.divider .kwill { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
 .divider .idx { font-family: var(--mono); color: var(--accent); font-weight: 800; letter-spacing: 0.1em; }
 
 /* --- Statement / pull-quote ----------------------------------------------- */
 .statement { display: grid; gap: 1.1rem; }
 .statement blockquote {
-  margin: 0; font-size: clamp(1.9rem, 4.2vw, 3.2rem);
+  margin: 0; font-size: clamp(1.6rem, 3.8vw, 2.6rem);
   font-weight: 750; line-height: 1.18; letter-spacing: -0.02em;
 }
 .statement blockquote .hl { color: var(--accent); }
@@ -352,9 +352,9 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   background: var(--surface-2); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; display: grid; gap: 0.35rem;
 }
-.stat .num { font-size: clamp(2.8rem, 6vw, 4.4rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
+.stat .num { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 850; letter-spacing: -0.03em; line-height: 1; }
 .stat .num .unit { font-size: 0.45em; color: var(--muted); font-weight: 800; margin-left: 0.15em; }
-.stat .cap { color: var(--muted); font-weight: 700; font-size: 1.12rem; }
+.stat .cap { color: var(--muted); font-weight: 700; font-size: 0.9rem; }
 .stat.teal .num { color: var(--teal); }
 .stat.violet .num { color: var(--violet); }
 .stat.green .num { color: var(--green); }
@@ -374,12 +374,12 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 .panel.pos .dot { background: var(--green); }
 .panel.neg { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 45%, var(--border)); }
 .panel.neg .dot { background: var(--red); }
-.panel ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.45rem; }
-.panel li { color: var(--text-2); font-size: 1.15rem; line-height: 1.4; }
+.panel ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.35rem; }
+.panel li { color: var(--text-2); font-size: 0.9rem; line-height: 1.35; }
 
 /* --- Comparison matrix ---------------------------------------------------- */
-.matrix { width: 100%; border-collapse: collapse; font-size: 1.12rem; }
-.matrix th, .matrix td { padding: 0.85rem 0.95rem; text-align: left; border-bottom: 1px solid var(--border); }
+.matrix { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.matrix th, .matrix td { padding: 0.6rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
 .matrix thead th {
   background: var(--surface-3); color: var(--text);
   font-weight: 800; border-bottom: 2px solid var(--border-strong);
@@ -398,8 +398,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 0.75rem 0.95rem; background: var(--surface-2);
 }
-.option .name { font-weight: 800; font-size: 1.12rem; }
-.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.3rem; color: var(--accent); }
+.option .name { font-weight: 800; }
+.option .score { font-variant-numeric: tabular-nums; font-weight: 850; font-size: 1.15rem; color: var(--accent); }
 .option .track { grid-column: 1 / -1; height: 0.5rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
 .option .track > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
 .option.win { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
@@ -412,40 +412,38 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   padding-bottom: 1rem; position: relative;
 }
 .timeline .step:not(:last-child)::before {
-  content: ""; position: absolute; left: 1.25rem; top: 2.6rem; bottom: -0.1rem;
+  content: ""; position: absolute; left: 0.95rem; top: 2rem; bottom: -0.1rem;
   width: 2px; background: var(--border-strong);
 }
 .timeline .num {
-  width: 2.5rem; height: 2.5rem; border-radius: 50%;
-  display: grid; place-items: center; font-weight: 850; font-size: 1.05rem;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 850; font-size: 0.85rem;
   background: var(--accent); color: #fff; z-index: 1;
 }
 .timeline .step.teal .num { background: var(--teal); }
 .timeline .step.violet .num { background: var(--violet); }
-.timeline .body { display: grid; gap: 0.25rem; padding-top: 0.2rem; }
-.timeline .body strong { font-size: 1.3rem; }
-.timeline .body p { margin: 0; color: var(--muted); font-size: 1.12rem; line-height: 1.4; }
+.timeline .body { display: grid; gap: 0.2rem; padding-top: 0.15rem; }
+.timeline .body strong { font-size: 0.98rem; }
+.timeline .body p { margin: 0; color: var(--muted); font-size: 0.87rem; line-height: 1.38; }
 
 /* --- Flow / pipeline (sketchy SVG) ---------------------------------------- */
 .flow { display: grid; gap: 0.6rem; }
 .flow svg { width: 100%; height: auto; }
-/* Sketch filter on the node boxes only — thin connectors stay crisp so their
-   stems don't get shredded by the displacement map. */
-.flow .node-fill { filter: url(#deckSketch); fill: var(--surface-2); stroke: var(--accent); stroke-width: 2.4; }
+.flow .sketch rect, .flow .sketch line, .flow .sketch polygon, .flow .sketch path.edge { filter: url(#deckSketch); }
+.flow .node-fill { fill: var(--surface-2); stroke: var(--accent); stroke-width: 2; }
 .flow .node-fill.teal { stroke: var(--teal); }
 .flow .node-fill.violet { stroke: var(--violet); }
 .flow .node-fill.green { stroke: var(--green); }
-.flow .edge { stroke: var(--faint); stroke-width: 3.2; fill: none; }
-.flow .edge.head { fill: var(--faint); stroke: none; }
-.flow text { font-family: var(--sans); fill: var(--text); font-weight: 800; font-size: 18px; }
+.flow .edge { stroke: var(--border-strong); stroke-width: 2.4; fill: none; }
+.flow text { font-family: var(--sans); fill: var(--text); font-weight: 750; }
 .flow text.sub { fill: var(--muted); font-weight: 650; }
 
 /* --- Kanban / register board ---------------------------------------------- */
 .board { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.85rem; }
 .column { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem; display: grid; gap: 0.5rem; align-content: start; }
-.column > h4 { margin: 0 0 0.1rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
+.column > h4 { margin: 0 0 0.1rem; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; }
 .column > h4 .count { color: var(--faint); }
-.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.55rem 0.7rem; font-size: 1.06rem; line-height: 1.36; }
+.ticket { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 7px; padding: 0.5rem 0.6rem; font-size: 0.82rem; line-height: 1.34; }
 .ticket.risk { border-left-color: var(--red); }
 .ticket.assumption { border-left-color: var(--gold); }
 .ticket.question { border-left-color: var(--violet); }
@@ -467,8 +465,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
   padding: 0.7rem 1rem; background: var(--surface-2);
 }
 .band .lyr { font-family: var(--mono); font-size: 0.72rem; color: var(--faint); font-weight: 800; }
-.band .lbl strong { font-size: 1.2rem; }
-.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 1rem; }
+.band .lbl strong { font-size: 0.95rem; }
+.band .lbl p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.82rem; }
 .band .tag { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
 .band:nth-child(1) { background: color-mix(in srgb, var(--accent) 9%, var(--surface-2)); }
 .band:nth-child(2) { background: color-mix(in srgb, var(--teal) 9%, var(--surface-2)); }
@@ -511,8 +509,8 @@ a.chip:hover { border-color: var(--accent); color: var(--accent); }
 }
 .ref-item:hover { border-color: var(--accent); }
 .ref-item .rk { font-family: var(--mono); font-size: 0.7rem; font-weight: 800; color: var(--faint); text-transform: uppercase; }
-.ref-item .rt { font-weight: 750; font-size: 1.18rem; }
-.ref-item .rp { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+.ref-item .rt { font-weight: 750; }
+.ref-item .rp { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
 .provenance { border-top: 1px dashed var(--border); padding-top: 0.7rem; margin-top: 0.4rem; }
 .provenance small { color: var(--faint); font-weight: 700; }
 .provenance a { color: var(--muted); font-size: 0.8rem; }
@@ -540,9 +538,9 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
 
 /* --- Inline gate ---------------------------------------------------------- */
 .gate { display: grid; gap: 0.7rem; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0.9rem 1rem; background: var(--surface-2); }
-.gate .q { font-weight: 800; font-size: 1.25rem; }
+.gate .q { font-weight: 800; }
 .gate .opts { display: flex; flex-wrap: wrap; gap: 0.9rem; }
-.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; font-size: 1.12rem; color: var(--text-2); }
+.gate .opts label { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 650; color: var(--text-2); }
 .gate textarea { width: 100%; min-height: 3.4rem; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--text); font: inherit; padding: 0.5rem; resize: vertical; }
 .gate .why { margin: 0; color: var(--muted); font-size: 0.82rem; }
 
@@ -643,154 +641,154 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
   </filter>
 </defs></svg>
 <header class="deck-topbar">
-  <div class="deck-brand"><span>idea-scope-brief</span><small>Business AFPS · Concept &amp; market</small></div>
+  <div class="deck-brand"><span>Create Briefing Slides</span><small>Dogfood deck · reviews itself</small></div>
   <div class="topbar-right">
-    <span data-slide-counter>1 / 7</span>
+    <span data-slide-counter>1 / 8</span>
     <div class="deck-progress" data-slide-progress aria-label="Deck progress"><span></span></div>
     <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme">☽ Dark</button>
   </div>
 </header>
 <main class="deck-stage">
-<section data-briefing-slide id="slide-1" data-slide-title="idea-scope-brief overview">
+<section data-briefing-slide id="slide-1" data-slide-title="What it solves">
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Business AFPS · planning</p>
-  <h1>idea-scope-brief</h1>
-  <p class="lead">Shape a rough product or project idea into a scoped brief before customer discovery, market research, specifications, UX, UI, or implementation planning.</p>
-  <div class="stat-row" style="grid-auto-columns:auto"><div class="stat teal" style="padding:.7rem .9rem"><div class="cap">Where it fits</div><div style="font-weight:800;font-size:1.05rem">Concept &amp; market</div></div><div class="stat " style="padding:.7rem .9rem"><div class="cap">Invoke</div><div style="font-weight:800;font-size:1.05rem"><code>$idea-scope-brief</code></div></div><div class="stat violet" style="padding:.7rem .9rem"><div class="cap">Next</div><div style="font-weight:800;font-size:1.05rem">customer-discovery</div></div></div>
-  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../briefing-slides/afps-skill-overviews.html">overview deck</a></div>
+  <p class="eyebrow">Briefing-first review</p>
+  <h1>Create Briefing Slides</h1>
+  <p class="lead">Turn dense alignment, interrogation, research, and spec artifacts into a visual review deck — without replacing the canonical source.</p>
+  <div class="stat-row" style="grid-auto-columns:auto"><div class="stat teal" style="padding:.7rem .9rem"><div class="cap">Primary surface</div><div style="font-weight:800;font-size:1.05rem">the deck</div></div><div class="stat " style="padding:.7rem .9rem"><div class="cap">Canonical</div><div style="font-weight:800;font-size:1.05rem">dense page</div></div><div class="stat violet" style="padding:.7rem .9rem"><div class="cap">Handoff</div><div style="font-weight:800;font-size:1.05rem">compiled YAML</div></div></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/codex/create-briefing-slides/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
   </div>
 </section>
-<section data-briefing-slide id="slide-2" data-slide-title="When to use it">
+<section data-briefing-slide id="slide-2" data-slide-title="The principle">
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Concept &amp; market</p><h2>When to use it</h2><p class="lead">Primary question: what decision, artifact, or proof does this step need to make safe before the next skill?</p>
+  <p class="eyebrow">Principle</p>
+  <div class="statement">
+    <div class="bar"></div>
+    <blockquote>Briefing slides make review <strong>visual and navigable</strong> — the dense page stays canonical and is never skipped.</blockquote>
+    <cite>briefing-slides convention · Briefing-First Review Surface</cite>
+  </div>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-3" data-slide-title="What it does / doesn't">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Scope</p><h2>One review surface, not a replacement</h2>
   <div class="split">
     <div class="panel pos">
-      <div class="head"><span class="dot"></span>Run this when</div>
-      <ul><li>The product is still rough, mixed, or underspecified.</li><li>Primary input: current repo artifacts plus the previous AFPS phase's research, design, prototype, spec, or task output.</li></ul>
+      <div class="head"><span class="dot"></span>It does</div>
+      <ul><li>Author <code>briefing-slides/&lt;skill&gt;-&lt;topic&gt;.html</code> after the dense page exists.</li><li>Open only the deck; link the dense page and sources as references.</li><li>Compile reviewer choices into YAML routed to the producing command.</li></ul>
     </div>
     <div class="panel neg">
-      <div class="head"><span class="dot"></span>Do not expect</div>
-      <ul><li>A shortcut around upstream evidence.</li><li>If required artifacts are missing, the skill routes to the prerequisite instead.</li></ul>
+      <div class="head"><span class="dot"></span>It does not</div>
+      <ul><li>Replace dense <code>alignment/*.html</code> or <code>interrogation/*.html</code> pages.</li><li>Embed pages with iframe/object/embed or auto-open references.</li><li>Drop unanswered gates or prior feedback on re-author.</li></ul>
     </div>
   </div>
-  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../docs/decks.md">decks</a></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
   </div>
 </section>
-<section data-briefing-slide id="slide-3" data-slide-title="What happens in the session">
+<section data-briefing-slide id="slide-4" data-slide-title="Deck vs dense page">
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Concept &amp; market</p><h2>What happens in the session</h2>
+  <p class="eyebrow">Surfaces</p><h2>Deck vs dense page</h2>
+  <table class="matrix">
+    <thead><tr><th>Concern</th><th>Briefing deck</th><th>Dense page</th></tr></thead>
+    <tbody><tr><th>Primary review surface</th><td><span class="cell yes">● </span></td><td><span class="cell no">○ </span></td></tr><tr><th>Canonical detail</th><td><span class="cell no">○ </span></td><td><span class="cell yes">● </span></td></tr><tr><th>Auto-opened</th><td><span class="cell yes">● </span></td><td><span class="cell no">○ </span></td></tr><tr><th>Carries the gates</th><td><span class="cell yes">● </span></td><td><span class="cell yes">● </span></td></tr></tbody>
+  </table>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  </div>
+</section>
+<section data-briefing-slide id="slide-5" data-slide-title="How a deck is built">
+  <div class="slide-card">
+    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
+    
+  <p class="eyebrow">Session</p><h2>How a deck gets built</h2>
   <div class="timeline">
     
     <div class="step ">
       <div class="num">1</div>
-      <div class="body"><strong>Resolve context</strong><p>Reads repo state, source artifacts, and relevant prior AFPS outputs before asking deeper questions.</p></div>
+      <div class="body"><strong>Author the dense page</strong><p>The producing skill writes its <code>alignment/*.html</code> or <code>interrogation/*.html</code> first — canonical, never skipped.</p></div>
     </div>
     <div class="step teal">
       <div class="num">2</div>
-      <div class="body"><strong>Work the frame</strong><p>Runs an interview, research synthesis, planning loop, build loop, audit, or shipping pass based on its type.</p></div>
+      <div class="body"><strong>Build the deck</strong><p>Map content beats to varied archetypes; theme-aware, self-contained, one idea per slide.</p></div>
     </div>
     <div class="step violet">
       <div class="num">3</div>
-      <div class="body"><strong>Gate the result</strong><p>Uses review artifacts, checks, or approval language before writing canonical outputs or routing onward.</p></div>
+      <div class="body"><strong>Gate &amp; compile</strong><p>Preserve every required gate; compile full-deck YAML back to the producing command.</p></div>
     </div>
   </div>
-  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../docs/decks.md">decks</a></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/codex/create-briefing-slides/SKILL.md">SKILL.md</a></div>
   </div>
 </section>
-<section data-briefing-slide id="slide-4" data-slide-title="What people should expect">
+<section data-briefing-slide id="slide-6" data-slide-title="Review controls">
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Concept &amp; market</p><h2>What people should expect</h2>
-  <div class="card-grid cols-2">
+  <p class="eyebrow">Review controls</p><h2>Every slide is reviewable</h2>
+  <div class="board">
     
-    <div class="card ">
-      <div class="kicker"><span class="ic">📦</span>Expected output</div>
-      <p>A scoped product brief that makes the idea specific enough for discovery instead of jumping into specs or build work.</p>
+    <div class="column">
+      <h4>Feedback<span class="count">4</span></h4>
+      <div class="ticket question">emphasize</div><div class="ticket question">revise</div><div class="ticket question">needs-clarification</div><div class="ticket question">freeform notes</div>
     </div>
-    <div class="card teal">
-      <div class="kicker"><span class="ic">🗂️</span>Where detail lives</div>
-      <p>Dense artifacts stay in research, design, prototype, specs, tasks, or source files. This deck is only the overview layer.</p>
+    <div class="column">
+      <h4>Marks<span class="count">4</span></h4>
+      <div class="ticket assumption">important</div><div class="ticket assumption">question</div><div class="ticket assumption">approved</div><div class="ticket assumption">skip</div>
     </div>
-    <div class="card violet">
-      <div class="kicker"><span class="ic">🎚️</span>Quality bar</div>
-      <p>The output should make the next route more obvious and reduce ambiguity, not create a new parallel workflow.</p>
-    </div>
-    <div class="card green">
-      <div class="kicker"><span class="ic">👤</span>Human review</div>
-      <p>Expect a checkpoint, alignment page, evidence artifact, prototype inspection, or shipping summary depending on the skill.</p>
+    <div class="column">
+      <h4>Gates<span class="count">3</span></h4>
+      <div class="ticket risk">inline radio answers</div><div class="ticket risk">red → green slide border</div><div class="ticket risk">compiled into YAML</div>
     </div>
   </div>
-  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../briefing-slides/afps-skill-overviews.html">overview</a></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
   </div>
 </section>
-<section data-briefing-slide id="slide-5" data-slide-title="Handoff and next route">
+<section data-briefing-slide id="slide-7" data-slide-title="References" data-references-slide>
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Concept &amp; market</p><h2>Handoff and next route</h2>
-  <div class="flow"><svg viewBox="0 0 904 156" width="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Flow: Rough idea then idea-scope-brief then customer-discovery"><rect class="node-fill" x="10" y="26" width="240" height="104" rx="14"/><text x="130" y="74" text-anchor="middle">Rough idea</text><text class="sub" x="130" y="100" text-anchor="middle" font-size="14">before</text><line class="edge" x1="256" y1="78" x2="316" y2="78"/><polygon class="edge head" points="316,70 328,78 316,86"/><rect class="node-fill teal" x="332" y="26" width="240" height="104" rx="14"/><text x="452" y="74" text-anchor="middle">idea-scope-brief</text><text class="sub" x="452" y="100" text-anchor="middle" font-size="14">scoped brief</text><line class="edge" x1="578" y1="78" x2="638" y2="78"/><polygon class="edge head" points="638,70 650,78 638,86"/><rect class="node-fill violet" x="654" y="26" width="240" height="104" rx="14"/><text x="774" y="74" text-anchor="middle">customer-discovery</text><text class="sub" x="774" y="100" text-anchor="middle" font-size="14">after</text></svg></div>
-  <p class="slide-note">Series talking point: explain why this skill exists as a boundary — what risk it burns down before the next AFPS step.</p>
-  <div class="chips"><a class="chip" data-reference-chip href="../docs/skill-next-step-contracts.md">skill-next-step-contracts</a><a class="chip" data-reference-chip href="../docs/decks.md">decks</a></div>
-  </div>
-</section>
-<section data-briefing-slide id="slide-6" data-slide-title="References" data-references-slide>
-  <div class="slide-card">
-    <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
-    
-  <p class="eyebrow">Review handoff</p>
+  <p class="eyebrow">Sources</p>
   <h2>References</h2>
   <div class="ref-list">
     
-    <a class="ref-item" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">
+    <a class="ref-item" data-reference-chip href="../packs/base/codex/create-briefing-slides/SKILL.md">
       <span class="rk">skill</span>
-      <span class="rt">idea-scope-brief SKILL.md</span>
-      <span class="rp">packs/base/claude/idea-scope-brief/SKILL.md</span>
-    </a>
-    <a class="ref-item" data-reference-chip href="../docs/decks.md">
-      <span class="rk">doc</span>
-      <span class="rt">AFPS deck chains</span>
-      <span class="rp">docs/decks.md</span>
-    </a>
-    <a class="ref-item" data-reference-chip href="../docs/skill-next-step-contracts.md">
-      <span class="rk">doc</span>
-      <span class="rt">Skill next-step contracts</span>
-      <span class="rp">docs/skill-next-step-contracts.md</span>
+      <span class="rt">create-briefing-slides SKILL.md</span>
+      <span class="rp">packs/base/codex/create-briefing-slides/SKILL.md</span>
     </a>
     <a class="ref-item" data-reference-chip href="../docs/briefing-slides-convention.md">
       <span class="rk">doc</span>
       <span class="rt">Briefing-slides convention</span>
       <span class="rp">docs/briefing-slides-convention.md</span>
     </a>
-    <a class="ref-item" data-reference-chip href="../briefing-slides/afps-skill-overviews.html">
-      <span class="rk">deck</span>
-      <span class="rt">AFPS skill overviews</span>
-      <span class="rp">briefing-slides/afps-skill-overviews.html</span>
-    </a>
   </div>
   
+  <div class="provenance">
+    <small>Provenance — carried in compiled source_artifacts, not a primary action:</small><br>
+    <a href="../packs/base/codex/create-briefing-slides/agents/openai.yaml">openai.yaml (agent metadata)</a>
+  </div>
   </div>
 </section>
-<section data-briefing-slide id="slide-7" data-slide-title="Review and review YAML" data-required-gate-slide data-gate-status="unanswered">
+<section data-briefing-slide id="slide-8" data-slide-title="Review and compiler" data-required-gate-slide data-gate-status="unanswered">
   <div class="slide-card">
     <button class="fb-trigger" type="button" data-feedback-trigger aria-label="Open feedback for this slide">Feedback</button>
     
-  <p class="eyebrow">Review handoff</p>
-  <h2>Review &amp;amp; review YAML</h2>
+  <p class="eyebrow">Response</p>
+  <h2>Review &amp;amp; compile</h2>
   
   <div class="gate">
-    <div class="q">Approve whether this deck accurately explains what people can expect from idea-scope-brief.</div>
+    <div class="q">Does this dogfood deck prove the briefing-first contract still works end to end?</div>
     <div class="opts">
-      <label><input type="radio" required data-gate-answer name="deck_accurate" value="approve"> Approve</label><label><input type="radio" required data-gate-answer name="deck_accurate" value="revise"> Revise</label><label><input type="radio" required data-gate-answer name="deck_accurate" value="needs-clarification"> Needs clarification</label>
+      <label><input type="radio" required data-gate-answer name="dogfood_ready" value="approve"> Approve</label><label><input type="radio" required data-gate-answer name="dogfood_ready" value="revise"> Revise</label>
     </div>
     <textarea placeholder="Rationale (optional)" aria-label="Gate rationale"></textarea>
-    <p class="why">Approving marks the deck ready for agent review and routes the compiled YAML back to $idea-scope-brief.</p>
+    <p class="why">Approving marks the deck ready for agent review; the compiled YAML routes to $create-briefing-slides.</p>
     <span class="gate-flag">● gate status reflects the slide border</span>
   </div>
   <div class="compiler">
@@ -802,7 +800,7 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
 # command / briefing_slides / slide_feedback / approval_status are emitted here.</pre>
     <textarea class="copy-fallback" data-deck-fallback readonly aria-label="Copy fallback"></textarea>
   </div>
-  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/claude/idea-scope-brief/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
+  <div class="chips"><a class="chip" data-reference-chip href="../packs/base/codex/create-briefing-slides/SKILL.md">SKILL.md</a><a class="chip" data-reference-chip href="../docs/briefing-slides-convention.md">convention</a></div>
   </div>
 </section>
 </main>
@@ -857,11 +855,11 @@ textarea.yaml { resize: vertical; min-height: 8rem; }
   <nav class="filmstrip" data-filmstrip aria-label="Slide filmstrip"></nav>
   <div class="footer-nav">
     <button class="btn" type="button" data-slide-prev aria-label="Previous slide">‹ Prev</button>
-    <span data-slide-counter>1 / 7</span>
+    <span data-slide-counter>1 / 8</span>
     <button class="btn" type="button" data-slide-next aria-label="Next slide">Next ›</button>
   </div>
 </footer>
-<script>window.__BRIEFING_DECK__ = {"slug":"afps-skill-idea-scope-brief","command":"$idea-scope-brief","briefingPath":"briefing-slides/afps-skill-idea-scope-brief.html","references":["packs/base/claude/idea-scope-brief/SKILL.md","docs/decks.md","docs/skill-next-step-contracts.md","docs/briefing-slides-convention.md","briefing-slides/afps-skill-overviews.html"],"sourceArtifacts":["packs/base/claude/idea-scope-brief/SKILL.md","docs/decks.md","docs/skill-next-step-contracts.md","docs/briefing-slides-convention.md","briefing-slides/afps-skill-overviews.html"]};</script>
+<script>window.__BRIEFING_DECK__ = {"slug":"create-briefing-slides","command":"$create-briefing-slides","briefingPath":"briefing-slides/create-briefing-slides.html","references":["packs/base/codex/create-briefing-slides/SKILL.md","docs/briefing-slides-convention.md"],"sourceArtifacts":["packs/base/codex/create-briefing-slides/SKILL.md","docs/briefing-slides-convention.md","packs/base/codex/create-briefing-slides/agents/openai.yaml"]};</script>
 <script>
 /* ==========================================================================
    Briefing Deck — runtime chrome (nav, filmstrip, theme, feedback sidebar,
