@@ -13,32 +13,31 @@ Land the deferred Phase 3 follow-on for the briefing-slides manifest redesign: d
 
 ### Plan
 
-- [ ] Update `docs/briefing-slides-convention.md` to document the manifest-driven system: `briefing-slides/_deck-manifest.json` as hand-editable source of truth; `scripts/extract-deck-manifest.mjs` (re-runnable extractor over legacy decks), `scripts/generate-briefing-decks.mjs` (default no-arg full batch + `--gallery`/`--flagships`/`--deck`/`--manifest`/`--audit-variety`), `scripts/briefing-deck-manifest.mjs` (rotating-archetype mapper + overviews + index), and the locked `scripts/briefing-deck-base.css` / `scripts/briefing-deck-chrome.js` chrome. State the rotating-archetype variety rule and "generated decks are not hand-edited; edit the manifest or the generator."
-- [ ] If the convention is bundled as `assets/briefing-slides-convention.md` (confirm via `grep -rl briefing-slides-convention assets packages`), regenerate/sync that packaged copy so it matches the source doc.
-- [ ] Add an archetype/manifest workflow step to BOTH `create-briefing-slides` SKILL.md mirrors (`packs/base/claude/create-briefing-slides/SKILL.md` and `packs/base/codex/create-briefing-slides/SKILL.md`): how skill decks are sourced from `_deck-manifest.json` and regenerated, and that hand-authored decks map beats to varied archetypes. Bump the version one decimal (behavioral update, not a refactor), archive the prior SKILL.md via `scripts/skill-archive.sh <skill-dir>`, and add CHANGELOG entries in each skill dir.
-- [ ] Refresh public skills catalog export (SKILL.md metadata changed): `node scripts/generate-skills-catalog-export.mjs` then `scripts/validate-skills-catalog-export.sh`; stage changed `exports/skills-catalog/v1/**`.
-- [ ] Run `scripts/pack.sh refresh` to republish runtime `.claude/skills` / `.codex/skills` copies (do not stage generated skill roots).
-- [ ] Run full verification, record review, commit + push intended changes on `master`.
+- [x] Update `docs/briefing-slides-convention.md` to document the manifest-driven system: `briefing-slides/_deck-manifest.json` as hand-editable source of truth; `scripts/extract-deck-manifest.mjs` (re-runnable extractor over legacy decks), `scripts/generate-briefing-decks.mjs` (default no-arg full batch + `--gallery`/`--flagships`/`--deck`/`--manifest`/`--audit-variety`), `scripts/briefing-deck-manifest.mjs` (rotating-archetype mapper + overviews + index), and the locked `scripts/briefing-deck-base.css` / `scripts/briefing-deck-chrome.js` chrome. State the rotating-archetype variety rule and "generated decks are not hand-edited; edit the manifest or the generator."
+- [x] Packaged copy `assets/briefing-slides-convention.md` is build-generated (copied from `docs/` by `packages/skillpacks/scripts/build-package.mjs`); no hand-sync needed. The runtime `.agents/skillpacks/docs/briefing-slides-convention.md` copy is refreshed by `scripts/pack.sh refresh` and verified in sync.
+- [x] Add an archetype/manifest workflow step to BOTH `create-briefing-slides` SKILL.md mirrors (`packs/base/claude/create-briefing-slides/SKILL.md` and `packs/base/codex/create-briefing-slides/SKILL.md`): how skill decks are sourced from `_deck-manifest.json` and regenerated, and that hand-authored decks map beats to varied archetypes. Bump the version one decimal (v0.1 → v0.2), archive the prior SKILL.md via `scripts/skill-archive.sh <skill-dir>`, and add CHANGELOG entries in each skill dir.
+- [x] Refresh public skills catalog export (SKILL.md metadata changed): `node scripts/generate-skills-catalog-export.mjs` then `scripts/validate-skills-catalog-export.sh`; stage changed `exports/skills-catalog/v1/**`.
+- [x] Run `scripts/pack.sh refresh` to republish runtime `.claude/skills` / `.codex/skills` copies (do not stage generated skill roots).
+- [x] Run full verification, record review, commit + push intended changes on `master`.
 
 ### Acceptance Criteria
 
-- [ ] `docs/briefing-slides-convention.md` describes the manifest → generator → rotating-archetype pipeline and names the four scripts + two locked chrome files.
-- [ ] Packaged convention copy (if one exists) matches the source doc byte-for-byte per its generator/audit.
-- [ ] Both `create-briefing-slides` mirrors document the manifest/archetype workflow, share the same version, and have archived prior SKILL.md + changelog entries.
-- [ ] `node scripts/generate-briefing-decks.mjs` still regenerates cleanly and `node scripts/audit-briefing-slides.mjs` exits 0 with all groups exact and no parity notes.
-- [ ] Package manifest, catalog export, mirror parity, and archive audits pass; final tree shows only intended changes plus pre-existing unrelated untracked files.
+- [x] `docs/briefing-slides-convention.md` describes the manifest → generator → rotating-archetype pipeline and names the four scripts + two locked chrome files.
+- [x] Packaged convention copy is build-generated and the built asset matches the source doc byte-for-byte.
+- [x] Both `create-briefing-slides` mirrors document the manifest/archetype workflow, share version v0.2, and have archived prior SKILL.md (`archive/v0.1/`) + changelog entries.
+- [x] `node scripts/generate-briefing-decks.mjs` still regenerates cleanly and `node scripts/audit-briefing-slides.mjs` exits 0 with all groups exact and no parity notes.
+- [x] Package manifest (canary lane), catalog export, mirror parity, and archive audits pass; final tree shows only intended changes plus pre-existing unrelated untracked files.
 
 ### Verification
 
-- [ ] `node scripts/generate-briefing-decks.mjs` then `node scripts/audit-briefing-slides.mjs` (exit 0)
-- [ ] `node scripts/skill-convention-bundle-audit.mjs` (if the convention is bundled)
-- [ ] `bash scripts/skill-mirror-parity-audit.sh`
-- [ ] `bash scripts/skill-archive-audit.sh --strict`
-- [ ] `npm --workspace packages/skillpacks run build:manifest:check`
-- [ ] `npm --workspace packages/skillpacks run build:check`
-- [ ] `scripts/validate-skills-catalog-export.sh`
-- [ ] `node scripts/audit-task-docs.mjs`
-- [ ] `git diff --check`
+- [x] `node scripts/generate-briefing-decks.mjs` then `node scripts/audit-briefing-slides.mjs` (exit 0)
+- [x] `bash scripts/skill-mirror-parity-audit.sh` (exit 0)
+- [x] `bash scripts/skill-archive-audit.sh --strict` (0 violations)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:manifest:check` (canary lane preserved — master is on a canary release manifest)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `scripts/validate-skills-catalog-export.sh` (fresh)
+- [x] `node scripts/audit-task-docs.mjs` (0 failures)
+- [x] `git diff --check` (working + cached, exit 0)
 
 ### Notes / gotchas from Phase 2
 
@@ -49,7 +48,15 @@ Land the deferred Phase 3 follow-on for the briefing-slides manifest redesign: d
 
 ### Review
 
-_(pending)_
+Documented the manifest-driven skill-deck pipeline as a new **Manifest-Driven Skill Decks (this repo)** section in `docs/briefing-slides-convention.md`: `_deck-manifest.json` as hand-editable source of truth; the four scripts (`extract-deck-manifest.mjs`, `generate-briefing-decks.mjs` with its flag set, `briefing-deck-manifest.mjs`, `briefing-deck-flagships.mjs`); the two locked chrome files (`briefing-deck-base.css`, `briefing-deck-chrome.js`); the six-beat → rotating-archetype mapping with the disjoint-adjacent-pool variety rule; the `meterRow`/`scorecard` exclusion and `bigStat`-as-icon-tiles constraint; flagships kept out of the manifest; and the "generated decks are not hand-edited" rule.
+
+Bumped both `create-briefing-slides` mirrors v0.1 → v0.2 (archived prior to `archive/v0.1/`, changelog entries added), adding a Workflow step 6 that points at the manifest pipeline and the convention's new section.
+
+Packaging: `assets/briefing-slides-convention.md` is build-generated (copied from `docs/` by `build-package.mjs`), so no hand-sync was needed; the built asset and the `.agents/skillpacks/docs/` runtime copy both verified in sync with the source doc.
+
+Key correction during execution: the committed master manifest is a **canary** release manifest (`0.1.22-experimental.2`). A default `npm run build` regenerates the **stable** lane and dropped the canary `create-briefing-slides` entries — verified that a clean-HEAD canary-lane check passes while the stable-lane check fails, confirming the repo is currently on the canary lane. Regenerated the manifest with `SKILLPACKS_PACKAGE_LANE=canary` so the diff is fingerprint + v0.1→v0.2 (version, content_sha256, archive_versions) only, preserving all canary entries. Also re-ran the catalog export **after** staging the v0.2 edits (both are index-generated) so it reflects v0.2, not the stale v0.1 it first captured.
+
+Verification: deck regen clean (generated decks byte-identical to HEAD; removed the redundant no-op archive), `audit-briefing-slides` exit 0, mirror parity exit 0, archive audit strict 0 violations, canary `build:manifest:check` + `build:check` pass, catalog export fresh, task-doc audit 0 failures, `git diff --check` clean. Final tree stages only intended changes; pre-existing unrelated untracked files (`apps/`, other sessions' `prompts/expert-review` + `prompts/sync`, `scratchpad/`) left untouched.
 
 ## Historical Implementation - Briefing Slide Required Gate Border Convention
 

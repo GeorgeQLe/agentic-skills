@@ -162,3 +162,22 @@ Before handoff:
 - Report opener status exactly as `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
 
 The opener may use the existing alignment page open helper because it is the repository's generic HTML opener; this does not make the deck an alignment page and does not authorize opening dense reference pages.
+
+## Manifest-Driven Skill Decks (this repo)
+
+The `briefing-slides/` skill-deck gallery in this repository — the per-skill decks that summarize each AFPS skill — is **generated**, not hand-authored. It flows manifest → generator → rotating archetypes so ~42 decks read as one designed folder instead of 42 identical layouts. Ad hoc briefing decks that producing skills author for a specific review step (everything above) are unaffected by this section; this pipeline governs only the repo's batch-generated skill gallery.
+
+**Source of truth.** `briefing-slides/_deck-manifest.json` is the hand-editable manifest of skill-deck entries (slug, command, title, family grouping/order, blurb, chips, `skillPath`, `nextSkill`, lead, and the six content `beats`). Edit this file to change deck content; do not hand-edit generated decks.
+
+**Scripts.**
+
+- `scripts/extract-deck-manifest.mjs` — re-runnable, read-only extractor over the legacy hand-authored `afps-skill-*.html` decks. Parses their stable anchors plus `index.html` grouping and `SKILL.md` frontmatter into `_deck-manifest.json` (overwrites it). The bespoke flagship decks are intentionally excluded (see below).
+- `scripts/generate-briefing-decks.mjs` — the single generation entry point. No-arg runs a full batch: every manifest deck plus the overviews deck and the index. Flags: `--deck <slug>` (one deck from flagships or manifest), `--manifest`/`--batch` (explicit full batch), `--gallery` (living style-guide `slide-template-gallery.html`), `--flagships` (bespoke flagship decks), `--audit-variety` (report archetype variety).
+- `scripts/briefing-deck-manifest.mjs` — maps each manifest entry onto the shared archetype toolbox with rotating archetypes, and builds the manifest-derived overviews deck and theme-aware index.
+- `scripts/briefing-deck-flagships.mjs` — the bespoke `FLAGSHIP_DECKS` content (`idea-scope-brief`, `create-briefing-slides`, `release-lane-change-boundary`). These stay bespoke and are **not** folded into the manifest.
+
+**Locked chrome.** Design tokens/chrome CSS live in `scripts/briefing-deck-base.css` and runtime chrome JS in `scripts/briefing-deck-chrome.js`. Both are injected verbatim into every generated deck so there is one place to edit the mechanics. Every emitted deck is theme-aware (light + dark), self-contained (works from `file://`), and conforms to `scripts/audit-briefing-slides.mjs`.
+
+**Rotating-archetype variety rule.** The six fixed content beats map to slides as: 1 overview → `hero` (fixed), 2 when-to-use → rotate POOL2, 3 session → rotate POOL3, 4 expect → rotate POOL4, 5 handoff → rotate POOL5, 6a references → `references` (fixed), 6b gate → `compiler` (fixed). Rotation is `pool[(deckIndex + beatOffset) % pool.length]`: adjacent beat pools are disjoint so neighboring slides in one deck never collide, and the manifest-order `deckIndex` offset makes adjacent folder decks differ. The rotating pools deliberately exclude `meterRow` and `scorecard` — those render numeric gauges/scores and the extracted beat copy carries no honest numbers; `bigStat` is used only as labeled icon tiles, never fabricated metrics.
+
+**Generated decks are not hand-edited.** To change a deck, edit `_deck-manifest.json` (content) or the generator/mapper/chrome scripts (structure or mechanics), then re-run `node scripts/generate-briefing-decks.mjs` and `node scripts/audit-briefing-slides.mjs`.

@@ -2,7 +2,7 @@
 name: create-briefing-slides
 description: Create or amend a self-contained PowerPoint-like HTML briefing slide deck for alignment pages, interrogation questions, research findings, framework/workshop artifacts, specs, reports, or documentation plans. Use when Codex should make review material more visual and navigable while preserving dense alignment/interrogation pages and source documents as linked references instead of auto-opening them.
 type: ops
-version: v0.2
+version: v0.1
 release_lane: canary
 required_conventions: [briefing-slides]
 argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]"
@@ -42,11 +42,6 @@ Create a self-contained HTML slide deck that becomes the primary opened review s
    - Run the convention's verification checklist.
    - Attempt to open only the deck, using the packaged HTML opener command specified by the convention.
    - Report opener status exactly as `focused`, `opened`, `fallback-opened`, `blocked`, or `failed`.
-
-6. Manifest-driven skill decks (this repo only):
-   - The per-skill AFPS deck gallery under `briefing-slides/` is **generated**, not hand-authored. Its source of truth is `briefing-slides/_deck-manifest.json`; edit that manifest to change deck content and regenerate — never hand-edit a generated deck.
-   - Regenerate with `node scripts/generate-briefing-decks.mjs` (no-arg = full batch of every manifest deck plus the overviews deck and index; `--deck <slug>`, `--gallery`, `--flagships`, `--manifest`/`--batch`, `--audit-variety` target subsets), then audit with `node scripts/audit-briefing-slides.mjs`.
-   - Each deck's six content beats map to rotating archetypes so the folder reads as varied rather than uniform; the bespoke flagship decks (`idea-scope-brief`, `create-briefing-slides`, `release-lane-change-boundary`) stay out of the manifest. See the convention's **Manifest-Driven Skill Decks** section.
 
 ## Output
 

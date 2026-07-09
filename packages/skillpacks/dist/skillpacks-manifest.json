@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.2",
     "release_lane": "canary"
   },
-  "source_fingerprint": "d39a82f8319ff7712fbfa164c7a5cd3b605d165c2541776dbc3d6f3e3e44115a",
+  "source_fingerprint": "11d1eb7978c36b2ae9d1cd50f31150b951bf205f2d03d870e218da4de5627899",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1511,7 +1511,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -1520,9 +1520,10 @@
       ],
       "path": "packs/base/claude/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "1895b5b05bf1749c349f032c5a4076328fa4dcd19f3170adb6e04f8d8a98a798",
+      "content_sha256": "20448daaab1928733c2a14e9b236a3c13adb3504ba88ad4cf1f83629a36ab305",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/create-briefing-slides",
       "deck_memberships": []
@@ -1951,7 +1952,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -1960,9 +1961,10 @@
       ],
       "path": "packs/base/codex/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "27755228d96996e0ece191c673fa66461e4d5cecdbdf360f1bdecc7539719216",
+      "content_sha256": "2992d70882fb4de1cb27a8df839ba84d7fa0fcaf6edebf0896c95e2ffd42d7e9",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$create-briefing-slides",
       "deck_memberships": []
