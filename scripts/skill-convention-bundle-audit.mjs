@@ -66,6 +66,39 @@ function fileContains(relativePath, needle) {
   return text.includes(needle);
 }
 
+const briefingFirstCanaries = [
+  {
+    relativePath: "docs/briefing-slides-convention.md",
+    label: "briefing-slides dense-page-first workflow",
+    needles: [
+      "the dense page is the canonical backup/reference surface",
+      "The dense page remains the canonical backup/reference surface and is never skipped.",
+      "Open **only** the deck.",
+      "The compiled full-deck YAML routes back to the **producing command**",
+    ],
+  },
+  {
+    relativePath: "docs/alignment-page-convention.md",
+    label: "alignment briefing-first open step",
+    needles: [
+      "When the `briefing-slides` review-surface convention asset is installed",
+      "treat the dense alignment page as the canonical backup/reference surface",
+      "then attempt to open only the briefing deck",
+      "If the briefing-slides convention asset is absent, the dense page remains the primary review surface",
+    ],
+  },
+  {
+    relativePath: "docs/interrogation-page-convention.md",
+    label: "interrogation briefing-first open step",
+    needles: [
+      "When the `briefing-slides` review-surface convention asset is installed",
+      "treat the dense interrogation page as the canonical backup/reference surface",
+      "then attempt to open only the briefing deck",
+      "If the briefing-slides convention asset is absent, the dense page remains the primary review surface",
+    ],
+  },
+];
+
 const tracked = new Set(gitFiles(repoRoot));
 const skills = activeSkillPaths([...tracked]).sort();
 const knownConventionIds = new Set(conventionIds());
@@ -155,6 +188,20 @@ for (const [id, convention] of Object.entries(SKILL_CONVENTIONS)) {
   }
   if (!fileContains("packages/skillpacks/scripts/build-package.mjs", convention.packageAsset)) {
     problems.push(`package staging does not produce ${convention.packageAsset}`);
+  }
+}
+
+for (const canary of briefingFirstCanaries) {
+  const absolutePath = path.join(repoRoot, canary.relativePath);
+  if (!existsSync(absolutePath)) {
+    problems.push(`${canary.label} canary file is missing: ${canary.relativePath}`);
+    continue;
+  }
+  const text = readFileSync(absolutePath, "utf8");
+  for (const needle of canary.needles) {
+    if (!text.includes(needle)) {
+      problems.push(`${canary.label} canary missing from ${canary.relativePath}: ${needle}`);
+    }
   }
 }
 

@@ -2,7 +2,45 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Briefing Slides Phase 3: convention + packaging + SKILL sync
+## Current Implementation - Briefing-First Review Surface Convention
+
+### Goal
+
+Make briefing slides the primary opened review surface whenever the canary `briefing-slides` convention is installed, while preserving dense `interrogation/*.html` and `alignment/*.html` pages as mandatory canonical backup/reference artifacts written first.
+
+### Plan
+
+- [x] Inspect current briefing, alignment, and interrogation convention wording plus generator/audit surfaces.
+- [x] Patch shared convention docs so dense HTML pages are produced first, decks are produced second, only decks are opened when the briefing convention exists, and compiled YAML routes back to the producing skill.
+- [x] Extend convention bundle audit canaries to fail when briefing-first dense-backup language disappears.
+- [x] Regenerate or verify packaged/runtime convention copies as needed without adding `briefing-slides` to every producer skill.
+- [x] Run convention audits, package build checks, package-content checks, and spot-check inherited skill behavior.
+- [x] Record verification results, review diffs, commit, and push intended changes.
+
+### Acceptance Criteria
+
+- [x] The briefing convention explicitly defines the dense-page-first, deck-open-first workflow.
+- [x] Alignment and interrogation conventions describe dense pages as canonical backup/reference surfaces when a briefing deck exists and preserve dense-page open fallback when the briefing convention asset is absent.
+- [x] Static audits enforce canary briefing-first wording in the relevant shared docs/assets.
+- [x] Canary package contents include briefing-slide convention assets and briefing-first alignment/interrogation assets.
+- [x] Representative research and product-design skills inherit the behavior through shared conventions without direct `required_conventions` churn.
+
+### Verification
+
+- [x] `node scripts/skill-convention-bundle-audit.mjs`
+- [x] `node scripts/audit-briefing-slides.mjs`
+- [x] `npm --workspace packages/skillpacks run build:check` (passed after temporarily generating a stable-lane manifest; final source restored to canary)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] Package asset content checks for briefing/alignment/interrogation convention assets.
+- [x] Spot-check one research framework subskill and one product-design skill.
+
+### Review
+
+Implemented briefing-first review-surface behavior at the shared convention layer. Dense alignment/interrogation pages are now documented as mandatory canonical backup/reference surfaces written first, while the briefing deck is built second and opened as the primary surface whenever the canary `briefing-slides` convention asset is present. Alignment and interrogation retain the dense-page open path when that asset is absent.
+
+Added `skill-convention-bundle-audit` canaries for the briefing-first dense-backup wording in the briefing, alignment, and interrogation conventions. Package checks passed in stable and canary lanes, with the final source restored to the canary manifest; canary package assets include the briefing convention and the new alignment/interrogation open-step language.
+
+## Historical Implementation - Briefing Slides Phase 3: convention + packaging + SKILL sync
 
 ### Goal
 

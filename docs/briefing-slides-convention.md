@@ -2,17 +2,17 @@
 
 This file is the **single authoring source** for the briefing-slides convention. Source checkouts load it from `docs/briefing-slides-convention.md`; packaged installs load the same content from `assets/briefing-slides-convention.md`. Briefing slides are the slide-first review surface for dense alignment pages, interrogation pages, research findings, framework/workshop artifacts, specs, reports, and documentation plans.
 
-Briefing slides do **not** replace dense artifacts. They make review more visual and navigable while preserving dense `alignment/*.html`, `interrogation/*.html`, markdown reports, specs, research notes, and source documents as linked references.
+Briefing slides do **not** replace dense artifacts. They make review more visual and navigable while preserving dense `alignment/*.html`, `interrogation/*.html`, markdown reports, specs, research notes, and source documents as linked canonical backup/reference surfaces.
 
 ## Briefing-First Review Surface
 
-Where this convention is installed, the briefing deck is the **primary review surface** at each interrogation and alignment step, and the dense page is the linked fallback. When a producing skill reaches a review/open step and this convention is present, it applies briefing-first:
+Where this convention is installed, the briefing deck is the **primary review surface** at each interrogation and alignment step, and the dense page is the canonical backup/reference surface. When a producing skill reaches a review/open step and this convention is present, it applies briefing-first:
 
-- The producing skill first authors its dense `interrogation/*.html` or `alignment/*.html` page inline via the shared interrogation-page / alignment-page conventions, exactly as it otherwise would. The dense page remains canonical and is never skipped.
-- After the dense page exists, build `briefing-slides/<skill>-<topic>.html` as the primary review surface for that step, where `<skill>` is the producing command's slug and `<topic>` is the step's topic slug.
+- The producing skill first authors its dense `interrogation/*.html` or `alignment/*.html` page inline via the shared interrogation-page / alignment-page conventions, exactly as it otherwise would. The dense page remains the canonical backup/reference surface and is never skipped.
+- After the dense page exists and has been verified, build `briefing-slides/<skill>-<topic>.html` as the primary review surface for that step, where `<skill>` is the producing command's slug and `<topic>` is the step's topic slug.
 - Open **only** the deck. Do not auto-open the dense page or any other linked reference. The dense page stays available as a drill-down fallback surface the reviewer can open manually.
 - Link the dense page and every source artifact from the deck using relative reference links/chips (`../interrogation/<page>.html`, `../alignment/<page>.html`, `../research/<file>.md`, etc.), not embeds.
-- The compiled full-deck YAML routes back to the **producing command** (not the briefing-slides command) via the `command` field, and carries `reference_pages` (the dense page plus every linked page) and `source_artifacts` so the producing skill can resume from the deck.
+- The compiled full-deck YAML routes back to the **producing command** (not `$create-briefing-slides`, `/create-briefing-slides`, or any other briefing-slides command) via the `command` field, and carries `reference_pages` (the dense page plus every linked page) and `source_artifacts` so the producing skill can resume from the deck.
 - Preserve every unanswered gate and all slide feedback across amendments: re-authoring the deck after feedback must not drop unanswered required gates or previously captured feedback/marks/annotations.
 - Mark the deck ready for agent review (`approval_status: ready-for-agent-review`) only when **every required gate is approved** and no unresolved revise/down/clarification feedback remains, per the YAML Contract.
 
