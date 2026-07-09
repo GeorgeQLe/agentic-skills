@@ -2,7 +2,13 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Briefing Slide Required Gate Border Convention
+## Current Implementation - Briefing Slides Phase 3: convention + packaging + SKILL sync
+
+### Goal
+
+Land the deferred Phase 3 follow-on for the briefing-slides manifest redesign: document the manifest-driven generation system in `docs/briefing-slides-convention.md`, sync the packaged convention copy, add the archetype/manifest workflow step to both `create-briefing-slides` SKILL.md mirrors with a version bump + archive, and refresh runtime skill copies. Phase 1/1.5/2 are already shipped (`2f31f8010`, `eae743125`). Full self-contained plan lives in `tasks/todo.md`.
+
+## Historical Implementation - Briefing Slide Required Gate Border Convention
 
 ### Goal
 

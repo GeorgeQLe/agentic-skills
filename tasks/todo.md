@@ -1,6 +1,57 @@
 # Current Task
 
-## Current Implementation - Briefing Slide Required Gate Border Convention
+## Current Implementation - Briefing Slides Phase 3: convention + packaging + SKILL sync
+
+### Goal
+
+Land the deferred Phase 3 follow-on for the briefing-slides manifest redesign: document the manifest-driven generation system in the shared convention, sync the packaged convention copy, add the archetype/manifest workflow step to the `create-briefing-slides` SKILL.md mirrors with a version bump + archive, and refresh runtime skill copies. Phase 1/1.5/2 (theme-aware archetype system, larger scale, and the manifest + batch regenerate of all 44 decks) are already shipped (`2f31f8010`, `eae743125`).
+
+### Execution Profile
+
+- Parallel mode: serial
+- Reason: package `build`/`build:check` and catalog export regeneration write/read shared `packages/skillpacks/build` and `dist` + `exports/` outputs and must not run concurrently. The skillpacks manifest is generated from the git index (CLAUDE.md "Skillpacks Manifest Is Index-Generated"): `git add` source edits before `npm run build`, then commit source + regenerated manifest together.
+
+### Plan
+
+- [ ] Update `docs/briefing-slides-convention.md` to document the manifest-driven system: `briefing-slides/_deck-manifest.json` as hand-editable source of truth; `scripts/extract-deck-manifest.mjs` (re-runnable extractor over legacy decks), `scripts/generate-briefing-decks.mjs` (default no-arg full batch + `--gallery`/`--flagships`/`--deck`/`--manifest`/`--audit-variety`), `scripts/briefing-deck-manifest.mjs` (rotating-archetype mapper + overviews + index), and the locked `scripts/briefing-deck-base.css` / `scripts/briefing-deck-chrome.js` chrome. State the rotating-archetype variety rule and "generated decks are not hand-edited; edit the manifest or the generator."
+- [ ] If the convention is bundled as `assets/briefing-slides-convention.md` (confirm via `grep -rl briefing-slides-convention assets packages`), regenerate/sync that packaged copy so it matches the source doc.
+- [ ] Add an archetype/manifest workflow step to BOTH `create-briefing-slides` SKILL.md mirrors (`packs/base/claude/create-briefing-slides/SKILL.md` and `packs/base/codex/create-briefing-slides/SKILL.md`): how skill decks are sourced from `_deck-manifest.json` and regenerated, and that hand-authored decks map beats to varied archetypes. Bump the version one decimal (behavioral update, not a refactor), archive the prior SKILL.md via `scripts/skill-archive.sh <skill-dir>`, and add CHANGELOG entries in each skill dir.
+- [ ] Refresh public skills catalog export (SKILL.md metadata changed): `node scripts/generate-skills-catalog-export.mjs` then `scripts/validate-skills-catalog-export.sh`; stage changed `exports/skills-catalog/v1/**`.
+- [ ] Run `scripts/pack.sh refresh` to republish runtime `.claude/skills` / `.codex/skills` copies (do not stage generated skill roots).
+- [ ] Run full verification, record review, commit + push intended changes on `master`.
+
+### Acceptance Criteria
+
+- [ ] `docs/briefing-slides-convention.md` describes the manifest → generator → rotating-archetype pipeline and names the four scripts + two locked chrome files.
+- [ ] Packaged convention copy (if one exists) matches the source doc byte-for-byte per its generator/audit.
+- [ ] Both `create-briefing-slides` mirrors document the manifest/archetype workflow, share the same version, and have archived prior SKILL.md + changelog entries.
+- [ ] `node scripts/generate-briefing-decks.mjs` still regenerates cleanly and `node scripts/audit-briefing-slides.mjs` exits 0 with all groups exact and no parity notes.
+- [ ] Package manifest, catalog export, mirror parity, and archive audits pass; final tree shows only intended changes plus pre-existing unrelated untracked files.
+
+### Verification
+
+- [ ] `node scripts/generate-briefing-decks.mjs` then `node scripts/audit-briefing-slides.mjs` (exit 0)
+- [ ] `node scripts/skill-convention-bundle-audit.mjs` (if the convention is bundled)
+- [ ] `bash scripts/skill-mirror-parity-audit.sh`
+- [ ] `bash scripts/skill-archive-audit.sh --strict`
+- [ ] `npm --workspace packages/skillpacks run build:manifest:check`
+- [ ] `npm --workspace packages/skillpacks run build:check`
+- [ ] `scripts/validate-skills-catalog-export.sh`
+- [ ] `node scripts/audit-task-docs.mjs`
+- [ ] `git diff --check`
+
+### Notes / gotchas from Phase 2
+
+- Manifest ownership: the 42 legacy skill decks come from `_deck-manifest.json`; `idea-scope-brief` + `create-briefing-slides` + `release-lane-change-boundary` stay bespoke `FLAGSHIP_DECKS` (already on the new system). Do not fold flagships into the manifest.
+- Rotating pools deliberately exclude `meterRow`/`scorecard` (no honest numeric source in the beat copy); `bigStat` is used as labeled icon tiles. Keep that constraint if editing the mapper.
+- Terminology: on AFPS-workflow surfaces, family members are "skills," not "decks" (see `tasks/lessons.md` 2026-07-09).
+- Ship-one-step handoff: implement only this step, validate it, then run `/ship` when done.
+
+### Review
+
+_(pending)_
+
+## Historical Implementation - Briefing Slide Required Gate Border Convention
 
 ### Goal
 

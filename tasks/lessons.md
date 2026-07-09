@@ -883,3 +883,9 @@
 - A user reported that `uninstall-global` showed zero removable global installs while `~/.codex/skills/codebase-status` still existed with an `agentic-skills` marker from an older local checkout. Both facts were true: the command only counted globals whose marker source was owned by the currently running npm package/checkout.
 - Rule: when debugging cleanup/install commands, inspect the marker file and the command's ownership predicate before concluding that "0 found" means "absent." A source path can be legacy-owned but outside the current package root.
 - Fix cleanup predicates at the right scope: broad compatibility is acceptable for retired user-home global cleanup when marker owner, source layout, tool, and skill name all match; keep project-local refresh/update ownership stricter unless the task proves that path needs migration behavior too.
+
+## 2026-07-09 — "Deck" collides: a briefing slide-deck vs an AFPS workflow deck
+
+- While shipping the briefing-slides Phase 2 batch, the overviews deck labeled each AFPS family "Business AFPS · 19 decks". The user corrected it: Business AFPS *is* one deck (a named workflow sequence per `docs/decks.md`); its members are **skills**, not decks. The very next slide even called Business/Devtool/Game "The five decks", so "19 decks" was self-contradictory.
+- Root cause: the word "deck" has two senses in this repo — a **briefing slide-deck** (one `briefing-slides/*.html` file) and an **AFPS deck** (a workflow sequence: VARD, ORD, Business/Devtool/Game AFPS). Copy that mixes both senses on one surface reads as a counting error.
+- Rule: on any surface that frames the AFPS decks as workflows (overviews, series maps, anything referencing `docs/decks.md`), call their members **skills**. Reserve "deck" for the slide-deck file only where that is unambiguously the subject (e.g. the index's own "index of review decks" framing). When a count sits next to an AFPS-deck name, it counts skills.

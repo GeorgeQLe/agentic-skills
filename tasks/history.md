@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-07-09 - Briefing-slides Phase 2: deck manifest + batch regenerate
+
+- Added `scripts/extract-deck-manifest.mjs` (read-only, re-runnable) to parse the 42 legacy hand-authored skill decks into `briefing-slides/_deck-manifest.json` — the committed, hand-editable source of truth. 42 decks extracted, no anchor gaps; 7 brancher next-step divergences logged and preserved (not auto-rewritten).
+- Added `scripts/briefing-deck-manifest.mjs`: `manifestToDeck()` maps the 6 fixed content beats onto rotating archetype pools by `(deckIndex+beatOffset)%pool` (disjoint adjacent pools guarantee intra-deck variety; deckIndex offset varies adjacent folder decks). Also builds the manifest-derived overviews deck and the restyled theme-aware index catalog (idempotent parse/render). Dropped `meterRow`/`scorecard` from the pools to avoid fabricating numeric values; `bigStat` is used as honest labeled tiles.
+- `generate-briefing-decks.mjs`: no-arg/default branch is now a full batch (manifest decks + flagships + gallery + overviews + index); added `--manifest`/`--batch` alias and `--audit-variety` dev log; `--deck` resolves manifest slugs too.
+- `briefing-deck-flagships.mjs`: converted the standalone `release-lane-change-boundary` deck onto the shared visual system so the whole folder conforms.
+- All 47 active decks pass `scripts/audit-briefing-slides.mjs` (exit 0, all groups exact, no parity notes; was 44 in DRIFT). Output byte-identical across runs. Prior decks archived under `docs/history/archive/2026-07-09/002705/`.
+- Follow-up fix (commit `eae743125`): the overviews deck labeled AFPS families "N decks"; corrected to "N skills" (members of an AFPS workflow deck are skills). Lesson recorded in `tasks/lessons.md`.
+- Commits: `2f31f8010`, `eae743125`.
+
 ## 2026-07-08 - Package validation bottleneck patch
 
 - Profiled package validation serially with the npm cache rooted at `/tmp/skillpacks-npm-cache`.
