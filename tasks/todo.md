@@ -12,8 +12,8 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] Implement `lstat`-based dangling-link inspection and current/legacy managed-link ownership.
 - [x] Add lifecycle regression coverage and update `CHANGELOG.md`.
 - [x] Run focused lifecycle tests, the full package Node suite, canary `build:check`, package verification, task-doc audit, and `git diff --check`.
-- [ ] Commit and push the source fix to `master`.
-- [ ] Run the canary publish dry run and publish both package names as `0.1.22-experimental.6` under `experimental` only.
+- [x] Commit and push the source fix to `master` (`5ab7edbbb`).
+- [x] Run the canary publish dry run and publish both package names as `0.1.22-experimental.6` under `experimental` only.
 - [ ] Commit, tag, and push post-publish metadata; verify dist-tags and published smoke commands.
 - [ ] Snapshot, dry-run, repair, and verify `apps/next-level-startup` with published `.6`.
 - [ ] Snapshot the remaining affected worktrees, approve the root dry-run only if it contains no unexpected/unmanaged deletion, run fleet refresh, and verify the formerly failing projects.
@@ -25,7 +25,7 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] `refresh --all --dry-run` reports updates without mutation; `refresh --all` completes affected projects as `ok` rather than `failed`.
 - [x] Doctor, prune, and remove recognize dangling managed links while preserving unrelated dangling links.
 - [x] Existing valid pinned links and a second idempotent refresh remain unchanged.
-- [ ] `experimental` points to `.6` for both packages while `latest` stays at `0.1.21`.
+- [x] `experimental` points to `.6` for both packages while `latest` stays at `0.1.21`.
 - [ ] The fleet recovery reports `60 ok, 0 flagged, 0 failed`, or any discovered count discrepancy is investigated and documented before proceeding.
 - [ ] No application repository is committed or pushed, and unrelated dirty files are byte-for-byte unchanged.
 
@@ -37,8 +37,8 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run verify:package`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [ ] `./publish.sh --dry-run --tag experimental --preid experimental prerelease`
-- [ ] npm dist-tag and published smoke verification for both package names
+- [x] `./publish.sh --dry-run --tag experimental --preid experimental prerelease`
+- [x] npm dist-tag and published smoke verification for both package names
 - [ ] Published `.6` pilot refresh dry-run, refresh, and doctor
 - [ ] Published `.6` fleet refresh dry-run, refresh, and targeted doctor/dangling-link audit
 
