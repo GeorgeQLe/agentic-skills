@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-07-10 - Dangling-symlink refresh and fleet recovery
+
+- Added non-following lifecycle path inspection so absent paths and dangling symlinks are distinguished while non-`ENOENT` filesystem errors propagate.
+- Unified current and legacy managed-link ownership across refresh, dry-run planning, doctor, prune, remove, active installs, and pinned installs. Unmanaged links remain untouched, and dangling managed links are no longer treated as valid pinned installs.
+- Added lifecycle regressions for current, legacy, unmanaged, pinned, doctor, prune, remove, dry-run, multi-project failure isolation, and idempotent refresh behavior. Focused tests passed 76/76; the full package Node suite passed 217/217.
+- Fixed the publish recovery tests on macOS Bash 3.2 by guarding empty array expansion under `set -u`; canary build, package verification, publish dry run, task-doc audit, and diff hygiene all passed.
+- Published `skillpacks@0.1.22-experimental.6` and `@glexcorp/gskp@0.1.22-experimental.6`, moved only `experimental`, and kept both `latest` tags at `0.1.21`. The first authenticated non-TTY attempt stopped on npm OTP authorization before either package published; the TTY retry completed both package publishes and both published smoke matrices.
+- Shipped source fix `5ab7edbbb`, release metadata commit `defe46efa`, and tag `skillpacks-v0.1.22-experimental.6` to `master`.
+- Piloted the published canary in `apps/next-level-startup`: 32 dangling managed links fell to zero, doctor passed, and unrelated dirty-file hashes and mtimes remained unchanged.
+- Reviewed the full dry run, including 13 additional current-checkout links whose packs were disabled, then ran the published canary across 60 projects. Refresh and doctor both reported `60 ok, 0 flagged, 0 failed`; a second dry run proposed zero changes and the ten formerly failing projects contained zero dangling links.
+- Preserved all three unmanaged links reported by planning, left existing application dirty state intact, and did not commit or push any application repository.
+- Manifest: `tasks/ship-manifest-2026-07-10-skillpacks-0.1.22-experimental.6-dangling-symlink-fleet-recovery.md`.
+
 ## 2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout
 
 - Confirmed npm now reports `skillpacks@experimental` and `@glexcorp/gskp@experimental` at `0.1.22-experimental.5`; `latest` remains `0.1.21` for both package names.

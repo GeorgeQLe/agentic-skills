@@ -1,10 +1,20 @@
 # Current Task
 
-## Current Implementation - Dangling-Symlink Refresh and Fleet Recovery
+## Current Implementation - No Active Task
 
 ### Status
 
-Implementation is active. The repository starts clean on `master` at the `0.1.22-experimental.5` release commit.
+No active executable task is promoted in this file. The dangling-symlink refresh fix, `0.1.22-experimental.6` canary release, pilot, and 60-project fleet recovery were completed and verified on 2026-07-10; see `tasks/history.md` and `tasks/ship-manifest-2026-07-10-skillpacks-0.1.22-experimental.6-dangling-symlink-fleet-recovery.md`.
+
+### Next Work
+
+- [ ] None promoted.
+
+## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
+
+### Status
+
+Implementation, canary publication, and fleet recovery are complete. Source commits `5ab7edbbb` and `defe46efa` are pushed on `master`, and tag `skillpacks-v0.1.22-experimental.6` points to the release metadata commit.
 
 ### Plan
 
@@ -14,10 +24,10 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] Run focused lifecycle tests, the full package Node suite, canary `build:check`, package verification, task-doc audit, and `git diff --check`.
 - [x] Commit and push the source fix to `master` (`5ab7edbbb`).
 - [x] Run the canary publish dry run and publish both package names as `0.1.22-experimental.6` under `experimental` only.
-- [ ] Commit, tag, and push post-publish metadata; verify dist-tags and published smoke commands.
-- [ ] Snapshot, dry-run, repair, and verify `apps/next-level-startup` with published `.6`.
-- [ ] Snapshot the remaining affected worktrees, approve the root dry-run only if it contains no unexpected/unmanaged deletion, run fleet refresh, and verify the formerly failing projects.
-- [ ] Record history, ship manifest, per-repository before/after path changes, final verification, and review.
+- [x] Commit, tag, and push post-publish metadata; verify dist-tags and published smoke commands.
+- [x] Snapshot, dry-run, repair, and verify `apps/next-level-startup` with published `.6`.
+- [x] Snapshot the remaining affected worktrees, approve the root dry-run only if it contains no unexpected/unmanaged deletion, run fleet refresh, and verify the formerly failing projects.
+- [x] Record history, ship manifest, per-repository before/after path changes, final verification, and review.
 
 ### Acceptance Criteria
 
@@ -26,8 +36,8 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] Doctor, prune, and remove recognize dangling managed links while preserving unrelated dangling links.
 - [x] Existing valid pinned links and a second idempotent refresh remain unchanged.
 - [x] `experimental` points to `.6` for both packages while `latest` stays at `0.1.21`.
-- [ ] The fleet recovery reports `60 ok, 0 flagged, 0 failed`, or any discovered count discrepancy is investigated and documented before proceeding.
-- [ ] No application repository is committed or pushed, and unrelated dirty files are byte-for-byte unchanged.
+- [x] The fleet recovery reports `60 ok, 0 flagged, 0 failed`, or any discovered count discrepancy is investigated and documented before proceeding.
+- [x] No application repository is committed or pushed, and unrelated dirty files are byte-for-byte unchanged.
 
 ### Verification
 
@@ -39,8 +49,14 @@ Implementation is active. The repository starts clean on `master` at the `0.1.22
 - [x] `git diff --check`
 - [x] `./publish.sh --dry-run --tag experimental --preid experimental prerelease`
 - [x] npm dist-tag and published smoke verification for both package names
-- [ ] Published `.6` pilot refresh dry-run, refresh, and doctor
-- [ ] Published `.6` fleet refresh dry-run, refresh, and targeted doctor/dangling-link audit
+- [x] Published `.6` pilot refresh dry-run, refresh, and doctor
+- [x] Published `.6` fleet refresh dry-run, refresh, and targeted doctor/dangling-link audit
+
+### Review
+
+The published `.6` pilot repaired 32 dangling managed links in `apps/next-level-startup`, and the remaining fleet run repaired 386 across the ten formerly failing projects. The global run completed `60 ok, 0 flagged, 0 failed`; `doctor --all` returned the same summary, a second dry run proposed zero changes, and a direct audit found zero dangling links in all ten targets.
+
+The reviewed fleet plan contained 233 installs, 389 updates, 38 managed removals, and three unmanaged skips. The removals were retired skill names plus 11 `business-ops` links in `tools/dev/trackctl` and two `ship` links in `web/dev/afps-tracker`, all owned by the current source checkout and no longer enabled. Unmanaged links were preserved. Pre-existing dirty path sets and recorded hash checks remained unchanged, and no application repository was committed or pushed.
 
 ## Historical Implementation - skillpacks 0.1.22-experimental.5 canary closeout
 
