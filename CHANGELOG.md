@@ -18,6 +18,8 @@ Keep this file updated before every npm package publish.
 
 ### Fixed
 
+- Fixed lifecycle path inspection so `refresh`, dry-run planning, `doctor`, `prune`, `remove`, and active or pinned installs recognize package-managed dangling symlinks, including legacy absolute links from moved `agentic-skills`/`skillpacks` checkouts, while preserving unrelated symlinks.
+- Fixed `publish.sh` empty-array handling under macOS Bash 3.2 with `set -u`, restoring dirty-tree checks, auth preflight, interrupt cleanup, and real publish flows.
 - Fixed published-package verification for non-`latest` dist-tags by resolving metadata from `package@dist-tag` and checking the dist-tag pointer separately.
 - Fixed `doctor` so an empty project config left after removing all managed installs does not report missing convention docs as drift.
 

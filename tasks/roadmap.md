@@ -2,9 +2,30 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - No Active Task
+## Current Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
-No active executable task is promoted in `tasks/todo.md`.
+### Goal
+
+Fix `skillpacks refresh` so it recognizes and migrates package-managed dangling symlinks without touching unrelated links, publish `0.1.22-experimental.6`, and use that published canary to recover the affected project fleet.
+
+### Plan
+
+- [x] Add a non-following path inspection helper that distinguishes an absent path from a dangling symlink and propagates non-`ENOENT` errors.
+- [x] Apply current/legacy managed-link ownership consistently across refresh planning and mutation, doctor, prune, remove, active installs, and pinned installs.
+- [x] Add lifecycle regressions for dangling current, legacy, unmanaged, pinned, dry-run, multi-project, removal, pruning, doctor, and idempotent behavior.
+- [ ] Document and verify the source fix, then commit and push it to `master`.
+- [ ] Dry-run and publish `skillpacks` plus `@glexcorp/gskp` as `0.1.22-experimental.6` without moving `latest`; commit, tag, and push release metadata.
+- [ ] Snapshot and repair `apps/next-level-startup` as the pilot, preserving unrelated dirty files byte-for-byte.
+- [ ] Review the fleet dry-run, repair all discovered projects through the published CLI, verify the expected summary and formerly failing projects, and report per-repository path changes without committing application repositories.
+
+### Acceptance Criteria
+
+- [ ] Dangling managed links are reported as missing/updatable and are replaced or removed by the canonical lifecycle command.
+- [ ] Legacy absolute links from moved `agentic-skills`/`skillpacks` checkouts are recognized only when tool and skill layout match.
+- [ ] Unmanaged dangling links and valid pinned links remain untouched.
+- [ ] A second refresh is idempotent, and `refresh --all` preserves per-project failure isolation.
+- [ ] Both npm package names publish `0.1.22-experimental.6` on `experimental`; both `latest` tags remain `0.1.21`.
+- [ ] The pilot and full fleet contain no package-managed dangling links after recovery, with application repositories left uncommitted and existing dirty content preserved.
 
 ## Historical Implementation - skillpacks 0.1.22-experimental.5 canary closeout
 

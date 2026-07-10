@@ -159,6 +159,15 @@ function skillPath(projectRoot, tool, skill) {
   return join(projectRoot, `.${tool}/skills/${skill}`);
 }
 
+function writeDanglingSkillLink(projectRoot, tool, skill, source) {
+  const target = skillPath(projectRoot, tool, skill);
+  mkdirSync(dirname(target), { recursive: true });
+  symlinkSync(source, target, 'dir');
+  assert.equal(existsSync(target), false, `${target} should be dangling`);
+  assert.equal(lstatSync(target).isSymbolicLink(), true);
+  return target;
+}
+
 function installStateSnapshot(projectRoot, skill) {
   const relPaths = ['.agents/project.json'];
   for (const tool of ['claude', 'codex']) {
@@ -1401,6 +1410,170 @@ describe('Node lifecycle commands', () => {
     }
   });
 
+  it('refresh replaces current and legacy dangling managed links and is idempotent', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'quality-sweep': 'code-quality'
+      }
+    });
+    writeDanglingSkillLink(
+      dir,
+      'claude',
+      'quality-sweep',
+      join(repoRoot, 'packs/moved/claude/quality-sweep')
+    );
+    writeDanglingSkillLink(
+      dir,
+      'codex',
+      'quality-sweep',
+      '/home/alice/src/agentic-skills/packs/code-quality/codex/quality-sweep'
+    );
+
+    const first = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(first.stdout, /Installed \.claude\/skills\/quality-sweep @ v0\.1/);
+    assert.match(first.stdout, /Installed \.codex\/skills\/quality-sweep @ v0\.1/);
+    for (const tool of ['claude', 'codex']) {
+      assert.equal(lstatSync(skillPath(dir, tool, 'quality-sweep')).isSymbolicLink(), false);
+      assert.match(marker(dir, tool, 'quality-sweep'), /^managed_by=agentic-skills$/m);
+      assert.equal(existsSync(join(skillPath(dir, tool, 'quality-sweep'), 'SKILL.md')), true);
+    }
+
+    const before = installStateSnapshot(dir, 'quality-sweep');
+    await waitForMtimeTick();
+    const second = await runSkillpacks(dir, ['refresh']);
+
+    assert.doesNotMatch(second.stdout, /Installed \.claude\/skills\/quality-sweep/);
+    assert.doesNotMatch(second.stdout, /Updated \.claude\/skills\/quality-sweep/);
+    assert.deepEqual(installStateSnapshot(dir, 'quality-sweep'), before);
+  });
+
+  it('refresh preserves unmanaged dangling links and reports them as skipped', async () => {
+    const parent = makeTempProject();
+    const dir = join(parent, 'project');
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'quality-sweep': 'code-quality'
+      }
+    });
+    const source = '/home/alice/custom-skills/quality-sweep';
+    const target = writeDanglingSkillLink(dir, 'claude', 'quality-sweep', source);
+
+    const dryRun = await runSkillpacks(parent, ['refresh', '--all', '--dry-run'], { home: makeTempProject() });
+
+    assert.match(dryRun.stdout, /skip\s+\.claude\/skills\/quality-sweep \(not repo-managed\)/);
+    assert.match(dryRun.stdout, /1 skipped unmanaged/);
+    assert.equal(lstatSync(target).isSymbolicLink(), true);
+    assert.equal(readlinkSync(target), source);
+
+    const refreshed = await runSkillpacks(dir, ['refresh']);
+
+    assert.match(refreshed.stderr, /exists and is not repo-managed, skipping/);
+    assert.equal(lstatSync(target).isSymbolicLink(), true);
+    assert.equal(readlinkSync(target), source);
+    assert.equal(lstatSync(skillPath(dir, 'codex', 'quality-sweep')).isDirectory(), true);
+  });
+
+  it('refresh migrates dangling managed pinned links and keeps valid pins unchanged', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'quality-sweep': 'code-quality'
+      },
+      pinned_versions: {
+        'quality-sweep': 'v0.0'
+      }
+    });
+    writeDanglingSkillLink(
+      dir,
+      'claude',
+      'quality-sweep',
+      '/home/alice/src/agentic-skills/packs/code-quality/claude/quality-sweep/archive/v0.0'
+    );
+
+    await runSkillpacks(dir, ['refresh']);
+
+    const expectedSources = {};
+    const mtimes = {};
+    for (const tool of ['claude', 'codex']) {
+      const target = skillPath(dir, tool, 'quality-sweep');
+      assert.equal(lstatSync(target).isSymbolicLink(), true);
+      assert.match(readlinkSync(target), new RegExp(`packs/code-quality/${tool}/quality-sweep/archive/v0\\.0$`));
+      expectedSources[tool] = readlinkSync(target);
+      mtimes[tool] = lstatSync(target, { bigint: true }).mtimeNs.toString();
+    }
+
+    await waitForMtimeTick();
+    const second = await runSkillpacks(dir, ['refresh']);
+
+    assert.doesNotMatch(second.stdout, /Pinned|Installed|Updated \.claude\/skills\/quality-sweep/);
+    for (const tool of ['claude', 'codex']) {
+      const target = skillPath(dir, tool, 'quality-sweep');
+      assert.equal(readlinkSync(target), expectedSources[tool]);
+      assert.equal(lstatSync(target, { bigint: true }).mtimeNs.toString(), mtimes[tool]);
+    }
+  });
+
+  it('doctor, prune, and remove recognize dangling managed links', async () => {
+    const doctorDir = makeTempProject();
+    writeProjectConfig(doctorDir, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'quality-sweep': 'code-quality'
+      }
+    });
+    writeDanglingSkillLink(
+      doctorDir,
+      'claude',
+      'quality-sweep',
+      '/home/alice/src/agentic-skills/packs/code-quality/claude/quality-sweep'
+    );
+
+    const doctor = await runSkillpacksRaw(doctorDir, ['doctor']);
+
+    assert.equal(doctor.exitCode, 1);
+    assert.match(doctor.stdout, /missing\s+\.claude\/skills\/quality-sweep — canonical source no longer exists/);
+    assert.doesNotMatch(doctor.stdout, /pinned\s+\.claude\/skills\/quality-sweep/);
+
+    const removed = await runSkillpacks(doctorDir, ['remove', 'quality-sweep']);
+
+    assert.match(removed.stdout, /Removed \.claude\/skills\/quality-sweep/);
+    assert.throws(() => lstatSync(skillPath(doctorDir, 'claude', 'quality-sweep')), { code: 'ENOENT' });
+
+    const pruneDir = makeTempProject();
+    writeProjectConfig(pruneDir, {
+      project_type: 'devtool',
+      enabled_packs: ['code-quality'],
+      skill_pack_version: 1
+    });
+    const orphan = writeDanglingSkillLink(
+      pruneDir,
+      'codex',
+      'orphan-skill',
+      '/home/alice/src/skillpacks/packs/retired/codex/orphan-skill'
+    );
+
+    const preview = await runSkillpacks(pruneDir, ['prune', '--dry-run']);
+    assert.match(preview.stdout, /would remove\s+\.codex\/skills\/orphan-skill \(source no longer exists\)/);
+    assert.equal(lstatSync(orphan).isSymbolicLink(), true);
+
+    const pruned = await runSkillpacks(pruneDir, ['prune']);
+    assert.match(pruned.stdout, /removed\s+\.codex\/skills\/orphan-skill \(source no longer exists\)/);
+    assert.throws(() => lstatSync(orphan), { code: 'ENOENT' });
+  });
+
   it('removes active packs without deleting unmanaged local skill directories', async () => {
     const dir = makeTempProject();
     await runSkillpacks(dir, ['install', 'code-quality']);
@@ -2112,6 +2285,48 @@ describe('Node multi-repo --all commands', () => {
     assert.equal(markerField(c, 'claude', 'quality-sweep', 'source'), cOldClaudeSource);
     assert.equal(markerField(c, 'codex', 'quality-sweep', 'source'), cOldCodexSource);
     assert.equal(exitCode, 0);
+  });
+
+  it('refresh --all plans dangling managed links as updates and completes them as ok', async () => {
+    const parent = makeParent();
+    const project = join(parent, 'project');
+    writeProjectConfig(project, {
+      project_type: 'devtool',
+      enabled_packs: [],
+      skill_pack_version: 1,
+      enabled_skills: {
+        'quality-sweep': 'code-quality'
+      }
+    });
+    const claudeTarget = writeDanglingSkillLink(
+      project,
+      'claude',
+      'quality-sweep',
+      '/home/alice/src/agentic-skills/packs/code-quality/claude/quality-sweep'
+    );
+    const codexTarget = writeDanglingSkillLink(
+      project,
+      'codex',
+      'quality-sweep',
+      '/home/alice/src/agentic-skills/packs/code-quality/codex/quality-sweep'
+    );
+
+    const dryRun = await runSkillpacksRaw(parent, ['refresh', '--all', '--dry-run'], { home: makeParent() });
+
+    assert.equal(dryRun.exitCode, 0);
+    assert.match(dryRun.stdout, /Proposed: 0 install, 2 update, 0 remove\./);
+    assert.match(dryRun.stdout, /update\s+\.claude\/skills\/quality-sweep \(\? -> v0\.1\)/);
+    assert.match(dryRun.stdout, /update\s+\.codex\/skills\/quality-sweep \(\? -> v0\.1\)/);
+    assert.match(dryRun.stdout, /Safe to run: yes/);
+    assert.equal(lstatSync(claudeTarget).isSymbolicLink(), true);
+    assert.equal(lstatSync(codexTarget).isSymbolicLink(), true);
+
+    const refreshed = await runSkillpacksRaw(parent, ['refresh', '--all'], { home: makeParent() });
+
+    assert.equal(refreshed.exitCode, 0);
+    assert.match(refreshed.stdout, /Summary \(refresh --all\): 1 ok, 0 flagged, 0 failed across 1 project\(s\)\./);
+    assert.equal(lstatSync(claudeTarget).isDirectory(), true);
+    assert.equal(lstatSync(codexTarget).isDirectory(), true);
   });
 
   it('refresh --all --dry-run reports failed project config as unsafe', async () => {

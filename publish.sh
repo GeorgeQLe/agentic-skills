@@ -214,9 +214,15 @@ print_path_group() {
 }
 
 print_dirty_tree_summary() {
-  print_path_group "release-impacting dirty paths" "${RELEASE_IMPACTING_DIRTY_PATHS[@]}"
-  print_path_group "non-release dirty paths" "${NON_RELEASE_DIRTY_PATHS[@]}"
-  print_path_group "untracked paths (not included in release)" "${UNTRACKED_DIRTY_PATHS[@]}"
+  if [[ "${#RELEASE_IMPACTING_DIRTY_PATHS[@]}" -gt 0 ]]; then
+    print_path_group "release-impacting dirty paths" "${RELEASE_IMPACTING_DIRTY_PATHS[@]}"
+  fi
+  if [[ "${#NON_RELEASE_DIRTY_PATHS[@]}" -gt 0 ]]; then
+    print_path_group "non-release dirty paths" "${NON_RELEASE_DIRTY_PATHS[@]}"
+  fi
+  if [[ "${#UNTRACKED_DIRTY_PATHS[@]}" -gt 0 ]]; then
+    print_path_group "untracked paths (not included in release)" "${UNTRACKED_DIRTY_PATHS[@]}"
+  fi
 }
 
 run() {
@@ -313,7 +319,11 @@ run_pre_mutation_auth_preflight() {
     env_args+=(npm_config_dry_run=true)
   fi
 
-  run env "${env_args[@]}" node "$PACKAGE_DIR/scripts/prepublish-auth-check.mjs" --package-name "$package_name" --package-version "$version"
+  if [[ "${#env_args[@]}" -gt 0 ]]; then
+    run env "${env_args[@]}" node "$PACKAGE_DIR/scripts/prepublish-auth-check.mjs" --package-name "$package_name" --package-version "$version"
+  else
+    run env node "$PACKAGE_DIR/scripts/prepublish-auth-check.mjs" --package-name "$package_name" --package-version "$version"
+  fi
 }
 
 verify_skillpacks_package() {
@@ -371,11 +381,13 @@ cleanup() {
   trap '' INT TERM HUP
   set +e
 
-  for dir in "${TMP_DIRS[@]}"; do
-    if [[ ( "$dir" == /tmp/skillpacks-publish-* || "$dir" == /tmp/skillpacks-version-* ) && -d "$dir" ]]; then
-      rm -rf "$dir" || true
-    fi
-  done
+  if [[ "${#TMP_DIRS[@]}" -gt 0 ]]; then
+    for dir in "${TMP_DIRS[@]}"; do
+      if [[ ( "$dir" == /tmp/skillpacks-publish-* || "$dir" == /tmp/skillpacks-version-* ) && -d "$dir" ]]; then
+        rm -rf "$dir" || true
+      fi
+    done
+  fi
 
   if [[ -n "$RESTORE_DIR" && -d "$RESTORE_DIR" ]]; then
     if [[ "$DRY_RUN" == "1" || ( "$status" != "0" && "$PUBLISH_STARTED" != "1" ) ]]; then

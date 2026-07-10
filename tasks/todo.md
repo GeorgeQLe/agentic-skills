@@ -1,14 +1,46 @@
 # Current Task
 
-## Current Implementation - No Active Task
+## Current Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
 ### Status
 
-No active executable task is promoted in this file. The `skillpacks` `0.1.22-experimental.5` canary source closeout was verified, committed, tagged, and pushed on 2026-07-09; see `tasks/history.md` and `tasks/ship-manifest-2026-07-09-skillpacks-0.1.22-experimental.5-canary-closeout.md`.
+Implementation is active. The repository starts clean on `master` at the `0.1.22-experimental.5` release commit.
 
-### Next Work
+### Plan
 
-- [ ] None promoted.
+- [x] Inspect repository instructions, lifecycle ownership paths, regression coverage, current release state, and fleet-recovery constraints.
+- [x] Implement `lstat`-based dangling-link inspection and current/legacy managed-link ownership.
+- [x] Add lifecycle regression coverage and update `CHANGELOG.md`.
+- [x] Run focused lifecycle tests, the full package Node suite, canary `build:check`, package verification, task-doc audit, and `git diff --check`.
+- [ ] Commit and push the source fix to `master`.
+- [ ] Run the canary publish dry run and publish both package names as `0.1.22-experimental.6` under `experimental` only.
+- [ ] Commit, tag, and push post-publish metadata; verify dist-tags and published smoke commands.
+- [ ] Snapshot, dry-run, repair, and verify `apps/next-level-startup` with published `.6`.
+- [ ] Snapshot the remaining affected worktrees, approve the root dry-run only if it contains no unexpected/unmanaged deletion, run fleet refresh, and verify the formerly failing projects.
+- [ ] Record history, ship manifest, per-repository before/after path changes, final verification, and review.
+
+### Acceptance Criteria
+
+- [x] Refresh replaces dangling Claude and Codex managed links with managed directories, including legacy `/home/.../agentic-skills/packs/...` links.
+- [x] `refresh --all --dry-run` reports updates without mutation; `refresh --all` completes affected projects as `ok` rather than `failed`.
+- [x] Doctor, prune, and remove recognize dangling managed links while preserving unrelated dangling links.
+- [x] Existing valid pinned links and a second idempotent refresh remain unchanged.
+- [ ] `experimental` points to `.6` for both packages while `latest` stays at `0.1.21`.
+- [ ] The fleet recovery reports `60 ok, 0 flagged, 0 failed`, or any discovered count discrepancy is investigated and documented before proceeding.
+- [ ] No application repository is committed or pushed, and unrelated dirty files are byte-for-byte unchanged.
+
+### Verification
+
+- [x] `node --test packages/skillpacks/test/lifecycle.test.mjs` (76/76)
+- [x] `npm --workspace packages/skillpacks run test:node` (217/217)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm_config_cache=/tmp/skillpacks-npm-cache npm --workspace packages/skillpacks run verify:package`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [ ] `./publish.sh --dry-run --tag experimental --preid experimental prerelease`
+- [ ] npm dist-tag and published smoke verification for both package names
+- [ ] Published `.6` pilot refresh dry-run, refresh, and doctor
+- [ ] Published `.6` fleet refresh dry-run, refresh, and targeted doctor/dangling-link audit
 
 ## Historical Implementation - skillpacks 0.1.22-experimental.5 canary closeout
 

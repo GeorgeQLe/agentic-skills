@@ -417,10 +417,22 @@ function isArchiveSource(sourceDir) {
   return basename(dirname(sourceDir)) === 'archive';
 }
 
+function inspectPath(target) {
+  try {
+    return lstatSync(target);
+  } catch (error) {
+    if (error && typeof error === 'object' && error.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
+  }
+}
+
 function isManagedSkillDir(target) {
-  return existsSync(target)
-    && !lstatSync(target).isSymbolicLink()
-    && lstatSync(target).isDirectory()
+  const stats = inspectPath(target);
+  return stats !== null
+    && !stats.isSymbolicLink()
+    && stats.isDirectory()
     && existsSync(join(target, SKILL_LINK_MARKER));
 }
 
@@ -462,6 +474,56 @@ function sourceOwnedBySkillpacks(source) {
   return ownedPrefixes.some((prefix) => source === prefix || source.startsWith(`${prefix}/`));
 }
 
+function sourceLooksLikeLegacyProjectSkillpacksInstall(source, tool, skillName) {
+  if (!source || !tool || !skillName) {
+    return false;
+  }
+
+  const normalizedSource = source.replace(/\\/g, '/').replace(/\/+$/, '');
+  const segments = normalizedSource.split('/').filter(Boolean);
+  const ownerIndex = Math.max(segments.lastIndexOf('agentic-skills'), segments.lastIndexOf('skillpacks'));
+  if (ownerIndex < 0) {
+    return false;
+  }
+
+  const toolIndex = segments.lastIndexOf(tool);
+  const skillIndex = segments.lastIndexOf(skillName);
+  if (toolIndex < 0 || skillIndex <= toolIndex) {
+    return false;
+  }
+
+  const trailing = segments.slice(skillIndex + 1);
+  if (trailing.length > 0 && !(trailing.length === 2 && trailing[0] === 'archive')) {
+    return false;
+  }
+
+  const sourceRoot = segments.slice(ownerIndex + 1, toolIndex);
+  return sourceRoot.includes('packs') || sourceRoot.includes('base') || sourceRoot.includes('global');
+}
+
+function skillInstallIdentity(target, options = {}) {
+  const toolRoot = basename(dirname(dirname(target)));
+  return {
+    tool: options.tool || (toolRoot.startsWith('.') ? toolRoot.slice(1) : toolRoot),
+    skillName: options.skillName || basename(target)
+  };
+}
+
+function resolvedLinkSource(target, source) {
+  return resolve(dirname(target), source);
+}
+
+function skillSymlinkOwnedBySkillpacks(target, source, options = {}) {
+  const { tool, skillName } = skillInstallIdentity(target, options);
+  const resolvedSource = resolvedLinkSource(target, source);
+  return (
+    sourceOwnedBySkillpacks(source)
+    || sourceOwnedBySkillpacks(resolvedSource)
+    || sourceLooksLikeLegacyProjectSkillpacksInstall(source, tool, skillName)
+    || sourceLooksLikeLegacyProjectSkillpacksInstall(resolvedSource, tool, skillName)
+  );
+}
+
 function sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName) {
   if (!source) {
     return false;
@@ -490,14 +552,14 @@ function targetManagedBySkillpacks(target) {
 function removeRepoSkillInstall(target, options = {}) {
   const { tool = '', skillName = '', allowLegacyGlobalSource = false } = options;
 
-  if (!existsSync(target)) {
+  const stats = inspectPath(target);
+  if (stats === null) {
     return false;
   }
 
-  const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
     const source = readlinkSync(target);
-    if (sourceOwnedBySkillpacks(source)) {
+    if (skillSymlinkOwnedBySkillpacks(target, source, { tool, skillName })) {
       unlinkSync(target);
       return true;
     }
@@ -518,13 +580,13 @@ function removeRepoSkillInstall(target, options = {}) {
 }
 
 function repoSkillInstallOwned(target) {
-  if (!existsSync(target)) {
+  const stats = inspectPath(target);
+  if (stats === null) {
     return false;
   }
 
-  const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
-    return sourceOwnedBySkillpacks(readlinkSync(target));
+    return skillSymlinkOwnedBySkillpacks(target, readlinkSync(target));
   }
 
   if (isManagedSkillDir(target)) {
@@ -536,13 +598,13 @@ function repoSkillInstallOwned(target) {
 }
 
 function globalRepoSkillInstallOwned(target, tool, skillName) {
-  if (!existsSync(target)) {
+  const stats = inspectPath(target);
+  if (stats === null) {
     return false;
   }
 
-  const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
-    return sourceOwnedBySkillpacks(readlinkSync(target));
+    return skillSymlinkOwnedBySkillpacks(target, readlinkSync(target), { tool, skillName });
   }
 
   if (isManagedSkillDir(target)) {
@@ -610,10 +672,15 @@ function comparePathStrings(left, right) {
 }
 
 function syncSkillLink(source, target) {
-  if (existsSync(target)) {
-    const stats = lstatSync(target);
+  const stats = inspectPath(target);
+  if (stats !== null) {
     if (stats.isSymbolicLink()) {
-      if (readlinkSync(target) === source) {
+      const currentSource = readlinkSync(target);
+      if (resolvedLinkSource(target, currentSource) === resolve(source)) {
+        return false;
+      }
+      if (!skillSymlinkOwnedBySkillpacks(target, currentSource)) {
+        console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
         return false;
       }
       unlinkSync(target);
@@ -630,13 +697,13 @@ function syncSkillLink(source, target) {
 }
 
 function installedSkillVersion(target) {
-  if (!existsSync(target)) {
+  const stats = inspectPath(target);
+  if (stats === null) {
     return '';
   }
 
-  const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
-    return skillSourceVersion(readlinkSync(target));
+    return skillSourceVersion(resolvedLinkSource(target, readlinkSync(target)));
   }
   if (isManagedSkillDir(target)) {
     return managedMarkerField(target, 'source_version');
@@ -692,9 +759,20 @@ function syncSkillInstall(source, target) {
   }
 
   const currentSha = skillContentSha(source);
-  if (existsSync(target)) {
-    const stats = lstatSync(target);
+  const stats = inspectPath(target);
+  if (stats !== null) {
     if (stats.isSymbolicLink()) {
+      const currentSource = readlinkSync(target);
+      if (!skillSymlinkOwnedBySkillpacks(target, currentSource)) {
+        console.error(`WARNING: ${target} exists and is not repo-managed, skipping`);
+        return {
+          changed: false,
+          contentChanged: false,
+          metadataChanged: false,
+          oldVersion,
+          newVersion
+        };
+      }
       unlinkSync(target);
     } else if (isManagedSkillDir(target)) {
       const currentSource = managedMarkerField(target, 'source');
@@ -1007,7 +1085,7 @@ function removeSingleSkill(projectRoot, manifest, skillName) {
   }
 
   for (const tool of TOOLS) {
-    if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName))) {
+    if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName), { tool, skillName })) {
       console.log(`Removed .${tool}/skills/${skillName}`);
     }
   }
@@ -1035,7 +1113,7 @@ function removePack(projectRoot, manifest, pack) {
 
   for (const tool of TOOLS) {
     for (const skillName of skillNames) {
-      if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName))) {
+      if (removeRepoSkillInstall(targetPath(projectRoot, tool, skillName), { tool, skillName })) {
         console.log(`Removed .${tool}/skills/${skillName}`);
       }
     }
@@ -1163,10 +1241,15 @@ function skillInstallStatus(target) {
   const stats = lstatSync(target);
   if (stats.isSymbolicLink()) {
     const source = readlinkSync(target);
-    if (!sourceOwnedBySkillpacks(source)) {
+    if (!skillSymlinkOwnedBySkillpacks(target, source)) {
       return { status: 'not-managed', recordedVersion: '', currentVersion: '' };
     }
-    const version = skillSourceVersion(source);
+    const resolvedSource = resolvedLinkSource(target, source);
+    const sourceStats = inspectPath(resolvedSource);
+    if (sourceStats === null || !sourceStats.isDirectory()) {
+      return { status: 'missing-source', recordedVersion: '', currentVersion: '' };
+    }
+    const version = skillSourceVersion(resolvedSource);
     return { status: 'pinned', recordedVersion: version, currentVersion: version };
   }
 
@@ -1368,7 +1451,8 @@ function expectedSkillInstallEntries(manifest, config, projectRoot) {
 }
 
 function plannedExpectedSkillChange(entry) {
-  if (!existsSync(entry.target)) {
+  const stats = inspectPath(entry.target);
+  if (stats === null) {
     return {
       type: 'install',
       skillName: entry.skillName,
@@ -1378,10 +1462,9 @@ function plannedExpectedSkillChange(entry) {
     };
   }
 
-  const stats = lstatSync(entry.target);
   if (stats.isSymbolicLink()) {
     const currentSource = readlinkSync(entry.target);
-    if (!sourceOwnedBySkillpacks(currentSource)) {
+    if (!skillSymlinkOwnedBySkillpacks(entry.target, currentSource, entry)) {
       return {
         type: 'skip',
         skillName: entry.skillName,
@@ -1389,14 +1472,15 @@ function plannedExpectedSkillChange(entry) {
         reason: 'not repo-managed'
       };
     }
-    if (currentSource === entry.source) {
+    const resolvedSource = resolvedLinkSource(entry.target, currentSource);
+    if (isArchiveSource(entry.source) && resolvedSource === resolve(entry.source)) {
       return null;
     }
     return {
       type: 'update',
       skillName: entry.skillName,
       target: entry.rel,
-      fromVersion: skillSourceVersion(currentSource),
+      fromVersion: skillSourceVersion(resolvedSource),
       toVersion: entry.version
     };
   }
@@ -1508,6 +1592,9 @@ function planRefreshProject({ manifest, projectRoot, config = null }) {
     const skillName = basename(target);
 
     if (status.status === 'not-managed') {
+      if (expectedTargets.has(rel)) {
+        continue;
+      }
       plan.skips.push({
         type: 'skip',
         skillName,
@@ -2296,6 +2383,7 @@ export async function doctorProject({ manifest, projectRoot = process.cwd(), arg
         break;
       case 'missing-source':
         console.log(`  missing  ${rel} — canonical source no longer exists`);
+        anyStale = true;
         break;
       case 'stale':
         console.log(
