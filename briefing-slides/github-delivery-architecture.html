@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Issue-backed GitHub delivery — architecture briefing</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f4f0e8;
+  --surface: #fffdf8;
+  --surface-2: #f3eee3;
+  --ink: #172033;
+  --muted: #647084;
+  --line: #d9d1c2;
+  --blue: #2468d8;
+  --blue-soft: #e8f0ff;
+  --teal: #087f78;
+  --teal-soft: #e1f4f0;
+  --violet: #7356d8;
+  --violet-soft: #eee9ff;
+  --gold: #a87400;
+  --gold-soft: #fbf0d2;
+  --red: #d63d45;
+  --red-soft: #fce9eb;
+  --green: #178d4d;
+  --green-soft: #e3f5e9;
+  --shadow: 0 24px 64px rgba(31, 38, 52, .14);
+  --radius: 18px;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #202733;
+  --ink: #d7dee8;
+  --muted: #97a3b4;
+  --line: #343d4b;
+  --blue: #65a8ff;
+  --blue-soft: #172b45;
+  --teal: #49c7bd;
+  --teal-soft: #153532;
+  --violet: #b7a0ff;
+  --violet-soft: #2a2144;
+  --gold: #e2b84a;
+  --gold-soft: #382f18;
+  --red: #ff7069;
+  --red-soft: #3d1d20;
+  --green: #4ed17e;
+  --green-soft: #173725;
+  --shadow: 0 24px 64px rgba(0, 0, 0, .52);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+body { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+button, input, select, textarea { font: inherit; }
+a { color: var(--blue); text-decoration-thickness: .08em; text-underline-offset: .18em; }
+.topbar, .footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .65rem 1rem; border-color: var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); z-index: 10; min-width: 0;
+}
+.topbar { border-bottom: 1px solid var(--line); }
+.footer { border-top: 1px solid var(--line); }
+.brand { min-width: 0; font-weight: 850; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand small { color: var(--muted); font-weight: 700; margin-left: .5rem; }
+.top-actions, .nav-actions { display: flex; align-items: center; gap: .55rem; }
+.pill-button {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px;
+  min-height: 2.2rem; padding: .35rem .8rem; cursor: pointer; font-weight: 750;
+}
+.pill-button:hover { border-color: var(--blue); color: var(--blue); }
+.progress { width: min(26rem, 35vw); height: .42rem; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--blue), var(--teal)); transition: width .18s ease; }
+[data-slide-counter] { color: var(--muted); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.deck-stage { position: relative; min-height: 0; min-width: 0; max-width: 100vw; }
+[data-briefing-slide] { display: none; width: 100%; min-width: 0; max-width: 100%; min-height: calc(100vh - 8.1rem); padding: 1.1rem; }
+[data-briefing-slide].active { display: grid; place-items: center; }
+.slide-card {
+  width: min(1260px, 100%); min-width: 0; max-width: 100%; min-height: min(700px, calc(100vh - 10.3rem));
+  padding: clamp(1.45rem, 3.2vw, 3rem); border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow); display: grid; align-content: center; gap: 1.25rem;
+}
+[data-required-gate-slide][data-gate-status="unanswered"] .slide-card { border: 3px solid var(--red); }
+[data-required-gate-slide][data-gate-status="answered"] .slide-card { border: 3px solid var(--green); }
+.feedback-trigger { justify-self: end; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-weight: 800; }
+.feedback-trigger:hover { color: var(--blue); }
+.eyebrow { margin: 0; color: var(--teal); font-weight: 850; text-transform: uppercase; letter-spacing: .13em; font-size: .78rem; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: clamp(2.6rem, 6vw, 5.6rem); line-height: .95; letter-spacing: -.055em; max-width: 15ch; }
+h2 { font-size: clamp(2rem, 4vw, 3.8rem); line-height: 1; letter-spacing: -.045em; }
+h3 { font-size: 1rem; letter-spacing: -.015em; }
+.lede { max-width: 68ch; color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.45; }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+.chip, [data-reference-chip] {
+  display: inline-flex; align-items: center; gap: .35rem; border: 1px solid var(--line); border-radius: 999px;
+  padding: .34rem .7rem; background: var(--surface-2); color: var(--muted); font-size: .78rem; font-weight: 750;
+}
+a[data-reference-chip] { color: var(--blue); text-decoration: none; }
+.hero-grid { display: grid; grid-template-columns: 1.18fr .82fr; gap: 2rem; align-items: end; }
+.hero-mark {
+  min-height: 18rem; border-radius: 2rem; background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--teal) 48%, transparent), transparent 42%),
+    radial-gradient(circle at 76% 30%, color-mix(in srgb, var(--violet) 50%, transparent), transparent 45%),
+    linear-gradient(145deg, var(--blue-soft), var(--violet-soft));
+  display: grid; place-items: center; position: relative; overflow: hidden;
+}
+.hero-mark::before, .hero-mark::after { content: ""; position: absolute; width: 12rem; height: 12rem; border: 1px solid color-mix(in srgb, var(--blue) 40%, transparent); border-radius: 50%; }
+.hero-mark::after { width: 19rem; height: 19rem; }
+.hero-mark strong { z-index: 1; font-size: clamp(3rem, 8vw, 7rem); letter-spacing: -.08em; }
+.metric-row, .card-grid, .matrix { display: grid; gap: .85rem; }
+.metric-row { grid-template-columns: repeat(3, 1fr); }
+.card-grid.three { grid-template-columns: repeat(3, 1fr); }
+.card-grid.two { grid-template-columns: repeat(2, 1fr); }
+.card, .metric, .risk, .phase {
+  border: 1px solid var(--line); border-radius: 14px; padding: 1rem; background: color-mix(in srgb, var(--surface) 70%, var(--surface-2));
+}
+.metric strong { display: block; font-size: clamp(2rem, 4vw, 4rem); letter-spacing: -.06em; color: var(--blue); }
+.metric span, .card p, .risk p, .phase p { color: var(--muted); font-size: .88rem; line-height: 1.4; }
+.card .icon { width: 2.2rem; height: 2.2rem; border-radius: .7rem; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); font-weight: 900; margin-bottom: .75rem; }
+.flow { display: grid; grid-template-columns: repeat(6, 1fr); align-items: stretch; gap: .45rem; }
+.flow-step { position: relative; border: 1px solid var(--line); background: var(--surface-2); border-radius: 14px; padding: .9rem .75rem; min-height: 9rem; display: grid; align-content: space-between; }
+.flow-step:not(:last-child)::after { content: "→"; position: absolute; right: -.65rem; top: 43%; z-index: 2; color: var(--blue); font-weight: 900; }
+.flow-step b { color: var(--blue); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.flow-step span { color: var(--muted); font-size: .78rem; line-height: 1.3; }
+.flow-step.stop { background: var(--gold-soft); border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); }
+.matrix { grid-template-columns: 1.05fr .95fr 1.2fr 1fr; align-items: stretch; }
+.matrix > div { padding: .75rem; border-bottom: 1px solid var(--line); font-size: .82rem; line-height: 1.35; }
+.matrix .head { color: var(--muted); text-transform: uppercase; font-size: .68rem; letter-spacing: .09em; font-weight: 850; }
+.matrix .skill { font-family: var(--mono); color: var(--blue); font-weight: 800; }
+.safety-shell { display: grid; grid-template-columns: .9fr 1.1fr; gap: 1rem; }
+.guard-list { display: grid; gap: .6rem; }
+.guard { border-left: 4px solid var(--green); padding: .7rem .85rem; background: var(--green-soft); border-radius: 0 10px 10px 0; }
+.guard.stop { border-left-color: var(--red); background: var(--red-soft); }
+.guard b { display: block; margin-bottom: .15rem; }
+.guard span { color: var(--muted); font-size: .82rem; }
+.sequence { counter-reset: step; display: grid; grid-template-columns: repeat(5, 1fr); gap: .7rem; }
+.sequence > div { counter-increment: step; border-top: 4px solid var(--blue); background: var(--surface-2); border-radius: 10px; padding: .8rem; min-height: 9rem; }
+.sequence > div::before { content: counter(step, decimal-leading-zero); display: block; color: var(--blue); font-family: var(--mono); font-weight: 900; margin-bottom: .7rem; }
+.sequence p { color: var(--muted); font-size: .78rem; line-height: 1.35; margin-top: .35rem; }
+.risk-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .65rem; }
+.risk { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: start; }
+.risk .signal { width: .75rem; height: .75rem; margin-top: .18rem; border-radius: 50%; background: var(--gold); }
+.risk.stop .signal { background: var(--red); }
+.phase-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.phase { border-top: 5px solid var(--teal); }
+.phase:nth-child(2) { border-top-color: var(--violet); }
+.phase:nth-child(3) { border-top-color: var(--gold); }
+.phase .num { color: var(--muted); font-family: var(--mono); font-weight: 900; }
+.phase ul { margin: .75rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .8rem; line-height: 1.45; }
+.gate-grid { display: grid; gap: .42rem; }
+.gate-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-width: 0; border: 1px solid var(--line); border-radius: 11px; padding: .58rem .8rem; background: var(--surface-2); }
+.gate-row > div { min-width: 0; }
+.gate-row strong { display: block; font-size: .84rem; }
+.gate-row span { color: var(--muted); font-size: .73rem; overflow-wrap: anywhere; }
+.gate-options { display: flex; gap: .65rem; white-space: nowrap; }
+.gate-options label { display: inline-flex; align-items: center; gap: .25rem; font-size: .76rem; font-weight: 750; cursor: pointer; }
+.references { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem; }
+.reference-card { border: 1px solid var(--line); border-radius: 12px; padding: .8rem; text-decoration: none; background: var(--surface-2); }
+.reference-card strong { display: block; color: var(--blue); font-size: .84rem; }
+.reference-card span { color: var(--muted); font-size: .74rem; }
+.compiler-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 1rem; align-items: stretch; }
+.compiler-card { border: 1px solid var(--line); background: var(--surface-2); border-radius: 14px; padding: 1rem; }
+textarea.yaml { width: 100%; height: 15rem; resize: vertical; border: 1px solid var(--line); border-radius: 10px; padding: .75rem; background: var(--bg); color: var(--ink); font: .72rem/1.4 var(--mono); }
+.status-line { margin-top: .55rem; color: var(--muted); font-size: .78rem; }
+.filmstrip { display: flex; gap: .25rem; align-items: center; min-width: 0; max-width: min(34rem, 46vw); overflow-x: auto; }
+.filmstrip button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 6px; min-width: 1.75rem; height: 1.75rem; cursor: pointer; font-size: .72rem; }
+.filmstrip button.active { background: var(--blue); color: white; border-color: var(--blue); }
+.filmstrip button.gate-unanswered { box-shadow: inset 0 0 0 2px var(--red); }
+.filmstrip button.gate-answered { box-shadow: inset 0 0 0 2px var(--green); }
+.feedback-panel {
+  position: fixed; z-index: 30; inset: 0 0 0 auto; width: min(28rem, 100vw); padding: 1rem; overflow-y: auto;
+  border-left: 1px solid var(--line); background: var(--surface); box-shadow: -18px 0 52px rgba(0,0,0,.22);
+  transform: translateX(102%); transition: transform .18s ease;
+}
+.feedback-panel.open { transform: translateX(0); }
+.panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: 1rem; }
+.feedback-panel label { display: grid; gap: .3rem; margin: .8rem 0; color: var(--muted); font-size: .78rem; font-weight: 800; }
+.feedback-panel select, .feedback-panel textarea { width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: .6rem; background: var(--bg); color: var(--ink); }
+.feedback-panel textarea { min-height: 6rem; resize: vertical; }
+.feedback-panel [data-slide-feedback-yaml] { min-height: 10rem; font-family: var(--mono); font-size: .7rem; }
+.copy-fallback { display: none; }
+@media (max-width: 900px) {
+  .brand small, .progress { display: none; }
+  .hero-grid, .safety-shell, .compiler-grid { grid-template-columns: 1fr; }
+  .hero-mark { min-height: 9rem; }
+  .metric-row, .card-grid.three, .card-grid.two, .risk-grid, .phase-row, .references { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: repeat(3, 1fr); }
+  .flow-step:nth-child(3)::after { display: none; }
+  .matrix { grid-template-columns: .8fr 1fr 1.2fr; }
+  .matrix > div:nth-child(4n) { display: none; }
+  .sequence { grid-template-columns: repeat(3, 1fr); }
+  .slide-card { min-height: 0; padding: 1.2rem; gap: .8rem; }
+  h2 { font-size: clamp(1.7rem, 7vw, 2.5rem); }
+}
+@media (max-width: 600px) {
+  [data-briefing-slide] { padding: .55rem; }
+  .topbar, .footer { padding: .45rem .55rem; }
+  .metric-row, .card-grid.three, .card-grid.two, .risk-grid, .phase-row, .references { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: repeat(2, 1fr); }
+  .flow-step:nth-child(2n)::after { display: none; }
+  .sequence { grid-template-columns: repeat(2, 1fr); }
+  .gate-row { grid-template-columns: 1fr; gap: .35rem; }
+  .filmstrip { max-width: 7.5rem; }
+  .footer { gap: .45rem; }
+  .nav-actions { gap: .3rem; }
+  .nav-actions .pill-button { min-width: 0; padding-inline: .65rem; }
+  .matrix { grid-template-columns: .7fr 1fr; }
+  .matrix > div:nth-child(3n), .matrix > div:nth-child(4n) { display: none; }
+}
+@media print {
+  body { display: block; background: white; color: black; }
+  .topbar, .footer, .feedback-panel, .feedback-trigger { display: none !important; }
+  [data-briefing-slide] { display: block !important; min-height: 100vh; padding: 0; page-break-after: always; }
+  .slide-card { min-height: 100vh; width: 100%; border: 0; border-radius: 0; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">GitHub delivery architecture <small>approved · 2026-07-12</small></div>
+  <div class="top-actions">
+    <div class="progress" data-slide-progress aria-label="Deck progress"><span></span></div>
+    <span data-slide-counter>1 / 11</span>
+    <button class="pill-button" type="button" data-theme-toggle>Theme</button>
+  </div>
+</header>
+
+<main class="deck-stage">
+  <section data-briefing-slide id="slide-1" data-slide-title="From direct push to reviewable delivery" class="active">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Approved architecture</p>
+          <h1>Reviewable by default.</h1>
+          <p class="lede">Every tracked mutation becomes an issue-backed branch and pull request. Primary stays protected; merge stays explicit.</p>
+          <div class="chips">
+            <span class="chip">3 universal subskills</span>
+            <span class="chip">370 inherited writers</span>
+            <a data-reference-chip href="../tasks/roadmap.md">Canonical roadmap</a>
+          </div>
+        </div>
+        <div class="hero-mark" aria-hidden="true"><strong>PR</strong></div>
+      </div>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-2" data-slide-title="One safety layer, not 370 rewrites">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Why this shape</p>
+      <h2>Change the contract once.</h2>
+      <div class="metric-row">
+        <div class="metric"><strong>370</strong><span>active skills already inherit the shared shipping contract</span></div>
+        <div class="metric"><strong>3</strong><span>base subskills own all GitHub lifecycle mutations</span></div>
+        <div class="metric"><strong>0</strong><span>default direct pushes to <code>main</code> or <code>master</code></span></div>
+      </div>
+      <p class="lede">Writing skills keep their domain logic. The shared contract handles ticket, branch, and PR state through low-freedom safety skills.</p>
+      <a data-reference-chip href="../tasks/todo.md">Current approval gate</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-3" data-slide-title="The delivery path">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Golden path</p>
+      <h2>One work item, one review boundary.</h2>
+      <div class="flow" aria-label="Delivery flow">
+        <div class="flow-step"><b>Intent</b><h3>Writing skill</h3><span>Defines goal, scope, and acceptance.</span></div>
+        <div class="flow-step"><b>Ticket</b><h3>GitHub Issue</h3><span>Reuse or create; never duplicate.</span></div>
+        <div class="flow-step"><b>Isolation</b><h3>Work branch</h3><span>Non-primary, issue-linked, scoped.</span></div>
+        <div class="flow-step"><b>Proof</b><h3>Validate</h3><span>Tests, manifest, adversarial review.</span></div>
+        <div class="flow-step"><b>Review</b><h3>Ready PR</h3><span>Upsert from current branch.</span></div>
+        <div class="flow-step stop"><b>Explicit gate</b><h3>Merge</h3><span>Checks + approval + confirmation.</span></div>
+      </div>
+      <div class="chips"><span class="chip">Issue closes through merged PR</span><span class="chip">Deploy/release only after merge</span></div>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-4" data-slide-title="Three universal subskills">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Base layer</p>
+      <h2>Small skills, hard boundaries.</h2>
+      <div class="matrix" role="table" aria-label="Subskill responsibility matrix">
+        <div class="head">Skill</div><div class="head">Owns</div><div class="head">Safety invariant</div><div class="head">Typical calls</div>
+        <div class="skill">github-issue</div><div>Issue / ticket</div><div>Search and link before create; no early close</div><div>ensure · update · close</div>
+        <div class="skill">github-branch</div><div>Branch + commits</div><div>Never primary or force-push; prove dirty-tree scope</div><div>ensure · adopt · publish · cleanup</div>
+        <div class="skill">github-pr</div><div>PR + merge</div><div>Upsert by head; merge only after strict gates</div><div>upsert · review · merge · status</div>
+      </div>
+      <p class="lede">They live in <code>packs/base</code>, so every installed writer can call them without depending on an optional GitOps pack.</p>
+      <a data-reference-chip href="../packs/base/PACK.md">Base-skill semantics</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-5" data-slide-title="Branch safety transaction">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Before the first tracked edit</p>
+      <h2>Branch adoption must be provable.</h2>
+      <div class="safety-shell">
+        <div class="card">
+          <div class="icon">↗</div>
+          <h3>Clean start</h3>
+          <p>Fetch the default branch, create <code>work/&lt;issue&gt;-&lt;slug&gt;</code> from remote primary, and leave local primary untouched.</p>
+        </div>
+        <div class="guard-list">
+          <div class="guard"><b>Reuse first</b><span>Existing linked issue, branch, or PR wins over creating another.</span></div>
+          <div class="guard"><b>Scoped adoption</b><span>Dirty work may move onto a branch only when every changed path belongs to this task.</span></div>
+          <div class="guard stop"><b>Stop on ambiguity</b><span>Unrelated changes, ahead-only primary commits, secrets, or branch conflicts block mutation.</span></div>
+          <div class="guard stop"><b>No escape hatch</b><span>Authentication failure never falls back to pushing primary.</span></div>
+        </div>
+      </div>
+      <a data-reference-chip href="../packs/release-ops/codex/branch-lifecycle/SKILL.md">Legacy branch behavior</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-6" data-slide-title="Ship and ship-end semantics">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Orchestrator refactor</p>
+      <h2>“Shipped” means ready for review.</h2>
+      <div class="sequence">
+        <div><h3>Resolve</h3><p>Ensure issue and non-primary branch; prove exact boundary.</p></div>
+        <div><h3>Validate</h3><p>Run tests, manifest checks, and adversarial review.</p></div>
+        <div><h3>Finalize</h3><p>Update task docs before the final commit boundary.</p></div>
+        <div><h3>Publish</h3><p>Group commits, push the work branch, upsert the PR.</p></div>
+        <div><h3>Stop</h3><p>Mark ready, report review route, never merge by default.</p></div>
+      </div>
+      <div class="chips">
+        <a data-reference-chip href="../packs/exec-loop/codex/ship/SKILL.md">Current ship</a>
+        <a data-reference-chip href="../packs/exec-loop/codex/ship-end/SKILL.md">Current ship-end</a>
+        <a data-reference-chip href="../packs/exec-loop/codex/exec/SKILL.md">Current Codex exec</a>
+      </div>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-7" data-slide-title="Failure policy">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Safe degradation</p>
+      <h2>Every failure has a non-primary outcome.</h2>
+      <div class="risk-grid">
+        <div class="risk stop"><i class="signal"></i><div><h3>No GitHub remote</h3><p>Keep work local on a non-primary branch; report that PR publication is unavailable.</p></div></div>
+        <div class="risk stop"><i class="signal"></i><div><h3><code>gh</code> unauthenticated</h3><p>Preserve safe local commits; expose authentication as the external blocker.</p></div></div>
+        <div class="risk stop"><i class="signal"></i><div><h3>Checks or review fail</h3><p>Update the branch, keep the PR unready, and never merge.</p></div></div>
+        <div class="risk"><i class="signal"></i><div><h3>Release or deploy requested</h3><p>Defer until the PR is merged and primary is current; production still needs confirmation.</p></div></div>
+      </div>
+      <p class="lede">The new workflow adds isolation and review without weakening secret, destructive-action, release, or production gates.</p>
+      <a data-reference-chip href="../docs/quality-gate-contract.md">Quality-gate contract</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-8" data-slide-title="Migration plan">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Serial rollout</p>
+      <h2>Build the safety layer first.</h2>
+      <div class="phase-row">
+        <div class="phase"><span class="num">01</span><h3>Subskills + contract</h3><ul><li>Create mirrored base skills</li><li>Define deterministic invariants</li><li>Add regression audit</li></ul></div>
+        <div class="phase"><span class="num">02</span><h3>Orchestrators</h3><ul><li>Refactor ship / ship-end / exec</li><li>Wrap legacy GitOps skills</li><li>Remove direct-primary bypasses</li></ul></div>
+        <div class="phase"><span class="num">03</span><h3>Provision + prove</h3><ul><li>Update root agent contracts</li><li>Refresh catalogs and manifests</li><li>Dogfood via ready PR</li></ul></div>
+      </div>
+      <div class="chips"><span class="chip">No automatic merge</span><span class="chip">No GitHub Actions</span><span class="chip">Migration itself ends in review</span></div>
+      <a data-reference-chip href="../tasks/roadmap.md">Full phased plan</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-9" data-slide-title="Architecture approval gates" data-required-gate-slide data-gate-status="answered">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Approved 2026-07-12</p>
+      <h2>Operating defaults accepted.</h2>
+      <div class="gate-grid">
+        <div class="gate-row"><div><strong>GitHub Issue is the ticket abstraction</strong><span>No duplicate ticket skill; tracker adapters can come later.</span></div><div class="gate-options"><label><input type="radio" required checked data-gate-answer name="gate_ticket_abstraction" value="approve">Approve</label><label><input type="radio" required data-gate-answer name="gate_ticket_abstraction" value="revise">Revise</label></div></div>
+        <div class="gate-row"><div><strong>Every tracked mutation uses branch + PR</strong><span>Reuse existing linked state and never push primary directly.</span></div><div class="gate-options"><label><input type="radio" required checked data-gate-answer name="gate_pr_every_mutation" value="approve">Approve</label><label><input type="radio" required data-gate-answer name="gate_pr_every_mutation" value="revise">Revise</label></div></div>
+        <div class="gate-row"><div><strong>Shipping publishes ready; it does not merge</strong><span>Merge remains a separate strict-gate action.</span></div><div class="gate-options"><label><input type="radio" required checked data-gate-answer name="gate_ready_not_merge" value="approve">Approve</label><label><input type="radio" required data-gate-answer name="gate_ready_not_merge" value="revise">Revise</label></div></div>
+        <div class="gate-row"><div><strong>Deploy and release wait for merge</strong><span>Only current primary is deployable or releasable.</span></div><div class="gate-options"><label><input type="radio" required checked data-gate-answer name="gate_deploy_after_merge" value="approve">Approve</label><label><input type="radio" required data-gate-answer name="gate_deploy_after_merge" value="revise">Revise</label></div></div>
+        <div class="gate-row"><div><strong>No primary fallback when GitHub is unavailable</strong><span>Keep a safe local branch and report the blocker.</span></div><div class="gate-options"><label><input type="radio" required checked data-gate-answer name="gate_no_primary_fallback" value="approve">Approve</label><label><input type="radio" required data-gate-answer name="gate_no_primary_fallback" value="revise">Revise</label></div></div>
+      </div>
+      <p class="status-line" data-gate-summary>All five architecture defaults were approved after expert review.</p>
+      <a data-reference-chip href="../tasks/todo.md">Approval source</a>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-10" data-slide-title="References" data-references-slide>
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Canonical drill-down</p>
+      <h2>Sources stay dense. Slides stay brief.</h2>
+      <div class="references">
+        <a class="reference-card" data-reference-chip href="../tasks/roadmap.md"><strong>Architecture roadmap</strong><span>Phases, decisions, and acceptance criteria</span></a>
+        <a class="reference-card" data-reference-chip href="../tasks/todo.md"><strong>Current approval gate</strong><span>Execution profile and five proposed defaults</span></a>
+        <a class="reference-card" data-reference-chip href="../tasks/lessons.md"><strong>Preference correction</strong><span>Branches and PRs replace the obsolete direct-primary preference</span></a>
+        <a class="reference-card" data-reference-chip href="../docs/quality-gate-contract.md"><strong>Quality gate</strong><span>Evidence required before any shipping boundary</span></a>
+        <a class="reference-card" data-reference-chip href="../packs/exec-loop/codex/ship/SKILL.md"><strong>Current ship contract</strong><span>Direct-primary behavior to refactor</span></a>
+        <a class="reference-card" data-reference-chip href="../packs/exec-loop/codex/ship-end/SKILL.md"><strong>Current ship-end contract</strong><span>Session wrap-up behavior to refactor</span></a>
+        <a class="reference-card" data-reference-chip href="../packs/release-ops/codex/branch-lifecycle/SKILL.md"><strong>Legacy branch lifecycle</strong><span>Advanced branch behavior to preserve behind wrappers</span></a>
+        <a class="reference-card" data-reference-chip href="../packs/gitops/codex/commit-and-push-by-feature/SKILL.md"><strong>Legacy commit publisher</strong><span>Compatibility route to move off primary</span></a>
+      </div>
+    </article>
+  </section>
+
+  <section data-briefing-slide id="slide-11" data-slide-title="Compile review YAML">
+    <article class="slide-card">
+      <button class="feedback-trigger" type="button" data-feedback-trigger>Feedback</button>
+      <p class="eyebrow">Return to the producing workflow</p>
+      <h2>Compile the review packet.</h2>
+      <div class="compiler-grid">
+        <div class="compiler-card">
+          <h3>Approval recorded</h3>
+          <p class="lede">All five gates passed expert review. Future revision feedback can reopen the packet without erasing this approval record.</p>
+          <div class="chips" style="margin-top:1rem"><span class="chip">Owner: $skill-creator</span><span class="chip">Full-deck YAML</span></div>
+        </div>
+        <div class="compiler-card" data-full-deck-yaml>
+          <button class="pill-button" type="button" data-compile-deck>Compile YAML</button>
+          <button class="pill-button" type="button" data-copy-deck>Copy YAML</button>
+          <textarea class="yaml" readonly data-deck-yaml aria-label="Compiled full-deck YAML"></textarea>
+          <textarea class="yaml copy-fallback" readonly data-deck-copy-fallback aria-label="YAML copy fallback"></textarea>
+          <p class="status-line" data-deck-status>Approved 2026-07-12. Compile to export the approval record.</p>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<footer class="footer" data-briefing-footer>
+  <div class="nav-actions">
+    <button class="pill-button" type="button" data-slide-prev aria-label="Previous slide">← Previous</button>
+    <button class="pill-button" type="button" data-slide-next aria-label="Next slide">Next →</button>
+  </div>
+  <div class="filmstrip" data-filmstrip aria-label="Slide filmstrip"></div>
+  <span data-slide-counter>1 / 11</span>
+</footer>
+
+<aside class="feedback-panel" data-slide-feedback-panel aria-label="Slide feedback sidebar" aria-hidden="true">
+  <div class="panel-head"><div><p class="eyebrow" data-fb-meta>Slide</p><h3 data-fb-title>Feedback</h3></div><button class="pill-button" type="button" data-fb-close>Close</button></div>
+  <label>Feedback
+    <select data-fb-feedback><option value="">No feedback</option><option value="emphasize">Emphasize</option><option value="revise">Revise</option><option value="needs-clarification">Needs clarification</option></select>
+  </label>
+  <label>Mark
+    <select data-fb-mark><option value="">Unmarked</option><option value="important">Important</option><option value="question">Question</option><option value="approved">Approved</option><option value="skip">Skip</option></select>
+  </label>
+  <label>Annotation<textarea data-fb-note placeholder="Slide-scoped notes"></textarea></label>
+  <button class="pill-button" type="button" data-compile-slide>Compile slide YAML</button>
+  <button class="pill-button" type="button" data-copy-slide>Copy slide YAML</button>
+  <textarea readonly data-slide-feedback-yaml aria-label="Compiled slide-feedback YAML"></textarea>
+  <textarea readonly class="copy-fallback" data-slide-copy-fallback aria-label="Slide YAML copy fallback"></textarea>
+</aside>
+
+<script>
+(function () {
+  "use strict";
+  var COMMAND = "$skill-creator";
+  var DECK_PATH = "briefing-slides/github-delivery-architecture.html";
+  var REFERENCES = [
+    "tasks/roadmap.md",
+    "tasks/todo.md",
+    "tasks/lessons.md",
+    "docs/quality-gate-contract.md",
+    "packs/exec-loop/codex/ship/SKILL.md",
+    "packs/exec-loop/codex/ship-end/SKILL.md",
+    "packs/release-ops/codex/branch-lifecycle/SKILL.md",
+    "packs/gitops/codex/commit-and-push-by-feature/SKILL.md"
+  ];
+  var SOURCES = REFERENCES.concat(["prompts/skill-creator/skill-prompt-20260710-104459-github-branch-pr-paradigm.md"]);
+  var STORE = "briefing:github-delivery-architecture:v3";
+  var POS = STORE + ":position";
+  var slides = Array.prototype.slice.call(document.querySelectorAll("[data-briefing-slide]"));
+  var current = 0;
+  var state = readState();
+  var panel = document.querySelector("[data-slide-feedback-panel]");
+  var filmstrip = document.querySelector("[data-filmstrip]");
+  var fbFeedback = panel.querySelector("[data-fb-feedback]");
+  var fbMark = panel.querySelector("[data-fb-mark]");
+  var fbNote = panel.querySelector("[data-fb-note]");
+
+  function approvedState() { return { gates: { gate_ticket_abstraction: "approve", gate_pr_every_mutation: "approve", gate_ready_not_merge: "approve", gate_deploy_after_merge: "approve", gate_no_primary_fallback: "approve" } }; }
+  function readState() { try { return JSON.parse(localStorage.getItem(STORE) || JSON.stringify(approvedState())) || approvedState(); } catch (e) { return approvedState(); } }
+  function persist() { try { localStorage.setItem(STORE, JSON.stringify(state)); localStorage.setItem(POS, String(current)); } catch (e) {} }
+  function q(value) { return JSON.stringify(String(value == null ? "" : value)); }
+  function slideState(id) { state.slides = state.slides || {}; state.slides[id] = state.slides[id] || {}; return state.slides[id]; }
+  function titleFor(slide) { return slide.getAttribute("data-slide-title") || slide.id; }
+  function currentSlide() { return slides[current]; }
+
+  function show(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach(function (slide, i) { slide.classList.toggle("active", i === current); });
+    document.querySelectorAll("[data-slide-counter]").forEach(function (el) { el.textContent = (current + 1) + " / " + slides.length; });
+    var fill = document.querySelector("[data-slide-progress] span");
+    if (fill) fill.style.width = (((current + 1) / slides.length) * 100) + "%";
+    Array.prototype.forEach.call(filmstrip.children, function (button, i) { button.classList.toggle("active", i === current); });
+    try { history.replaceState(null, "", "#slide-" + (current + 1)); } catch (e) {}
+    syncPanel(); persist();
+  }
+
+  slides.forEach(function (slide, i) {
+    var button = document.createElement("button");
+    button.type = "button"; button.textContent = String(i + 1); button.title = titleFor(slide);
+    button.addEventListener("click", function () { show(i); }); filmstrip.appendChild(button);
+  });
+  document.querySelectorAll("[data-slide-prev]").forEach(function (button) { button.addEventListener("click", function () { show(current - 1); }); });
+  document.querySelectorAll("[data-slide-next]").forEach(function (button) { button.addEventListener("click", function () { show(current + 1); }); });
+  document.addEventListener("keydown", function (event) {
+    if (["INPUT", "TEXTAREA", "SELECT"].indexOf(event.target.tagName) !== -1) return;
+    var key = event.key.toLowerCase();
+    if (key === "arrowleft" || key === "a") { event.preventDefault(); show(current - 1); }
+    if (key === "arrowright" || key === "d" || event.key === " ") { event.preventDefault(); show(current + 1); }
+    if (key === "home") { event.preventDefault(); show(0); }
+    if (key === "end") { event.preventDefault(); show(slides.length - 1); }
+    if (key === "escape") closePanel();
+  });
+  document.querySelector(".deck-stage").addEventListener("click", function (event) {
+    if (event.target.closest(".slide-card, button, a, input, select, textarea, .feedback-panel")) return;
+    show(current + 1);
+  });
+
+  function syncPanel() {
+    var slide = currentSlide(); var item = slideState(slide.id);
+    panel.querySelector("[data-fb-meta]").textContent = "Slide " + (current + 1) + " / " + slides.length;
+    panel.querySelector("[data-fb-title]").textContent = titleFor(slide);
+    fbFeedback.value = item.feedback || ""; fbMark.value = item.mark || ""; fbNote.value = item.annotation || "";
+  }
+  function openPanel() { syncPanel(); panel.classList.add("open"); panel.setAttribute("aria-hidden", "false"); }
+  function closePanel() { panel.classList.remove("open"); panel.setAttribute("aria-hidden", "true"); }
+  document.querySelectorAll("[data-feedback-trigger]").forEach(function (button) {
+    button.addEventListener("click", function () { var slide = button.closest("[data-briefing-slide]"); show(slides.indexOf(slide)); openPanel(); });
+  });
+  panel.querySelector("[data-fb-close]").addEventListener("click", closePanel);
+  fbFeedback.addEventListener("change", function () { slideState(currentSlide().id).feedback = fbFeedback.value; persist(); });
+  fbMark.addEventListener("change", function () { slideState(currentSlide().id).mark = fbMark.value; persist(); });
+  fbNote.addEventListener("input", function () { slideState(currentSlide().id).annotation = fbNote.value; persist(); });
+
+  function gateNames(slide) {
+    var names = {}; slide.querySelectorAll("[data-gate-answer]").forEach(function (input) { names[input.name] = true; }); return Object.keys(names);
+  }
+  function refreshGate(slide) {
+    if (!slide.hasAttribute("data-required-gate-slide")) return;
+    var names = gateNames(slide); var answered = names.length > 0 && names.every(function (name) { return state.gates && state.gates[name]; });
+    slide.setAttribute("data-gate-status", answered ? "answered" : "unanswered");
+    var button = filmstrip.children[slides.indexOf(slide)];
+    if (button) { button.classList.toggle("gate-unanswered", !answered); button.classList.toggle("gate-answered", answered); }
+    var summary = slide.querySelector("[data-gate-summary]");
+    if (summary) summary.textContent = answered ? "All required decisions answered. Compile the full review packet on slide 11." : "Five answers required. The slide border turns green when complete.";
+  }
+  document.querySelectorAll("[data-gate-answer]").forEach(function (input) {
+    if (state.gates && state.gates[input.name] === input.value) input.checked = true;
+    input.addEventListener("change", function () { state.gates = state.gates || {}; state.gates[input.name] = input.value; persist(); refreshGate(input.closest("[data-briefing-slide]")); });
+  });
+  slides.forEach(refreshGate);
+
+  function feedbackEntries(field) {
+    return Object.keys(state.slides || {}).filter(function (id) { return state.slides[id] && state.slides[id][field]; }).map(function (id) { return { id: id, value: state.slides[id][field] }; });
+  }
+  function compileSlide() {
+    var slide = currentSlide(); var item = slideState(slide.id);
+    return [
+      "# Invoke with: " + COMMAND,
+      "command: " + q(COMMAND),
+      "briefing_slides: " + DECK_PATH,
+      "slide: " + q(slide.id),
+      "slide_title: " + q(titleFor(slide)),
+      "slide_feedback:",
+      "  status: " + q(item.feedback || ""),
+      "  mark: " + q(item.mark || ""),
+      "  annotation: " + q(item.annotation || ""),
+      "approval_status: review-pending"
+    ].join("\n");
+  }
+  function compileDeck() {
+    var gateInputs = Array.prototype.slice.call(document.querySelectorAll("[data-gate-answer]"));
+    var gateNamesAll = gateInputs.map(function (input) { return input.name; }).filter(function (name, index, all) { return all.indexOf(name) === index; });
+    var unanswered = gateNamesAll.filter(function (name) { return !(state.gates && state.gates[name]); });
+    var allApprove = gateNamesAll.length > 0 && unanswered.length === 0 && gateNamesAll.every(function (name) { return state.gates[name] === "approve"; });
+    var blocking = feedbackEntries("feedback").some(function (entry) { return entry.value === "revise" || entry.value === "needs-clarification"; });
+    var lines = ["# Invoke with: " + COMMAND, "command: " + q(COMMAND), "briefing_slides: " + DECK_PATH, "reference_pages:"];
+    REFERENCES.forEach(function (path) { lines.push("  - " + q(path)); });
+    lines.push("source_artifacts:"); SOURCES.forEach(function (path) { lines.push("  - " + q(path)); });
+    lines.push("gate_answers:"); gateNamesAll.forEach(function (name) { lines.push("  " + name + ": " + q((state.gates || {})[name] || "")); });
+    lines.push("slide_feedback:"); feedbackEntries("feedback").forEach(function (entry) { lines.push("  - slide: " + q(entry.id)); lines.push("    status: " + q(entry.value)); });
+    lines.push("annotations:"); feedbackEntries("annotation").forEach(function (entry) { lines.push("  - slide: " + q(entry.id)); lines.push("    note: " + q(entry.value)); });
+    lines.push("marked_slides:"); feedbackEntries("mark").forEach(function (entry) { lines.push("  - slide: " + q(entry.id)); lines.push("    mark: " + q(entry.value)); });
+    lines.push("unanswered_required_questions:"); unanswered.forEach(function (name) { lines.push("  - " + q(name)); });
+    lines.push("approval_status: " + (allApprove && !blocking ? "ready-for-agent-review" : "not-approved"));
+    return { yaml: lines.join("\n"), ready: allApprove && !blocking };
+  }
+  function copyText(text, fallback) {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(function () { fallback.value = text; fallback.style.display = "block"; fallback.focus(); fallback.select(); });
+    else { fallback.value = text; fallback.style.display = "block"; fallback.focus(); fallback.select(); }
+  }
+  panel.querySelector("[data-compile-slide]").addEventListener("click", function () { panel.querySelector("[data-slide-feedback-yaml]").value = compileSlide(); });
+  panel.querySelector("[data-copy-slide]").addEventListener("click", function () { var yaml = compileSlide(); panel.querySelector("[data-slide-feedback-yaml]").value = yaml; copyText(yaml, panel.querySelector("[data-slide-copy-fallback]")); });
+  document.querySelector("[data-compile-deck]").addEventListener("click", function () { var result = compileDeck(); document.querySelector("[data-deck-yaml]").value = result.yaml; document.querySelector("[data-deck-status]").textContent = result.ready ? "Ready for agent review." : "Not approved: answer every gate with Approve and resolve revision feedback."; });
+  document.querySelector("[data-copy-deck]").addEventListener("click", function () { var result = compileDeck(); document.querySelector("[data-deck-yaml]").value = result.yaml; copyText(result.yaml, document.querySelector("[data-deck-copy-fallback]")); });
+  document.querySelector("[data-theme-toggle]").addEventListener("click", function () { var dark = document.documentElement.getAttribute("data-theme") === "dark"; document.documentElement.setAttribute("data-theme", dark ? "light" : "dark"); });
+
+  var fromHash = parseInt(String(location.hash).replace("#slide-", ""), 10);
+  var saved = parseInt(localStorage.getItem(POS) || "0", 10);
+  show(fromHash >= 1 && fromHash <= slides.length ? fromHash - 1 : (isNaN(saved) ? 0 : saved));
+}());
+</script>
+</body>
+</html>

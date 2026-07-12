@@ -19,6 +19,7 @@
     "guide": "guided-walkthrough",
     "ux-variations": "product-design",
     "reconcile-dev-docs": "docs-health",
-    "roadmap": "agent-work-admin"
+    "roadmap": "agent-work-admin",
+    "create-briefing-slides": "base"
   }
 }

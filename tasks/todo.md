@@ -1,14 +1,54 @@
 # Current Task
 
-## Current Implementation - No Active Task
+## Current Implementation - Issue-Backed Branch and PR Delivery
 
 ### Status
 
-No active executable task is promoted in this file. The dangling-symlink refresh fix, `0.1.22-experimental.6` canary release, pilot, and 60-project fleet recovery were completed and verified on 2026-07-10; see `tasks/history.md` and `tasks/ship-manifest-2026-07-10-skillpacks-0.1.22-experimental.6-dangling-symlink-fleet-recovery.md`.
+Architecture is approved and the primary review surface is recorded at `briefing-slides/github-delivery-architecture.html`. Implementation may proceed. The approved default is: GitHub Issue equals ticket; all tracked mutations use a non-primary branch and PR; `ship`, `ship-end`, and Codex `exec` publish a ready PR but do not merge; deploy and release remain primary-branch-only after merge.
+
+### Execution Profile
+
+- Mode: serial
+- Reason: the shared contract, mirrored skills, version archives, generated manifests, and active root instructions overlap heavily and must change in a deterministic order.
+- Write scope: `packs/base/**`, `packs/gitops/**`, `packs/release-ops/**`, `packs/exec-loop/**`, shared workflow docs, validation scripts, generated catalog/manifest artifacts, prompt/task history, and active root agent instructions.
+- Must not edit: generated runtime roots under `.claude/skills/**` and `.codex/skills/**` except through `scripts/pack.sh refresh`; protected credential files; unrelated application repositories.
+
+### Plan
+
+- [x] Inventory the existing direct-primary shared contract, shipping orchestrators, `commit-and-push-by-feature`, and legacy `branch-lifecycle` behavior.
+- [x] Choose the minimal universal architecture: three mirrored base subskills (`github-issue`, `github-branch`, `github-pr`) plus compatibility wrappers.
+- [x] Record the full phased migration and acceptance criteria in `tasks/roadmap.md`.
+- [x] Build and verify `briefing-slides/github-delivery-architecture.html` as the visual approval surface.
+- [x] Confirm the proposed defaults with the user before implementation.
+- [ ] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
+- [ ] Implement Phase 2 shipping-orchestrator migration.
+- [ ] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
+- [ ] Publish the completed migration as a ready PR without merging it automatically.
+
+### Approval Gate
+
+Approved 2026-07-12 after expert review. Implementation proceeds with these defaults:
+
+1. GitHub Issue is the canonical ticket abstraction.
+2. Every tracked mutation uses an issue-backed non-primary branch and PR when GitHub is available.
+3. `ship`, `ship-end`, and Codex `exec` may create or update a ready PR, but merge requires a separate explicit action.
+4. Deploy and release wait until the PR is merged to the current primary branch.
+5. Non-GitHub or unauthenticated states never fall back to pushing primary.
+
+### Concurrent Completed Work - Codex Accountable Agent Lifecycle
+
+- [x] Added the Codex-only Sol/Luna/Terra convention and risk-based topology.
+- [x] Updated and versioned Codex `plan-phase`, `exec`, `expert-review`, `ship`, and `ship-end`; Claude sources remain unchanged.
+- [x] Added lifecycle contract coverage and completed archive, parity, catalog, task-doc, alignment, and runtime consistency verification; the full layer-one run passed 2,511/2,532 tests with 21 unrelated failures in untouched research/design/provisioning contracts.
+- Review: the lifecycle keeps integration and delivery with Sol, caps Luna fan-out at three disjoint lanes, requires fresh read-only Terra review for non-trivial mutations, and blocks unresolved accepted Critical/High findings or missing high-risk re-audits.
 
 ### Next Work
 
-- [ ] None promoted.
+- [ ] Implement and validate the three mirrored base safety subskills plus the canonical GitHub delivery contract before changing any orchestrator.
+
+### Review
+
+The architecture packet is approved with no blocking or advisory findings. Each gate was re-checked against the current base-pack availability model, direct-primary shipping contracts, strict merge behavior, quality-gate contract, and release/deploy primary-branch preflights. The design centralizes fragile GitHub mutations in three low-freedom base subskills, preserves reuse-before-create and stop-on-ambiguity behavior, separates ready-for-review publication from merge, and keeps external authentication failures from weakening primary-branch protection.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

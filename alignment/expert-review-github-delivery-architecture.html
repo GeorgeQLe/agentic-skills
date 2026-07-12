@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-alignment-category="qa-meta" data-visual-tier="document" data-alignment-status="confirmed" data-alignment-stage="stage-2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expert Review — Issue-Backed GitHub Delivery Architecture</title>
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--orange:#d29922;--purple:#bc8cff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{width:min(1060px,calc(100vw - 32px));margin:auto;padding:32px 0 64px}h1{margin:.2rem 0;font-size:clamp(2rem,5vw,3.6rem);line-height:1.05;color:#fff}h2{margin:2rem 0 .8rem;color:var(--accent)}h3{margin:.2rem 0;color:#fff}p{margin:.45rem 0}.muted{color:var(--muted)}.status,.card,.toc,.table-wrap{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:18px;margin:16px 0}.status{border-left:5px solid var(--green)}.status strong{color:var(--green)}.toc a,a{color:var(--accent)}.toc ul{columns:2;margin:.5rem 0;padding-left:1.3rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.decision{border-left:4px solid var(--green)}.badge{display:inline-block;border:1px solid var(--green);border-radius:999px;color:var(--green);padding:.18rem .55rem;font-size:.78rem;font-weight:800}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:.72rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--border)}th{color:#fff;background:#202630}.none{color:var(--green);font-weight:800}code{background:#0b1018;border:1px solid var(--border);border-radius:5px;padding:.08rem .3rem}.source-list li{margin:.35rem 0}@media(max-width:720px){.grid{grid-template-columns:1fr}.toc ul{columns:1}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="muted">Expert review · confirmed 2026-07-12</p>
+    <h1>Issue-Backed GitHub Delivery Architecture</h1>
+    <p>The architecture packet is approved. The review found no surviving correctness, security, architecture, testing, dependency, or specification findings that block or qualify implementation.</p>
+  </header>
+
+  <section class="status" aria-label="Confirmation status">
+    <strong>alignment_status: confirmed</strong>
+    <p>Confirmation date: 2026-07-12</p>
+    <p>Confirmed artifacts: <code>briefing-slides/github-delivery-architecture.html</code>, <code>tasks/roadmap.md</code>, and <code>tasks/todo.md</code>.</p>
+    <p>Approval source: the user's request to review and approve the existing packet, followed by an evidence-backed expert review of all five gates.</p>
+    <p class="muted">This record is finished and current for this approval cycle. Later evidence may amend it only after the prior confirmed page is archived and the amendment is highlighted.</p>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <strong>Table of Contents</strong>
+    <ul>
+      <li><a href="#verdict">Verdict</a></li>
+      <li><a href="#decisions">Approved decisions</a></li>
+      <li><a href="#evidence">Evidence matrix</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#risks">Residual risks</a></li>
+      <li><a href="#sources">Sources</a></li>
+      <li><a href="#handoff">Implementation handoff</a></li>
+    </ul>
+  </nav>
+
+  <section id="verdict">
+    <h2>Verdict</h2>
+    <div class="card">
+      <span class="badge">APPROVED</span>
+      <p>The packet defines a coherent replacement for direct-to-primary mutation delivery. It centralizes fragile GitHub operations in three low-freedom base subskills, makes issue/branch/PR reuse deterministic, preserves stop-on-ambiguity behavior, and keeps merge separate from ordinary shipping.</p>
+      <p>The design is intentionally additive to existing safety boundaries: quality evidence remains mandatory before publication; merge remains gated; release and deploy continue to require clean, current primary; production deployment still requires explicit confirmation.</p>
+    </div>
+  </section>
+
+  <section id="decisions">
+    <h2>Approved decisions</h2>
+    <div class="grid">
+      <article class="card decision"><h3>1. GitHub Issue is the ticket</h3><p>One canonical issue abstraction avoids a redundant ticket skill while leaving room for future tracker adapters.</p></article>
+      <article class="card decision"><h3>2. Every tracked mutation gets a branch and PR</h3><p>GitHub-backed work reuses or creates one issue, one non-primary branch, and one PR; it never defaults to a primary push.</p></article>
+      <article class="card decision"><h3>3. Shipping stops at ready for review</h3><p><code>ship</code>, <code>ship-end</code>, and Codex <code>exec</code> may publish or update a ready PR, but cannot merge by default.</p></article>
+      <article class="card decision"><h3>4. Release and deploy wait for merge</h3><p>Only a clean, current primary branch is releasable or deployable; an open PR is not equivalent to merged state.</p></article>
+      <article class="card decision"><h3>5. GitHub failure never weakens primary</h3><p>Missing remotes or authentication preserve safe local non-primary work and surface a blocker instead of falling back to primary.</p></article>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <h2>Evidence matrix</h2>
+    <div class="table-wrap" data-tts-narrative="The evidence matrix shows that all five approval gates align with current repository contracts and preserve existing safety boundaries.">
+      <table>
+        <thead><tr><th>Gate</th><th>Repository evidence</th><th>Review conclusion</th></tr></thead>
+        <tbody>
+          <tr><td>Universal safety layer</td><td><code>packs/base/PACK.md</code> installs base skills independently of optional packs.</td><td>The three GitHub subskills can be universally available without cross-pack routing failures.</td></tr>
+          <tr><td>Replace direct-primary delivery</td><td>Current <code>ship</code>, <code>ship-end</code>, and <code>commit-and-push-by-feature</code> contracts explicitly land work on primary.</td><td>The packet targets the actual shared mutation boundary rather than requiring hundreds of domain-skill rewrites.</td></tr>
+          <tr><td>Separate publication and merge</td><td><code>branch-lifecycle</code> already defines strict conflict, check, approval, and unresolved-finding merge gates.</td><td>Moving merge behind <code>github-pr merge</code> preserves and clarifies the strict gate.</td></tr>
+          <tr><td>Preserve release/deploy safety</td><td><code>release</code> and <code>deploy</code> already require primary, clean state, and current remote state; production remains explicitly confirmed.</td><td>Deferring them until merge is consistent with existing preflights.</td></tr>
+          <tr><td>Fail safely</td><td>Packet rules stop on ambiguous dirty trees, secrets, conflicts, missing remotes, or unauthenticated GitHub state.</td><td>No failure path authorizes a weaker direct-primary fallback.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="findings">
+    <h2>Findings</h2>
+    <div class="card">
+      <p><strong>Critical:</strong> <span class="none">none</span></p>
+      <p><strong>High:</strong> <span class="none">none</span></p>
+      <p><strong>Medium:</strong> <span class="none">none</span></p>
+      <p><strong>Low:</strong> <span class="none">none</span></p>
+      <p><strong>Spec conformance:</strong> <span class="none">no divergences</span></p>
+    </div>
+    <div class="card"><h3>Documented decisions — no action needed</h3><p>The architecture deliberately changes the repository's former direct-to-primary default. It deliberately does not auto-merge, close issues when PRs merely open, deploy from PR branches, or create a second generic ticket abstraction.</p></div>
+    <div class="card"><h3>Positive observations</h3><p>The serial three-phase rollout is appropriately ordered: safety primitives and regression policy first, orchestrators second, provisioning and dogfood last. The migration's own ready-PR dogfood criterion is a strong end-to-end proof.</p></div>
+  </section>
+
+  <section id="risks">
+    <h2>Residual risks and implementation checks</h2>
+    <div class="card">
+      <p>No architecture-level blocker remains. Implementation must still prove issue/PR deduplication, dirty-tree ownership, default-branch resolution, review/check status handling, and idempotent retry behavior with executable fixtures.</p>
+      <p class="muted">These are acceptance criteria already represented in the roadmap, not reasons to withhold architecture approval.</p>
+    </div>
+  </section>
+
+  <section id="sources">
+    <h2>Sources reviewed</h2>
+    <ul class="source-list">
+      <li><a href="../briefing-slides/github-delivery-architecture.html">Architecture briefing</a></li>
+      <li><a href="../tasks/roadmap.md">Architecture roadmap</a> and <a href="../tasks/todo.md">current implementation contract</a></li>
+      <li><a href="../docs/quality-gate-contract.md">Quality gate contract</a></li>
+      <li><a href="../packs/base/PACK.md">Base pack semantics</a></li>
+      <li><a href="../packs/exec-loop/codex/ship/SKILL.md">Ship</a>, <a href="../packs/exec-loop/codex/ship-end/SKILL.md">ship-end</a>, and <a href="../packs/gitops/codex/commit-and-push-by-feature/SKILL.md">commit publisher</a></li>
+      <li><a href="../packs/release-ops/codex/branch-lifecycle/SKILL.md">Branch lifecycle</a>, <a href="../packs/release-ops/codex/release/SKILL.md">release</a>, and <a href="../packs/release-ops/codex/deploy/SKILL.md">deploy</a></li>
+    </ul>
+  </section>
+
+  <section id="handoff">
+    <h2>Implementation handoff</h2>
+    <div class="card"><p>Proceed serially with Phase 1: create and validate mirrored <code>github-issue</code>, <code>github-branch</code>, and <code>github-pr</code> base subskills plus the canonical GitHub delivery contract before modifying any shipping orchestrator.</p></div>
+  </section>
+</main>
+<script src="../scripts/alignment-tts-kokoro.js"></script>
+</body>
+</html>

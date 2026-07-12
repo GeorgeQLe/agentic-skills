@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-07-10 - GitHub delivery preference now favors branches and PRs
+
+- The user's earlier reluctance to use branches and pull requests is no longer the governing preference; carrying that historical preference forward would preserve an obsolete direct-to-primary workflow.
+- Rule: once the repository has safe issue, branch, and pull-request lifecycle subskills, route tracked-file mutations through an issue-backed non-primary branch and a review PR instead of pushing directly to `main` or `master`.
+- Keep merge, destructive branch cleanup, issue closure outside a merged PR, release publication, and production deployment behind their existing explicit safety gates; a preference for PR delivery is not blanket permission for irreversible GitHub actions.
+
 ## 2026-07-08 - Required gate slide status must be visually enforced
 
 - A briefing-slide expectation required red borders for unanswered required gate questions and green borders once answered, but the convention and audit only enforced gate answerability and YAML status.
