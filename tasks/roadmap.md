@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Issue-Backed Branch and PR Delivery
+## Historical Implementation - Issue-Backed Branch and PR Delivery
 
 ### Goal
 
@@ -44,7 +44,7 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 - [x] Archive every behavior-changing skill version, bump versions, and update mirrored changelogs before editing active contracts.
 - [x] Refresh the runtime skill copies and generated skill/catalog manifests without committing generated `.claude/skills/**` or `.codex/skills/**` roots.
 - [x] Run skill validation, mirror/version/archive parity, dependency, direct-primary policy, task-doc, catalog, package-manifest, and targeted shipping-route tests.
-- [ ] Dogfood the new path by publishing this migration on its issue-backed non-primary branch as a ready PR; do not merge it automatically.
+- [x] Dogfood the new path by publishing this migration on its issue-backed non-primary branch as a ready PR; do not merge it automatically.
 
 ### Acceptance Criteria
 
@@ -53,7 +53,7 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 - [x] `ship`, `ship-end`, and Codex `exec` produce an issue, non-primary branch, pushed commits, and ready PR when GitHub is available, while merge remains a separate confirmed action.
 - [x] Release and deploy skills require an already-merged, current primary branch and never reinterpret an open PR as deployable primary state.
 - [x] Automated audits fail on regression to direct-primary mutation shipping or on missing mirrored/versioned subskill artifacts.
-- [ ] The migration itself is delivered for human review through the new branch/PR workflow.
+- [x] The migration itself is delivered for human review through the new branch/PR workflow.
 
 ### Concurrent Completed Work - Codex Accountable Agent Lifecycle
 

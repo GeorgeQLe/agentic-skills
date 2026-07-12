@@ -1,10 +1,10 @@
 # Current Task
 
-## Current Implementation - Issue-Backed Branch and PR Delivery
+## No Active Implementation
 
 ### Status
 
-Architecture is approved and the primary review surface is recorded at `briefing-slides/github-delivery-architecture.html`. Implementation may proceed. The approved default is: GitHub Issue equals ticket; all tracked mutations use a non-primary branch and PR; `ship`, `ship-end`, and Codex `exec` publish a ready PR but do not merge; deploy and release remain primary-branch-only after merge.
+The Issue-Backed Branch and PR Delivery migration is complete and published for review as ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4). It has not been merged or deployed.
 
 ### Execution Profile
 
@@ -23,7 +23,7 @@ Architecture is approved and the primary review surface is recorded at `briefing
 - [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
 - [x] Implement Phase 2 shipping-orchestrator migration.
 - [x] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
-- [ ] Publish the completed migration as a ready PR without merging it automatically.
+- [x] Publish the completed migration as a ready PR without merging it automatically.
 
 ### Approval Gate
 

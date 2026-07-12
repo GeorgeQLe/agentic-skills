@@ -68,4 +68,4 @@ Revert the Phase 3 commit on the work branch to restore prior provisioning/docs/
 
 ## Final Sol acceptance
 
-Accepted. Integrated verification passes, all accepted Terra findings are resolved, focused re-audit passes, and no Critical/High finding remains open. Ready-PR publication is the remaining delivery action.
+Accepted. Integrated verification passes, all accepted Terra findings are resolved, focused re-audit passes, and no Critical/High finding remains open. Commit `436818831` is pushed and ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4) is open without merge.

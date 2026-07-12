@@ -7,6 +7,7 @@
 - Removed the final direct-primary audit allowance and hardened detection for “repository primary branch” plus obsolete direct-primary exception framing.
 - Fresh Terra review found one High and two Medium findings. Sol accepted and remediated all three; focused re-audit and integrated validation evidence are recorded in the Phase 3 ship manifest.
 - Verification passed for lifecycle tests (76/76), GitHub-delivery tests (7/7), the zero-allowance policy audit, strict archive audit, base/mirror parity, task-doc audit, catalog validation, canary package `build:check`, and diff hygiene.
+- Published commit `436818831` on `chore/3-github-delivery-safety` and updated ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4); merge and deployment remain deferred.
 
 ## 2026-07-12 - GitHub delivery Phase 2 orchestrator migration
 
