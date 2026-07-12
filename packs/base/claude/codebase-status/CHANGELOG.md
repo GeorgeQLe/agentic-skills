@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-12
+
+- Replaced direct-primary mutation shipping with the canonical issue-backed branch and ready pull-request boundary.
+
 ## v0.11 - 2026-06-22
 
 - Updated codebase-status AFPS route guidance to use `/consolidate-prototypes` as the primary post-UAT consolidation skill.

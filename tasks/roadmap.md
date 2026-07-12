@@ -31,11 +31,11 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 
 ### Phase 2 - Shipping Orchestrator Migration
 
-- [ ] Refactor `commit-and-push-by-feature` into a compatibility wrapper over safe non-primary branch publication.
-- [ ] Refactor `branch-lifecycle` into a compatibility/advanced-recovery wrapper over `github-branch` and `github-pr` rather than an exception to direct-to-primary development.
-- [ ] Refactor mirrored `ship` and `ship-end`, plus Codex `exec`, so task docs, commits, branch push, and PR readiness happen in one review boundary.
-- [ ] Preserve Claude `/exec`'s dirty-tree handoff while requiring `/ship` to create or adopt the issue-backed branch before committing.
-- [ ] Remove direct-primary overrides from active writing skills and point them at the shared GitHub delivery contract.
+- [x] Refactor `commit-and-push-by-feature` into a compatibility wrapper over safe non-primary branch publication.
+- [x] Refactor `branch-lifecycle` into a compatibility/advanced-recovery wrapper over `github-branch` and `github-pr` rather than an exception to direct-to-primary development.
+- [x] Refactor mirrored `ship` and `ship-end`, plus Codex `exec`, so task docs, commits, branch push, and PR readiness happen in one review boundary.
+- [x] Preserve Claude `/exec`'s dirty-tree handoff while requiring `/ship` to create or adopt the issue-backed branch before committing.
+- [x] Remove direct-primary overrides from active writing skills and point them at the shared GitHub delivery contract.
 
 ### Phase 3 - Provisioning, Documentation, And Verification
 

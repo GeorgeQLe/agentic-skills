@@ -2,7 +2,7 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.11
+version: v0.12
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
@@ -108,5 +108,5 @@ End with exactly:
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
 - Normally read-only and should not create or modify tracked repository files.
-- If the user explicitly asks this skill to create or modify tracked files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
+- If the user explicitly asks this skill to create or modify tracked files, follow `docs/github-delivery-contract.md` and finish with an issue-backed non-primary branch plus ready pull request; do not merge it.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

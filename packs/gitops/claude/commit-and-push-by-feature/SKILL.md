@@ -2,13 +2,13 @@
 name: commit-and-push-by-feature
 description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
 type: shipping
-version: v0.1
+version: v0.2
 argument-hint:
 ---
 
 # Commit and Push by Feature
 
-Commit and push all changes to GitHub grouped by feature/function.
+Compatibility wrapper that groups changes into feature/function commits while delegating issue, branch, publication, and pull-request safety to the canonical GitHub delivery contract.
 
 ## Process
 
@@ -33,16 +33,14 @@ Commit and push all changes to GitHub grouped by feature/function.
      - Verify `git diff --cached` matches the bucket before committing.
    - If there are uncommitted leftover changes at the end, bucket them; do not leave a dirty working tree. Do not bucket generated local skill roots under `.claude/skills/**` or `.codex/skills/**`, even in final leftover cleanup.
 
-4. **Branch handling:**
-   - Determine the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.
-   - Ensure the commits land on the primary branch.
-   - If already on `main` or `master`, stay there.
-   - If on any other branch, switch to the primary branch before committing and pushing. Carry the working tree across only if it can be done safely.
-   - If switching would discard work, introduce conflicts you cannot resolve confidently, or otherwise prevent a safe move onto the primary branch, stop and explain the blocker. Do not push the feature branch instead.
+4. **Issue-backed branch handling:**
+   - Follow `docs/github-delivery-contract.md`.
+   - Run `/github-issue ensure`, then `/github-branch ensure` before committing. Reuse unambiguous existing state; stop on ambiguous issue, branch, remote, or dirty-tree ownership.
+   - Never commit tracked mutations on the detected primary branch. If the current tree is on primary, create the issue-backed non-primary branch before staging.
 
-5. **Push and report:**
-   - Push the resulting commits to the primary branch. `commit-and-push-by-feature` means commit and push when the workflow succeeds.
-   - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean, and whether push was performed or blocked.
+5. **Publish and report:**
+   - Run `/github-branch publish`, then `/github-pr upsert` to create or update one ready pull request. Do not merge it.
+   - Output a concise summary: issue, branch, commits, working-tree state, push status, and pull-request URL or blocker.
 
 ## Output
 

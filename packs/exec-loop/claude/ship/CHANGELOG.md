@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12 - 2026-07-12
+
+- Migrated shipping to one issue-backed branch and ready pull-request boundary, with deployment deferred until merge.
+
 ## v0.11 - 2026-07-06
 
 - Removed the Build-In-Public output-boundary clause now that BIP is no longer an active shipping path.

@@ -2,7 +2,7 @@
 name: exec
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
-version: v0.7
+version: v0.8
 argument-hint: "[--phase] [--execute-approved]"
 invocation: orchestrator
 ---
@@ -82,8 +82,9 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If the user corrected the agent during the step, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise. If it exposes a workflow failure, also include the relevant skill contract, validation script, fixture, or test enforcement update in the same shipping boundary, or include `Correction enforcement:` with the blocker or not-applicable rationale and the concrete follow-up file/command when needed.
 12. Ship the completed work:
    - Update `tasks/history.md` with a brief record of what was accomplished. Create it if needed.
-   - Commit and push using the `$commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
+   - Commit and publish using `$commit-and-push-by-feature` with `docs/github-delivery-contract.md`; ensure the issue-backed non-primary branch and create or update one ready pull request without merging it.
 13. Deploy:
+   - If the ready pull request is not merged into the current primary branch, defer deployment and route to explicit review/`$github-pr merge`. Never deploy development state from the work branch.
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
    - If a deploy contract exists, read it first and use it to determine the deploy method.
@@ -110,12 +111,12 @@ Identify the next incomplete unit of work from the phased plan, build an executi
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
-       4. If no more phases remain, ship the planning/task updates via `$commit-and-push-by-feature`, landing them on `main` or `master`, then run `$research-roadmap` to recommend the next action based on project state. Then stop.
+       4. If no more phases remain, publish the planning/task updates in the same ready pull-request boundary via `$commit-and-push-by-feature`, then run `$research-roadmap` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `$plan-phase` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
    - If the next uncompleted step is verification-only/no-op-only (for example, "refactor if validation exposes drift", "verify", "run validation", or `Files: no source changes expected`) and the current session already has passing validation evidence for the same scope, mark it complete with a review note and continue to the next substantive item. Do not write a fresh execution plan for a step whose expected result is "no source changes".
 15. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-16. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
+16. Include task-document changes in the same issue-backed branch and ready pull-request boundary via `$commit-and-push-by-feature`.
 
 ## Output
 
@@ -173,7 +174,7 @@ PoketoWork kanban packs are hibernated while Poketo.work is being rebuilt. Do no
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
-- Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely. Temporary `agent-team` lane branches are allowed only for parallel write isolation and must pass consolidation/PR review before landing.
+- Do not commit on or push mutations directly to the primary branch. Use `$commit-and-push-by-feature` to ensure and publish the issue-backed work branch and ready pull request. Temporary `agent-team` lane branches remain isolated and must pass consolidation/PR review before integration.
 - Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `$reconcile-dev-docs` or promoted into `tasks/todo.md`, not routed to `$guide`.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 - `exec` ships by default in Codex. Use `$ship` only when there is already finished work in the tree or unpushed commits that need packaging without running a new step.

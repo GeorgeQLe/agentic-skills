@@ -2,7 +2,7 @@
 name: exec
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
 type: execution
-version: v0.6
+version: v0.7
 argument-hint: "[--phase]"
 invocation: orchestrator
 ---
@@ -176,5 +176,5 @@ Rules:
 ## Execution Handoff Contract
 
 - `/exec` deliberately leaves completed tracked changes uncommitted so `/ship` can validate, update `tasks/history.md`, commit, push, deploy, plan the next step, and enter plan mode in one coherent shipping pass.
-- If the user explicitly asks `/exec` to commit or push, stop and redirect them to `/ship` or `/commit-and-push-by-feature`; do not reinterpret `/exec` as a shipping command.
+- Preserve `/exec`'s dirty-tree handoff: if the user explicitly asks `/exec` to commit or push, stop and redirect them to `/ship`, which must ensure the issue-backed branch before committing and publish a ready pull request without merging it.
 - Report the exact next command as `/ship` unless a blocker prevents shipping.

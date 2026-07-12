@@ -7,7 +7,7 @@
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
-    "branch": "master",
+    "branch": "chore/3-github-delivery-safety",
     "ref_policy": "Consumers should pin SKILLS_REPO_REF to a tag or commit SHA for releases and deployments."
   },
   "proof_artifacts": [

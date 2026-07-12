@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.11
+version: v0.12
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -67,13 +67,15 @@ e) **Save conversation (skip if `--save-conversation` and `--save-all-conversati
    Run `scripts/save-conversation.sh` to export the current Claude Code conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., not running in Claude Code, no local conversation history), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
    - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
 
-f) Ship the changes using the /commit-and-push-by-feature workflow:
+f) Ship the changes using the `/commit-and-push-by-feature` compatibility workflow and `docs/github-delivery-contract.md`:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
-   - Land the resulting commits on `main` or `master`, not on an existing feature branch.
-   - `commit-and-push-by-feature` means commit and push when the workflow succeeds.
+   - Ensure or reuse the linked issue and issue-backed non-primary branch before committing.
+   - Publish the branch and create or update one ready pull request; do not merge it.
 
 ### 3. Deploy (skip if `--no-deploy`)
+
+If the ready pull request is not merged into the current primary branch, defer deployment and route to explicit review/`github-pr merge`. Never deploy development state from the work branch.
 After shipping, deploy only when the project has an explicit manual deploy contract.
 
 a) **Check for deploy contract.** Look for `deploy.md` or `tasks/deploy.md`.
@@ -115,7 +117,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
    - Acceptance criteria: how to verify the step is done
    - **Ship-one-step handoff contract:** the next clear-context implementation session must implement only this step, validate it, then run `/ship` when done.
-e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
+e) Include task-document changes in the same issue-backed branch and ready pull-request boundary via `/commit-and-push-by-feature`.
 
 ### 5. Enter plan mode (skip if `--no-plan`)
 **YOU MUST run the full plan-mode approval sequence.** This is not optional. A next-step plan being written or already present is not a completed `/ship` unless `--no-plan` is set or the approval UI is presented successfully.

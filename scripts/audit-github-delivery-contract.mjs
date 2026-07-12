@@ -6,32 +6,8 @@ import { join, relative, sep } from "node:path";
 // Values are the exact maximum number of pre-existing violating lines. This
 // baselines the migration without giving an allowlisted file unlimited drift.
 const legacyMigrationLimits = new Map([
-  ...[
-    "packs/base/claude/afps-status/SKILL.md",
-    "packs/base/claude/animation-design-planner/SKILL.md",
-    "packs/base/claude/codebase-status/SKILL.md",
-    "packs/base/claude/create-alignment-page/SKILL.md",
-    "packs/base/claude/create-briefing-slides/SKILL.md",
-    "packs/base/codex/afps-status/SKILL.md",
-    "packs/base/codex/animation-design-planner/SKILL.md",
-    "packs/base/codex/codebase-status/SKILL.md",
-    "packs/base/codex/create-alignment-page/SKILL.md",
-    "packs/base/codex/create-briefing-slides/SKILL.md",
-    "packs/project-fleet/codex/project-fleet/SKILL.md",
-    "packs/report-gen/claude/report-website/SKILL.md",
-    "packs/report-gen/codex/report-website/SKILL.md",
-    "packs/release-ops/claude/branch-lifecycle/SKILL.md",
-    "packs/release-ops/codex/branch-lifecycle/SKILL.md",
-  ].map((file) => [file, 1]),
   ["packs/base/claude/provision-agentic-config/SKILL.md", 4],
   ["packs/base/codex/provision-agentic-config/SKILL.md", 4],
-  ["packs/exec-loop/claude/ship-end/SKILL.md", 1],
-  ["packs/exec-loop/claude/ship/SKILL.md", 2],
-  ["packs/exec-loop/codex/exec/SKILL.md", 3],
-  ["packs/exec-loop/codex/ship-end/SKILL.md", 1],
-  ["packs/exec-loop/codex/ship/SKILL.md", 2],
-  ["packs/gitops/claude/commit-and-push-by-feature/SKILL.md", 3],
-  ["packs/gitops/codex/commit-and-push-by-feature/SKILL.md", 3],
 ]);
 
 const directPrimaryPatterns = [

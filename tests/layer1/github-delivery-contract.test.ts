@@ -52,4 +52,29 @@ describe("GitHub delivery safety subskills", () => {
     expect(contract).toContain("Ordinary shipping stops at the ready pull request");
     expect(() => execFileSync("node", ["scripts/audit-github-delivery-contract.mjs"], { cwd: ROOT })).not.toThrow();
   });
+
+  it("routes shipping orchestrators through the issue-backed ready-PR boundary", () => {
+    for (const agent of ["claude", "codex"]) {
+      const commit = read(`packs/gitops/${agent}/commit-and-push-by-feature/SKILL.md`);
+      const lifecycle = read(`packs/release-ops/${agent}/branch-lifecycle/SKILL.md`);
+      const ship = read(`packs/exec-loop/${agent}/ship/SKILL.md`);
+      const shipEnd = read(`packs/exec-loop/${agent}/ship-end/SKILL.md`);
+
+      expect(commit).toContain("docs/github-delivery-contract.md");
+      expect(commit).toMatch(/ready pull request/i);
+      expect(commit).toMatch(/Do not merge it/i);
+      expect(lifecycle).toMatch(/compatibility and advanced-recovery wrapper/i);
+      expect(lifecycle).toMatch(/github-pr (?:merge|upsert)/);
+      expect(ship).toMatch(/ready pull request/i);
+      expect(ship).toMatch(/defer deployment/i);
+      expect(shipEnd).toMatch(/ready pull request/i);
+      expect(shipEnd).toMatch(/defer deployment/i);
+    }
+
+    const claudeExec = read("packs/exec-loop/claude/exec/SKILL.md");
+    const codexExec = read("packs/exec-loop/codex/exec/SKILL.md");
+    expect(claudeExec).toContain("Preserve `/exec`'s dirty-tree handoff");
+    expect(codexExec).toMatch(/ready pull request/i);
+    expect(codexExec).toMatch(/defer deployment/i);
+  });
 });

@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: v0.14
+version: v0.15
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -43,8 +43,9 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - If `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` changed and `scripts/audit-task-docs.mjs` exists, run `node scripts/audit-task-docs.mjs` and fix any failures before final next-work routing.
    - **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):** Run `scripts/save-conversation.sh` to export the current conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., no local conversation history available), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
      - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
-   - Commit and push using the `$commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
+   - Commit and publish using the `$commit-and-push-by-feature` compatibility workflow and `docs/github-delivery-contract.md`; ensure the issue-backed non-primary branch and create or update one ready pull request without merging it.
 3. Deploy (skip if `--no-deploy`):
+   - If the ready pull request is not merged into the current primary branch, defer deployment and route to explicit review/`$github-pr merge`. Never deploy development state from the work branch.
    After shipping, deploy only when the project has an explicit manual deploy contract.
    - Check for deploy contract: look for `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -71,7 +72,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
      - If **NO:** find the next uncompleted step within the current phase.
    - If the next uncompleted step is verification-only/no-op-only (for example, "refactor if validation exposes drift", "verify", "run validation", or `Files: no source changes expected`) and the current session already has passing validation evidence for the same scope, mark it complete with a review note and continue to the next substantive item. Do not write a fresh execution plan for a step whose expected result is "no source changes".
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone. Preserve the current phase's `### Execution Profile` so `$exec` can decide whether to execute serially, use read-only subagents, use review subagents, or use disjoint write subagents after presenting the plan and proceeding under implicit approval.
-6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
+6. Include task-document changes in the same issue-backed branch and ready pull-request boundary via `$commit-and-push-by-feature`.
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
@@ -118,7 +119,7 @@ Rules:
 - Do NOT create `tasks/todo.md` from scratch — if it doesn't exist and there's no roadmap, suggest discovery skills instead.
 - Do not amend or rewrite history.
 - Do not commit secrets.
-- Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
+- Do not commit on or push mutations directly to the primary branch. Use `$commit-and-push-by-feature` to ensure and publish the issue-backed work branch and ready pull request.
 - The plan must be actionable with specific file paths, technical details, and the current phase's `### Execution Profile`.
 - In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$exec` for the normal execute-and-ship loop.
 - Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.

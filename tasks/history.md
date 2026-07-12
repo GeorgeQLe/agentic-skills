@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-12 - GitHub delivery Phase 2 orchestrator migration
+
+- Converted `commit-and-push-by-feature` into a compatibility wrapper over issue ensure, issue-backed branch ensure/publish, and ready pull-request upsert without automatic merge.
+- Converted `branch-lifecycle` into a compatibility and advanced-recovery wrapper; normal PR creation and merge now delegate to the canonical safety skills.
+- Migrated mirrored `ship` and `ship-end`, Codex `exec`, Claude's dirty-tree `/exec` handoff, and 13 active writing-skill overrides away from direct-primary mutation delivery.
+- Archived and versioned all 23 changed skills, refreshed the public catalog proof/runtime copies, and reduced the direct-primary audit baseline to the two provisioning-template targets reserved for Phase 3.
+- Focused GitHub delivery tests, direct-primary audit, archive audit, base parity, catalog validation, task-doc audit, and diff hygiene passed. The mirror audit retained the same three unrelated pre-existing `plan-phase`/`expert-review` failures.
+
 ## 2026-07-12 - Codex accountable multi-agent lifecycle
 
 - Added a Codex-only risk-based accountability convention: Sol owns planning, integration, verification, dispositions, and delivery; up to three disjoint Luna lanes may implement bounded work; a fresh read-only Terra context audits every non-trivial integrated mutation.

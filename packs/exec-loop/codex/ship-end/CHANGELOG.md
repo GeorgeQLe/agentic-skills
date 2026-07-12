@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17 - 2026-07-12
+
+- Migrated session closeout to issue-backed branch publication and ready pull-request delivery, with deployment deferred until merge.
+
 ## v0.16 - 2026-07-12
 
 - Added the Codex accountability manifest/report and hard shipping gates for unresolved accepted Critical/High findings, failed integrated verification, and missing required focused Terra review.

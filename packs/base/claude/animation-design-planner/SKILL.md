@@ -2,7 +2,7 @@
 name: animation-design-planner
 description: Plan interactive UI animations before implementation with visible motion contracts, lifecycle ownership, accessibility/performance guardrails, and proof gates
 type: planning
-version: v0.1
+version: v0.2
 required_conventions: [alignment-page]
 invocation: orchestrator
 argument-hint: "[component, interaction, animation bug, or motion brief]"
@@ -112,5 +112,5 @@ Follow the shared alignment-page convention via the packaged convention resolver
 ## Default Shipping Contract
 
 - This skill is planning-first. Normally it should not mutate implementation files directly.
-- If the user explicitly asks this skill to create or modify tracked files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
+- If the user explicitly asks this skill to create or modify tracked files, follow `docs/github-delivery-contract.md` and finish with an issue-backed non-primary branch plus ready pull request; do not merge it.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

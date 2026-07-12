@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-12
+
+- Replaced the repository-specific direct-primary override with issue-backed branch and ready pull-request delivery.
+
 ## v0.2 - 2026-07-09
 
 - Document the manifest-driven skill-deck pipeline: the per-skill AFPS deck gallery under `briefing-slides/` is generated from `briefing-slides/_deck-manifest.json` via `scripts/generate-briefing-decks.mjs`, with six content beats mapped onto rotating archetypes and the bespoke flagship decks kept out of the manifest. Never hand-edit a generated deck — edit the manifest or the generator and regenerate. Mirrors the convention's new **Manifest-Driven Skill Decks** section.

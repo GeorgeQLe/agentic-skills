@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8 - 2026-07-12
+
+- Migrated execution shipping to one issue-backed branch and ready pull-request boundary, with deployment deferred until merge.
+
 ## v0.7 - 2026-07-12
 
 - Made Codex `$exec` the Sol lifecycle controller for bounded Luna implementation, integrated verification, fresh read-only Terra audit, disposition, risk-triggered focused re-audit, and final acceptance.

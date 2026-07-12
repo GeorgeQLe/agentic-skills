@@ -2,7 +2,7 @@
 name: report-website
 description: Convert one Markdown report or a collection of documented Markdown outputs into clean JSX routes for a polished, readable frontend website
 type: execution
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "<report.md|directory|--all-output-docs> [base route]"
 ---
@@ -80,7 +80,7 @@ Use this skill when the user wants one report, a directory of reports, or all do
 
 7. **Document and ship**
    - Record the source Markdown path or discovery query, generated base route, per-document route strategy, document count, verification commands, and any fidelity exceptions.
-   - If tracked files changed, commit and push intended changes on the repository primary branch unless the user explicitly asked not to.
+   - If tracked files changed, follow `docs/github-delivery-contract.md` and publish an issue-backed non-primary branch plus ready pull request unless the user explicitly asked not to.
    - Leave unrelated dirty files untouched.
 
 ## Output
@@ -114,4 +114,4 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`.
 - After building the report website, recommend `/uat` when the report is intended for stakeholder review, or `/ship` when implementation is complete but not yet packaged.
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
+- If this skill creates or modifies tracked repository files, finish through the issue-backed branch and ready pull-request boundary; do not merge it.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-07-12
+
+- Replaced direct-primary mutation shipping with the canonical issue-backed branch and ready pull-request boundary.
+
 ## v0.0
 
 - Archived previous skill contract.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4 - 2026-07-12
+
+- Replaced the repository-specific direct-primary override with issue-backed branch and ready pull-request delivery.
+
 ## v0.3 - 2026-07-04
 
 - Added packaged scaffold usage for ad hoc alignment pages while keeping normal producing skills responsible for their own alignment content, gates, and handoff flow.
