@@ -1,0 +1,7 @@
+interface:
+  display_name: "GitHub Branch"
+  short_description: "Safely manage an issue-backed work branch"
+  default_prompt: "Use $github-branch to ensure, adopt, publish, inspect, or safely clean up the issue-backed non-primary branch."
+
+policy:
+  allow_implicit_invocation: true

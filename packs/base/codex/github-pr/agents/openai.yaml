@@ -1,0 +1,7 @@
+interface:
+  display_name: "GitHub Pull Request"
+  short_description: "Safely publish, review, or explicitly merge a PR"
+  default_prompt: "Use $github-pr to upsert or inspect the pull request for this work; merge only through its explicit strict gate."
+
+policy:
+  allow_implicit_invocation: true

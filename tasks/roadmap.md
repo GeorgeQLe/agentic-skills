@@ -24,10 +24,10 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 
 ### Phase 1 - Safety Subskills And Shared Contract
 
-- [ ] Create mirrored base `github-issue`, `github-branch`, and `github-pr` skills with deterministic, low-freedom safety rules.
-- [ ] Define issue deduplication, branch naming/adoption, dirty-tree ownership, push, PR upsert, merge, issue-linking, and post-merge cleanup contracts.
-- [ ] Update `packs/base/PACK.md`, skill metadata, UI metadata, public references, and the packaged manifest so the new subskills are universally available.
-- [ ] Add a canonical GitHub delivery contract and a validator that rejects active direct-to-primary mutation instructions outside release/deploy exceptions.
+- [x] Create mirrored base `github-issue`, `github-branch`, and `github-pr` skills with deterministic, low-freedom safety rules.
+- [x] Define issue deduplication, branch naming/adoption, dirty-tree ownership, push, PR upsert, merge, issue-linking, and post-merge cleanup contracts.
+- [x] Update `packs/base/PACK.md`, skill metadata, UI metadata, public references, and the packaged manifest so the new subskills are universally available.
+- [x] Add a canonical GitHub delivery contract and a validator that rejects active direct-to-primary mutation instructions outside release/deploy exceptions.
 
 ### Phase 2 - Shipping Orchestrator Migration
 

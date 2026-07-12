@@ -20,7 +20,7 @@ Architecture is approved and the primary review surface is recorded at `briefing
 - [x] Record the full phased migration and acceptance criteria in `tasks/roadmap.md`.
 - [x] Build and verify `briefing-slides/github-delivery-architecture.html` as the visual approval surface.
 - [x] Confirm the proposed defaults with the user before implementation.
-- [ ] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
+- [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
 - [ ] Implement Phase 2 shipping-orchestrator migration.
 - [ ] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
 - [ ] Publish the completed migration as a ready PR without merging it automatically.
@@ -44,11 +44,11 @@ Approved 2026-07-12 after expert review. Implementation proceeds with these defa
 
 ### Next Work
 
-- [ ] Implement and validate the three mirrored base safety subskills plus the canonical GitHub delivery contract before changing any orchestrator.
+- [ ] Implement Phase 2 shipping-orchestrator migration over the validated `github-issue`, `github-branch`, and `github-pr` contracts.
 
 ### Review
 
-The architecture packet is approved with no blocking or advisory findings. Each gate was re-checked against the current base-pack availability model, direct-primary shipping contracts, strict merge behavior, quality-gate contract, and release/deploy primary-branch preflights. The design centralizes fragile GitHub mutations in three low-freedom base subskills, preserves reuse-before-create and stop-on-ambiguity behavior, separates ready-for-review publication from merge, and keeps external authentication failures from weakening primary-branch protection.
+The architecture packet is approved with no blocking or advisory findings. Phase 1 is implemented: mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` base skills now centralize reuse-before-create, dirty-tree ownership, non-primary publication, PR upsert, strict merge confirmation, issue closure, and safe cleanup. `docs/github-delivery-contract.md` is canonical, the package manifest exposes all six platform entries, and `scripts/audit-github-delivery-contract.mjs` blocks new direct-primary delivery language while baselining only pre-existing Phase 2/3 migration targets. Focused tests and the new audit pass; the repository-wide mirror audit retains three unrelated pre-existing failures in `plan-phase` and `expert-review`.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
