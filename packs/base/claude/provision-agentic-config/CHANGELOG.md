@@ -1,5 +1,10 @@
 # provision-agentic-config Changelog
 
+## v0.15 - 2026-07-12
+
+- Replaced direct-primary mutation shipping in both provisioned blocks with the canonical issue-backed non-primary branch and ready pull-request lifecycle.
+- Bumped provision block markers to `v0.16` so downstream drift checks require the new delivery policy.
+
 ## v0.14 - 2026-07-05
 
 - Added the shared shipping contract convention to the provisioned `CLAUDE.md` and `AGENTS.md` blocks so downstream skill stubs can resolve `Follow the shared shipping contract convention in CLAUDE.md`.

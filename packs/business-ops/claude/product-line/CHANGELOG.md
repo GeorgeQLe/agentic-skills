@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-12
+
+- Synchronized the mirrored shipping contract with the universal issue-backed non-primary branch and ready pull-request lifecycle.
+
 ## v0.6 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

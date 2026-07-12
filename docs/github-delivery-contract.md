@@ -43,4 +43,4 @@ Post-merge branch cleanup is optional and separately confirmed. Never delete an 
 
 ## Transitional Enforcement
 
-`scripts/audit-github-delivery-contract.mjs` rejects active skill instructions that introduce direct-primary mutation delivery. Its temporary legacy allowlist contains only pre-existing contracts scheduled for Phase 2 orchestrator migration or Phase 3 provisioning cleanup; remove each entry as that contract adopts this lifecycle.
+`scripts/audit-github-delivery-contract.mjs` rejects active skill instructions that introduce direct-primary mutation delivery. The audit has no legacy allowance: newly discovered wording must be migrated and covered by regression tests rather than baselined.

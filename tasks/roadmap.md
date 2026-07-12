@@ -39,20 +39,20 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 
 ### Phase 3 - Provisioning, Documentation, And Verification
 
-- [ ] Update the provisioned `AGENTS.md`/`CLAUDE.md` blocks and this repository's active copies to make issue-backed branch/PR delivery the default.
-- [ ] Update quality-gate, operating-mode, invocation-type, skill-reference, pack, and next-step documentation for the new lifecycle.
-- [ ] Archive every behavior-changing skill version, bump versions, and update mirrored changelogs before editing active contracts.
-- [ ] Refresh the runtime skill copies and generated skill/catalog manifests without committing generated `.claude/skills/**` or `.codex/skills/**` roots.
-- [ ] Run skill validation, mirror/version/archive parity, dependency, direct-primary policy, task-doc, catalog, package-manifest, and targeted shipping-route tests.
+- [x] Update the provisioned `AGENTS.md`/`CLAUDE.md` blocks and this repository's active copies to make issue-backed branch/PR delivery the default.
+- [x] Update quality-gate, operating-mode, invocation-type, skill-reference, pack, and next-step documentation for the new lifecycle.
+- [x] Archive every behavior-changing skill version, bump versions, and update mirrored changelogs before editing active contracts.
+- [x] Refresh the runtime skill copies and generated skill/catalog manifests without committing generated `.claude/skills/**` or `.codex/skills/**` roots.
+- [x] Run skill validation, mirror/version/archive parity, dependency, direct-primary policy, task-doc, catalog, package-manifest, and targeted shipping-route tests.
 - [ ] Dogfood the new path by publishing this migration on its issue-backed non-primary branch as a ready PR; do not merge it automatically.
 
 ### Acceptance Criteria
 
-- [ ] Every tracked-file-writing skill inherits or explicitly applies the GitHub delivery contract; no active mutation path pushes directly to `main` or `master`.
-- [ ] The three safety subskills are base skills available to both Claude and Codex and refuse force-push, silent merge, duplicate issue/PR creation, destructive unmerged-branch deletion, and ambiguous dirty-tree adoption.
-- [ ] `ship`, `ship-end`, and Codex `exec` produce an issue, non-primary branch, pushed commits, and ready PR when GitHub is available, while merge remains a separate confirmed action.
-- [ ] Release and deploy skills require an already-merged, current primary branch and never reinterpret an open PR as deployable primary state.
-- [ ] Automated audits fail on regression to direct-primary mutation shipping or on missing mirrored/versioned subskill artifacts.
+- [x] Every tracked-file-writing skill inherits or explicitly applies the GitHub delivery contract; no active mutation path pushes directly to `main` or `master`.
+- [x] The three safety subskills are base skills available to both Claude and Codex and refuse force-push, silent merge, duplicate issue/PR creation, destructive unmerged-branch deletion, and ambiguous dirty-tree adoption.
+- [x] `ship`, `ship-end`, and Codex `exec` produce an issue, non-primary branch, pushed commits, and ready PR when GitHub is available, while merge remains a separate confirmed action.
+- [x] Release and deploy skills require an already-merged, current primary branch and never reinterpret an open PR as deployable primary state.
+- [x] Automated audits fail on regression to direct-primary mutation shipping or on missing mirrored/versioned subskill artifacts.
 - [ ] The migration itself is delivered for human review through the new branch/PR workflow.
 
 ### Concurrent Completed Work - Codex Accountable Agent Lifecycle

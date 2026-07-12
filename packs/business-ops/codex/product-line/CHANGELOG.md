@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-12
+
+- Removed the Codex-only direct-primary adaptation so the shared issue-backed delivery contract applies unchanged.
+
 ## v0.6 - 2026-06-12
 
 - Made alignment pages optional by default: report inline and write the skill's normal durable artifacts unless the user requests an alignment page or the agent identifies a concrete clarification/review need.

@@ -22,7 +22,7 @@ Architecture is approved and the primary review surface is recorded at `briefing
 - [x] Confirm the proposed defaults with the user before implementation.
 - [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
 - [x] Implement Phase 2 shipping-orchestrator migration.
-- [ ] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
+- [x] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
 - [ ] Publish the completed migration as a ready PR without merging it automatically.
 
 ### Approval Gate
@@ -48,7 +48,7 @@ Approved 2026-07-12 after expert review. Implementation proceeds with these defa
 
 ### Review
 
-The architecture packet is approved with no blocking or advisory findings. Phase 1 is implemented: mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` base skills now centralize reuse-before-create, dirty-tree ownership, non-primary publication, PR upsert, strict merge confirmation, issue closure, and safe cleanup. Phase 2 migrated the compatibility wrappers, mirrored shipping orchestrators, Codex execution shipping, Claude dirty-tree handoff, and 13 active writing-skill overrides to the issue-backed branch and ready-PR boundary. The direct-primary audit now baselines only the two provisioning templates reserved for Phase 3. Focused tests, archive audit, base parity, catalog validation, and diff hygiene pass; the repository-wide mirror audit retains three unrelated pre-existing failures in `plan-phase` and `expert-review`.
+The architecture packet is approved with no blocking or advisory findings. Phase 1 implemented mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` safety subskills. Phase 2 migrated compatibility wrappers, shipping orchestrators, Codex execution shipping, Claude dirty-tree handoff, and active writing-skill overrides. Phase 3 migrated provisioned/root policy, quality/operating/invocation/reference/pack docs, and remaining active direct-primary instructions; the audit now has zero legacy allowances. Fresh Terra review found one High and two Medium issues; Sol accepted and remediated all three by strengthening the audit, migrating `update-packages` and `product-line`, removing obsolete exception/allowlist text, and regenerating index-backed artifacts. Focused tests, lifecycle tests, strict archive audit, base and mirror parity, task-doc audit, catalog validation, canary package build, and diff hygiene pass. Publication as a ready PR remains the final in-session delivery step.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

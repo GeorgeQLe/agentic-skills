@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "94b1962409a75ba6f4c4a5b7affd8fdd7633931b",
-  "generated_at": "2026-07-12T06:09:51.121Z",
-  "source_fingerprint": "5a04fc758c7224718d9aab6cb447c8b4d0fe8522205fa77a37d14cb593f01cf3",
+  "source_commit": "50c17a5cc392a5ba6f856d6d71965937cab2e1b3",
+  "generated_at": "2026-07-12T16:52:41.020Z",
+  "source_fingerprint": "06101bfd6f695ac3745801192ce5b4b6d3f5ed0aecc3ea75d6db09465d74c0ba",
   "source_count": 459,
   "exports": {
     "catalog": "exports/skills-catalog/v1/catalog.json",

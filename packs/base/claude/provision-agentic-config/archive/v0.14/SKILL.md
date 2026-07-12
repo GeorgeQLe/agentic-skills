@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.15
+version: v0.14
 required_conventions: [alignment-page]
 argument-hint:
 ---
@@ -27,12 +27,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.16 -->`. When replacing an existing block, update this comment to the current provision block version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.14 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.16 -->
+   <!-- provision-agentic-config v0.14 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -47,7 +47,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Offload research, exploration, and parallel analysis to subagents
    - For complex problems, throw more compute at it via subagents
    - One task per subagent for focused execution
-   - For `agent-team` parallel write lanes, require separate non-primary GitHub branches per lane and include a consolidation/PR review step before final integration.
+   - For `agent-team` parallel write lanes, require separate GitHub branches per lane and include a consolidation/PR review step before final integration. This is the explicit exception to direct-to-primary work.
 
    ### 3. Self-Improvement Loop
    - After ANY correction from the user: update `tasks/lessons.md` with the pattern
@@ -107,7 +107,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    When a skill says "Follow the shared shipping contract convention", apply these rules:
 
    - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-   - If this skill creates or modifies tracked repository files, reuse or create one GitHub Issue, work on a non-primary branch, and publish or update one ready pull request without merging it.
+   - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
    - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
    - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
 
@@ -126,7 +126,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
-   - **Issue-Backed GitHub Delivery**: Every tracked mutation uses one GitHub Issue, a non-primary branch, and a ready pull request when GitHub is available. Never push tracked mutations directly to the primary branch. Merge remains a separate explicit review action.
+   - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
    - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception (Claude only): `/exec` hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 
@@ -161,7 +161,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.16 -->
+   <!-- provision-agentic-config v0.14 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -176,7 +176,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - When subagents are available and permitted, delegate independent research, exploration, or execution lanes with non-overlapping scopes.
    - One task per subagent for focused execution.
    - Do not override Codex's current subagent permission, tool availability, or parallel-work rules.
-   - For `agent-team` parallel write lanes, require separate non-primary GitHub branches per lane and include a consolidation/PR review step before final integration.
+   - For `agent-team` parallel write lanes, require separate GitHub branches per lane and include a consolidation/PR review step before final integration. This is the explicit exception to direct-to-primary work.
 
    ### 3. Self-Improvement Loop
    - After ANY correction from the user: update `tasks/lessons.md` with the pattern
@@ -236,7 +236,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    When a skill says "Follow the shared shipping contract convention", apply these rules:
 
    - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-   - If this skill creates or modifies tracked repository files, reuse or create one GitHub Issue, work on a non-primary branch, and publish or update one ready pull request without merging it.
+   - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
    - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
    - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
 
@@ -262,7 +262,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
-   - **Issue-Backed GitHub Delivery**: Every tracked mutation uses one GitHub Issue, a non-primary branch, and a ready pull request when GitHub is available. Never push tracked mutations directly to the primary branch. Merge remains a separate explicit review action.
+   - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
    - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Codex `$exec` ships by default (validates, commits, pushes, plans next) — use `$ship` only to package existing work or unpushed commits.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 

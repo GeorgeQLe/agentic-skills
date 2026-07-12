@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-07-12 - GitHub delivery Phase 3 provisioning and verification
+
+- Migrated the provisioned and active root agent-policy blocks to issue-backed non-primary delivery, and updated quality-gate, operating-mode, pack, invocation, and skills-reference documentation.
+- Archived and versioned both `provision-agentic-config` mirrors, both `update-packages` mirrors, and both `product-line` mirrors; refreshed the public catalog and canary package manifest from the staged source boundary.
+- Removed the final direct-primary audit allowance and hardened detection for “repository primary branch” plus obsolete direct-primary exception framing.
+- Fresh Terra review found one High and two Medium findings. Sol accepted and remediated all three; focused re-audit and integrated validation evidence are recorded in the Phase 3 ship manifest.
+- Verification passed for lifecycle tests (76/76), GitHub-delivery tests (7/7), the zero-allowance policy audit, strict archive audit, base/mirror parity, task-doc audit, catalog validation, canary package `build:check`, and diff hygiene.
+
 ## 2026-07-12 - GitHub delivery Phase 2 orchestrator migration
 
 - Converted `commit-and-push-by-feature` into a compatibility wrapper over issue ensure, issue-backed branch ensure/publish, and ready pull-request upsert without automatic merge.

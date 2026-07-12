@@ -97,14 +97,14 @@ If claiming the correction is already covered by an existing rule, cite the exac
 
 Corrections should not stop at memory. The quality gate should turn repeated mistakes into enforceable workflow changes whenever practical.
 
-## Direct-To-Primary Compatibility
+## Issue-Backed Delivery Compatibility
 
-This contract does not replace the repository's direct-to-primary shipping flow. It defines the proof required before a mutation is committed and pushed to `main` or `master`.
+This contract supplies the proof required by `docs/github-delivery-contract.md`; it does not replace that lifecycle. Tracked mutations use an issue-backed non-primary branch and stop at a ready pull request unless the user separately invokes the confirmed merge action.
 
-For direct-to-primary work:
+For issue-backed delivery:
 
 - Build the manifest from the exact diff that will be committed.
-- Do not use a feature branch as a substitute for the quality gate. `agent-team` lane branches add isolation and PR review, but the final shipping boundary still needs this manifest.
+- Do not use a work branch or pull request as a substitute for the quality gate. `agent-team` lane branches add isolation and review, but the final shipping boundary still needs this manifest.
 - Do not commit or push with known lint, type, test, build, or review failures.
 - Do not include unrelated tracked changes unless the manifest explicitly proves the ownership boundary and the operator accepts it.
 - Preserve the required next-step routing so the next operator has one concrete continuation path.

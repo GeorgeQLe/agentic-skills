@@ -81,7 +81,7 @@ Sol refuses shipping when any of these is true:
 - Luna ownership overlap or out-of-scope edits remain unresolved;
 - Sol has not inspected and accepted the integrated result.
 
-Direct-to-primary and branch-isolated `agent-team` delivery rules remain governed by the repository's shipping contract. Sol is always the final integration and delivery owner.
+Issue-backed non-primary delivery and branch-isolated `agent-team` rules remain governed by the repository's shipping contract. Sol is always the final integration and delivery owner.
 
 ## Final accountability report
 

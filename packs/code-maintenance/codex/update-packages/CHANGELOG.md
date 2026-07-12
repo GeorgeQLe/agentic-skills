@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-07-12
+
+- Replaced direct-primary dependency-update shipping with the issue-backed non-primary branch and ready pull-request lifecycle.
+
 ## v0.1 - 2026-06-13
 
 - Stop recommending unsupported npm project `.npmrc` age-gate keys.

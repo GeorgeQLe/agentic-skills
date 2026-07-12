@@ -53,6 +53,35 @@ describe("GitHub delivery safety subskills", () => {
     expect(() => execFileSync("node", ["scripts/audit-github-delivery-contract.mjs"], { cwd: ROOT })).not.toThrow();
   });
 
+  it("provisions issue-backed delivery without legacy direct-primary allowances", () => {
+    for (const agent of ["claude", "codex"]) {
+      const provision = read(`packs/base/${agent}/provision-agentic-config/SKILL.md`);
+      expect(provision).toContain("Issue-Backed GitHub Delivery");
+      expect(provision).toContain("reuse or create one GitHub Issue");
+      expect(provision).not.toContain("Direct-To-Primary Git Flow");
+    }
+
+    const audit = read("scripts/audit-github-delivery-contract.mjs");
+    expect(audit).not.toContain("legacyMigrationLimits");
+    expect(audit).toContain("repository\\s+");
+    expect(read("AGENTS.md")).toContain("<!-- provision-agentic-config v0.16 -->");
+    expect(read("CLAUDE.md")).toContain("<!-- provision-agentic-config v0.16 -->");
+    expect(read("AGENTS.md")).not.toContain("explicit exception to direct-to-primary work");
+    expect(read("CLAUDE.md")).not.toContain("explicit exception to direct-to-primary work");
+  });
+
+  it("migrates active mutation skills that previously pushed the repository primary branch", () => {
+    for (const agent of ["claude", "codex"]) {
+      const updatePackages = read(`packs/code-maintenance/${agent}/update-packages/SKILL.md`);
+      expect(updatePackages).toMatch(/non-primary branch/);
+      expect(updatePackages).toMatch(/ready pull request/);
+      expect(updatePackages).not.toMatch(/push on the repository primary branch/);
+    }
+
+    const productLine = read("packs/business-ops/codex/product-line/SKILL.md");
+    expect(productLine).not.toMatch(/push changes to the repository primary branch/);
+  });
+
   it("routes shipping orchestrators through the issue-backed ready-PR boundary", () => {
     for (const agent of ["claude", "codex"]) {
       const commit = read(`packs/gitops/${agent}/commit-and-push-by-feature/SKILL.md`);

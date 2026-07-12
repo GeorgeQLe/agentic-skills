@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "94b1962409a75ba6f4c4a5b7affd8fdd7633931b",
-  "generated_at": "2026-07-12T06:09:51.109Z",
-  "source_fingerprint": "5a04fc758c7224718d9aab6cb447c8b4d0fe8522205fa77a37d14cb593f01cf3",
+  "source_commit": "50c17a5cc392a5ba6f856d6d71965937cab2e1b3",
+  "generated_at": "2026-07-12T16:52:41.009Z",
+  "source_fingerprint": "06101bfd6f695ac3745801192ce5b4b6d3f5ed0aecc3ea75d6db09465d74c0ba",
   "source_count": 459,
   "skill_count": 415,
   "pack_count": 40,
@@ -592,7 +592,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -743,7 +743,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -820,7 +820,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[optional repo path, focus, or --no-history]",
       "platform": "claude",
@@ -845,7 +845,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -873,7 +873,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "briefing-slides"
       ],
@@ -1058,7 +1058,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1137,7 +1137,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1288,7 +1288,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1365,7 +1365,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[optional repo path, focus, or --no-history]",
       "platform": "codex",
@@ -1390,7 +1390,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1418,7 +1418,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "briefing-slides"
       ],
@@ -1603,7 +1603,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.15",
+      "version": "v0.16",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2290,7 +2290,7 @@
       "type": "ops",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2652,7 +2652,7 @@
       "type": "ops",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -4273,7 +4273,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": "[package names, workspace scope, or --all]",
       "platform": "claude",
@@ -4326,7 +4326,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": "[package names, workspace scope, or --all]",
       "platform": "codex",
@@ -6500,7 +6500,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [],
       "argumentHint": "[--phase]",
       "platform": "claude",
@@ -6525,7 +6525,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6551,7 +6551,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6576,7 +6576,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [],
       "argumentHint": "[--phase] [--execute-approved]",
       "platform": "codex",
@@ -6601,7 +6601,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.16",
+      "version": "v0.17",
       "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -6627,7 +6627,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -7285,7 +7285,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": null,
       "platform": "claude",
@@ -7338,7 +7338,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": null,
       "platform": "codex",
@@ -9241,7 +9241,7 @@
       "type": "orchestration",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9351,7 +9351,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9431,7 +9431,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9783,7 +9783,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9811,7 +9811,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],

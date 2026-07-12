@@ -27,6 +27,9 @@
 | `web-animations-api` | sub-skill | `/animation-design-planner` router | Web Animations API usage detected |
 | `threejs` | sub-skill | `/animation-design-planner` router | Three.js/R3F detected in codebase |
 | `codebase-status` | primary | user | Any time — status check |
+| `github-branch` | sub-skill | mutation/shipping skills | Issue-backed non-primary branch must be created or adopted safely |
+| `github-issue` | sub-skill | mutation/shipping skills | Canonical GitHub Issue must be reused or created |
+| `github-pr` | sub-skill | mutation/shipping skills | Ready PR must be created/updated, or explicit merge was requested |
 | `idea-scope-brief` | primary | user | New project/concept needs scoping |
 | `init-agentic-skills` | primary | user | First-time machine setup |
 | `pack` | primary | user | Pack management needed |
@@ -245,7 +248,7 @@
 
 | Skill | Type | Typical invoker | Entry condition |
 |-------|------|-----------------|-----------------|
-| `commit-and-push-by-feature` | primary | user | Feature-grouped commits needed |
+| `commit-and-push-by-feature` | chained | shipping skills or user | Publish validated commits on the issue-backed work branch and upsert the ready PR |
 | `sync` | primary | user | Pull latest + status |
 
 ### Pack: guided-walkthrough
