@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-12
+
+- Preserved the dirty-tree handoff while requiring `/ship` to adopt the issue-backed branch before committing and publishing a ready pull request.
+
 ## v0.6 - 2026-06-29
 
 - Replaced local Skills Showcase regeneration with the public `exports/skills-catalog/v1/**` refresh contract and routed website copy follow-up to the separate Showcase repo.

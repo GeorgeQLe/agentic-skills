@@ -2,7 +2,7 @@
 name: update-packages
 description: Update project dependencies to the latest version that is more than 8 days old, preferring pnpm over npm and enforcing installer age gates
 type: execution
-version: v0.1
+version: v0.2
 argument-hint: "[package names, workspace scope, or --all]"
 ---
 
@@ -76,7 +76,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - Summarize packages updated, versions selected, publish dates, packages skipped, package-manager changes, and verification.
    - Include the age-gate config files changed and the exact setting values.
    - Update task docs or changelogs when the repository workflow requires it.
-   - If tracked files changed, commit and push on the repository primary branch unless the user explicitly says not to.
+   - If tracked files changed, follow the shared shipping contract: reuse or create one GitHub Issue, publish the validated commits on a non-primary branch, and create or update one ready pull request without merging it.
 
 ## Output
 

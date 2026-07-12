@@ -2,7 +2,7 @@
 name: create-alignment-page
 description: Create or amend a portable HTML alignment review page in a target repo using bundled conventions and skillpacks alignment commands
 type: ops
-version: v0.3
+version: v0.4
 required_conventions: [alignment-page]
 argument-hint: "<skill-or-topic> [target artifact or repo path]"
 ---
@@ -78,4 +78,4 @@ Follow the shared alignment-page convention via the packaged convention resolver
 ## Default Shipping Contract
 
 - Modified alignment pages, archive copies, index updates, and source artifacts are normal repo artifacts. Follow the target repo's shipping rules after verification.
-- When operating in this `agentic-skills` repository, commit and push intended tracked changes on the primary branch before stopping unless the user explicitly says not to ship.
+- When operating in this `agentic-skills` repository, follow `docs/github-delivery-contract.md` and publish intended tracked changes through an issue-backed non-primary branch and ready pull request unless the user explicitly says not to ship.

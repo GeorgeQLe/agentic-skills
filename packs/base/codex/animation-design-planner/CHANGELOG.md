@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-07-12
+
+- Replaced direct-primary mutation shipping with the canonical issue-backed branch and ready pull-request boundary.
+
 ## v0.1 - 2026-06-13
 
 - Removed direct execution-loop command handoffs from non-exec routing; route through approved YAML, task, or roadmap artifacts instead.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-07-12
+
+- Replaced direct-primary mutation shipping with the canonical issue-backed branch and ready pull-request boundary.
+
 ## v0.2 - 2026-06-29
 
 - Updated frontend target-selection guidance to avoid the removed in-repo Skills Showcase path and allow separate public report/showcase repositories.

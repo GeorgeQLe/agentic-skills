@@ -1,0 +1,7 @@
+interface:
+  display_name: "GitHub Issue"
+  short_description: "Safely resolve the issue tracking repository work"
+  default_prompt: "Use $github-issue to reuse or create the single GitHub Issue for this work without duplicates or early closure."
+
+policy:
+  allow_implicit_invocation: true

@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.6",
     "release_lane": "canary"
   },
-  "source_fingerprint": "3a30b38667d60c56fc2099b457b2ac9154e0a601e25ef667315313f41306d8ff",
+  "source_fingerprint": "a5007bbd126933532159470b58a3ae45810f1633c08be110a2c701e6c77c5962",
   "packs": [
     {
       "name": "agent-bridge",
@@ -887,7 +887,7 @@
       "scope": "pack",
       "pack": "agent-work-admin",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -896,14 +896,15 @@
       ],
       "path": "packs/agent-work-admin/codex/plan-phase/SKILL.md",
       "installable": true,
-      "content_sha256": "aa5fc194833c7b9a19c55801fa5ad563a624eda5ac2ae63bfe89751c9b95c4a8",
+      "content_sha256": "791bf8c94ad9a9ce0bd008f8d64c8b8d63c60a9a6a6858925da925dfb35bac0e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "$plan-phase",
       "deck_memberships": []
@@ -1279,7 +1280,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.9",
+      "version": "v0.10",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1288,7 +1289,7 @@
       ],
       "path": "packs/base/claude/afps-status/SKILL.md",
       "installable": true,
-      "content_sha256": "13d0e7b4b9c1a4242ccf53e197ff7e8b0da2195297db9aad33628f7ea59fa53a",
+      "content_sha256": "24c9ccd09b41a007a8f727436a39505dcce61fbd6e5722702c567121afa05535",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1298,7 +1299,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "/afps-status",
       "deck_memberships": []
@@ -1399,7 +1401,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1408,9 +1410,10 @@
       ],
       "path": "packs/base/claude/animation-design-planner/SKILL.md",
       "installable": true,
-      "content_sha256": "86f212cb3cdbda87c996992ad46f183cb2531743a9601eb01ae53e678bf20d13",
+      "content_sha256": "eeed33486c86ca2cc40b4b5c984166a589307d3afb5a8a8d15b93f5d8d983f19",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/animation-design-planner",
       "deck_memberships": []
@@ -1457,18 +1460,19 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/base/claude/codebase-status/SKILL.md",
       "installable": true,
-      "content_sha256": "c8894551fa9e68c17fc343f7f0a3185217189ca5080e6f3e30be0c8cad88a1dd",
+      "content_sha256": "c08a3175d4fc842f06ad02bc09c10e49affe2c04d6018710a0eac3e799c929f1",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1487,7 +1491,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.3",
+      "version": "v0.4",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1496,11 +1500,12 @@
       ],
       "path": "packs/base/claude/create-alignment-page/SKILL.md",
       "installable": true,
-      "content_sha256": "185abd9f94415b42ce4cfd0bec885b119095f49955bb403a22ea0cd32617fcae",
+      "content_sha256": "d2e82f8a7e20718ce3af548085f9a46fddb4d3cf77ddff93b7ef1a9d02aeb216",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "/create-alignment-page",
       "deck_memberships": []
@@ -1511,7 +1516,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -1520,10 +1525,11 @@
       ],
       "path": "packs/base/claude/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "20448daaab1928733c2a14e9b236a3c13adb3504ba88ad4cf1f83629a36ab305",
+      "content_sha256": "90e066da9a4034559cf774d646984a33d0cdc94ce543b685850fbf40558cd622",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/create-briefing-slides",
       "deck_memberships": []
@@ -1548,6 +1554,60 @@
         "v0.0"
       ],
       "command": "/fork-idea-branch",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-github-branch",
+      "name": "github-branch",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/claude/github-branch/SKILL.md",
+      "installable": true,
+      "content_sha256": "62f02042a9a704f0bcb3b6d0238e94fd35743ddcb27787ea3a4d437576eeb99d",
+      "archive_versions": [],
+      "command": "/github-branch",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-github-issue",
+      "name": "github-issue",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/claude/github-issue/SKILL.md",
+      "installable": true,
+      "content_sha256": "27c3ba5d2e209bca66051e66589e37831319ecee1812d72cce0f6499acf34001",
+      "archive_versions": [],
+      "command": "/github-issue",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-claude-github-pr",
+      "name": "github-pr",
+      "scope": "base",
+      "pack": null,
+      "platform": "claude",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/claude/github-pr/SKILL.md",
+      "installable": true,
+      "content_sha256": "f96618a48a91fca626858805256156f11928f06018176d9057130d6866fc4818",
+      "archive_versions": [],
+      "command": "/github-pr",
       "deck_memberships": []
     },
     {
@@ -1633,7 +1693,7 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.14",
+      "version": "v0.15",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1642,7 +1702,7 @@
       ],
       "path": "packs/base/claude/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "3017617b0d62e86442e3f1c56e176e49f1979bc455551e1f8144dee2f6ecddba",
+      "content_sha256": "b2c92693693e3baa94b57cbe1771b78c35e72d9f10a079fb121274614e0e7588",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1650,6 +1710,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1720,7 +1781,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.9",
+      "version": "v0.10",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1729,7 +1790,7 @@
       ],
       "path": "packs/base/codex/afps-status/SKILL.md",
       "installable": true,
-      "content_sha256": "383a31c2d32078dea2e9577b705fd52bb68926d7fcdc8a8b35a6483df0394e29",
+      "content_sha256": "bbec50e173b2e9ddc23271a5a8566da76459e74259a9ad6b07924d9668ec35a6",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1739,7 +1800,8 @@
         "v0.5",
         "v0.6",
         "v0.7",
-        "v0.8"
+        "v0.8",
+        "v0.9"
       ],
       "command": "$afps-status",
       "deck_memberships": []
@@ -1840,7 +1902,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1849,9 +1911,10 @@
       ],
       "path": "packs/base/codex/animation-design-planner/SKILL.md",
       "installable": true,
-      "content_sha256": "58165894d94b9f073fcdddad54fccb3bd2b7c097453a3ae525a136a05731c967",
+      "content_sha256": "cf882458253f906227c3243c1eda88c9279cc9e94a58bdd7d73168e4e918fb45",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$animation-design-planner",
       "deck_memberships": []
@@ -1898,18 +1961,19 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.11",
+      "version": "v0.12",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/base/codex/codebase-status/SKILL.md",
       "installable": true,
-      "content_sha256": "0959a499442fe1dbe69f7f4900a59267d629de6f98a37530e5d9c4a41c765b88",
+      "content_sha256": "f5bf4e6abae3729976fe00a43ddf05cbb877a92bfb12c821e185444dd4a4c438",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -1928,7 +1992,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.3",
+      "version": "v0.4",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -1937,11 +2001,12 @@
       ],
       "path": "packs/base/codex/create-alignment-page/SKILL.md",
       "installable": true,
-      "content_sha256": "7d8a5e87c57ddf0f9bd083547dd02dd7a1a5a0723e9bc6cc8217268443c5f9b8",
+      "content_sha256": "61d26a4ef5f2f375a65951a582103148e1fb2b7a9f9d989bf35ec8c82abdc228",
       "archive_versions": [
         "v0.0",
         "v0.1",
-        "v0.2"
+        "v0.2",
+        "v0.3"
       ],
       "command": "$create-alignment-page",
       "deck_memberships": []
@@ -1952,7 +2017,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "canary",
       "deprecated": false,
       "replaced_by": null,
@@ -1961,10 +2026,11 @@
       ],
       "path": "packs/base/codex/create-briefing-slides/SKILL.md",
       "installable": true,
-      "content_sha256": "2992d70882fb4de1cb27a8df839ba84d7fa0fcaf6edebf0896c95e2ffd42d7e9",
+      "content_sha256": "e135dee3d9aa9d5b51f9e384f1a63b476e33b80f2cd8f82afaf58ba897d6ad3d",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$create-briefing-slides",
       "deck_memberships": []
@@ -1989,6 +2055,60 @@
         "v0.0"
       ],
       "command": "$fork-idea-branch",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-github-branch",
+      "name": "github-branch",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/codex/github-branch/SKILL.md",
+      "installable": true,
+      "content_sha256": "75ef4bb20e82c5b57c7458cf64c383867036728a3d6ed101e188cb234d10fcb7",
+      "archive_versions": [],
+      "command": "$github-branch",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-github-issue",
+      "name": "github-issue",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/codex/github-issue/SKILL.md",
+      "installable": true,
+      "content_sha256": "cea80f58f0f3c697e95e67e55a909c07ec883b2dccb02b2fcd4f3987014939c1",
+      "archive_versions": [],
+      "command": "$github-issue",
+      "deck_memberships": []
+    },
+    {
+      "id": "base-codex-github-pr",
+      "name": "github-pr",
+      "scope": "base",
+      "pack": null,
+      "platform": "codex",
+      "version": "v0.0",
+      "release_lane": "stable",
+      "deprecated": false,
+      "replaced_by": null,
+      "required_conventions": [],
+      "path": "packs/base/codex/github-pr/SKILL.md",
+      "installable": true,
+      "content_sha256": "9b807fa79b2b5893df9ef29e574edb0a7a0f13b488a6d5932700d365ca2462ea",
+      "archive_versions": [],
+      "command": "$github-pr",
       "deck_memberships": []
     },
     {
@@ -2074,7 +2194,7 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.15",
+      "version": "v0.16",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -2083,7 +2203,7 @@
       ],
       "path": "packs/base/codex/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "690cc24d9437f9c917edaaaa904989fa1b64b85a886c23c26d661b9c6abe604b",
+      "content_sha256": "e1aaf4c9c9e9bdb2201773e05fd12f5d8ded4c526f4a540c4fa5be4fc33980b3",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2092,6 +2212,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -2850,7 +2971,7 @@
       "scope": "pack",
       "pack": "business-ops",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -2859,14 +2980,15 @@
       ],
       "path": "packs/business-ops/claude/product-line/SKILL.md",
       "installable": true,
-      "content_sha256": "8a65318b8b57e047c097f842fcbd848a9efa6c153692c282b0af7472e207ef4c",
+      "content_sha256": "9337bcb45a36a6e1c3c26b3ac09edafa7b2c5223df738b3fcae8a189aa8576c4",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/product-line",
       "deck_memberships": [
@@ -3224,7 +3346,7 @@
       "scope": "pack",
       "pack": "business-ops",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -3233,14 +3355,15 @@
       ],
       "path": "packs/business-ops/codex/product-line/SKILL.md",
       "installable": true,
-      "content_sha256": "c37914a6e3e00f77e4b5b8ec5e770009e7287250c60541e153e613e37ef2fb5e",
+      "content_sha256": "1aeaf1100733ff847ee230d8709729cd31e3daf258780a08aa511f3904d0a72e",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "$product-line",
       "deck_memberships": [
@@ -5198,16 +5321,17 @@
       "scope": "pack",
       "pack": "code-maintenance",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-maintenance/claude/update-packages/SKILL.md",
       "installable": true,
-      "content_sha256": "a668f91f279de28080b2f51f674033e95fd2b2179070f9e68359e5ffd623b0bf",
+      "content_sha256": "aaa79dcb395b082c2021190819cbe5690e9d481f60218725f0b45bf7d7959f55",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/update-packages",
       "deck_memberships": []
@@ -5240,16 +5364,17 @@
       "scope": "pack",
       "pack": "code-maintenance",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/code-maintenance/codex/update-packages/SKILL.md",
       "installable": true,
-      "content_sha256": "6167e5d7e3e3c9216d23c758f891a6775b8c02aabbc17c2c9f23bd3ecebe924a",
+      "content_sha256": "330a85f55fe4e399f0b5dcc26f33564eb6378a65ea716d29825d52179e93f91d",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$update-packages",
       "deck_memberships": []
@@ -5458,7 +5583,7 @@
       "scope": "pack",
       "pack": "code-review",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -5467,9 +5592,10 @@
       ],
       "path": "packs/code-review/codex/expert-review/SKILL.md",
       "installable": true,
-      "content_sha256": "dd675ff2de39c44dc29bce18fe7ac39c587ee04079689406604622df21fa1490",
+      "content_sha256": "3a67be5e8e83299fc337b92529f713a787f933faa81afe9c4eab9e3b4ce18ab1",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$expert-review",
       "deck_memberships": []
@@ -7380,21 +7506,22 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/exec/SKILL.md",
       "installable": true,
-      "content_sha256": "fb122658d2b68cb5b382a3d844664771bce325bbe1e4452fe730994702c4d7b2",
+      "content_sha256": "1a0a5f4fb21c9cebb7f9df308ccdbc11a09d5437c9cdc2851675c409c1788068",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/exec",
       "deck_memberships": []
@@ -7405,14 +7532,14 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.14",
+      "version": "v0.15",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "cfd4cf09b3f4c4d8d13a982553701709ec8bac025867a4289016710594baabeb",
+      "content_sha256": "be6c3d5be444f545da5a11614815e9e12b886fe8049ae53faeeff8c66bb7d11b",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7420,6 +7547,7 @@
         "v0.11",
         "v0.12",
         "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7438,18 +7566,19 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "claude",
-      "version": "v0.11",
+      "version": "v0.12",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/claude/ship/SKILL.md",
       "installable": true,
-      "content_sha256": "02004ed3e76df60a58c086dcbeb13921b3ebe9f5a561d54e55a447637ab11c4c",
+      "content_sha256": "abbc9386f0418dcfd7346f7a16f3983785284aef84c976dfb3e9e94a1beee0b3",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
+        "v0.11",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7468,21 +7597,23 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.8",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/exec/SKILL.md",
       "installable": true,
-      "content_sha256": "0c8376e936745eb690c96d0fd6a71f5e584f3b80a1aefa7ad7a22bcfd6b5244f",
+      "content_sha256": "3de46dbfb08a53ac68aba59e901b89eac642ecc8697c967bf114d44864b167a0",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6",
+        "v0.7"
       ],
       "command": "$exec",
       "deck_memberships": []
@@ -7493,14 +7624,14 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.15",
+      "version": "v0.17",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/ship-end/SKILL.md",
       "installable": true,
-      "content_sha256": "bd357f6314650fe7d86c0b076b791a34c77fd419cbe0d79753f9c9fada5b94cf",
+      "content_sha256": "ee0aaa634f01b97146de666b68e5e4b81314e9bae67ab54aa964e613e02957f5",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -7509,6 +7640,8 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
+        "v0.16",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -7527,20 +7660,22 @@
       "scope": "pack",
       "pack": "exec-loop",
       "platform": "codex",
-      "version": "v0.13",
+      "version": "v0.15",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/exec-loop/codex/ship/SKILL.md",
       "installable": true,
-      "content_sha256": "f42dcfbe6e020e25673856d4c405a2bdec10be1efdfeb6efba631ccfa693f9ca",
+      "content_sha256": "d4c1183112576da1da640006339b14939a78ee3481b61cce1a104e72ee2d0b11",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.10",
         "v0.11",
         "v0.12",
+        "v0.13",
+        "v0.14",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -8169,16 +8304,17 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "claude",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/claude/commit-and-push-by-feature/SKILL.md",
       "installable": true,
-      "content_sha256": "2ab59041d1a578f5356f5c375210c6ece9466766f6d2e0a157d71e1b6c0a3f3c",
+      "content_sha256": "ac3bab5342df7b725d4d17c2603ef7b72aed5bfe19439a9af4ffcc25bd2318b6",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "/commit-and-push-by-feature",
       "deck_memberships": []
@@ -8214,16 +8350,17 @@
       "scope": "pack",
       "pack": "gitops",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [],
       "path": "packs/gitops/codex/commit-and-push-by-feature/SKILL.md",
       "installable": true,
-      "content_sha256": "c3669484a10de5a5c6822748f97cf097fe8eb16616defa756b7cd94ae218ceb8",
+      "content_sha256": "db4e3431b6fd9a8abdc08b41579c8bea8deff27cb2e754ddbe442ed3a25c9606",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$commit-and-push-by-feature",
       "deck_memberships": []
@@ -10152,7 +10289,7 @@
       "scope": "pack",
       "pack": "project-fleet",
       "platform": "codex",
-      "version": "v0.1",
+      "version": "v0.2",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -10161,9 +10298,10 @@
       ],
       "path": "packs/project-fleet/codex/project-fleet/SKILL.md",
       "installable": true,
-      "content_sha256": "bb3c05b95522b212d2c2a04dda8fbacec26020f70bcb80f1e42ea34522281e13",
+      "content_sha256": "634f508a8fd49b6847e801e2eed75ed19c921532f52f89d2e0c7184ef5586a31",
       "archive_versions": [
-        "v0.0"
+        "v0.0",
+        "v0.1"
       ],
       "command": "$project-fleet",
       "deck_memberships": []
@@ -10236,7 +10374,7 @@
       "scope": "pack",
       "pack": "release-ops",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -10245,10 +10383,11 @@
       ],
       "path": "packs/release-ops/claude/branch-lifecycle/SKILL.md",
       "installable": true,
-      "content_sha256": "61e153977319a45162cd46c672d27ae1a5670a3ca38c005b528c24e77ff53d2e",
+      "content_sha256": "dcccae3955728b74d4c43b08a9c478a7101c0f58df2ed0b45b8b78de09d52d1a",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/branch-lifecycle",
       "deck_memberships": []
@@ -10300,7 +10439,7 @@
       "scope": "pack",
       "pack": "release-ops",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -10309,10 +10448,11 @@
       ],
       "path": "packs/release-ops/codex/branch-lifecycle/SKILL.md",
       "installable": true,
-      "content_sha256": "cbed0715a68f14621eca082f1f0235cdf69c1b3d1ad9f084876d482e41acfa09",
+      "content_sha256": "dc2973c9796e5faa91b394c7ce3f0619c2c58fc05532b631d7c73a1a9cc7125f",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$branch-lifecycle",
       "deck_memberships": []
@@ -10596,7 +10736,7 @@
       "scope": "pack",
       "pack": "report-gen",
       "platform": "claude",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -10605,10 +10745,11 @@
       ],
       "path": "packs/report-gen/claude/report-website/SKILL.md",
       "installable": true,
-      "content_sha256": "2ca153e71e2e14367f45667c36e394b4945f4652659e3db61f9d5181f3809229",
+      "content_sha256": "d4e3544fa621900162abf16b3b3e532a6395d357af186184ff509a2ee7b688ce",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "/report-website",
       "deck_memberships": []
@@ -10619,7 +10760,7 @@
       "scope": "pack",
       "pack": "report-gen",
       "platform": "codex",
-      "version": "v0.2",
+      "version": "v0.3",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
@@ -10628,10 +10769,11 @@
       ],
       "path": "packs/report-gen/codex/report-website/SKILL.md",
       "installable": true,
-      "content_sha256": "2680117a8e51386197fcf7c94936d3e31158e1dc2212b6c4c981cd970e071b09",
+      "content_sha256": "b0d9570804dbccb2f7f293ec03636e5347d54a8d18c6d37f4deb9ade2cf778c7",
       "archive_versions": [
         "v0.0",
-        "v0.1"
+        "v0.1",
+        "v0.2"
       ],
       "command": "$report-website",
       "deck_memberships": []

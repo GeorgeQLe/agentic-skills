@@ -1,10 +1,10 @@
 # Current Task
 
-## Current Implementation - Issue-Backed Branch and PR Delivery
+## No Active Implementation
 
 ### Status
 
-Architecture is approved and the primary review surface is recorded at `briefing-slides/github-delivery-architecture.html`. Implementation may proceed. The approved default is: GitHub Issue equals ticket; all tracked mutations use a non-primary branch and PR; `ship`, `ship-end`, and Codex `exec` publish a ready PR but do not merge; deploy and release remain primary-branch-only after merge.
+The Issue-Backed Branch and PR Delivery migration is complete and published for review as ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4). It has not been merged or deployed.
 
 ### Execution Profile
 
@@ -20,10 +20,10 @@ Architecture is approved and the primary review surface is recorded at `briefing
 - [x] Record the full phased migration and acceptance criteria in `tasks/roadmap.md`.
 - [x] Build and verify `briefing-slides/github-delivery-architecture.html` as the visual approval surface.
 - [x] Confirm the proposed defaults with the user before implementation.
-- [ ] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
-- [ ] Implement Phase 2 shipping-orchestrator migration.
-- [ ] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
-- [ ] Publish the completed migration as a ready PR without merging it automatically.
+- [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
+- [x] Implement Phase 2 shipping-orchestrator migration.
+- [x] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
+- [x] Publish the completed migration as a ready PR without merging it automatically.
 
 ### Approval Gate
 
@@ -44,11 +44,11 @@ Approved 2026-07-12 after expert review. Implementation proceeds with these defa
 
 ### Next Work
 
-- [ ] Implement and validate the three mirrored base safety subskills plus the canonical GitHub delivery contract before changing any orchestrator.
+- [x] Implement Phase 2 shipping-orchestrator migration over the validated `github-issue`, `github-branch`, and `github-pr` contracts.
 
 ### Review
 
-The architecture packet is approved with no blocking or advisory findings. Each gate was re-checked against the current base-pack availability model, direct-primary shipping contracts, strict merge behavior, quality-gate contract, and release/deploy primary-branch preflights. The design centralizes fragile GitHub mutations in three low-freedom base subskills, preserves reuse-before-create and stop-on-ambiguity behavior, separates ready-for-review publication from merge, and keeps external authentication failures from weakening primary-branch protection.
+The architecture packet is approved with no blocking or advisory findings. Phase 1 implemented mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` safety subskills. Phase 2 migrated compatibility wrappers, shipping orchestrators, Codex execution shipping, Claude dirty-tree handoff, and active writing-skill overrides. Phase 3 migrated provisioned/root policy, quality/operating/invocation/reference/pack docs, and remaining active direct-primary instructions; the audit now has zero legacy allowances. Fresh Terra review found one High and two Medium issues; Sol accepted and remediated all three by strengthening the audit, migrating `update-packages` and `product-line`, removing obsolete exception/allowlist text, and regenerating index-backed artifacts. Focused tests, lifecycle tests, strict archive audit, base and mirror parity, task-doc audit, catalog validation, canary package build, and diff hygiene pass. Publication as a ready PR remains the final in-session delivery step.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

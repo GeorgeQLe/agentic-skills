@@ -2,7 +2,7 @@
 name: project-fleet
 description: Orchestrate a central control repository that plans, provisions, tracks, and advances many related downstream repositories or work items with guarded batches, blocker handling, and productive fallback work.
 type: orchestration
-version: v0.1
+version: v0.2
 required_conventions: [alignment-page]
 argument-hint: "[--status] [--plan] [--execute]"
 ---
@@ -202,6 +202,6 @@ Follow the shared alignment-page convention via the packaged convention resolver
 ## Default Shipping Contract
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- If this skill creates or modifies tracked repository files, follow `docs/github-delivery-contract.md` and finish with an issue-backed non-primary branch plus ready pull request; do not merge it.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

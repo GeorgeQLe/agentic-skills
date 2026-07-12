@@ -70,7 +70,7 @@ When a shared skill is created or materially updated and benchmark coverage is n
 
 ## Base Skills
 
-Base skills are domain-neutral and installed project-local via `npx skillpacks init` for every project. The base surface is intentionally small — 11 skills under `packs/base/claude/`, 8 of them mirrored under `packs/base/codex/`:
+Base skills are domain-neutral and installed project-local via `npx skillpacks init` for every project. The base surface is intentionally small — 14 skills under `packs/base/claude/`, 11 of them mirrored under `packs/base/codex/`:
 
 | Skill | Purpose |
 | --- | --- |
@@ -80,6 +80,9 @@ Base skills are domain-neutral and installed project-local via `npx skillpacks i
 | `autoresearch-prep` | Scaffold a `program.md` for `/autoresearch` from codebase signals and a short interview |
 | `codebase-status` | Report repo state, related conversation history, and outstanding work |
 | `fork-idea-branch` | Split an active research path into parallel product paths |
+| `github-branch` | Create or adopt the issue-backed non-primary work branch and enforce dirty-tree/push safety |
+| `github-issue` | Reuse or create the single canonical GitHub Issue ticket for tracked work |
+| `github-pr` | Create or update the ready pull request and gate merge, issue closure, and cleanup |
 | `idea-scope-brief` | Shape a rough idea into a concept brief before ICP and market research |
 | `init-agentic-skills` | Initialize base Claude and Codex managed skill installs from this checkout and route pack setup to the pack workflow |
 | `pack` | Manage project-local packs and `.agents/project.json` |
@@ -87,6 +90,8 @@ Base skills are domain-neutral and installed project-local via `npx skillpacks i
 | `skills` | Browse base and enabled project-local skills |
 
 > Three base skills are **Claude-only** (no `packs/base/codex/` mirror): `autoresearch`, `autoresearch-prep`, and `fork-idea-branch`.
+
+Tracked-file mutation skills follow [`docs/github-delivery-contract.md`](github-delivery-contract.md): the base GitHub subskills are universally available, ordinary shipping stops at a ready pull request, and merge/release/deploy remain separate gated actions.
 
 All other formerly-base skills now live in domain packs — see [Moved Skills](#moved-skills) and the per-pack sections below.
 

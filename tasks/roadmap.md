@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Issue-Backed Branch and PR Delivery
+## Historical Implementation - Issue-Backed Branch and PR Delivery
 
 ### Goal
 
@@ -24,36 +24,36 @@ Approved 2026-07-12 after expert review. No Critical, High, Medium, Low, or spec
 
 ### Phase 1 - Safety Subskills And Shared Contract
 
-- [ ] Create mirrored base `github-issue`, `github-branch`, and `github-pr` skills with deterministic, low-freedom safety rules.
-- [ ] Define issue deduplication, branch naming/adoption, dirty-tree ownership, push, PR upsert, merge, issue-linking, and post-merge cleanup contracts.
-- [ ] Update `packs/base/PACK.md`, skill metadata, UI metadata, public references, and the packaged manifest so the new subskills are universally available.
-- [ ] Add a canonical GitHub delivery contract and a validator that rejects active direct-to-primary mutation instructions outside release/deploy exceptions.
+- [x] Create mirrored base `github-issue`, `github-branch`, and `github-pr` skills with deterministic, low-freedom safety rules.
+- [x] Define issue deduplication, branch naming/adoption, dirty-tree ownership, push, PR upsert, merge, issue-linking, and post-merge cleanup contracts.
+- [x] Update `packs/base/PACK.md`, skill metadata, UI metadata, public references, and the packaged manifest so the new subskills are universally available.
+- [x] Add a canonical GitHub delivery contract and a validator that rejects active direct-to-primary mutation instructions outside release/deploy exceptions.
 
 ### Phase 2 - Shipping Orchestrator Migration
 
-- [ ] Refactor `commit-and-push-by-feature` into a compatibility wrapper over safe non-primary branch publication.
-- [ ] Refactor `branch-lifecycle` into a compatibility/advanced-recovery wrapper over `github-branch` and `github-pr` rather than an exception to direct-to-primary development.
-- [ ] Refactor mirrored `ship` and `ship-end`, plus Codex `exec`, so task docs, commits, branch push, and PR readiness happen in one review boundary.
-- [ ] Preserve Claude `/exec`'s dirty-tree handoff while requiring `/ship` to create or adopt the issue-backed branch before committing.
-- [ ] Remove direct-primary overrides from active writing skills and point them at the shared GitHub delivery contract.
+- [x] Refactor `commit-and-push-by-feature` into a compatibility wrapper over safe non-primary branch publication.
+- [x] Refactor `branch-lifecycle` into a compatibility/advanced-recovery wrapper over `github-branch` and `github-pr` rather than an exception to direct-to-primary development.
+- [x] Refactor mirrored `ship` and `ship-end`, plus Codex `exec`, so task docs, commits, branch push, and PR readiness happen in one review boundary.
+- [x] Preserve Claude `/exec`'s dirty-tree handoff while requiring `/ship` to create or adopt the issue-backed branch before committing.
+- [x] Remove direct-primary overrides from active writing skills and point them at the shared GitHub delivery contract.
 
 ### Phase 3 - Provisioning, Documentation, And Verification
 
-- [ ] Update the provisioned `AGENTS.md`/`CLAUDE.md` blocks and this repository's active copies to make issue-backed branch/PR delivery the default.
-- [ ] Update quality-gate, operating-mode, invocation-type, skill-reference, pack, and next-step documentation for the new lifecycle.
-- [ ] Archive every behavior-changing skill version, bump versions, and update mirrored changelogs before editing active contracts.
-- [ ] Refresh the runtime skill copies and generated skill/catalog manifests without committing generated `.claude/skills/**` or `.codex/skills/**` roots.
-- [ ] Run skill validation, mirror/version/archive parity, dependency, direct-primary policy, task-doc, catalog, package-manifest, and targeted shipping-route tests.
-- [ ] Dogfood the new path by publishing this migration on its issue-backed non-primary branch as a ready PR; do not merge it automatically.
+- [x] Update the provisioned `AGENTS.md`/`CLAUDE.md` blocks and this repository's active copies to make issue-backed branch/PR delivery the default.
+- [x] Update quality-gate, operating-mode, invocation-type, skill-reference, pack, and next-step documentation for the new lifecycle.
+- [x] Archive every behavior-changing skill version, bump versions, and update mirrored changelogs before editing active contracts.
+- [x] Refresh the runtime skill copies and generated skill/catalog manifests without committing generated `.claude/skills/**` or `.codex/skills/**` roots.
+- [x] Run skill validation, mirror/version/archive parity, dependency, direct-primary policy, task-doc, catalog, package-manifest, and targeted shipping-route tests.
+- [x] Dogfood the new path by publishing this migration on its issue-backed non-primary branch as a ready PR; do not merge it automatically.
 
 ### Acceptance Criteria
 
-- [ ] Every tracked-file-writing skill inherits or explicitly applies the GitHub delivery contract; no active mutation path pushes directly to `main` or `master`.
-- [ ] The three safety subskills are base skills available to both Claude and Codex and refuse force-push, silent merge, duplicate issue/PR creation, destructive unmerged-branch deletion, and ambiguous dirty-tree adoption.
-- [ ] `ship`, `ship-end`, and Codex `exec` produce an issue, non-primary branch, pushed commits, and ready PR when GitHub is available, while merge remains a separate confirmed action.
-- [ ] Release and deploy skills require an already-merged, current primary branch and never reinterpret an open PR as deployable primary state.
-- [ ] Automated audits fail on regression to direct-primary mutation shipping or on missing mirrored/versioned subskill artifacts.
-- [ ] The migration itself is delivered for human review through the new branch/PR workflow.
+- [x] Every tracked-file-writing skill inherits or explicitly applies the GitHub delivery contract; no active mutation path pushes directly to `main` or `master`.
+- [x] The three safety subskills are base skills available to both Claude and Codex and refuse force-push, silent merge, duplicate issue/PR creation, destructive unmerged-branch deletion, and ambiguous dirty-tree adoption.
+- [x] `ship`, `ship-end`, and Codex `exec` produce an issue, non-primary branch, pushed commits, and ready PR when GitHub is available, while merge remains a separate confirmed action.
+- [x] Release and deploy skills require an already-merged, current primary branch and never reinterpret an open PR as deployable primary state.
+- [x] Automated audits fail on regression to direct-primary mutation shipping or on missing mirrored/versioned subskill artifacts.
+- [x] The migration itself is delivered for human review through the new branch/PR workflow.
 
 ### Concurrent Completed Work - Codex Accountable Agent Lifecycle
 

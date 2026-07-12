@@ -273,7 +273,7 @@ For teams adopting agentic-skills across multiple developers:
 4. **Never commit generated skill roots.** `.claude/skills/` and `.codex/skills/` in consumer projects are generated from `.agents/project.json`. Add them to `.gitignore`.
 5. **Run `scripts/pack.sh refresh` after pulling pack changes.** When `.agents/project.json` changes upstream (e.g. a new pack is added), each developer runs refresh to recreate their local skill roots.
 6. **Restart CLI after install/remove/refresh.** Skills are not hot-reloaded. Claude Code: `/reload-skills` then `/clear` or restart. Codex: fresh session.
-7. **Agree on shipping workflow.** The default is direct-to-primary (commit and push to main/master). If your team uses feature branches, note this in `.agents/project.json` `notes` or your project's CLAUDE.md.
+7. **Use issue-backed delivery.** Tracked mutations default to one GitHub Issue, a non-primary branch, and a ready pull request. Merge is a separate confirmed action; release and deployment wait for the merged primary branch. Record any non-GitHub tracker adapter in `.agents/project.json` `notes` or the project's agent instructions.
 
 ## Former Base Domain Skills
 

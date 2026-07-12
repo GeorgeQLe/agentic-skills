@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-07-12
+
+- Migrated shipping to one issue-backed branch and ready pull-request boundary, with deployment deferred until merge.
+
 ## v0.14 - 2026-07-12
 
 - Added the Codex accountability manifest/report and hard shipping gates for unresolved accepted Critical/High findings, failed integrated verification, and missing required focused Terra review.

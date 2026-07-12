@@ -1,5 +1,22 @@
 # Session History
 
+## 2026-07-12 - GitHub delivery Phase 3 provisioning and verification
+
+- Migrated the provisioned and active root agent-policy blocks to issue-backed non-primary delivery, and updated quality-gate, operating-mode, pack, invocation, and skills-reference documentation.
+- Archived and versioned both `provision-agentic-config` mirrors, both `update-packages` mirrors, and both `product-line` mirrors; refreshed the public catalog and canary package manifest from the staged source boundary.
+- Removed the final direct-primary audit allowance and hardened detection for “repository primary branch” plus obsolete direct-primary exception framing.
+- Fresh Terra review found one High and two Medium findings. Sol accepted and remediated all three; focused re-audit and integrated validation evidence are recorded in the Phase 3 ship manifest.
+- Verification passed for lifecycle tests (76/76), GitHub-delivery tests (7/7), the zero-allowance policy audit, strict archive audit, base/mirror parity, task-doc audit, catalog validation, canary package `build:check`, and diff hygiene.
+- Published commit `436818831` on `chore/3-github-delivery-safety` and updated ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4); merge and deployment remain deferred.
+
+## 2026-07-12 - GitHub delivery Phase 2 orchestrator migration
+
+- Converted `commit-and-push-by-feature` into a compatibility wrapper over issue ensure, issue-backed branch ensure/publish, and ready pull-request upsert without automatic merge.
+- Converted `branch-lifecycle` into a compatibility and advanced-recovery wrapper; normal PR creation and merge now delegate to the canonical safety skills.
+- Migrated mirrored `ship` and `ship-end`, Codex `exec`, Claude's dirty-tree `/exec` handoff, and 13 active writing-skill overrides away from direct-primary mutation delivery.
+- Archived and versioned all 23 changed skills, refreshed the public catalog proof/runtime copies, and reduced the direct-primary audit baseline to the two provisioning-template targets reserved for Phase 3.
+- Focused GitHub delivery tests, direct-primary audit, archive audit, base parity, catalog validation, task-doc audit, and diff hygiene passed. The mirror audit retained the same three unrelated pre-existing `plan-phase`/`expert-review` failures.
+
 ## 2026-07-12 - Codex accountable multi-agent lifecycle
 
 - Added a Codex-only risk-based accountability convention: Sol owns planning, integration, verification, dispositions, and delivery; up to three disjoint Luna lanes may implement bounded work; a fresh read-only Terra context audits every non-trivial integrated mutation.

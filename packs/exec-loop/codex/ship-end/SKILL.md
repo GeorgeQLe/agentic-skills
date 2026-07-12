@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.16
+version: v0.17
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -38,6 +38,7 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
    - If no executable check is relevant, state why in `Skipped tests` and explain the residual risk. Do not write "not run" without a rationale.
    - If the user corrected the agent during the session, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise. If it exposes a workflow failure, also include the relevant skill contract, validation script, fixture, or test enforcement update in the same shipping boundary, or include `Correction enforcement:` with the blocker or not-applicable rationale and the concrete follow-up file/command when needed.
 6. Deploy (skip if `--no-deploy`):
+   - If the current session work is not already merged into the current primary branch, defer deployment until after ready-PR publication and explicit review/`$github-pr merge`. Never deploy development state from the work branch.
    After shipping, deploy only when the project has an explicit manual deploy contract.
    - Check for deploy contract: look for `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -48,7 +49,7 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
    - If `$deploy` reports failure, report the error. Do not retry.
 7. **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):** Run `scripts/save-conversation.sh` to export the current conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., no local conversation history available), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
    - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
-8. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
+8. Commit and publish using `$commit-and-push-by-feature` with `docs/github-delivery-contract.md`; ensure the issue-backed non-primary branch and create or update one ready pull request without merging it.
 8b. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 9. Report:
    - Accountability topology, Luna assignments/results, model-routing fallbacks, Sol inspection/integration evidence, grouped changed files, integrated verification and unavailable checks, Terra findings/dispositions, remediation, focused re-review, deferred risks, and final Sol acceptance
@@ -95,7 +96,7 @@ Rules:
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
-- Do not push session-wrap-up commits to an existing feature branch. Use `commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
+- Do not commit on or push mutations directly to the primary branch. Use `$commit-and-push-by-feature` to ensure and publish the issue-backed work branch and ready pull request.
 - `ship-end` only deploys when `deploy.md` or `tasks/deploy.md` exists. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

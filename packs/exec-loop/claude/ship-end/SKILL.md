@@ -2,7 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.14
+version: v0.15
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -25,6 +25,7 @@ Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` co
    - If `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` changed and `scripts/audit-task-docs.mjs` exists, run `node scripts/audit-task-docs.mjs` and fix any failures before final next-work routing.
 
 3. **Deploy (skip if `--no-deploy`):**
+   - If the current session work is not already merged into the current primary branch, defer deployment until after ready-PR publication and explicit review/`/github-pr merge`. Never deploy development state from the work branch.
    After shipping, deploy only when the project has an explicit manual deploy contract.
    - **Check for deploy contract.** Look for `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -39,7 +40,7 @@ Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` co
    - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
 
 5. **Ship the session changes:**
-   - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, land the resulting commits on `main` or `master`, and push them there when the workflow succeeds.
+   - Use `/commit-and-push-by-feature` with `docs/github-delivery-contract.md`: group logical commits on the issue-backed non-primary branch, publish it, and create or update one ready pull request without merging it.
    - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 
 6. **Report session summary:**
@@ -101,7 +102,7 @@ Rules:
 - Do not switch branches or create new branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Do not commit secrets.
-- Do not push session-wrap-up commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
+- Do not commit on or push mutations directly to the primary branch. Use `/commit-and-push-by-feature` to ensure and publish the issue-backed work branch and ready pull request.
 - If pre-commit hooks fail, fix and retry.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

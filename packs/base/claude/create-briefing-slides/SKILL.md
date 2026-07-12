@@ -2,7 +2,7 @@
 name: create-briefing-slides
 description: Create or amend a self-contained PowerPoint-like HTML briefing slide deck for alignment pages, interrogation questions, research findings, framework/workshop artifacts, specs, reports, or documentation plans. Use when Claude should make review material more visual and navigable while preserving dense alignment/interrogation pages and source documents as linked references instead of auto-opening them.
 type: ops
-version: v0.2
+version: v0.3
 release_lane: canary
 required_conventions: [briefing-slides]
 argument-hint: "<topic-or-artifact> [--from alignment/page.html|interrogation/page.html|path] [--out briefing-slides/name.html]"
@@ -74,4 +74,4 @@ Follow the shared briefing-slides convention via the packaged convention resolve
 ## Default Shipping Contract
 
 - Generated decks, archive copies, and source artifacts are normal repo artifacts. Follow the target repo's shipping rules after verification.
-- When operating in this `agentic-skills` repository, commit and push intended tracked changes on the primary branch before stopping unless the user explicitly says not to ship.
+- When operating in this `agentic-skills` repository, follow `docs/github-delivery-contract.md` and publish intended tracked changes through an issue-backed non-primary branch and ready pull request unless the user explicitly says not to ship.

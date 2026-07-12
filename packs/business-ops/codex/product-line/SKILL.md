@@ -2,7 +2,7 @@
 name: product-line
 description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
 type: ops
-version: v0.6
+version: v0.7
 required_conventions: [alignment-page]
 argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 context_intake: artifact_only
@@ -183,4 +183,4 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 ## Default Shipping Contract
 
-Follow the shared shipping contract convention in CLAUDE.md (adapted for Codex: commit and push changes to the repository primary branch).
+Follow the shared shipping contract convention in CLAUDE.md.

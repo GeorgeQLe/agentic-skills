@@ -1,10 +1,10 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "d002c8989ec52664d5ec75fc4aedaab9623f5105",
-  "generated_at": "2026-07-12T05:24:44.425Z",
-  "source_fingerprint": "b143ea58d555d991ef095a021bea9c2944158c21082f931ba3e9cef7168da6e6",
-  "source_count": 453,
-  "skill_count": 409,
+  "source_commit": "9a6cc55f46ea423649ec33f81742d3693877d433",
+  "generated_at": "2026-07-12T20:54:13.800Z",
+  "source_fingerprint": "c3af670d045862e09d76e1bdf296f80fc6c95aa5513adce6f544481c7b51c0a1",
+  "source_count": 459,
+  "skill_count": 415,
   "pack_count": 40,
   "deck_count": 5,
   "set_count": 3,
@@ -592,7 +592,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -743,7 +743,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -820,7 +820,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[optional repo path, focus, or --no-history]",
       "platform": "claude",
@@ -845,7 +845,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -873,7 +873,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "briefing-slides"
       ],
@@ -919,6 +919,80 @@
         "fork",
         "idea",
         "planning"
+      ]
+    },
+    {
+      "id": "base-claude-github-branch",
+      "name": "github-branch",
+      "title": "Github Branch",
+      "description": "Safely create, adopt, publish, or clean up an issue-backed non-primary Git branch without force-pushing or absorbing ambiguous work",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<ensure|adopt|publish|cleanup|status> [issue-number] [branch-name]",
+      "platform": "claude",
+      "command": "/github-branch",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/claude/github-branch/SKILL.md",
+      "mirrorKey": "github-branch",
+      "tags": [
+        "base",
+        "branch",
+        "claude",
+        "github",
+        "operations"
+      ]
+    },
+    {
+      "id": "base-claude-github-issue",
+      "name": "github-issue",
+      "title": "Github Issue",
+      "description": "Safely reuse, create, update, or explicitly close the single GitHub Issue that tracks repository work",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<ensure|update|close|status> [issue-number] [--title <title>]",
+      "platform": "claude",
+      "command": "/github-issue",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/claude/github-issue/SKILL.md",
+      "mirrorKey": "github-issue",
+      "tags": [
+        "base",
+        "claude",
+        "github",
+        "issue",
+        "operations"
+      ]
+    },
+    {
+      "id": "base-claude-github-pr",
+      "name": "github-pr",
+      "title": "Github Pr",
+      "description": "Safely upsert, inspect, review, or explicitly merge the pull request for an issue-backed work branch",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<upsert|review|merge|status> [pr-number] [--draft|--ready]",
+      "platform": "claude",
+      "command": "/github-pr",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/claude/github-pr/SKILL.md",
+      "mirrorKey": "github-pr",
+      "tags": [
+        "base",
+        "claude",
+        "github",
+        "operations"
       ]
     },
     {
@@ -984,7 +1058,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1063,7 +1137,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.9",
+      "version": "v0.10",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1214,7 +1288,7 @@
       "type": "planning",
       "contextIntake": null,
       "visualTier": "prototype",
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1291,7 +1365,7 @@
       "type": "analysis",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[optional repo path, focus, or --no-history]",
       "platform": "codex",
@@ -1316,7 +1390,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.3",
+      "version": "v0.4",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -1344,7 +1418,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "briefing-slides"
       ],
@@ -1390,6 +1464,80 @@
         "fork",
         "idea",
         "planning"
+      ]
+    },
+    {
+      "id": "base-codex-github-branch",
+      "name": "github-branch",
+      "title": "Github Branch",
+      "description": "Safely create, adopt, publish, or clean up an issue-backed non-primary Git branch without force-pushing or absorbing ambiguous work",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<ensure|adopt|publish|cleanup|status> [issue-number] [branch-name]",
+      "platform": "codex",
+      "command": "$github-branch",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/codex/github-branch/SKILL.md",
+      "mirrorKey": "github-branch",
+      "tags": [
+        "base",
+        "branch",
+        "codex",
+        "github",
+        "operations"
+      ]
+    },
+    {
+      "id": "base-codex-github-issue",
+      "name": "github-issue",
+      "title": "Github Issue",
+      "description": "Safely reuse, create, update, or explicitly close the single GitHub Issue that tracks repository work",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<ensure|update|close|status> [issue-number] [--title <title>]",
+      "platform": "codex",
+      "command": "$github-issue",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/codex/github-issue/SKILL.md",
+      "mirrorKey": "github-issue",
+      "tags": [
+        "base",
+        "codex",
+        "github",
+        "issue",
+        "operations"
+      ]
+    },
+    {
+      "id": "base-codex-github-pr",
+      "name": "github-pr",
+      "title": "Github Pr",
+      "description": "Safely upsert, inspect, review, or explicitly merge the pull request for an issue-backed work branch",
+      "type": "operations",
+      "contextIntake": null,
+      "visualTier": null,
+      "version": "v0.0",
+      "requiredConventions": [],
+      "argumentHint": "<upsert|review|merge|status> [pr-number] [--draft|--ready]",
+      "platform": "codex",
+      "command": "$github-pr",
+      "scope": "base",
+      "pack": null,
+      "path": "packs/base/codex/github-pr/SKILL.md",
+      "mirrorKey": "github-pr",
+      "tags": [
+        "base",
+        "codex",
+        "github",
+        "operations"
       ]
     },
     {
@@ -1455,7 +1603,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.15",
+      "version": "v0.16",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2142,7 +2290,7 @@
       "type": "ops",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -2504,7 +2652,7 @@
       "type": "ops",
       "contextIntake": "artifact_only",
       "visualTier": "visual",
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -4125,7 +4273,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": "[package names, workspace scope, or --all]",
       "platform": "claude",
@@ -4178,7 +4326,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": "[package names, workspace scope, or --all]",
       "platform": "codex",
@@ -6352,7 +6500,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [],
       "argumentHint": "[--phase]",
       "platform": "claude",
@@ -6377,7 +6525,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6403,7 +6551,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.11",
+      "version": "v0.12",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "claude",
@@ -6428,7 +6576,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.7",
+      "version": "v0.8",
       "requiredConventions": [],
       "argumentHint": "[--phase] [--execute-approved]",
       "platform": "codex",
@@ -6453,7 +6601,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.16",
+      "version": "v0.17",
       "requiredConventions": [],
       "argumentHint": "[--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -6479,7 +6627,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.14",
+      "version": "v0.15",
       "requiredConventions": [],
       "argumentHint": "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]",
       "platform": "codex",
@@ -7137,7 +7285,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": null,
       "platform": "claude",
@@ -7190,7 +7338,7 @@
       "type": "shipping",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [],
       "argumentHint": null,
       "platform": "codex",
@@ -9093,7 +9241,7 @@
       "type": "orchestration",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.1",
+      "version": "v0.2",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9203,7 +9351,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9283,7 +9431,7 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9635,7 +9783,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],
@@ -9663,7 +9811,7 @@
       "type": "execution",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.2",
+      "version": "v0.3",
       "requiredConventions": [
         "alignment-page"
       ],

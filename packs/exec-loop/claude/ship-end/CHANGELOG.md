@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15 - 2026-07-12
+
+- Migrated session closeout to issue-backed branch publication and ready pull-request delivery, with deployment deferred until merge.
+
 ## v0.14 - 2026-07-06
 
 - Removed Build-In-Public wrap-up behavior and dropped the `social-ledger` convention dependency that was only needed for BIP post suggestions.

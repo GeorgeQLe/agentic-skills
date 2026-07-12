@@ -15,3 +15,6 @@ Base skills live under `packs/base/{claude,codex}` so their source layout matche
 ## Skills
 
 - `create-briefing-slides`: Create slide-first HTML briefing decks for alignment/interrogation review material while keeping dense artifacts as linked references.
+- `github-issue`: Reuse, create, update, or explicitly close the one GitHub Issue that tracks a mutation.
+- `github-branch`: Safely create, adopt, publish, or clean up an issue-backed non-primary branch.
+- `github-pr`: Upsert, inspect, review, or explicitly merge the pull request for a work branch.

@@ -2,7 +2,7 @@
 name: afps-status
 description: Summarize AFPS product-workflow progress from existing artifacts and recommend the next concrete skill command
 type: analysis
-version: v0.9
+version: v0.10
 required_conventions: [alignment-page]
 argument-hint: "[optional project path, product path, or focus]"
 ---
@@ -114,5 +114,5 @@ Follow the shared alignment-page convention via the packaged convention resolver
 
 - **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
 - Normally read-only and should not create or modify tracked repository files.
-- If the user explicitly asks this skill to create or modify tracked files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
+- If the user explicitly asks this skill to create or modify tracked files, follow `docs/github-delivery-contract.md` and finish with an issue-backed non-primary branch plus ready pull request; do not merge it.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

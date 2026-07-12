@@ -2,7 +2,7 @@
 name: branch-lifecycle
 description: "Evaluate feature branches and decide whether to merge, salvage, keep open, or delete based on branch health, PR status, and stale-branch heuristics"
 type: ops
-version: v0.2
+version: v0.3
 required_conventions: [alignment-page]
 argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]"
 ---
@@ -11,7 +11,7 @@ argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge
 
 Evaluate feature branches after review and drive one of four outcomes: `merge`, `salvage`, `keep-open`, or `delete`.
 
-This is an exception workflow. The default repository policy is direct-to-primary development on `main`/`master`; use this skill for legacy branches, externally introduced branches, explicit user requests for branch/PR work, or `agent-team` lane branches created by an approved parallel plan.
+This is a compatibility and advanced-recovery wrapper. Normal issue-backed branch creation/publication delegates to `/github-branch`; pull-request creation, review, and merge delegate to `/github-pr`. This skill retains inventory, salvage, and cleanup decisions for legacy or damaged branch state.
 
 ## Arguments
 
@@ -29,7 +29,7 @@ This is an exception workflow. The default repository policy is direct-to-primar
    - Detect the base branch in this order: repository default branch, `main`, then `master`.
    - Run `git status` and report uncommitted changes before any mutating action.
    - Use `gh` for PR metadata and merge operations when available. If `gh` is unavailable or unauthenticated, report that limitation and continue with local-only facts where possible.
-   - State clearly that normal solo-dev work should land directly on the base branch, not stay on a feature branch.
+   - State clearly that normal tracked mutations use an issue-backed non-primary branch and ready pull request.
 
 2. **Build branch inventory:**
    - Enumerate local branches except the current branch and base branch.
@@ -81,7 +81,7 @@ This is an exception workflow. The default repository policy is direct-to-primar
 3. For each eligible branch:
    - summarize commits unique to the branch
    - confirm with AskUserQuestion unless `--force`
-   - create the PR with `gh pr create`
+   - delegate PR reuse/creation to `/github-pr upsert`
 4. If a branch is a better `salvage` candidate than a PR candidate, say so and do not open the PR automatically.
 
 ### `review <branch-or-pr>`
@@ -106,10 +106,8 @@ This is an exception workflow. The default repository policy is direct-to-primar
 1. Resolve the target to an open PR. If the branch has no PR, stop and recommend `pr` or `salvage`.
 2. Re-check the strict merge gate.
 3. If any merge gate fails, stop and explain which requirement failed.
-4. Confirm with AskUserQuestion unless `--force`.
-5. Merge with squash by default: `gh pr merge <number> --squash`
-   - Respect `CLAUDE.md` if it specifies a different merge strategy.
-6. Report the merged PR and resulting commit hash.
+4. Delegate the final gate, explicit confirmation, and merge to `/github-pr merge <number>`; `--force` never bypasses that merge confirmation.
+5. Report the merged PR and resulting commit hash.
 
 ### `salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>]`
 

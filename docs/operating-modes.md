@@ -22,6 +22,12 @@ Codex both plans and executes. Used when Claude is unavailable for the same clas
 
 Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/spec-interview` → `/exec` plans → `/delegate $exec` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
 
+## Delivery Lifecycle Across Modes
+
+All three modes share the same tracked-mutation boundary from `docs/github-delivery-contract.md`: reuse or create one GitHub Issue, work on a non-primary branch, and publish or update one ready pull request. Claude `/exec` may hand a dirty tree to `/ship`; Codex `$exec` may ship inline; either route ends at the ready PR and does not merge. A merge requires the separate `github-pr merge` action and explicit confirmation. Release and deployment run only from an already-merged, current primary branch.
+
+If GitHub publication or authentication is unavailable, retain safe commits on a non-primary local branch and report the blocker. Operating mode never authorizes a fallback push to primary.
+
 ## Mode-signal resolution
 
 Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` environment variable (shell-scoped override) and the `agent_mode` field in `.agents/project.json` (project-scoped, committed optionally, usually developer-local). The resolver `scripts/agent-mode.sh` (function `validate_agent_mode` + top-level env/file check) is the single source of truth for precedence and validation; skills and pack wrappers defer to it rather than reimplementing the lookup.
