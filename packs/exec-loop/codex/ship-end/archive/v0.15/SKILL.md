@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.16
+version: v0.15
 argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
@@ -28,11 +28,8 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
    - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the session-wrap-up commit, or a separate commit if unrelated.
    - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 5b. **Quality gate for non-trivial mutations:**
-   - Read and enforce `docs/codex-accountable-agent-workflow.md`. Sol remains the sole integration and delivery owner.
    - Apply `docs/quality-gate-contract.md` when the session changed source code, scripts, configuration, schemas, generated runtime assets, deploy behavior, workflow policy, validation rules, command surfaces, or multiple files.
    - Build a ship manifest from the exact diff and unpushed commits that will be included in the session wrap-up. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
-   - Add accountability topology; Luna assignments/results; requested/resolved models and fallbacks; Sol inspection/integration evidence; grouped changed files by owner and purpose; integrated verification and unavailable checks; Terra findings and complete Sol dispositions; remediation; focused re-review; deferred risks; and final Sol acceptance.
-   - Refuse shipping when an accepted Critical/High Terra finding is unresolved, required integrated verification failed, or a required focused Terra re-audit is absent or failed.
    - For non-trivial source changes, run a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
    - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
    - If no executable check is relevant, state why in `Skipped tests` and explain the residual risk. Do not write "not run" without a rationale.
@@ -51,7 +48,6 @@ Use this skill when the user wants the current session wrapped up cleanly. If `$
 8. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
 8b. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 9. Report:
-   - Accountability topology, Luna assignments/results, model-routing fallbacks, Sol inspection/integration evidence, grouped changed files, integrated verification and unavailable checks, Terra findings/dispositions, remediation, focused re-review, deferred risks, and final Sol acceptance
    - What was accomplished
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)

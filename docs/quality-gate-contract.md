@@ -80,6 +80,8 @@ Use the smallest review method that matches the risk:
 
 The review is not complete until findings are either fixed or explicitly accepted in the manifest as residual risk.
 
+Platform executors may impose a stricter independent-review and disposition contract. Codex workflows apply the platform-specific convention in `docs/codex-accountable-agent-workflow.md`; this shared contract remains platform-neutral.
+
 ## User Corrections
 
 When the user corrects the agent, update `tasks/lessons.md` with the repeatable pattern before shipping any related work. The lesson must name the behavior to avoid, the preferred replacement behavior, and the trigger that should make future agents apply it.

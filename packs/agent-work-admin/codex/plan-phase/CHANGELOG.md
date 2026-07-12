@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-12
+
+- Added the orthogonal Codex accountability topology and decision-complete, maximum-three Luna lane contract while preserving existing execution-profile modes.
+
 ## v0.6 - 2026-07-02
 
 - Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex approved task artifact routes.

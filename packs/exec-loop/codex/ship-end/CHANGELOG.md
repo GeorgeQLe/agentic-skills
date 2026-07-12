@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.16 - 2026-07-12
+
+- Added the Codex accountability manifest/report and hard shipping gates for unresolved accepted Critical/High findings, failed integrated verification, and missing required focused Terra review.
+
 ## v0.15 - 2026-07-06
 
 - Removed Build-In-Public wrap-up behavior and dropped the `social-ledger` convention dependency that was only needed for BIP post suggestions.

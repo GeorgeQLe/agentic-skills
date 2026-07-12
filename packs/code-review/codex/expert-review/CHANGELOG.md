@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-07-12
+
+- Added fresh delegated Terra review through `--adversarial-diff --read-only`, with strict no-write behavior and structured evidence/confidence fields.
+
 ## v0.0
 
 - Archived previous skill contract.

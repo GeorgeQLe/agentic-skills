@@ -2,7 +2,7 @@
 name: exec
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
-version: v0.7
+version: v0.6
 argument-hint: "[--phase] [--execute-approved]"
 invocation: orchestrator
 ---
@@ -18,7 +18,6 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. Read `tasks/todo.md` — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 3. Read `CLAUDE.md` for project conventions.
-3a. Read `docs/codex-accountable-agent-workflow.md` and act as Sol for every non-trivial mutation.
 3b. If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
 4. Find the next incomplete item:
    - Look for the next phase with an unchecked milestone.
@@ -32,7 +31,6 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If missing, treat the phase as `serial`.
    - Use the profile only for the current step or scoped phase; do not plan ahead.
    - If the profile's `Parallel mode` is `agent-team`, stop before implementation unless the active workflow can run branch-backed isolated worktrees or a dedicated agent team. Each write lane must have a non-primary GitHub `Branch:` value and the phase must include a consolidation/PR review step before final validation or shipping.
-   - Read `Accountability topology` independently. Default non-trivial mutations to `sol-terra`; use `sol-luna-terra` only for one to three decision-complete, disjoint Luna write lanes; reserve `sol-only-trivial` for the convention's trivial exemption.
 6c. **`--execute-approved` branch** (if `$ARGUMENTS` contains `--execute-approved`):
    - Reject `--execute-approved --phase` — approved packets target one step, not a full phase.
    - Exec `scripts/approved-plan.sh check`.
@@ -58,8 +56,6 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If it is a verification step: run all tests, fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same execution by recording the no-op result instead of preserving it as a separate next-step plan.
    - The main agent owns integration, conflict resolution, task doc updates, history updates, shipping, and deployment.
    - If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
-   - For every Luna lane, record the complete assignment and return contract. Reject overlapping ownership. Sol must inspect the actual diff and surrounding code, enforce allowed/forbidden paths, and personally integrate or reject the work.
-9b. **Accountability lifecycle:** After integration, run integrated verification. For every non-trivial mutation, launch a fresh Terra context with `$expert-review --adversarial-diff --read-only`. Record every structured finding and give it exactly one Sol disposition: `accepted`, `rejected`, or `deferred`. Remediate accepted findings, rerun relevant checks, and run a fresh focused Terra re-audit when remediation affects security, authentication, billing, persistence, migrations, concurrency, privacy, data loss, or broad cross-package contracts. Finish with final Sol acceptance.
 10. Mark the completed work in `tasks/todo.md`:
    - Default mode: check off the completed step.
    - `--phase` mode: check off the completed steps and any acceptance criteria satisfied by the phase work.
@@ -74,8 +70,6 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If the completed step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the public skills catalog export before shipping: run `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh`; include changed `exports/skills-catalog/v1/**` artifacts in the shipping boundary.
    - The Skills Showcase lives in the separate `agentic-skills-showcase` repository and imports the public catalog export. Do not run Showcase app generators, Next.js builds, or website asset refreshes during normal `agentic-skills` shipping. If a skill change needs curated website copy, record the follow-up for the Showcase repo instead of editing app files here.
    - Before commit/push, produce a diff-aware ship manifest for the exact shipping boundary. It must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
-   - Add topology; Luna assignments/results; requested/resolved models and fallbacks; Sol inspection/integration evidence; grouped changed files; integrated verification and unavailable checks; Terra findings and dispositions; remediation; focused re-review; deferred risks; and final Sol acceptance.
-   - Refuse shipping while an accepted Critical/High Terra finding is unresolved, integrated verification failed, or a required focused Terra re-audit is missing.
    - For non-trivial source changes, run a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
    - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
    - If no executable check is relevant, state why in `Skipped tests` and explain the residual risk. Do not write "not run" without a rationale.

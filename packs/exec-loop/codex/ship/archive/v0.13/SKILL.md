@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: v0.14
+version: v0.13
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 invocation: orchestrator
 ---
@@ -24,13 +24,10 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the step's commit (or as a separate commit if unrelated).
    - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 1c. **Quality gate for non-trivial mutations:**
-   - Read and enforce `docs/codex-accountable-agent-workflow.md`. Sol remains the sole integration and delivery owner.
    - Apply `docs/quality-gate-contract.md` when the work to ship changes source code, scripts, configuration, schemas, generated runtime assets, deploy behavior, workflow policy, validation rules, command surfaces, or multiple files.
    - If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the public skills catalog export before commit: run `node scripts/generate-skills-catalog-export.mjs` and `scripts/validate-skills-catalog-export.sh`; include changed `exports/skills-catalog/v1/**` artifacts in the same shipping boundary.
    - The Skills Showcase lives in the separate `agentic-skills-showcase` repository and imports the public catalog export. Do not run Showcase app generators, Next.js builds, or website asset refreshes during normal `agentic-skills` shipping. If a skill change needs curated website copy, record the follow-up for the Showcase repo instead of editing app files here.
    - Build a ship manifest from the exact diff and unpushed commits that will be included in the shipping boundary. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command. The `Next command` field must use Codex dollar-command syntax; for a completed `$ship` run, default to `$exec` unless project state names a more specific next route. Do not leave `Next command` blank unless all planned work is genuinely complete, in which case use `none`.
-   - Add accountability topology; Luna assignments/results; requested/resolved models and fallbacks; Sol inspection/integration evidence; grouped changed files by owner and purpose; integrated verification and unavailable checks; Terra findings and complete Sol dispositions; remediation; focused re-review; deferred risks; and final Sol acceptance.
-   - Refuse shipping when an accepted Critical/High Terra finding is unresolved, required integrated verification failed, or a required focused Terra re-audit is absent or failed.
    - For non-trivial source changes, run a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
    - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
    - If the tree contains unrelated pre-existing changes, the manifest must separate included files from untouched files and explain why the ship boundary is safe. If that cannot be proven, stop instead of shipping.

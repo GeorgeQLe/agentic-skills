@@ -2,8 +2,7 @@
 name: expert-review
 description: Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents
 type: review
-version: v0.2
-argument-hint: "[path] [--adversarial-diff] [--read-only]"
+version: v0.1
 required_conventions: [alignment-page]
 ---
 
@@ -21,8 +20,6 @@ Use this skill when the user wants a code review of the whole project or a speci
    - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks. Read `tasks/record-todo.md` and `tasks/recurring-todo.md` (if they exist) for advisory context only.
    - Build a mental model of intentional decisions and documented trade-offs.
 2. If the user provides a file or directory, scope the review there. Otherwise review the repository broadly.
-2a. With `--adversarial-diff`, review the integrated diff and relevant surrounding code against the goal, plan, specifications, and verification evidence from a fresh context that did not implement or integrate the change.
-2b. With `--read-only`, do not modify repository files, task documents, prompt history, alignment pages, the index, branches, commits, refs, or external state. This overrides every mutation-producing instruction in this skill, its Alignment Page and Default Shipping Contract conventions, project task-management rules, and prompt-history capture for the delegated invocation. Sol must capture any required delegation prompt/history before Terra starts. Delegated Terra review requires both flags and follows `docs/codex-accountable-agent-workflow.md`.
 3. Read enough of the codebase to understand the architecture before critiquing it.
 4. Review against these dimensions:
    - Correctness
@@ -53,11 +50,9 @@ Report findings grouped by severity:
 - Documented decisions (no action needed): patterns that look like issues but are intentional
 - Positive observations: strong patterns worth preserving
 
-In delegated Terra mode, every non-stylistic finding also includes a stable ID, file and line evidence, impact/failure mode, recommended remediation, verification method, and `high|medium|low` confidence. Report `no findings` explicitly when none survive verification.
-
 ## Follow-Through
 
-After presenting findings, write Critical and High implementation fixes to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section), except when `--read-only` is active. One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$exec` or `$investigate` to start fixing concrete work.
+After presenting findings, write Critical and High implementation fixes to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$exec` or `$investigate` to start fixing concrete work.
 
 ## Constraints
 
@@ -72,10 +67,6 @@ After presenting findings, write Critical and High implementation fixes to `task
 
 Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/expert-review-{topic}.html`.
 
-Skip alignment-page creation when `--read-only` is active.
-
 ## Default Shipping Contract
 
 Follow the shared shipping contract convention in CLAUDE.md.
-
-Skip all shipping, commit, push, task-document, and prompt-history mutations when `--read-only` is active.

@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-12 - Codex accountable multi-agent lifecycle
+
+- Added a Codex-only risk-based accountability convention: Sol owns planning, integration, verification, dispositions, and delivery; up to three disjoint Luna lanes may implement bounded work; a fresh read-only Terra context audits every non-trivial integrated mutation.
+- Extended Codex `plan-phase`, `exec`, `expert-review`, `ship`, and `ship-end` with topology, assignment/return evidence, model-routing disclosure, structured findings, disposition and remediation gates, focused high-risk re-audit, final acceptance, and shipping blockers.
+- Archived and bumped the affected Codex skills to `plan-phase`/`exec` v0.7, `expert-review` v0.2, `ship` v0.14, and `ship-end` v0.16; Claude skill sources were intentionally unchanged.
+- Added layer-one contract coverage and refreshed the public catalog/runtime copies. Preserved the unrelated issue-backed GitHub delivery task and its existing dirty files outside this shipping boundary.
+- Verification passed for the targeted lifecycle suite, archive audit, Codex/Claude parity audit, task-doc audit, alignment resolver/audit, catalog validation, runtime/source comparisons, and diff hygiene. The full layer-one run passed 2,511/2,532 tests; its 21 failures are in untouched research/design/provisioning contracts and remain outside this change.
+- Fresh Terra review found a High read-only convention conflict and a Medium enforcement-test weakness. Sol accepted and remediated both; a fresh focused Terra re-audit returned no findings.
+
 ## 2026-07-10 - Dangling-symlink refresh and fleet recovery
 
 - Added non-following lifecycle path inspection so absent paths and dangling symlinks are distinguished while non-`ENOENT` filesystem errors propagate.

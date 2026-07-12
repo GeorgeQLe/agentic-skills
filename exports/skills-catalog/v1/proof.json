@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "d004f44a646ec225f64a1d0d68da59eb32ae9356",
-  "generated_at": "2026-07-09T05:07:36.195Z",
-  "source_fingerprint": "46a2223a3673158e337fbca12abd675c0e109890ef95793a6c2e063720085676",
+  "source_commit": "d002c8989ec52664d5ec75fc4aedaab9623f5105",
+  "generated_at": "2026-07-12T05:24:44.483Z",
+  "source_fingerprint": "b143ea58d555d991ef095a021bea9c2944158c21082f931ba3e9cef7168da6e6",
   "source_count": 453,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-12 - Codex accountable multi-agent lifecycle",
+    "2026-07-10 - Dangling-symlink refresh and fleet recovery",
+    "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout",
+    "2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout",
+    "2026-07-09 - Briefing-first review surface convention",
     "2026-07-09 - Briefing-slides Phase 2: deck manifest + batch regenerate",
     "2026-07-08 - Package validation bottleneck patch",
-    "2026-07-08 - skillpacks 0.1.22-experimental.1 canary closeout",
-    "2026-07-07 - Dirty worktree prompt-history closeout",
-    "2026-07-07 - Active skill cut",
-    "2026-07-06 - skillpacks 0.1.21 source-state closeout",
-    "2026-07-06 - Release-lane convention agent-review handoff",
-    "2026-07-06 - ship-end closeout for UAT checklist contract"
+    "2026-07-08 - skillpacks 0.1.22-experimental.1 canary closeout"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

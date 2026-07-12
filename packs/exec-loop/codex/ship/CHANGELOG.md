@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.14 - 2026-07-12
+
+- Added the Codex accountability manifest/report and hard shipping gates for unresolved accepted Critical/High findings, failed integrated verification, and missing required focused Terra review.
+
 ## v0.13 - 2026-07-06
 
 - Removed the Build-In-Public output-boundary clause now that BIP is no longer an active shipping path.

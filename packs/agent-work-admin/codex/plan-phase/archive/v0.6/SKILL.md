@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: v0.7
+version: v0.6
 required_conventions: [alignment-page]
 invocation: sub-skill
 parent: exec
@@ -33,7 +33,6 @@ Read:
 - `specs/` (or `spec.md`) for the detailed requirements referenced by the phase's scope.
 - The codebase as needed to understand existing code, patterns, and which files to modify.
 - The roadmap phase's `Parallelization` and `Coordination Notes` fields, if present.
-- `docs/codex-accountable-agent-workflow.md` for the Codex accountability topology and lane contracts.
 
 ## Planning Process
 
@@ -69,7 +68,6 @@ Add this section before implementation steps:
 ```markdown
 ### Execution Profile
 **Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
-**Accountability topology:** sol-only-trivial | sol-terra | sol-luna-terra
 **Integration owner:** main agent
 **Conflict risk:** low | medium | high
 **Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
@@ -90,16 +88,6 @@ Add this section before implementation steps:
 For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
 For `agent-team`, every write lane must have a deterministic `Branch:` value that is not `main` or `master`, and the phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
 
-### Determine Accountability Topology
-
-Choose this independently of parallel mode and add `**Accountability topology:** sol-only-trivial | sol-terra | sol-luna-terra` to the Execution Profile.
-
-- Use `sol-only-trivial` only for typo, formatting-only, narrow text, or task-checkbox work that changes no executable behavior or workflow policy.
-- Use `sol-terra` for every other mutation unless bounded implementation parallelism is materially beneficial.
-- Use `sol-luna-terra` only with one to three Luna implementation lanes whose write ownership is disjoint. Reject overlapping `Owns` paths.
-
-Each Luna lane must state its objective, acceptance criteria, context, allowed/owned paths, forbidden/shared paths, verification commands, dependencies, requested model, resolved model (or `unavailable` plus fallback), and required return evidence. Return evidence includes status, changed paths, diff or commit evidence, acceptance mapping, verification results, deviations, unresolved risks, and model routing. Sol retains task docs, shared manifests, lockfiles, migrations, generated artifacts, integration, commits, pushes, and deployment unless exclusive ownership is explicitly assigned.
-
 ### Break the Phase into Steps
 
 Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The structure depends on the test strategy:
@@ -119,7 +107,6 @@ For new user-facing product, SaaS, marketplace, dashboard, internal tool, or pro
 
 ### Execution Profile
 **Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
-**Accountability topology:** sol-only-trivial | sol-terra | sol-luna-terra
 **Integration owner:** main agent
 **Conflict risk:** low | medium | high
 **Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
@@ -166,7 +153,6 @@ For new user-facing product, SaaS, marketplace, dashboard, internal tool, or pro
 
 ### Execution Profile
 **Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
-**Accountability topology:** sol-only-trivial | sol-terra | sol-luna-terra
 **Integration owner:** main agent
 **Conflict risk:** low | medium | high
 **Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
@@ -206,7 +192,6 @@ For new user-facing product, SaaS, marketplace, dashboard, internal tool, or pro
 
 ### Execution Profile
 **Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
-**Accountability topology:** sol-only-trivial | sol-terra | sol-luna-terra
 **Integration owner:** main agent
 **Conflict risk:** low | medium | high
 **Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none

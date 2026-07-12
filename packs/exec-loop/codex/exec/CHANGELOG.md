@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-07-12
+
+- Made Codex `$exec` the Sol lifecycle controller for bounded Luna implementation, integrated verification, fresh read-only Terra audit, disposition, risk-triggered focused re-audit, and final acceptance.
+
 ## v0.6 - 2026-07-02
 
 - Normalized Codex next-step routing fallback wording so imported Claude slash routes become Codex `$...` commands unless an explicit cross-agent or human-guided Claude route is required.
