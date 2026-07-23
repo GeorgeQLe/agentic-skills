@@ -8,6 +8,7 @@ PACKAGE_JSON="$PACKAGE_DIR/package.json"
 PACKAGE_NAME=${SKILLPACKS_PACKAGE_NAME:-$(node -e "console.log(require(process.argv[1]).name)" "$PACKAGE_JSON")}
 EXPECTED_VERSION=${SKILLPACKS_EXPECTED_VERSION:-$(node -e "console.log(require(process.argv[1]).version)" "$PACKAGE_JSON")}
 EXPECTED_LICENSE=${SKILLPACKS_EXPECTED_LICENSE:-MIT}
+EXPECTED_DIST_TAG=${SKILLPACKS_EXPECTED_DIST_TAG:-latest}
 NPM_SPEC=${SKILLPACKS_NPM_SPEC:-$PACKAGE_NAME@latest}
 NPM_CACHE=${SKILLPACKS_NPM_CACHE:-/tmp/skillpacks-npm-cache}
 TMP_ROOT=${SKILLPACKS_TMP_ROOT:-/tmp}
@@ -121,17 +122,18 @@ capture_cli_in() {
 assert_metadata() {
   local metadata_json=$1
   local versions_json=$2
-  METADATA_JSON=$metadata_json VERSIONS_JSON=$versions_json node - "$PACKAGE_NAME" "$EXPECTED_VERSION" "$EXPECTED_LICENSE" <<'NODE'
+  METADATA_JSON=$metadata_json VERSIONS_JSON=$versions_json node - "$PACKAGE_NAME" "$EXPECTED_VERSION" "$EXPECTED_LICENSE" "$EXPECTED_DIST_TAG" <<'NODE'
 const metadata = JSON.parse(process.env.METADATA_JSON);
 const versions = JSON.parse(process.env.VERSIONS_JSON);
-const [packageName, expectedVersion, expectedLicense] = process.argv.slice(2);
+const [packageName, expectedVersion, expectedLicense, expectedDistTag] = process.argv.slice(2);
+const distTagKey = `dist-tags.${expectedDistTag}`;
 const failures = [];
 
 if (metadata.version !== expectedVersion) {
-  failures.push(`${packageName}@latest version expected ${expectedVersion}, got ${metadata.version}`);
+  failures.push(`${packageName}@${expectedDistTag} version expected ${expectedVersion}, got ${metadata.version}`);
 }
-if (metadata["dist-tags.latest"] !== expectedVersion) {
-  failures.push(`${packageName} latest dist-tag expected ${expectedVersion}, got ${metadata["dist-tags.latest"]}`);
+if (metadata[distTagKey] !== expectedVersion) {
+  failures.push(`${packageName} ${expectedDistTag} dist-tag expected ${expectedVersion}, got ${metadata[distTagKey]}`);
 }
 if (metadata.license !== expectedLicense) {
   failures.push(`${packageName} license expected ${expectedLicense}, got ${metadata.license}`);
@@ -146,9 +148,9 @@ if (failures.length) {
 }
 
 if (versions.length === 1) {
-  console.log(`ok metadata: ${packageName}@latest=${expectedVersion}, license=${expectedLicense}; package-version upgrade test skipped because npm has one published version`);
+  console.log(`ok metadata: ${packageName}@${expectedDistTag}=${expectedVersion}, license=${expectedLicense}; package-version upgrade test skipped because npm has one published version`);
 } else {
-  console.log(`ok metadata: ${packageName}@latest=${expectedVersion}, license=${expectedLicense}; published versions=${versions.join(",")}`);
+  console.log(`ok metadata: ${packageName}@${expectedDistTag}=${expectedVersion}, license=${expectedLicense}; published versions=${versions.join(",")}`);
 }
 NODE
 }
@@ -166,7 +168,7 @@ verify_metadata_with_retries() {
     metadata_json=""
     versions_json=""
 
-    if ! metadata_json=$(npm view "$PACKAGE_NAME" version license dist-tags.latest --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
+    if ! metadata_json=$(npm view "$PACKAGE_NAME" version license "dist-tags.$EXPECTED_DIST_TAG" --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
       last_metadata_output="npm view metadata check failed for $PACKAGE_NAME: ${metadata_json}"
     elif ! versions_json=$(npm view "$PACKAGE_NAME" versions --json --prefer-online --cache "$NPM_CACHE" --workspaces=false 2>&1); then
       last_metadata_output="npm view versions check failed for $PACKAGE_NAME: ${versions_json}"
