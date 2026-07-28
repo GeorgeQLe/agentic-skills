@@ -1,54 +1,39 @@
 # Current Task
 
-## No Active Implementation
+## Current Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
 
 ### Status
 
-The Issue-Backed Branch and PR Delivery migration is complete and published for review as ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4). It has not been merged or deployed.
+Implementation is active on GitHub issue `#5` and branch `feat/issue-5-youtube-thumbnail-generation`.
 
 ### Execution Profile
 
 - Mode: serial
-- Reason: the shared contract, mirrored skills, version archives, generated manifests, and active root instructions overlap heavily and must change in a deterministic order.
-- Write scope: `packs/base/**`, `packs/gitops/**`, `packs/release-ops/**`, `packs/exec-loop/**`, shared workflow docs, validation scripts, generated catalog/manifest artifacts, prompt/task history, and active root agent instructions.
-- Must not edit: generated runtime roots under `.claude/skills/**` and `.codex/skills/**` except through `scripts/pack.sh refresh`; protected credential files; unrelated application repositories.
+- Reason: both skill mirrors, version archives, generated manifests, runtime refresh, and delivery evidence must remain deterministic and parity-safe.
+- Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
+- Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
 
 ### Plan
 
-- [x] Inventory the existing direct-primary shared contract, shipping orchestrators, `commit-and-push-by-feature`, and legacy `branch-lifecycle` behavior.
-- [x] Choose the minimal universal architecture: three mirrored base subskills (`github-issue`, `github-branch`, `github-pr`) plus compatibility wrappers.
-- [x] Record the full phased migration and acceptance criteria in `tasks/roadmap.md`.
-- [x] Build and verify `briefing-slides/github-delivery-architecture.html` as the visual approval surface.
-- [x] Confirm the proposed defaults with the user before implementation.
-- [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
-- [x] Implement Phase 2 shipping-orchestrator migration.
-- [x] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
-- [x] Publish the completed migration as a ready PR without merging it automatically.
+- [x] Inspect the current contracts, prior ship evidence, repository state, delivery contract, and applicable skill-creator instructions.
+- [x] Create/reuse the GitHub issue, switch to a non-primary issue-backed branch, capture the invocation, and record the implementation plan.
+- [x] Archive `v0.4`, bump both active mirrors to `v0.5`, and update identical changelogs.
+- [x] Implement explicit asset intake/accounting, Stage 2.5 generation and manifests, HTML image comparison, regeneration preservation, and the second approval gate.
+- [x] Update successful report/checklist/handoff/constraint language to require exactly three real thumbnail files and preserve manual Studio setup.
+- [x] Add focused readback assertions and run all planned strict/package/refresh/task/whitespace verification.
+- [ ] Record review and ship evidence, commit, push, and open a ready PR without merging.
 
-### Approval Gate
+### Acceptance Criteria
 
-Approved 2026-07-12 after expert review. Implementation proceeds with these defaults:
-
-1. GitHub Issue is the canonical ticket abstraction.
-2. Every tracked mutation uses an issue-backed non-primary branch and PR when GitHub is available.
-3. `ship`, `ship-end`, and Codex `exec` may create or update a ready PR, but merge requires a separate explicit action.
-4. Deploy and release wait until the PR is merged to the current primary branch.
-5. Non-GitHub or unauthenticated states never fall back to pushing primary.
-
-### Concurrent Completed Work - Codex Accountable Agent Lifecycle
-
-- [x] Added the Codex-only Sol/Luna/Terra convention and risk-based topology.
-- [x] Updated and versioned Codex `plan-phase`, `exec`, `expert-review`, `ship`, and `ship-end`; Claude sources remain unchanged.
-- [x] Added lifecycle contract coverage and completed archive, parity, catalog, task-doc, alignment, and runtime consistency verification; the full layer-one run passed 2,511/2,532 tests with 21 unrelated failures in untouched research/design/provisioning contracts.
-- Review: the lifecycle keeps integration and delivery with Sol, caps Luna fan-out at three disjoint lanes, requires fresh read-only Terra review for non-trivial mutations, and blocks unresolved accepted Critical/High findings or missing high-risk re-audits.
-
-### Next Work
-
-- [x] Implement Phase 2 shipping-orchestrator migration over the validated `github-issue`, `github-branch`, and `github-pr` contracts.
+- [x] Every pointed asset is inspected within its explicit location and recorded as used or rejected with a reason.
+- [x] Concept approval produces exactly three generated 1280x720 thumbnails under a unique generation directory, or stops for unavailable capability/access.
+- [x] The review page remains `review`, embeds all three title/image pairs, and requires a new compiled approval before Stage 3.
+- [x] Revision feedback creates a new generation directory without overwriting prior evidence.
+- [x] Successful reports and handoffs cite the three actual thumbnail paths and do not claim Studio upload.
 
 ### Review
 
-The architecture packet is approved with no blocking or advisory findings. Phase 1 implemented mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` safety subskills. Phase 2 migrated compatibility wrappers, shipping orchestrators, Codex execution shipping, Claude dirty-tree handoff, and active writing-skill overrides. Phase 3 migrated provisioned/root policy, quality/operating/invocation/reference/pack docs, and remaining active direct-primary instructions; the audit now has zero legacy allowances. Fresh Terra review found one High and two Medium issues; Sol accepted and remediated all three by strengthening the audit, migrating `update-packages` and `product-line`, removing obsolete exception/allowlist text, and regenerating index-backed artifacts. Focused tests, lifecycle tests, strict archive audit, base and mirror parity, task-doc audit, catalog validation, canary package build, and diff hygiene pass. Publication as a ready PR remains the final in-session delivery step.
+The mirrored v0.5 contracts now require bounded source-asset accounting, exactly three distinct Stage 2 proposals, capability-gated Stage 2.5 generation, immutable per-generation manifests, embedded HTML image comparisons, and a second compiled approval before Stage 3. Focused contract tests pass 15/15; strict archive/version, catalog, canary package, task-doc, refresh, and whitespace checks pass. Repository-wide dependency/routing/parity failures reproduce unchanged on clean `master` and do not touch this skill. Publication to a ready PR remains.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5 - 2026-07-27
+
+- Added repeatable `--thumbnail-asset` intake, backward-compatible `--thumbnail` handling, bounded inspection of explicitly pointed files/URLs/attachments/directories, and complete used-or-rejected asset accounting.
+- Added Stage 2.5 to generate and verify exactly three upload-ready 1280x720 thumbnails under immutable per-generation directories, with a manifest covering paired titles, source assets, hypotheses, dimensions, and generation provenance.
+- Required the review HTML to embed all three generated title/image pairs with open/download links and remain in `review` until a second compiled approval covers the actual images and titles.
+- Updated report, evidence, checklist, handoff, and constraint contracts so successful runs reference three real thumbnail files, preserve revision generations, stop when image capability or required asset access is unavailable, and keep YouTube Studio upload manual.
+
 ## v0.4 - 2026-06-28
 
 - Added persistent per-video URL ledger requirements under `research/youtube/data/`, including a per-video record and aggregate JSONL index for future YouTube skill context.

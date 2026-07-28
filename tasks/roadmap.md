@@ -2,6 +2,39 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
+
+### Goal
+
+Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thumbnail planning to exactly three generated, upload-ready 1280x720 title/thumbnail pairs, with explicit source-asset accounting and a second approval gate before finalization.
+
+### Delivery
+
+- GitHub issue: `#5`
+- Branch: `feat/issue-5-youtube-thumbnail-generation`
+- Pull request: pending implementation and verification
+
+### Plan
+
+- [x] Inspect the current skill mirrors, delivery contract, task state, prior ship evidence, and relevant verification commands.
+- [x] Create issue `#5`, switch to the issue-backed non-primary branch, and capture the visible invocation.
+- [x] Archive both active `v0.4` contracts, bump both mirrors to `v0.5`, and update identical changelogs.
+- [x] Add repeatable pointed-asset intake, bounded discovery, inspection/accounting, and approved asset allocation requirements.
+- [x] Add Stage 2.5 generation, durable generation manifests, exactly-three 1280x720 enforcement, HTML embedding, regeneration history, capability stops, and the second compiled approval gate.
+- [x] Update report, evidence, checklist, constraints, and final handoff so successful runs reference three real thumbnail files and never claim Studio upload.
+- [x] Add focused contract assertions and run strict version/archive, parity, dependency, routing, package, task-doc, refresh, generated-artifact, and whitespace verification.
+- [ ] Record review/history/ship evidence, commit and push all intended files, and open a ready pull request without merging.
+
+### Acceptance Criteria
+
+- [x] Stage 2 proposes exactly three distinct titles, thumbnail concepts, and approved source-asset allocations.
+- [x] Every user-pointed file, URL, attachment, or directory candidate is inspected within the pointed boundary and recorded as used or rejected with a reason.
+- [x] Stage 2.5 cannot complete without an available image-generation/editing capability and accessible required assets.
+- [x] Each generation preserves exactly three 1280x720 thumbnail files plus a manifest under the per-video `test-and-compare/<generation-id>/` directory.
+- [x] The review HTML embeds all three generated images beside paired titles, source assets, hypotheses, and open/download links.
+- [x] Generated-image/title approval is distinct from concept approval; revision feedback creates a new generation directory and preserves prior candidates.
+- [x] Stage 3 and successful handoffs reference three real thumbnail files while YouTube Studio setup remains explicitly manual.
+
 ## Historical Implementation - Issue-Backed Branch and PR Delivery
 
 ### Goal
