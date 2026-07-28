@@ -2,7 +2,45 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Implementation - Documentation Pipeline
+
+### State
+
+State D — implementation phases are complete and a documentation scan is needed.
+
+### Evidence
+
+- `tasks/roadmap.md` has one structured phase heading, `## Phase 1: Design-Tree Branch Prioritization And UI Experiment Split ✓`, with all phase acceptance criteria checked.
+- `tasks/todo.md` recorded no active implementation and had no current `## Priority Documentation Todo` before this scan.
+- `tasks/recurring-todo.md` contains two overdue advisory records: spec drift due 2026-06-11 and devtool docs audit due 2026-07-02.
+- `git status --short` reports four pre-existing untracked path groups outside the pushed issue #9 branch history; their ownership is classified as unrelated user work and they remain explicitly excluded from this branch.
+
+### Priority
+
+Run the in-tree `research-roadmap` documentation scan. Keep recurring records advisory until the scan explicitly promotes concrete execution work.
+
+## Historical Implementation - Development Docs Reconciliation
+
+### Goal
+
+Reconcile the stale PR #6 task state, missing merge history, recurring documentation metadata, phase-archive coverage, and spec freshness against current git/code evidence.
+
+### Plan
+
+- [x] Audit task docs, specs, phase archives, git history, code paths, and GitHub delivery state.
+- [x] Apply unambiguous task-doc corrections and preserve append-only history.
+- [x] Defer spec and archive changes that require dedicated claim-level judgment.
+- [x] Validate task routing and prepare the reconciliation update for issue #9 / PR #10.
+
+### Review
+
+PR #6 merge routing, missing terminal history, and devtool recurring metadata were corrected. Spec claim updates, phase archive reconstruction, and overdue recurring work remain advisory until explicitly promoted. `tasks/todo.md` now records no active implementation task.
+
+## Historical Implementation - PR #6 Final Review And Conditional Merge
+
+### Status
+
+Completed. GitHub merged pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) into `master` with merge commit `4db27d8b6f6302838475f44d995c7d60eaf80edf` on 2026-07-27 and closed issue `#5`. The feature branch remains present. This reconciliation found no deployment evidence and makes no deployment claim.
 
 ### Goal
 
@@ -17,7 +55,7 @@ Review pull request `#6` at its final commit, remediate the blocking upload-read
 - [x] Rebuild generated artifacts, update delivery evidence, run focused and repository-wide verification, and prove any baseline-only failures reproduce unchanged on `master`.
 - [x] Commit and push the remediation to `feat/issue-5-youtube-thumbnail-generation`, then reply to and resolve the upload-readiness thread (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
 
-The fresh exact-head independent review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported after the final documentation commit without creating another tracked change that would invalidate the reviewed SHA.
+The original tracked task stopped before the external merge gate. Git and GitHub now provide the missing terminal evidence: PR `#6` merged through merge commit `4db27d8b6` and issue `#5` closed. The earlier exact-head review and confirmation transcript was not added retroactively; the merge result supersedes the stale active-task routing.
 
 ### Acceptance Criteria
 
@@ -38,7 +76,7 @@ Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thu
 
 - GitHub issue: `#5`
 - Branch: `feat/issue-5-youtube-thumbnail-generation`
-- Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (open and non-draft for review; not merge-ready; not merged)
+- Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (merged into `master` as `4db27d8b6` on 2026-07-27; issue `#5` closed)
 
 ### Plan
 

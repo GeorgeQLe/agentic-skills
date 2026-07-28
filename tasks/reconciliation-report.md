@@ -1,5 +1,52 @@
 # Development Docs Reconciliation Report
 
+## 2026-07-28 — `$reconcile-dev-docs fix all`
+
+- **Mode:** fix · **Scope:** all
+
+### Summary
+
+- Roadmap/todo alignment: **fixed** — PR #6 is no longer routed as open current work after its verified merge.
+- History coverage: **fixed** — a superseding entry records merge commit `4db27d8b6` and issue #5 closure without rewriting the original pre-merge record.
+- Phase archives: **issues deferred** — 20 numbered phase files exist, but the directory mixes completed archives with active/planned records and does not provide sufficient evidence for safe bulk reconstruction.
+- Spec freshness: **issues deferred** — affected specs require claim-level `$spec-drift fix all` review and archive-first replacement before substantive rewriting.
+- Recommended next action: explicitly promote the overdue advisory `Spec drift check` into `tasks/todo.md`, then run the in-tree `spec-drift` skill; no executable next task is promoted by this reconciliation.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md / tasks/todo.md** — Both still described pull request #6 as open, unmerged current work. Evidence: GitHub reports PR #6 merged, issue #5 closed, and `origin/master` contains merge commit `4db27d8b6f6302838475f44d995c7d60eaf80edf`.
+
+### Warnings
+
+- **tasks/phases/** — Archive coverage remains inconsistent. Only 20 numbered phase files exist for a history extending through Phase 43, and files such as phases 12, 26, 32, 34, 37, and 43 retain active/planned wording or incomplete checklist state. No archive was fabricated without a complete promoted source plan.
+- **specs/workflow-hybrid-replay-feature-interview.md / specs/workflow-persistent-transcript-feature-interview.md** — Both reference the formerly in-repo `apps/skills-showcase` implementation, which split into `GeorgeQLe/agentic-skills-showcase` in commit `ef4151b65` on 2026-06-29.
+- **specs/project-fleet.md / specs/code-quality-skill-pack.md / specs/monorepo-execution-controller.md** — Their described pack areas changed after the specs' last updates, including July shipping/convention migrations. Recommended action: `$spec-drift fix all`.
+- **tasks/recurring-todo.md** — The spec-drift run remains overdue (`Last run: 2026-05-11`, `Next due: 2026-06-11`) but advisory because this reconciliation did not promote or execute it.
+
+### Fixed
+
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260728-122537-fix-all.md` — captured the exact visible invocation and pasted skill context.
+- [x] `tasks/roadmap.md` — converted the stale PR #6 current section to historical status and recorded the verified merge/issue outcome in both affected roadmap records.
+- [x] `tasks/todo.md` — removed completed PR #6 work from active execution routing and left an explicit no-active-task reconciliation review.
+- [x] `tasks/history.md` — appended the missing merge and reconciliation evidence without changing the earlier pre-merge entry.
+- [x] `tasks/recurring-todo.md` — corrected the devtool-docs last-run/next-due metadata and removed the invalid installation prerequisite.
+- [x] `tasks/reconciliation-report.md` — recorded resolved, deferred, and remaining findings for the all-scope pass.
+
+### Deferred
+
+- [ ] Claim-level spec reconciliation and archive-first replacements — requires `$spec-drift fix all`; this skill does not infer the correct new canonical claims from file age alone.
+- [ ] Numbered phase archive normalization/backfill — requires correlating each phase with its completed todo source and deciding whether active/planned records should be renamed, completed, or moved.
+- [ ] Overdue recurring work — remains advisory until explicitly promoted into `tasks/todo.md`.
+
+### Validation
+
+- `node scripts/audit-task-docs.mjs`
+- Prompt capture comparison against `.codex/skills/reconcile-dev-docs/SKILL.md`
+- Targeted scans for stale PR #6 current/open claims
+- `git diff --check`
+
+---
+
 ## 2026-07-02 — `$reconcile-dev-docs fix tasks`
 
 - **Mode:** fix · **Scope:** tasks

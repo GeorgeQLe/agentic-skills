@@ -1,45 +1,41 @@
 # Current Task
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Status
 
-### Status
+The 2026-07-28 development-docs reconciliation is complete. No product implementation phase is active; the documentation pipeline is promoted below.
 
-Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. Upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` is pushed, the verification reply is posted, and the review thread is resolved. The remaining merge gates are a fresh review of the exact final head, a GitHub-state refresh, and explicit user confirmation. Merge and deployment have not occurred.
+Unchecked items in `tasks/manual-todo.md`, `tasks/recurring-todo.md`, historical roadmap sections, reconciliation reports, and phase records are advisory or historical evidence unless explicitly promoted here.
 
-### Execution Profile
+## Priority Task Queue
 
-- Mode: serial with fresh read-only Terra review
-- Accountability topology: `sol-terra`
-- Risk classification: non-trivial executable skill-contract remediation and merge gate
-- Reason: both active mirrors, focused tests, generated manifests, GitHub review state, and final-SHA evidence must remain deterministic and parity-safe.
-- Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
-- Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
+The executable checklist is promoted into the matching current documentation-pipeline section below. This compatibility shape preserves the canonical queue marker while keeping unchecked work inside the repository's audited current-task surface.
 
-### Plan
+## Current Implementation - Documentation Pipeline
 
-- [x] Capture the visible invocation, read the review/delivery contracts, inspect task state, and record this execution plan.
-- [x] Confirm PR `#6` is open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and at the expected head SHA.
-- [x] Run a fresh-context read-only adversarial review of the full diff and surrounding skill contracts.
-- [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
-- [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
-- [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
-- [x] Commit and push all intended tracked changes to the existing feature branch (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
-- [x] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
+- [x] Dirty-tree ownership classified — the pre-existing untracked `apps/`, `scratchpad/`, `prompts/expert-review/skill-prompt-20260615-230417-ord-align-refactor.md`, and `prompts/sync/skill-prompt-20260620-231338-sync.md` paths are unrelated user-owned work and remain explicitly excluded from this branch.
+- [ ] `$research-roadmap` - run the documentation health scan because the roadmap's structured Phase 1 is complete, `tasks/todo.md` has no active product implementation, and no current `## Priority Documentation Todo` section exists after the 2026-07-28 reconciliation. Use the in-tree source at `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md`; do not install skillpacks in this repository.
+- [ ] Review `tasks/recurring-todo.md`: "Spec drift check" — next due was 2026-06-11 and the 2026-07-28 reconciliation identified concrete stale-spec candidates; promote to `tasks/todo.md` only if the documentation scan confirms this remains the next execution task.
+- [ ] Review `tasks/recurring-todo.md`: "Devtool docs audit refresh" — next due was 2026-07-02; promote to `tasks/todo.md` only if the documentation scan confirms a new audit run is needed after the verified 2026-06-02 completion.
 
-The fresh exact-head review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported in the terminal and GitHub after this documentation commit; they are deliberately not self-recorded as completed checkboxes here because any follow-up commit would invalidate the exact-SHA review and confirmation.
+## Development Docs Reconciliation
 
-### Acceptance Criteria
+### Resolved
 
-- [x] Exactly three generated files are positively validated as JPG, PNG, or GIF images at 1280x720 and no larger than 50 MB before generation completion.
-- [x] Every completed generation manifest records each file's validated format and byte size.
-- [x] Claude/Codex active v0.5 contracts, tests, changelogs, archives, generated manifests, and public catalog remain internally consistent and fresh.
-- [ ] All independent review findings have an explicit accepted, rejected, or deferred disposition; no accepted Critical/High or functional upload-readiness blocker remains.
-- [ ] GitHub reports no unresolved review thread, change request, conflict, or failed/pending required check at the exact confirmed SHA.
-- [ ] Issue `#5` remains linked through `Closes #5`; merge uses a merge commit, leaves the feature branch intact, and performs no deployment.
+- [x] Removed merged PR #6 from current roadmap/todo routing.
+- [x] Recorded merge commit `4db27d8b6` and issue #5 closure in roadmap, history, and the reconciliation report.
+- [x] Corrected the completed devtool-docs recurring occurrence to `Last run: 2026-06-02` and `Next due: 2026-07-02`.
+- [x] Captured the exact `$reconcile-dev-docs fix all` invocation.
+- [x] Passed task-doc routing, prompt-capture, targeted stale-state, and diff-hygiene checks.
+
+### Deferred
+
+- Spec reconciliation remains advisory until `$spec-drift fix all` is explicitly promoted and run with archive-first replacements.
+- Phase archive normalization remains advisory until each phase has a proven completed source plan.
+- The overdue recurring tasks remain advisory and are not executable from this file.
 
 ### Review
 
-Remediation and integrated verification are complete. Final acceptance remains external and requires a clean exact-head independent review, unchanged GitHub gates, and explicit user confirmation immediately before merge.
+All unambiguous reconciliation changes are recorded in `tasks/reconciliation-report.md`. Delivery uses issue #9 and ready pull request #10; the documentation pipeline above is the only promoted current task.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
