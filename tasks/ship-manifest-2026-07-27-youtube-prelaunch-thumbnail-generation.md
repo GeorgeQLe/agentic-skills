@@ -67,7 +67,8 @@ The focused test proves the changed YouTube mirrors normalize exactly, so these 
 ### Terra Findings And Sol Dispositions
 
 - `TERRA-PR6-H-001` (High, high confidence) — **accepted and remediated.** Dimension/file-count validation alone could mark unsupported or oversized images complete. Both active v0.5 mirrors now require content/signature-based JPEG/PNG/GIF detection, 1280x720 decode readback, `byte_size <= 50_000_000`, rejection of unreadable/disguised/unsupported/oversized outputs, and manifest `format`/`byte_size` fields before completion or review-page updates. Focused coverage increased from 15 to 17 passing tests.
-- `TERRA-PR6-H-002` (High, high confidence) — **accepted and remediated.** The earlier delivery record said ready without the required accountability evidence, and the first focused re-audit found two remaining ambiguous roadmap uses of “ready.” The manifest now records topology, risk, routing disclosure, Sol inspection, complete findings/dispositions, remediation, integrated verification, baseline comparison, final-SHA re-audit requirement, and merge-gate status. Roadmap/task status now distinguishes an open non-draft PR available for review from merge readiness and states that the remediation is not yet on the remote branch. Task state remains active until the final review and explicit merge confirmation complete.
+- `TERRA-PR6-H-002` (High, high confidence) — **accepted and remediated.** The earlier delivery record said ready without the required accountability evidence, and the first focused re-audit found two remaining ambiguous roadmap uses of “ready.” The manifest now records topology, risk, routing disclosure, Sol inspection, complete findings/dispositions, remediation, integrated verification, baseline comparison, final-SHA re-audit requirement, and merge-gate status. Roadmap/task status now distinguishes an open non-draft PR available for review from merge readiness and records the pushed remediation plus resolved thread. Task state remains active until the final review and explicit merge confirmation complete.
+- `TERRA-PR6-H-003` (High, high confidence) — **accepted and remediated.** The first exact-head audit found that a checkpoint sentence and unchecked push/thread tasks had become stale after `cbeccf06f` reached the remote branch. Current task records now name that pushed remediation commit and resolved thread. Exact-head review and merge results are intentionally external terminal/GitHub evidence: committing those outcomes here would change the reviewed SHA and invalidate the evidence.
 - Medium/Low: no findings.
 
 The required fresh final-SHA read-only adversarial re-audit remains a hard pre-merge gate. Any finding or new commit restarts remediation, verification, and review.
@@ -84,7 +85,7 @@ Revert this task's commits to restore the active `v0.4` behavior and generated m
 
 - Implementation commit: `c2f9d6460`
 - Initial delivery-record commit: `c28e448a1`
-- Remediation commit: the commit containing this manifest; exact SHA is reported in the PR and final merge-gate evidence
+- Upload-readiness remediation commit: `cbeccf06f989610d367cef9b4794dd788e0543cb`
 - Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6), pending final-SHA review and explicit merge confirmation
 - Final Sol acceptance: pending final-SHA re-audit and GitHub gate refresh
 - Merge/deployment: not performed; feature branch must remain intact

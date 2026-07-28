@@ -9,8 +9,8 @@
 - Required the review page to embed all three real images with paired titles and open/download links, remain in `review`, and receive a separate post-generation compiled approval before Stage 3. Revision feedback preserves prior generations.
 - Updated report, evidence, checklist, constraints, and final handoff contracts so successful runs cite three actual thumbnail files and never claim YouTube Studio upload/configuration.
 - Added 17 focused contract tests; strict version/archive, catalog, canary package build/package checks, task-doc, runtime refresh, changed-file secret, and whitespace verification passed. Global dependency, next-step, and mirror-parity findings reproduce unchanged on clean `master`.
-- Fresh Terra review reported two High findings: upload-readiness validation and incomplete accountability evidence. Sol accepted both, remediated the contracts/tests and delivery record, and required a final-SHA independent re-audit before merge.
-- Published commits on `feat/issue-5-youtube-thumbnail-generation` and opened pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6), closing issue [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5) only when merged. Merge and deployment remain gated.
+- Fresh Terra review reported High findings in upload-readiness validation and accountability status evidence. Sol accepted them, remediated the contracts/tests and delivery record, and required a final-SHA independent re-audit before merge.
+- Pushed upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` on `feat/issue-5-youtube-thumbnail-generation`, replied to and resolved the review thread, and kept pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) open. Issue [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5) closes only when the PR merges; merge and deployment remain gated.
 - Manifest: `tasks/ship-manifest-2026-07-27-youtube-prelaunch-thumbnail-generation.md`.
 
 ## 2026-07-12 - GitHub delivery Phase 3 provisioning and verification

@@ -4,7 +4,7 @@
 
 ### Status
 
-Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. At the focused re-audit checkpoint, the upload-readiness remediation was staged locally and not yet committed or pushed. The existing review thread remains blocking until the fix reaches the remote branch, the thread is resolved with evidence, and a fresh final-SHA review passes. Merge and deployment have not occurred.
+Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. Upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` is pushed, the verification reply is posted, and the review thread is resolved. The remaining merge gates are a fresh review of the exact final head, a GitHub-state refresh, and explicit user confirmation. Merge and deployment have not occurred.
 
 ### Execution Profile
 
@@ -23,11 +23,10 @@ Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open an
 - [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
 - [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
 - [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
-- [ ] Commit and push all intended tracked changes to the existing feature branch.
-- [ ] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
-- [ ] Rerun the independent review at the new final SHA and re-fetch all GitHub merge gates.
-- [ ] Present complete evidence and request explicit confirmation for `gh pr merge 6 --merge`.
-- [ ] After confirmation, merge without deleting the branch or deploying; verify PR merge metadata, automatic issue closure, and reviewed content on `master`.
+- [x] Commit and push all intended tracked changes to the existing feature branch (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
+- [x] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
+
+The fresh exact-head review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported in the terminal and GitHub after this documentation commit; they are deliberately not self-recorded as completed checkboxes here because any follow-up commit would invalidate the exact-SHA review and confirmation.
 
 ### Acceptance Criteria
 
@@ -40,7 +39,7 @@ Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open an
 
 ### Review
 
-Pending final review, remediation, verification, and explicit merge confirmation.
+Remediation and integrated verification are complete. Final acceptance remains external and requires a clean exact-head independent review, unchanged GitHub gates, and explicit user confirmation immediately before merge.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

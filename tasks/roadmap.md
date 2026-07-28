@@ -15,9 +15,9 @@ Review pull request `#6` at its final commit, remediate the blocking upload-read
 - [x] Run a fresh-context `expert-review --adversarial-diff --read-only` pass over the full diff and surrounding contracts.
 - [x] Fold JPG/PNG/GIF validation, the YouTube Studio desktop 50 MB limit, and manifest format/size evidence into both active v0.5 mirrors and focused tests without another version bump or archive.
 - [x] Rebuild generated artifacts, update delivery evidence, run focused and repository-wide verification, and prove any baseline-only failures reproduce unchanged on `master`.
-- [ ] Commit and push the remediation to `feat/issue-5-youtube-thumbnail-generation`, reply to and resolve the upload-readiness thread, and rerun the independent review at the new final SHA.
-- [ ] Present the exact final SHA and complete merge gates, then obtain explicit user confirmation immediately before `gh pr merge 6 --merge`.
-- [ ] After confirmation, merge without deleting the branch; verify the merge commit, timestamp, automatic issue `#5` closure, and reviewed content on `master`.
+- [x] Commit and push the remediation to `feat/issue-5-youtube-thumbnail-generation`, then reply to and resolve the upload-readiness thread (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
+
+The fresh exact-head independent review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported after the final documentation commit without creating another tracked change that would invalidate the reviewed SHA.
 
 ### Acceptance Criteria
 
