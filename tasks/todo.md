@@ -1,10 +1,21 @@
 # Current Task
 
-## No Active Implementation Task
+## Current Status
 
-The 2026-07-28 development-docs reconciliation is complete. No implementation task is currently promoted.
+The 2026-07-28 development-docs reconciliation is complete. No product implementation phase is active; the documentation pipeline is promoted below.
 
 Unchecked items in `tasks/manual-todo.md`, `tasks/recurring-todo.md`, historical roadmap sections, reconciliation reports, and phase records are advisory or historical evidence unless explicitly promoted here.
+
+## Priority Task Queue
+
+The executable checklist is promoted into the matching current documentation-pipeline section below. This compatibility shape preserves the canonical queue marker while keeping unchecked work inside the repository's audited current-task surface.
+
+## Current Implementation - Documentation Pipeline
+
+- [x] Dirty-tree ownership classified — the pre-existing untracked `apps/`, `scratchpad/`, `prompts/expert-review/skill-prompt-20260615-230417-ord-align-refactor.md`, and `prompts/sync/skill-prompt-20260620-231338-sync.md` paths are unrelated user-owned work and remain explicitly excluded from this branch.
+- [ ] `$research-roadmap` - run the documentation health scan because the roadmap's structured Phase 1 is complete, `tasks/todo.md` has no active product implementation, and no current `## Priority Documentation Todo` section exists after the 2026-07-28 reconciliation. Use the in-tree source at `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md`; do not install skillpacks in this repository.
+- [ ] Review `tasks/recurring-todo.md`: "Spec drift check" — next due was 2026-06-11 and the 2026-07-28 reconciliation identified concrete stale-spec candidates; promote to `tasks/todo.md` only if the documentation scan confirms this remains the next execution task.
+- [ ] Review `tasks/recurring-todo.md`: "Devtool docs audit refresh" — next due was 2026-07-02; promote to `tasks/todo.md` only if the documentation scan confirms a new audit run is needed after the verified 2026-06-02 completion.
 
 ## Development Docs Reconciliation
 
@@ -24,7 +35,7 @@ Unchecked items in `tasks/manual-todo.md`, `tasks/recurring-todo.md`, historical
 
 ### Review
 
-All unambiguous reconciliation changes are recorded in `tasks/reconciliation-report.md`. Delivery uses issue #9 and ready pull request #10; commit/push evidence is verified after this documentation snapshot without promoting another implementation task.
+All unambiguous reconciliation changes are recorded in `tasks/reconciliation-report.md`. Delivery uses issue #9 and ready pull request #10; the documentation pipeline above is the only promoted current task.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

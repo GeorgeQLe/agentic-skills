@@ -2,6 +2,23 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - Documentation Pipeline
+
+### State
+
+State D — implementation phases are complete and a documentation scan is needed.
+
+### Evidence
+
+- `tasks/roadmap.md` has one structured phase heading, `## Phase 1: Design-Tree Branch Prioritization And UI Experiment Split ✓`, with all phase acceptance criteria checked.
+- `tasks/todo.md` recorded no active implementation and had no current `## Priority Documentation Todo` before this scan.
+- `tasks/recurring-todo.md` contains two overdue advisory records: spec drift due 2026-06-11 and devtool docs audit due 2026-07-02.
+- `git status --short` reports four pre-existing untracked path groups outside the pushed issue #9 branch history; their ownership is classified as unrelated user work and they remain explicitly excluded from this branch.
+
+### Priority
+
+Run the in-tree `research-roadmap` documentation scan. Keep recurring records advisory until the scan explicitly promotes concrete execution work.
+
 ## Historical Implementation - Development Docs Reconciliation
 
 ### Goal
