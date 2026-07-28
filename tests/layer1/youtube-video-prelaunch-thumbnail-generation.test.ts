@@ -76,11 +76,30 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
           "Write `variant-a`, `variant-b`, and `variant-c` image files plus `manifest.json`",
         );
         expect(content).toContain(
-          "validate that exactly three variant image files exist and each is 1280x720",
+          "validate that exactly three variant image files exist, each decodes as 1280x720",
         );
         expect(content).toContain("generation provenance");
         expect(content).toContain(
           "Never overwrite, rename away, or delete a prior generation",
+        );
+      });
+
+      it("requires content-based upload format and desktop byte-size validation", () => {
+        expect(content).toContain(
+          "actual format detected from its contents or file signature is JPEG, PNG, or GIF",
+        );
+        expect(content).toContain(
+          "Do not trust the filename extension; reject unreadable files, extension/content mismatches, unsupported formats, and oversized outputs",
+        );
+        expect(content).toContain(
+          "detected `format` normalized to `jpg`, `png`, or `gif`, and numeric `byte_size`",
+        );
+        expect(content).toContain("`byte_size <= 50_000_000`");
+        expect(content).toContain(
+          "write the detected format and byte size to the manifest before changing the status to complete or updating the review page",
+        );
+        expect(content).toContain(
+          "Do not substitute the separate mobile/API limit, infer format from an extension",
         );
       });
 

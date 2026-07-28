@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.6",
     "release_lane": "canary"
   },
-  "source_fingerprint": "eada0a78a75f9063d5de1ea172933baad5aec3afcea2aae7db34de0c93a95146",
+  "source_fingerprint": "1d6463ec229c7dafdecfaf4ef3570e14a9c7369c8b76eb28c787d8f5ef95d515",
   "packs": [
     {
       "name": "agent-bridge",
@@ -11823,7 +11823,7 @@
       ],
       "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "9cf347051d37c5827de1885af20b4db0aaaedc479bd7ed25a94ea9097b1b8aec",
+      "content_sha256": "bcb1d02cb6d27b91b292305f84ecb560ccfc22c6d4530663dd0c11cdbb856735",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -12240,7 +12240,7 @@
       ],
       "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "699962daef01c02e0058dabbd473134c45722ddbc63dd4bd1abc4e98f60c76eb",
+      "content_sha256": "dc9e77bf74b03179a6f01f64fa5814944bf3c128d3977c0a14232ebc9e1a4b14",
       "archive_versions": [
         "v0.0",
         "v0.1",

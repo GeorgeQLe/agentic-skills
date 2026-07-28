@@ -4,11 +4,13 @@
 
 - Upgraded mirrored `youtube-video-prelaunch-audit` contracts from v0.4 to v0.5 and archived both pristine v0.4 skill files.
 - Added repeatable pointed thumbnail-asset intake, bounded inspection, complete used/rejected accounting, and exactly three distinct Stage 2 title/concept/asset-allocation proposals.
-- Added capability-gated Stage 2.5 generation of exactly three verified 1280x720 files under immutable generation directories, with manifests covering title pairings, source assets, hypotheses, dimensions, and generation provenance.
+- Added capability-gated Stage 2.5 generation of exactly three verified 1280x720 files under immutable generation directories, with manifests covering title pairings, source assets, hypotheses, dimensions, detected format, byte size, and generation provenance.
+- Final review found that dimension-only readback could still accept unsupported or oversized output. The v0.5 contracts now require content-based JPEG/PNG/GIF detection, reject extension/content mismatches, enforce a conservative 50,000,000-byte desktop Studio limit, and record normalized `format` plus `byte_size` before completion or review-page publication.
 - Required the review page to embed all three real images with paired titles and open/download links, remain in `review`, and receive a separate post-generation compiled approval before Stage 3. Revision feedback preserves prior generations.
 - Updated report, evidence, checklist, constraints, and final handoff contracts so successful runs cite three actual thumbnail files and never claim YouTube Studio upload/configuration.
-- Added 15 focused contract tests; strict version/archive, catalog, canary package, task-doc, runtime refresh, secret, and whitespace verification passed. Global dependency, next-step, and mirror-parity findings reproduce unchanged on clean `master`.
-- Published commits on `feat/issue-5-youtube-thumbnail-generation` and opened ready pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6), closing issue [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5) only when merged.
+- Added 17 focused contract tests; strict version/archive, catalog, canary package build/package checks, task-doc, runtime refresh, changed-file secret, and whitespace verification passed. Global dependency, next-step, and mirror-parity findings reproduce unchanged on clean `master`.
+- Fresh Terra review reported two High findings: upload-readiness validation and incomplete accountability evidence. Sol accepted both, remediated the contracts/tests and delivery record, and required a final-SHA independent re-audit before merge.
+- Published commits on `feat/issue-5-youtube-thumbnail-generation` and opened pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6), closing issue [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5) only when merged. Merge and deployment remain gated.
 - Manifest: `tasks/ship-manifest-2026-07-27-youtube-prelaunch-thumbnail-generation.md`.
 
 ## 2026-07-12 - GitHub delivery Phase 3 provisioning and verification

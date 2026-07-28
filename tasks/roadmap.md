@@ -2,6 +2,32 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Current Implementation - PR #6 Final Review And Conditional Merge
+
+### Goal
+
+Review pull request `#6` at its final commit, remediate the blocking upload-readiness finding on the existing issue-backed branch, publish complete local and GitHub gate evidence, and merge with a merge commit only after explicit user confirmation.
+
+### Plan
+
+- [x] Capture the visible invocation, read the `expert-review` and repository delivery contracts, and inspect the starting branch, task, and review-thread state.
+- [x] Confirm the pull request remains open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and unchanged at the reviewed SHA; this describes review availability, not merge readiness.
+- [x] Run a fresh-context `expert-review --adversarial-diff --read-only` pass over the full diff and surrounding contracts.
+- [x] Fold JPG/PNG/GIF validation, the YouTube Studio desktop 50 MB limit, and manifest format/size evidence into both active v0.5 mirrors and focused tests without another version bump or archive.
+- [x] Rebuild generated artifacts, update delivery evidence, run focused and repository-wide verification, and prove any baseline-only failures reproduce unchanged on `master`.
+- [ ] Commit and push the remediation to `feat/issue-5-youtube-thumbnail-generation`, reply to and resolve the upload-readiness thread, and rerun the independent review at the new final SHA.
+- [ ] Present the exact final SHA and complete merge gates, then obtain explicit user confirmation immediately before `gh pr merge 6 --merge`.
+- [ ] After confirmation, merge without deleting the branch; verify the merge commit, timestamp, automatic issue `#5` closure, and reviewed content on `master`.
+
+### Acceptance Criteria
+
+- [x] A generation cannot become complete unless exactly three real files are valid JPG, PNG, or GIF images, each is 1280x720, and each is no larger than 50 MB for the documented manual desktop Studio workflow.
+- [x] The immutable generation manifest records each thumbnail's validated format and byte size before the review page or completion status advances.
+- [x] Claude and Codex v0.5 active contracts and changelogs remain normalized mirrors; existing v0.4 archives remain unchanged.
+- [ ] No accepted Critical/High finding, functional upload-readiness defect, unresolved thread, conflict, failed/pending required check, or branch-only verification failure remains at merge time.
+- [ ] The user sees the exact repository, PR, final head SHA, base, merge method, findings/dispositions, local verification, GitHub gates, and issue-closing behavior before confirming.
+- [ ] The feature branch remains intact and no deployment occurs.
+
 ## Historical Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
 
 ### Goal
@@ -12,7 +38,7 @@ Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thu
 
 - GitHub issue: `#5`
 - Branch: `feat/issue-5-youtube-thumbnail-generation`
-- Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (ready, not merged)
+- Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (open and non-draft for review; not merge-ready; not merged)
 
 ### Plan
 
@@ -23,7 +49,7 @@ Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thu
 - [x] Add Stage 2.5 generation, durable generation manifests, exactly-three 1280x720 enforcement, HTML embedding, regeneration history, capability stops, and the second compiled approval gate.
 - [x] Update report, evidence, checklist, constraints, and final handoff so successful runs reference three real thumbnail files and never claim Studio upload.
 - [x] Add focused contract assertions and run strict version/archive, parity, dependency, routing, package, task-doc, refresh, generated-artifact, and whitespace verification.
-- [x] Record review/history/ship evidence, commit and push all intended files, and open a ready pull request without merging.
+- [x] Record review/history/ship evidence, commit and push all intended files, and open a non-draft pull request for review without merging.
 
 ### Acceptance Criteria
 

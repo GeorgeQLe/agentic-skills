@@ -4,6 +4,7 @@
 
 - Added repeatable `--thumbnail-asset` intake, backward-compatible `--thumbnail` handling, bounded inspection of explicitly pointed files/URLs/attachments/directories, and complete used-or-rejected asset accounting.
 - Added Stage 2.5 to generate and verify exactly three upload-ready 1280x720 thumbnails under immutable per-generation directories, with a manifest covering paired titles, source assets, hypotheses, dimensions, and generation provenance.
+- Required content-based JPG/PNG/GIF validation, a 50,000,000-byte desktop Studio limit, and per-variant manifest `format`/`byte_size` evidence before a generation can become complete.
 - Required the review HTML to embed all three generated title/image pairs with open/download links and remain in `review` until a second compiled approval covers the actual images and titles.
 - Updated report, evidence, checklist, handoff, and constraint contracts so successful runs reference three real thumbnail files, preserve revision generations, stop when image capability or required asset access is unavailable, and keep YouTube Studio upload manual.
 

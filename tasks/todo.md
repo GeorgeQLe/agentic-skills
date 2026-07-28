@@ -1,39 +1,46 @@
 # Current Task
 
-## No Active Implementation
+## Current Implementation - PR #6 Final Review And Conditional Merge
 
 ### Status
 
-The YouTube prelaunch Stage 2.5 thumbnail-generation update is complete on issue `#5` and published as ready pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6). It has not been merged or deployed.
+Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. At the focused re-audit checkpoint, the upload-readiness remediation was staged locally and not yet committed or pushed. The existing review thread remains blocking until the fix reaches the remote branch, the thread is resolved with evidence, and a fresh final-SHA review passes. Merge and deployment have not occurred.
 
 ### Execution Profile
 
-- Mode: serial
-- Reason: both skill mirrors, version archives, generated manifests, runtime refresh, and delivery evidence must remain deterministic and parity-safe.
+- Mode: serial with fresh read-only Terra review
+- Accountability topology: `sol-terra`
+- Risk classification: non-trivial executable skill-contract remediation and merge gate
+- Reason: both active mirrors, focused tests, generated manifests, GitHub review state, and final-SHA evidence must remain deterministic and parity-safe.
 - Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
 - Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
 
 ### Plan
 
-- [x] Inspect the current contracts, prior ship evidence, repository state, delivery contract, and applicable skill-creator instructions.
-- [x] Create/reuse the GitHub issue, switch to a non-primary issue-backed branch, capture the invocation, and record the implementation plan.
-- [x] Archive `v0.4`, bump both active mirrors to `v0.5`, and update identical changelogs.
-- [x] Implement explicit asset intake/accounting, Stage 2.5 generation and manifests, HTML image comparison, regeneration preservation, and the second approval gate.
-- [x] Update successful report/checklist/handoff/constraint language to require exactly three real thumbnail files and preserve manual Studio setup.
-- [x] Add focused readback assertions and run all planned strict/package/refresh/task/whitespace verification.
-- [x] Record review and ship evidence, commit, push, and open a ready PR without merging.
+- [x] Capture the visible invocation, read the review/delivery contracts, inspect task state, and record this execution plan.
+- [x] Confirm PR `#6` is open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and at the expected head SHA.
+- [x] Run a fresh-context read-only adversarial review of the full diff and surrounding skill contracts.
+- [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
+- [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
+- [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
+- [ ] Commit and push all intended tracked changes to the existing feature branch.
+- [ ] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
+- [ ] Rerun the independent review at the new final SHA and re-fetch all GitHub merge gates.
+- [ ] Present complete evidence and request explicit confirmation for `gh pr merge 6 --merge`.
+- [ ] After confirmation, merge without deleting the branch or deploying; verify PR merge metadata, automatic issue closure, and reviewed content on `master`.
 
 ### Acceptance Criteria
 
-- [x] Every pointed asset is inspected within its explicit location and recorded as used or rejected with a reason.
-- [x] Concept approval produces exactly three generated 1280x720 thumbnails under a unique generation directory, or stops for unavailable capability/access.
-- [x] The review page remains `review`, embeds all three title/image pairs, and requires a new compiled approval before Stage 3.
-- [x] Revision feedback creates a new generation directory without overwriting prior evidence.
-- [x] Successful reports and handoffs cite the three actual thumbnail paths and do not claim Studio upload.
+- [x] Exactly three generated files are positively validated as JPG, PNG, or GIF images at 1280x720 and no larger than 50 MB before generation completion.
+- [x] Every completed generation manifest records each file's validated format and byte size.
+- [x] Claude/Codex active v0.5 contracts, tests, changelogs, archives, generated manifests, and public catalog remain internally consistent and fresh.
+- [ ] All independent review findings have an explicit accepted, rejected, or deferred disposition; no accepted Critical/High or functional upload-readiness blocker remains.
+- [ ] GitHub reports no unresolved review thread, change request, conflict, or failed/pending required check at the exact confirmed SHA.
+- [ ] Issue `#5` remains linked through `Closes #5`; merge uses a merge commit, leaves the feature branch intact, and performs no deployment.
 
 ### Review
 
-The mirrored v0.5 contracts now require bounded source-asset accounting, exactly three distinct Stage 2 proposals, capability-gated Stage 2.5 generation, immutable per-generation manifests, embedded HTML image comparisons, and a second compiled approval before Stage 3. Focused contract tests pass 15/15; strict archive/version, catalog, canary package, task-doc, refresh, secret, and whitespace checks pass. Repository-wide dependency/routing/parity failures reproduce unchanged on clean `master` and do not touch this skill. The work is committed, pushed, and ready for review in PR #6.
+Pending final review, remediation, verification, and explicit merge confirmation.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
