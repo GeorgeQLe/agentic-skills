@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-07-28 - Development docs reconciliation
+
+- Reconciled the stale PR #6 active-task state against Git and GitHub evidence: pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) merged into `master` through merge commit `4db27d8b6f6302838475f44d995c7d60eaf80edf` on 2026-07-27 and issue `#5` closed.
+- Moved the completed merge-gate work out of current roadmap/todo routing, preserved the original pre-merge history entry, and added this superseding terminal outcome instead of rewriting historical evidence.
+- Corrected the devtool-docs recurring record to its verified 2026-06-02 run and 2026-07-02 next due date; the overdue occurrence remains advisory and requires no skillpacks install in this source repository.
+- Deferred claim-level spec updates and broad phase-archive reconstruction: Showcase workflow specs reference code split out on 2026-06-29, several pack specs predate July contract changes, and the existing phase directory mixes completed archives with active/planned records.
+- Captured the visible `$reconcile-dev-docs fix all` invocation and recorded full resolved/deferred evidence in `tasks/reconciliation-report.md`.
+- Verification: `node scripts/audit-task-docs.mjs`, prompt-capture/source comparison, targeted stale-state scans, and `git diff --check`.
+
 ## 2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation
 
 - Upgraded mirrored `youtube-video-prelaunch-audit` contracts from v0.4 to v0.5 and archived both pristine v0.4 skill files.

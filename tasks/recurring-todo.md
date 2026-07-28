@@ -7,12 +7,12 @@
   - Owner/agent: `/devtool-docs-audit`
   - Scope: project-wide skill and documentation coverage
   - Trigger: commit count threshold or calendar month
-  - Last run: 2026-04-30
-  - Next due: 2026-05-30
+  - Last run: 2026-06-02
+  - Next due: 2026-07-02
   - Command/skill: `/devtool-docs-audit`
   - Evidence/output path: `research/devtool-docs-audit.md`
   - Escalation conditions: becomes blocking if new skills are undocumented in discovery docs or README
-  - Promotion: promoted on 2026-06-01 to `tasks/todo.md`; prerequisite is installing the `devtool` pack because `devtool-docs-audit` is not currently installed.
+  - Status note: the 2026-05-30 occurrence was promoted on 2026-06-01 and completed on 2026-06-02; the next monthly occurrence is overdue but remains advisory until explicitly promoted into `tasks/todo.md`. In this source repository the skill is available directly at `packs/devtool/{claude,codex}/devtool-docs-audit/SKILL.md`; no skillpacks installation prerequisite applies.
 
 - [ ] Spec drift check
   - Cadence: monthly or after 30+ skill/pack commits
