@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation
+
+- Upgraded mirrored `youtube-video-prelaunch-audit` contracts from v0.4 to v0.5 and archived both pristine v0.4 skill files.
+- Added repeatable pointed thumbnail-asset intake, bounded inspection, complete used/rejected accounting, and exactly three distinct Stage 2 title/concept/asset-allocation proposals.
+- Added capability-gated Stage 2.5 generation of exactly three verified 1280x720 files under immutable generation directories, with manifests covering title pairings, source assets, hypotheses, dimensions, and generation provenance.
+- Required the review page to embed all three real images with paired titles and open/download links, remain in `review`, and receive a separate post-generation compiled approval before Stage 3. Revision feedback preserves prior generations.
+- Updated report, evidence, checklist, constraints, and final handoff contracts so successful runs cite three actual thumbnail files and never claim YouTube Studio upload/configuration.
+- Added 15 focused contract tests; strict version/archive, catalog, canary package, task-doc, runtime refresh, secret, and whitespace verification passed. Global dependency, next-step, and mirror-parity findings reproduce unchanged on clean `master`.
+- Published commits on `feat/issue-5-youtube-thumbnail-generation` and opened ready pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6), closing issue [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5) only when merged.
+- Manifest: `tasks/ship-manifest-2026-07-27-youtube-prelaunch-thumbnail-generation.md`.
+
 ## 2026-07-12 - GitHub delivery Phase 3 provisioning and verification
 
 - Migrated the provisioned and active root agent-policy blocks to issue-backed non-primary delivery, and updated quality-gate, operating-mode, pack, invocation, and skills-reference documentation.

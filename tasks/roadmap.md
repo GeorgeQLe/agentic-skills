@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
+## Historical Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
 
 ### Goal
 
@@ -12,7 +12,7 @@ Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thu
 
 - GitHub issue: `#5`
 - Branch: `feat/issue-5-youtube-thumbnail-generation`
-- Pull request: pending implementation and verification
+- Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (ready, not merged)
 
 ### Plan
 
@@ -23,7 +23,7 @@ Upgrade the mirrored `youtube-video-prelaunch-audit` skill from concept-only thu
 - [x] Add Stage 2.5 generation, durable generation manifests, exactly-three 1280x720 enforcement, HTML embedding, regeneration history, capability stops, and the second compiled approval gate.
 - [x] Update report, evidence, checklist, constraints, and final handoff so successful runs reference three real thumbnail files and never claim Studio upload.
 - [x] Add focused contract assertions and run strict version/archive, parity, dependency, routing, package, task-doc, refresh, generated-artifact, and whitespace verification.
-- [ ] Record review/history/ship evidence, commit and push all intended files, and open a ready pull request without merging.
+- [x] Record review/history/ship evidence, commit and push all intended files, and open a ready pull request without merging.
 
 ### Acceptance Criteria
 

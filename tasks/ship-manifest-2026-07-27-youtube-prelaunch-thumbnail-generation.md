@@ -3,7 +3,7 @@
 Date: 2026-07-27
 Issue: [#5](https://github.com/GeorgeQLe/agentic-skills/issues/5)
 Branch: `feat/issue-5-youtube-thumbnail-generation`
-Pull request: pending publication
+Pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) (ready, not merged)
 
 ## User Goal
 
@@ -59,3 +59,9 @@ The package manifest and public skills catalog were regenerated from the staged 
 ## Rollback
 
 Revert this task's commits to restore the active `v0.4` behavior and generated metadata. The archived `v0.4` mirrors preserve the exact pre-change contracts.
+
+## Delivery
+
+- Implementation commit: `c2f9d6460`
+- Ready pull request: [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6)
+- Merge/deployment: not performed

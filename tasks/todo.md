@@ -1,10 +1,10 @@
 # Current Task
 
-## Current Implementation - YouTube Prelaunch Stage 2.5 Thumbnail Generation
+## No Active Implementation
 
 ### Status
 
-Implementation is active on GitHub issue `#5` and branch `feat/issue-5-youtube-thumbnail-generation`.
+The YouTube prelaunch Stage 2.5 thumbnail-generation update is complete on issue `#5` and published as ready pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6). It has not been merged or deployed.
 
 ### Execution Profile
 
@@ -21,7 +21,7 @@ Implementation is active on GitHub issue `#5` and branch `feat/issue-5-youtube-t
 - [x] Implement explicit asset intake/accounting, Stage 2.5 generation and manifests, HTML image comparison, regeneration preservation, and the second approval gate.
 - [x] Update successful report/checklist/handoff/constraint language to require exactly three real thumbnail files and preserve manual Studio setup.
 - [x] Add focused readback assertions and run all planned strict/package/refresh/task/whitespace verification.
-- [ ] Record review and ship evidence, commit, push, and open a ready PR without merging.
+- [x] Record review and ship evidence, commit, push, and open a ready PR without merging.
 
 ### Acceptance Criteria
 
@@ -33,7 +33,7 @@ Implementation is active on GitHub issue `#5` and branch `feat/issue-5-youtube-t
 
 ### Review
 
-The mirrored v0.5 contracts now require bounded source-asset accounting, exactly three distinct Stage 2 proposals, capability-gated Stage 2.5 generation, immutable per-generation manifests, embedded HTML image comparisons, and a second compiled approval before Stage 3. Focused contract tests pass 15/15; strict archive/version, catalog, canary package, task-doc, refresh, and whitespace checks pass. Repository-wide dependency/routing/parity failures reproduce unchanged on clean `master` and do not touch this skill. Publication to a ready PR remains.
+The mirrored v0.5 contracts now require bounded source-asset accounting, exactly three distinct Stage 2 proposals, capability-gated Stage 2.5 generation, immutable per-generation manifests, embedded HTML image comparisons, and a second compiled approval before Stage 3. Focused contract tests pass 15/15; strict archive/version, catalog, canary package, task-doc, refresh, secret, and whitespace checks pass. Repository-wide dependency/routing/parity failures reproduce unchanged on clean `master` and do not touch this skill. The work is committed, pushed, and ready for review in PR #6.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
