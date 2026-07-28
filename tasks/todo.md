@@ -1,54 +1,45 @@
 # Current Task
 
-## No Active Implementation
+## Current Implementation - PR #6 Final Review And Conditional Merge
 
 ### Status
 
-The Issue-Backed Branch and PR Delivery migration is complete and published for review as ready pull request [#4](https://github.com/GeorgeQLe/agentic-skills/pull/4). It has not been merged or deployed.
+Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. Upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` is pushed, the verification reply is posted, and the review thread is resolved. The remaining merge gates are a fresh review of the exact final head, a GitHub-state refresh, and explicit user confirmation. Merge and deployment have not occurred.
 
 ### Execution Profile
 
-- Mode: serial
-- Reason: the shared contract, mirrored skills, version archives, generated manifests, and active root instructions overlap heavily and must change in a deterministic order.
-- Write scope: `packs/base/**`, `packs/gitops/**`, `packs/release-ops/**`, `packs/exec-loop/**`, shared workflow docs, validation scripts, generated catalog/manifest artifacts, prompt/task history, and active root agent instructions.
-- Must not edit: generated runtime roots under `.claude/skills/**` and `.codex/skills/**` except through `scripts/pack.sh refresh`; protected credential files; unrelated application repositories.
+- Mode: serial with fresh read-only Terra review
+- Accountability topology: `sol-terra`
+- Risk classification: non-trivial executable skill-contract remediation and merge gate
+- Reason: both active mirrors, focused tests, generated manifests, GitHub review state, and final-SHA evidence must remain deterministic and parity-safe.
+- Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
+- Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
 
 ### Plan
 
-- [x] Inventory the existing direct-primary shared contract, shipping orchestrators, `commit-and-push-by-feature`, and legacy `branch-lifecycle` behavior.
-- [x] Choose the minimal universal architecture: three mirrored base subskills (`github-issue`, `github-branch`, `github-pr`) plus compatibility wrappers.
-- [x] Record the full phased migration and acceptance criteria in `tasks/roadmap.md`.
-- [x] Build and verify `briefing-slides/github-delivery-architecture.html` as the visual approval surface.
-- [x] Confirm the proposed defaults with the user before implementation.
-- [x] Implement Phase 1 safety subskills and the canonical GitHub delivery contract.
-- [x] Implement Phase 2 shipping-orchestrator migration.
-- [x] Implement Phase 3 provisioning, docs, audits, generated artifacts, and verification.
-- [x] Publish the completed migration as a ready PR without merging it automatically.
+- [x] Capture the visible invocation, read the review/delivery contracts, inspect task state, and record this execution plan.
+- [x] Confirm PR `#6` is open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and at the expected head SHA.
+- [x] Run a fresh-context read-only adversarial review of the full diff and surrounding skill contracts.
+- [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
+- [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
+- [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
+- [x] Commit and push all intended tracked changes to the existing feature branch (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
+- [x] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
 
-### Approval Gate
+The fresh exact-head review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported in the terminal and GitHub after this documentation commit; they are deliberately not self-recorded as completed checkboxes here because any follow-up commit would invalidate the exact-SHA review and confirmation.
 
-Approved 2026-07-12 after expert review. Implementation proceeds with these defaults:
+### Acceptance Criteria
 
-1. GitHub Issue is the canonical ticket abstraction.
-2. Every tracked mutation uses an issue-backed non-primary branch and PR when GitHub is available.
-3. `ship`, `ship-end`, and Codex `exec` may create or update a ready PR, but merge requires a separate explicit action.
-4. Deploy and release wait until the PR is merged to the current primary branch.
-5. Non-GitHub or unauthenticated states never fall back to pushing primary.
-
-### Concurrent Completed Work - Codex Accountable Agent Lifecycle
-
-- [x] Added the Codex-only Sol/Luna/Terra convention and risk-based topology.
-- [x] Updated and versioned Codex `plan-phase`, `exec`, `expert-review`, `ship`, and `ship-end`; Claude sources remain unchanged.
-- [x] Added lifecycle contract coverage and completed archive, parity, catalog, task-doc, alignment, and runtime consistency verification; the full layer-one run passed 2,511/2,532 tests with 21 unrelated failures in untouched research/design/provisioning contracts.
-- Review: the lifecycle keeps integration and delivery with Sol, caps Luna fan-out at three disjoint lanes, requires fresh read-only Terra review for non-trivial mutations, and blocks unresolved accepted Critical/High findings or missing high-risk re-audits.
-
-### Next Work
-
-- [x] Implement Phase 2 shipping-orchestrator migration over the validated `github-issue`, `github-branch`, and `github-pr` contracts.
+- [x] Exactly three generated files are positively validated as JPG, PNG, or GIF images at 1280x720 and no larger than 50 MB before generation completion.
+- [x] Every completed generation manifest records each file's validated format and byte size.
+- [x] Claude/Codex active v0.5 contracts, tests, changelogs, archives, generated manifests, and public catalog remain internally consistent and fresh.
+- [ ] All independent review findings have an explicit accepted, rejected, or deferred disposition; no accepted Critical/High or functional upload-readiness blocker remains.
+- [ ] GitHub reports no unresolved review thread, change request, conflict, or failed/pending required check at the exact confirmed SHA.
+- [ ] Issue `#5` remains linked through `Closes #5`; merge uses a merge commit, leaves the feature branch intact, and performs no deployment.
 
 ### Review
 
-The architecture packet is approved with no blocking or advisory findings. Phase 1 implemented mirrored v0.0 `github-issue`, `github-branch`, and `github-pr` safety subskills. Phase 2 migrated compatibility wrappers, shipping orchestrators, Codex execution shipping, Claude dirty-tree handoff, and active writing-skill overrides. Phase 3 migrated provisioned/root policy, quality/operating/invocation/reference/pack docs, and remaining active direct-primary instructions; the audit now has zero legacy allowances. Fresh Terra review found one High and two Medium issues; Sol accepted and remediated all three by strengthening the audit, migrating `update-packages` and `product-line`, removing obsolete exception/allowlist text, and regenerating index-backed artifacts. Focused tests, lifecycle tests, strict archive audit, base and mirror parity, task-doc audit, catalog validation, canary package build, and diff hygiene pass. Publication as a ready PR remains the final in-session delivery step.
+Remediation and integrated verification are complete. Final acceptance remains external and requires a clean exact-head independent review, unchanged GitHub gates, and explicit user confirmation immediately before merge.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

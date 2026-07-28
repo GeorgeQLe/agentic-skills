@@ -1,13 +1,13 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "9a6cc55f46ea423649ec33f81742d3693877d433",
-  "generated_at": "2026-07-12T20:54:13.856Z",
-  "source_fingerprint": "c3af670d045862e09d76e1bdf296f80fc6c95aa5513adce6f544481c7b51c0a1",
+  "source_commit": "c28e448a162dc14e7de6bc2c5e6c79480155a4c9",
+  "generated_at": "2026-07-28T02:53:32.158Z",
+  "source_fingerprint": "c326bd62eb5ab268a38e5c5756436be99a66a9c0cf6e8742592b6ac2d8b8aa12",
   "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
-    "branch": "chore/3-github-delivery-safety",
+    "branch": "feat/issue-5-youtube-thumbnail-generation",
     "ref_policy": "Consumers should pin SKILLS_REPO_REF to a tag or commit SHA for releases and deployments."
   },
   "proof_artifacts": [
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation",
     "2026-07-12 - GitHub delivery Phase 3 provisioning and verification",
     "2026-07-12 - GitHub delivery Phase 2 orchestrator migration",
     "2026-07-12 - Codex accountable multi-agent lifecycle",
     "2026-07-10 - Dangling-symlink refresh and fleet recovery",
     "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout",
     "2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout",
-    "2026-07-09 - Briefing-first review surface convention",
-    "2026-07-09 - Briefing-slides Phase 2: deck manifest + batch regenerate"
+    "2026-07-09 - Briefing-first review surface convention"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",
