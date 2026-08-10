@@ -15,13 +15,13 @@ Finish the exact-head review and metadata cleanup for research PR `#12`, merge i
 - [x] Recheck PR `#12` at its exact head for review findings, checks, unresolved threads, mergeability, and base currency.
 - [x] Present PR `#12`'s exact merge details and merge with a merge commit only after immediate user confirmation.
 - [x] Refresh PR `#14` from the resulting `master`, update its body to close issues `#11` and `#13`, and remove stale wording that PR `#12` is still open.
-- [ ] Update PR `#14`'s task records, commit and push every intended change, and rerun exact-head expert review plus the full relevant verification set.
+- [x] Update PR `#14`'s task records, commit and push every intended change, and rerun exact-head expert review plus the full relevant verification set.
 - [ ] Present PR `#14`'s exact merge details and merge with a merge commit only after immediate user confirmation.
 - [ ] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
 
 ### Acceptance Criteria
 
-- [ ] Each PR is open, non-draft, current, conflict-free, and free of failed checks, unresolved threads, or accepted blocking findings when its merge details are presented.
+- [x] Each PR is open, non-draft, current, conflict-free, and free of failed checks, unresolved threads, or accepted blocking findings when its merge details are presented.
 - [x] PR `#12` treats issue `#11` as research evidence rather than closing it, and its three ledger entries are explicitly recorded as user-ratified.
 - [x] PR `#14` closes both issues `#11` and `#13` and contains the final task and review evidence for the combined work.
 - [x] The briefing-slide audit, task-document audit, terminology/interface checks, link/scope assertions, deck interaction/viewport checks, and diff hygiene all pass at PR `#14`'s final reviewed head.

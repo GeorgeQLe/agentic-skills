@@ -13,7 +13,7 @@ Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/age
 - [x] Recheck PR `#12`'s exact head, checks, mergeability, base currency, and unresolved-thread state.
 - [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
 - [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
-- [ ] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
+- [x] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
 - [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
 - [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
 
@@ -34,15 +34,15 @@ PR `#14`'s fresh GitHub audit exposed two P1 and two P2 threads omitted from the
 
 Static deck and task audits pass. Contract, threshold, assertion-scope, rework, packet, source-link, prompt-parity, scope-boundary, secret, and diff checks pass. Headless Chrome passes navigation, feedback preservation, title fallback, exact three-decision packet, forbidden-field absence, and all 11 slides at both 1440x1000 and 500x844. No active skill, convention, generator, runtime mirror, alignment page, or interrogation page changed.
 
-Publication, review-thread resolution, and a fresh exact-head GitHub gate refresh remain before the PR `#14` merge confirmation.
+Remediation commit `074b0c127` is pushed. All four review threads have disposition replies and are resolved. The exact-head local review passes every verification above with no surviving Critical, High, Medium, Low, or spec-conformance finding; GitHub reports the PR open, non-draft, current with `master`, and conflict-free with no failed checks.
 
 ### Next Work
 
-Commit and push PR `#14` remediation, resolve the four review threads, and request its immediate merge confirmation after the fresh exact-head review.
+Present PR `#14`'s exact merge details and obtain immediate confirmation before merging it with a merge commit.
 
 ### Recommended Next Command
 
-`$expert-review PR #14 exact head`
+`$github-pr merge #14`
 
 ## Code Review Fixes
 
