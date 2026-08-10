@@ -2,7 +2,38 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Implementation - AFPS 2.0 Foundational RFC And Canary Plan
+
+### Goal
+
+Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 canary protocol, and one optional decision-checkpoint deck without changing any active skill or convention behavior.
+
+### Delivery
+
+- GitHub issue: `#13`
+- Branch: `docs/13-afps-2-rfc`
+- Evidence: research issue `#11` and unmerged PR `#12`
+- Pull request: pending until verification completes
+
+### Plan
+
+- [x] Read the invoked skill instructions, shared deck convention, repository lessons, research evidence, and delivery contract.
+- [x] Create issue `#13`, branch from `origin/master`, and capture the visible `skill-creator` and `create-briefing-slides` invocations.
+- [x] Draft `docs/proposals/afps-2.0-rfc.md` with the operating model, global convention boundary, artifact ownership, migration architecture, and clean-break release contract.
+- [x] Draft `docs/proposals/afps-2.0-canary-plan.md` with pinned fixtures, paired-run protocol, metrics, thresholds, stop conditions, and cutover sequence.
+- [x] Build `briefing-slides/afps-2.0-rfc.html` as a chat-first review checkpoint with no alignment/interrogation backup page and at most three material decisions.
+- [x] Run terminology/interface consistency checks, the briefing static audit, desktop/mobile fit checks, task-doc audit, diff hygiene, secret scan, and scope-boundary checks.
+- [ ] Record review evidence, commit and push all intended files, then open a ready pull request that links issue `#13` and PR `#12` without merging either.
+
+### Acceptance Criteria
+
+- [x] The RFC and canary plan use the same AFPS 2.0 loop, action taxonomy, slice schema, decision-packet interface, graduation thresholds, and clean-break end state.
+- [x] The deck links both documents directly, contains no implicit approval or authorization semantics, and exposes no more than three material decisions.
+- [x] The draft adds no `alignment/*.html` or `interrogation/*.html` page and changes no active skill, convention, generator, audit, package, or runtime mirror.
+- [x] Static, desktop, and mobile deck verification passes; local document/task/diff/secret checks pass.
+- [ ] All tracked work is committed and pushed on `docs/13-afps-2-rfc`, with one ready pull request separate from PR `#12`.
+
+## Historical Implementation - PR #6 Final Review And Conditional Merge
 
 ### Goal
 

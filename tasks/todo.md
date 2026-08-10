@@ -1,45 +1,43 @@
 # Current Task
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Implementation - AFPS 2.0 Foundational RFC And Canary Plan
 
 ### Status
 
-Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. Upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` is pushed, the verification reply is posted, and the review thread is resolved. The remaining merge gates are a fresh review of the exact final head, a GitHub-state refresh, and explicit user confirmation. Merge and deployment have not occurred.
+Drafting is active on issue-backed branch `docs/13-afps-2-rfc` for GitHub issue `#13`. This is a documentation-only follow-up to research issue `#11` and unmerged PR `#12`; no AFPS runtime or skill behavior changes are in scope.
 
 ### Execution Profile
 
-- Mode: serial with fresh read-only Terra review
-- Accountability topology: `sol-terra`
-- Risk classification: non-trivial executable skill-contract remediation and merge gate
-- Reason: both active mirrors, focused tests, generated manifests, GitHub review state, and final-SHA evidence must remain deterministic and parity-safe.
-- Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
-- Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
+- Mode: serial
+- Risk classification: architecture and migration design; tracked documentation and one self-contained HTML review artifact
+- Write scope: two proposal documents, one briefing deck, prompt history, and current task/lesson records
+- Must not edit: active skills, conventions, generators, auditors, packages, runtime mirrors, `alignment/`, `interrogation/`, unrelated untracked `apps/`, `scratchpad/`, or older prompt artifacts
 
 ### Plan
 
-- [x] Capture the visible invocation, read the review/delivery contracts, inspect task state, and record this execution plan.
-- [x] Confirm PR `#6` is open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and at the expected head SHA.
-- [x] Run a fresh-context read-only adversarial review of the full diff and surrounding skill contracts.
-- [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
-- [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
-- [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
-- [x] Commit and push all intended tracked changes to the existing feature branch (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
-- [x] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
-
-The fresh exact-head review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported in the terminal and GitHub after this documentation commit; they are deliberately not self-recorded as completed checkboxes here because any follow-up commit would invalidate the exact-SHA review and confirmation.
+- [x] Read the invoked skill instructions, current convention and delivery contract, task state, and prior AFPS 2.0 research evidence.
+- [x] Create issue `#13`, switch to `docs/13-afps-2-rfc` from `origin/master`, capture both visible skill invocations, and record the correction lesson.
+- [x] Write the foundational RFC.
+- [x] Write the synchronized canary and cutover plan.
+- [x] Build the optional decision-checkpoint deck with direct links to both documents.
+- [x] Verify document consistency; audit deck mechanics and desktop/mobile fit; prove no active behavior or alignment/interrogation artifact changed.
+- [ ] Complete this review section, commit and push explicit intended paths, and open a ready PR with `Closes #13` and PR `#12` linked as evidence.
 
 ### Acceptance Criteria
 
-- [x] Exactly three generated files are positively validated as JPG, PNG, or GIF images at 1280x720 and no larger than 50 MB before generation completion.
-- [x] Every completed generation manifest records each file's validated format and byte size.
-- [x] Claude/Codex active v0.5 contracts, tests, changelogs, archives, generated manifests, and public catalog remain internally consistent and fresh.
-- [ ] All independent review findings have an explicit accepted, rejected, or deferred disposition; no accepted Critical/High or functional upload-readiness blocker remains.
-- [ ] GitHub reports no unresolved review thread, change request, conflict, or failed/pending required check at the exact confirmed SHA.
-- [ ] Issue `#5` remains linked through `Closes #5`; merge uses a merge commit, leaves the feature branch intact, and performs no deployment.
+- [x] Both documents share the same terms, thresholds, decision-packet schema, and clean-break end state.
+- [x] Checkpoints are chat-first, optional deck controls contain at most three decisions, and packet fields never imply approval or authorization.
+- [x] The canary compares legacy and temporary `--afps2` behavior across four pinned scenarios, both agents, and three repeats after deterministic checks.
+- [x] No active skill/convention behavior changes and no alignment/interrogation page is created.
+- [ ] All local audits pass and a ready, unmerged pull request is published separately from PR `#12`.
 
 ### Review
 
-Remediation and integrated verification are complete. Final acceptance remains external and requires a clean exact-head independent review, unchanged GitHub gates, and explicit user confirmation immediately before merge.
+Drafting and local verification are complete. The RFC defines the four-action boundary, seven-element slice, reversible canonical writes, chat-first checkpoints, goal/evidence routing, globally provisioned convention, continuous design-tree slices, explicit-only page tools, five implementation waves, and atomic clean-break release. The canary defines four pinned scenarios, three scenario families, 48 measured runs, deterministic preflight, exact metrics, hard safety/parity gates, rollback conditions, and flag removal before release.
+
+Verification passed for contract/threshold/interface consistency, six direct deck source links, prompt-capture parity, the repository briefing static audit, task-doc audit, diff whitespace, and the intended-file secret scan. Headless Chrome fit checks passed at 1440×1000 and the 500×844 mobile breakpoint for the densest slides. A temporary-copy browser self-test passed 11-slide navigation, per-slide feedback triggers, feedback-panel opening, previous/next controls, both canonical references, exactly three decisions, all five packet top-level fields, and absence of authorization fields. The generic opener reported `blocked` because of its PowerShell argument-forwarding defect; the repository-prescribed direct WSL file-URI fallback succeeded, so final deck opener status is `fallback-opened`.
+
+Scope review confirms no active skill, shared convention, generator, auditor, package, runtime mirror, alignment page, or interrogation page changed. Publication to a ready pull request remains pending.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
