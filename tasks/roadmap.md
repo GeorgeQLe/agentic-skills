@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - AFPS 2.0 Foundational RFC And Canary Plan
+## Historical Implementation - AFPS 2.0 Foundational RFC And Canary Plan
 
 ### Goal
 
@@ -13,7 +13,7 @@ Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 ca
 - GitHub issue: `#13`
 - Branch: `docs/13-afps-2-rfc`
 - Evidence: research issue `#11` and unmerged PR `#12`
-- Pull request: pending until verification completes
+- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (ready for review; open and unmerged)
 
 ### Plan
 
@@ -23,7 +23,7 @@ Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 ca
 - [x] Draft `docs/proposals/afps-2.0-canary-plan.md` with pinned fixtures, paired-run protocol, metrics, thresholds, stop conditions, and cutover sequence.
 - [x] Build `briefing-slides/afps-2.0-rfc.html` as a chat-first review checkpoint with no alignment/interrogation backup page and at most three material decisions.
 - [x] Run terminology/interface consistency checks, the briefing static audit, desktop/mobile fit checks, task-doc audit, diff hygiene, secret scan, and scope-boundary checks.
-- [ ] Record review evidence, commit and push all intended files, then open a ready pull request that links issue `#13` and PR `#12` without merging either.
+- [x] Record review evidence, commit and push all intended files, then open a ready pull request that links issue `#13` and PR `#12` without merging either.
 
 ### Acceptance Criteria
 
@@ -31,7 +31,15 @@ Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 ca
 - [x] The deck links both documents directly, contains no implicit approval or authorization semantics, and exposes no more than three material decisions.
 - [x] The draft adds no `alignment/*.html` or `interrogation/*.html` page and changes no active skill, convention, generator, audit, package, or runtime mirror.
 - [x] Static, desktop, and mobile deck verification passes; local document/task/diff/secret checks pass.
-- [ ] All tracked work is committed and pushed on `docs/13-afps-2-rfc`, with one ready pull request separate from PR `#12`.
+- [x] All tracked work is committed and pushed on `docs/13-afps-2-rfc`, with one ready pull request separate from PR `#12`.
+
+### Review
+
+The RFC and canary plan share one loop, four-action taxonomy, seven-element slice, compact decision-packet interface, graduation thresholds, and clean-break end state. The 11-slide checkpoint deck links the two documents directly, exposes exactly three material decisions, and emits no authorization fields. It creates no dense alignment/interrogation backup page.
+
+Verification passed for the repository briefing static audit, task-doc audit, contract/interface consistency, source-link existence, prompt-capture parity, 1440×1000 and 500×844 rendered fit checks, a headless browser interaction self-test, diff whitespace, intended-file secret scanning, and the active-behavior scope boundary. The generic WSL opener reported `blocked` because of its PowerShell argument forwarding; the prescribed direct file-URI fallback succeeded, so deck opener status is `fallback-opened`.
+
+Commit `8e1892f3c` and this closeout update are published on `docs/13-afps-2-rfc`. Ready PR `#14` closes issue `#13` only when merged and links open research PR `#12` as evidence. Neither pull request was merged.
 
 ## Historical Implementation - PR #6 Final Review And Conditional Merge
 

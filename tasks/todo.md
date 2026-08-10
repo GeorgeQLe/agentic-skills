@@ -1,43 +1,16 @@
 # Current Task
 
-## Current Implementation - AFPS 2.0 Foundational RFC And Canary Plan
+## No Active Implementation
 
-### Status
+AFPS 2.0 RFC drafting is complete and published in ready, unmerged pull request [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14), separate from open research PR [#12](https://github.com/GeorgeQLe/agentic-skills/pull/12). Issue `#13` remains open and is linked through `Closes #13` so it closes only if PR `#14` merges.
 
-Drafting is active on issue-backed branch `docs/13-afps-2-rfc` for GitHub issue `#13`. This is a documentation-only follow-up to research issue `#11` and unmerged PR `#12`; no AFPS runtime or skill behavior changes are in scope.
+### Next Work
 
-### Execution Profile
+Review the [AFPS 2.0 briefing checkpoint](../briefing-slides/afps-2.0-rfc.html), foundational RFC, and canary plan. After the RFC decisions are resolved, open a separate issue/branch/PR for Wave 0; do not implement the foundation on this drafting branch.
 
-- Mode: serial
-- Risk classification: architecture and migration design; tracked documentation and one self-contained HTML review artifact
-- Write scope: two proposal documents, one briefing deck, prompt history, and current task/lesson records
-- Must not edit: active skills, conventions, generators, auditors, packages, runtime mirrors, `alignment/`, `interrogation/`, unrelated untracked `apps/`, `scratchpad/`, or older prompt artifacts
+### Recommended Next Command
 
-### Plan
-
-- [x] Read the invoked skill instructions, current convention and delivery contract, task state, and prior AFPS 2.0 research evidence.
-- [x] Create issue `#13`, switch to `docs/13-afps-2-rfc` from `origin/master`, capture both visible skill invocations, and record the correction lesson.
-- [x] Write the foundational RFC.
-- [x] Write the synchronized canary and cutover plan.
-- [x] Build the optional decision-checkpoint deck with direct links to both documents.
-- [x] Verify document consistency; audit deck mechanics and desktop/mobile fit; prove no active behavior or alignment/interrogation artifact changed.
-- [ ] Complete this review section, commit and push explicit intended paths, and open a ready PR with `Closes #13` and PR `#12` linked as evidence.
-
-### Acceptance Criteria
-
-- [x] Both documents share the same terms, thresholds, decision-packet schema, and clean-break end state.
-- [x] Checkpoints are chat-first, optional deck controls contain at most three decisions, and packet fields never imply approval or authorization.
-- [x] The canary compares legacy and temporary `--afps2` behavior across four pinned scenarios, both agents, and three repeats after deterministic checks.
-- [x] No active skill/convention behavior changes and no alignment/interrogation page is created.
-- [ ] All local audits pass and a ready, unmerged pull request is published separately from PR `#12`.
-
-### Review
-
-Drafting and local verification are complete. The RFC defines the four-action boundary, seven-element slice, reversible canonical writes, chat-first checkpoints, goal/evidence routing, globally provisioned convention, continuous design-tree slices, explicit-only page tools, five implementation waves, and atomic clean-break release. The canary defines four pinned scenarios, three scenario families, 48 measured runs, deterministic preflight, exact metrics, hard safety/parity gates, rollback conditions, and flag removal before release.
-
-Verification passed for contract/threshold/interface consistency, six direct deck source links, prompt-capture parity, the repository briefing static audit, task-doc audit, diff whitespace, and the intended-file secret scan. Headless Chrome fit checks passed at 1440×1000 and the 500×844 mobile breakpoint for the densest slides. A temporary-copy browser self-test passed 11-slide navigation, per-slide feedback triggers, feedback-panel opening, previous/next controls, both canonical references, exactly three decisions, all five packet top-level fields, and absence of authorization fields. The generic opener reported `blocked` because of its PowerShell argument-forwarding defect; the repository-prescribed direct WSL file-URI fallback succeeded, so final deck opener status is `fallback-opened`.
-
-Scope review confirms no active skill, shared convention, generator, auditor, package, runtime mirror, alignment page, or interrogation page changed. Publication to a ready pull request remains pending.
+`$skill-creator AFPS 2.0 foundational convention and canary harness`
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
