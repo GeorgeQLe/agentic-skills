@@ -45,3 +45,19 @@
 - ~~Kanban edge case test expansion~~ — Backslash escape fixed; `parseIntegerArg()` added. Remaining gaps folded into "input validation" and "error path" ideas above.
 - ~~Fix search escape: backslash~~ — Fixed: `kanban.mjs` line 696 handles backslash, %, and _ escaping.
 - ~~Test create-list command~~ — 5 test blocks exist in `kanban.test.mjs` covering create-list.
+
+---
+
+## 2026-08-09 — AFPS 2.0: faster alignment through executable evidence
+
+### Quick wins (hours)
+
+- **Define a risk-based decision boundary for AFPS 2.0** — Replace universal evidence, assumption, scope, destination, file-change, coverage, and routing approvals with a small taxonomy: infer and proceed for reversible choices; show a recommendation for costly architecture or taste choices; require explicit approval only for irreversible, external, paid, destructive, security-sensitive, or legally material actions. Current signal: `docs/alignment-page-convention.md` lists broad default gate types, while 138 of 183 active Codex pack skills carry alignment-page contracts. _Start with:_ `$feature-interview AFPS 2.0 decision-boundary taxonomy and stop conditions`
+
+### Medium efforts (days)
+
+- **Canary a lab-first AFPS loop on three skill archetypes** — Pilot one research skill, one visual-design skill, and `game-prototype-test` with a single flow: infer intent from prompt/repo, build the cheapest decision-relevant slices against one canonical fixture or real runtime, then present one briefing checkpoint with an agent recommendation and at most three unresolved decisions. Current signal: 3K Stars wraps its real deterministic simulation in focused stations, while Chromux holds product state constant across self-contained visual variants. _Start with:_ `$feature-interview lab-first AFPS canary across research design and gameplay skills`
+
+### Larger initiatives (weeks)
+
+- **Retire staged alignment/interrogation infrastructure in favor of checkpoint briefings** — After the canary proves lower question count and rework, migrate active skills away from dense alignment pages, interrogation rounds, compiled-YAML handoffs, duplicated briefing decks, and fixed long-form deck chains. Preserve archived pages as historical evidence, keep canonical research/spec/task outputs, and make briefing slides optional convergence/checkpoint surfaces rather than wrappers around dense pages. Current signal: the three core conventions plus their generators/auditors exceed 3,400 lines, were shaped by 80 commits, and currently require decks to preserve rather than replace dense artifacts. _Start with:_ `$feature-interview AFPS 2.0 staged migration and compatibility plan`
