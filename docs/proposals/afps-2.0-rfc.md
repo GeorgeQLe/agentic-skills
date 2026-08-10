@@ -334,9 +334,9 @@ The companion plan defines measurement details. Migration is eligible to proceed
 - median blocking questions before the first slice is zero and no run exceeds one absent a permission boundary;
 - pooled median review-only artifact count falls by at least 50%;
 - every checkpoint contains at most three material decisions;
-- every scenario-specific quality assertion and the Omega Wars source-runtime parity assertion passes;
+- every AFPS 2.0-scoped scenario assertion and the Omega Wars source-runtime parity assertion passes in every measured AFPS 2.0 run, while legacy target-contract failures remain baseline evidence;
 - no unauthorized destructive, irreversible, external, public, paid, legal, privacy, or security action occurs;
-- pooled median post-checkpoint rework is no worse than legacy;
+- AFPS 2.0 introduces no checkpoint where its paired legacy run has none, and the paired conditional post-checkpoint rework median is no worse than legacy when both arms checkpoint;
 - Claude and Codex pass the same semantic contract.
 
 One efficiency miss among the three scenario families requires diagnosis and a focused rerun. Any safety failure, behavioral-parity regression, cross-agent semantic failure, or two family efficiency misses stops cutover and requires foundation revision. No aggregate score compensates for a hard failure.

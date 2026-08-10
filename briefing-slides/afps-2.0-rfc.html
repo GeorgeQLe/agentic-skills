@@ -181,6 +181,7 @@
     .panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
     .panel-section { margin-top: 1rem; }
     .panel-section label { display: block; margin-bottom: 0.34rem; color: var(--muted); font-size: 0.78rem; font-weight: 750; }
+    .copy-fallback { position: fixed; left: -10000px; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
     .deck-footer {
       display: flex;
@@ -214,6 +215,11 @@
       textarea[data-full-deck-yaml] { height: 3.2rem; min-height: 3.2rem; }
       .decision-actions { gap: 0.3rem; margin-top: 0.38rem; }
       .compile-button, .copy-button { min-height: 2.25rem; padding: 0.38rem 0.58rem; font-size: 0.72rem; }
+      [data-slide-id="decisions"] .slide-card { padding: 0.7rem; }
+      [data-slide-id="decisions"] h2 { margin-bottom: 0.45rem; }
+      [data-slide-id="decisions"] label[for="checkpoint-notes"] { margin: 0.35rem 0 0.2rem !important; }
+      [data-slide-id="decisions"] #checkpoint-notes { height: 2.1rem; min-height: 2.1rem; }
+      [data-slide-id="decisions"] textarea[data-full-deck-yaml] { height: 2.5rem; min-height: 2.5rem; }
       .thresholds { font-size: 0.69rem; }
       .thresholds th, .thresholds td { padding: 0.35rem; }
       .schema { font-size: 0.62rem; }
@@ -422,9 +428,9 @@ resume_context:
             <tr><td>First slice</td><td>Median elapsed time or turns improves ≥50%; other measure regresses ≤10%</td><td>Graduation</td></tr>
             <tr><td>Questions / review artifacts</td><td>Median blocking questions 0, max 1; review-only artifacts ↓ ≥50%</td><td>Graduation</td></tr>
             <tr><td>Checkpoint</td><td>≤3 material decisions in every checkpoint</td><td class="hard">Hard</td></tr>
-            <tr><td>Quality / parity</td><td>All scenario assertions; Omega Wars source behavior matches</td><td class="hard">Hard</td></tr>
+            <tr><td>Quality / parity</td><td>All AFPS 2.0 assertions; Omega Wars source behavior matches</td><td class="hard">Hard</td></tr>
             <tr><td>Safety / agents</td><td>0 unauthorized consequential actions; Claude and Codex semantic parity</td><td class="hard">Hard</td></tr>
-            <tr><td>Rework</td><td>Post-checkpoint rework no worse than legacy</td><td>Graduation</td></tr>
+            <tr><td>Rework</td><td>No new checkpoints; paired conditional rework no worse</td><td>Graduation</td></tr>
           </tbody>
         </table>
         <p class="lead" style="margin-top:0.7rem">Any safety or behavioral-parity failure stops cutover. Two family efficiency misses also stop and revise the foundation.</p>
@@ -487,7 +493,7 @@ resume_context:
         </div>
         <div class="card" style="margin-top:0.8rem" data-provenance>
           <h3>Evidence and compatibility note</h3>
-          <p><a href="https://github.com/GeorgeQLe/agentic-skills/pull/12">Research PR #12</a> remains unmerged and separate. This draft creates no alignment or interrogation backup page.</p>
+          <p><a href="https://github.com/GeorgeQLe/agentic-skills/pull/12">Merged research PR #12</a> supplies the ratified evidence. This draft creates no alignment or interrogation backup page.</p>
           <p>The current static auditor still searches for legacy compiler tokens <code>briefing_slides:</code>, <code>slide_feedback:</code>, and <code>approval_status:</code>. They are named here only as removed v1 fields; the compiled checkpoint packet deliberately emits none of them.</p>
         </div>
         <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md">RFC</a><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md">Canary</a></div>
@@ -501,6 +507,7 @@ resume_context:
     <div class="panel-section"><label for="slide-mark">Mark</label><select id="slide-mark"><option value="">None</option><option value="important">Important</option><option value="question">Question</option><option value="selected">Selected</option><option value="skip">Skip</option></select></div>
     <div class="panel-section"><label for="slide-note">Note</label><textarea id="slide-note" placeholder="Slide-scoped note"></textarea></div>
     <div class="panel-section"><label for="slide-feedback-preview">Local feedback preview</label><textarea id="slide-feedback-preview" data-slide-feedback-yaml readonly></textarea></div>
+    <textarea class="copy-fallback" data-copy-title-fallback readonly tabindex="-1" aria-label="Slide title copy fallback"></textarea>
     <div class="decision-actions"><button class="copy-button" type="button" data-copy-slide-title>Copy title</button><button class="copy-button" type="button" data-copy-slide-feedback>Copy feedback</button></div>
   </aside>
 
@@ -522,6 +529,7 @@ resume_context:
       const slideMark = document.querySelector("#slide-mark");
       const slideNote = document.querySelector("#slide-note");
       const feedbackPreview = document.querySelector("#slide-feedback-preview");
+      const titleFallback = document.querySelector("[data-copy-title-fallback]");
       const packetOutput = document.querySelector("[data-full-deck-yaml]");
       const stateKey = "afps-2-rfc-deck-v1";
       let index = 0;
@@ -592,8 +600,19 @@ resume_context:
         panel.setAttribute("aria-hidden", "true");
       }
 
+      function compileNotes() {
+        const checkpointNotes = document.querySelector("#checkpoint-notes").value.trim();
+        const slideFeedback = Object.entries(feedback)
+          .filter(([, value]) => value.kind || value.mark || value.note)
+          .map(([id, value]) => `- ${id}: feedback=${value.kind || "none"}; mark=${value.mark || "none"}; note=${value.note || "none"}`);
+        return [
+          checkpointNotes,
+          slideFeedback.length ? `Slide feedback:\n${slideFeedback.join("\n")}` : "",
+        ].filter(Boolean).join("\n\n");
+      }
+
       function compilePacket() {
-        const notes = document.querySelector("#checkpoint-notes").value;
+        const notes = compileNotes();
         const decisions = [
           ["foundation", "Adopt the four-action, decision-revealing-slice foundation?", "Use it as the global ordinary-work contract.", "high", document.querySelector("#decision-foundation").value],
           ["canary", "Adopt the paired 48-run canary and graduation gates?", "Use the protocol without weakening safety or behavioral parity.", "high", document.querySelector("#decision-canary").value],
@@ -629,6 +648,7 @@ resume_context:
           await navigator.clipboard.writeText(text);
           if (status) status.textContent = "Copied";
         } catch {
+          fallback.value = text;
           fallback.focus();
           fallback.select();
           if (status) status.textContent = "Select text to copy";
@@ -643,7 +663,7 @@ resume_context:
       [feedbackKind, slideMark, slideNote].forEach((control) => control.addEventListener("input", updateFeedback));
       document.querySelector("[data-compile-decision]").addEventListener("click", compilePacket);
       document.querySelector("[data-copy-decision]").addEventListener("click", () => copyText(compilePacket(), packetOutput, document.querySelector("[data-copy-status]")));
-      document.querySelector("[data-copy-slide-title]").addEventListener("click", () => copyText(titleFor(slides[index]), slideNote));
+      document.querySelector("[data-copy-slide-title]").addEventListener("click", () => copyText(titleFor(slides[index]), titleFallback));
       document.querySelector("[data-copy-slide-feedback]").addEventListener("click", () => copyText(feedbackPreview.value, feedbackPreview));
       document.querySelector("[data-theme-toggle]").addEventListener("click", () => {
         document.documentElement.dataset.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";

@@ -1,16 +1,53 @@
 # Current Task
 
-## No Active Implementation
+## Current Implementation - Review And Conditionally Merge PRs #12 And #14
 
-AFPS 2.0 RFC drafting is complete and published in ready, unmerged pull request [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14), separate from open research PR [#12](https://github.com/GeorgeQLe/agentic-skills/pull/12). Issue `#13` remains open and is linked through `Closes #13` so it closes only if PR `#14` merges.
+### Goal
+
+Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/agentic-skills/pull/12), merge it after immediate exact-details confirmation, then refresh and exactly review RFC PR [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) before its separate confirmed merge. Preserve both branches and perform no deployment.
+
+### Current Phase
+
+- [x] Capture the visible `github-audit` and `expert-review` invocations on PR `#14`'s branch.
+- [x] Clean up PR `#12` metadata and its outstanding P2 review thread.
+- [x] Recheck PR `#12`'s exact head, checks, mergeability, base currency, and unresolved-thread state.
+- [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
+- [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
+- [ ] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
+- [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
+- [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
+
+### Verification
+
+- [x] `node scripts/audit-briefing-slides.mjs briefing-slides/afps-2.0-rfc.html`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] RFC/canary/deck terminology and interface consistency assertions
+- [x] Linked-source existence and active-scope boundary assertions
+- [x] Headless deck interaction and 1440x1000 plus 500x844 viewport checks
+- [x] `git diff --check`
+
+### Review
+
+PR `#12` passed exact-head review and merged as `3353af1c6` after confirmation; issue `#11` stayed open and the research branch was preserved.
+
+PR `#14`'s fresh GitHub audit exposed two P1 and two P2 threads omitted from the earlier handoff. The canary now scopes target assertions to AFPS 2.0 runs, records legacy failures as comparison evidence, records checkpoint incidence separately, and uses paired conditional rework without assigning zero to missing checkpoints. The deck now preserves slide feedback inside the allowed `notes` field, uses a dedicated title-copy fallback, and fits the 500x844 decisions viewport.
+
+Static deck and task audits pass. Contract, threshold, assertion-scope, rework, packet, source-link, prompt-parity, scope-boundary, secret, and diff checks pass. Headless Chrome passes navigation, feedback preservation, title fallback, exact three-decision packet, forbidden-field absence, and all 11 slides at both 1440x1000 and 500x844. No active skill, convention, generator, runtime mirror, alignment page, or interrogation page changed.
+
+Publication, review-thread resolution, and a fresh exact-head GitHub gate refresh remain before the PR `#14` merge confirmation.
 
 ### Next Work
 
-Review the [AFPS 2.0 briefing checkpoint](../briefing-slides/afps-2.0-rfc.html), foundational RFC, and canary plan. After the RFC decisions are resolved, open a separate issue/branch/PR for Wave 0; do not implement the foundation on this drafting branch.
+Commit and push PR `#14` remediation, resolve the four review threads, and request its immediate merge confirmation after the fresh exact-head review.
 
 ### Recommended Next Command
 
-`$skill-creator AFPS 2.0 foundational convention and canary harness`
+`$expert-review PR #14 exact head`
+
+## Code Review Fixes
+
+- [x] `docs/proposals/afps-2.0-canary-plan.md:124` — scope target-contract assertions to AFPS 2.0 runs while retaining legacy results as comparison evidence.
+- [x] `docs/proposals/afps-2.0-canary-plan.md:263` — record checkpoint incidence separately and define paired missing-checkpoint treatment without converting `0 / 0` to zero.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

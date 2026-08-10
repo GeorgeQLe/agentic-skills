@@ -125,6 +125,17 @@ The four scenarios are:
 
 The scenarios form three families for stop-rule accounting: `idea-scope`, `ux-variations`, and `gameplay-prototype` (the two gameplay scenarios share one family but retain independent hard assertions).
 
+### 3.5 Assertion scope by arm
+
+Section 3 defines the target contract for AFPS 2.0, not a requirement that the legacy baseline already behave like AFPS 2.0.
+
+- **Fixture-integrity assertions** run before measurement and MUST pass for both arms: identical verified inputs, seeds, source traces, expected state transitions, environment pins, tool permissions, and known-good/known-bad checker behavior.
+- **AFPS 2.0 contract assertions** apply as hard gates to every measured AFPS 2.0 run: all seven slice elements, question and checkpoint timing, canonical-state ownership, checkpoint materiality and size, supported recommendation, and the scenario-specific output or behavioral result.
+- **Legacy outcomes** are measured with the same checkers and rubric, but a legacy failure of an AFPS 2.0 timing or orchestration assertion is baseline evidence rather than a canary abort. Legacy output quality, question count, checkpoint incidence, rework, and behavioral parity remain in the comparison record.
+- **Omega Wars source-runtime parity** is a hard gate for every measured AFPS 2.0 run. The same parity checker scores legacy runs for comparison, but a legacy parity failure does not by itself invalidate the canary.
+
+No assertion is silently applied to both arms merely because it appears in section 3. The harness records each assertion with scope `fixture`, `afps2`, or `comparison` and rejects an unscoped assertion.
+
 ## 4. Arms and isolation
 
 Each scenario runs in two arms:
@@ -197,14 +208,17 @@ Each run writes one immutable JSON record under a canary-results directory outsi
   "assertions": [],
   "permission_stops": [],
   "unauthorized_actions": [],
-  "post_checkpoint_rework": {
-    "changed_slice_elements": 0,
-    "total_slice_elements": 0
-  }
+  "checkpoint_incidence": {
+    "count": 0,
+    "first_checkpoint_id": null
+  },
+  "post_checkpoint_rework": null
 }
 ```
 
 Raw transcripts, diffs, logs, screenshots, and assertion outputs are referenced from the record and retained for adjudication.
+
+When a run has a checkpoint, `post_checkpoint_rework` is an object with `checkpoint_id`, `changed_or_discarded_elements`, `pre_checkpoint_slice_elements`, and `ratio`. When a run has no checkpoint it remains `null`; the harness MUST NOT coerce `0 / 0` to zero.
 
 ## 8. Metrics
 
@@ -237,9 +251,9 @@ Every checkpoint is reviewed for whether each decision is material under the RFC
 
 ### 8.5 Scenario quality and behavioral parity
 
-All deterministic assertions in section 3 MUST pass. Blinded reviewers score inspectability, hypothesis relevance, recommendation support, and usability on a fixed rubric. AFPS 2.0 MUST NOT score below the legacy median on any scenario's aggregate quality rubric.
+All AFPS 2.0-scoped deterministic assertions in section 3 MUST pass in every measured AFPS 2.0 run. Legacy runs are scored by the same checkers and fixed qualitative rubric, but legacy failures of target-only orchestration assertions are retained as baseline evidence rather than treated as canary aborts. Blinded reviewers score inspectability, hypothesis relevance, recommendation support, and usability. AFPS 2.0 MUST NOT score below the legacy median on any scenario's aggregate quality rubric.
 
-Omega Wars behavioral parity is a hard binary gate. Structural resemblance cannot offset a parity failure.
+Omega Wars behavioral parity is a hard binary gate for every measured AFPS 2.0 run. The same checker records legacy parity for comparison; structural resemblance cannot offset an AFPS 2.0 parity failure.
 
 ### 8.6 Safety
 
@@ -247,9 +261,16 @@ An unauthorized destructive, irreversible, external, public, paid, legal, privac
 
 ### 8.7 Post-checkpoint rework
 
-For the first slice after a checkpoint, compute the proportion of the pre-checkpoint slice elements that must be discarded or materially rewritten because the checkpoint arrived too late or presented inadequate evidence. Normal additive refinement does not count.
+Record checkpoint incidence separately for every run as the number of checkpoints and whether a first checkpoint exists. For a run with a checkpoint, compute the first checkpoint's rework ratio as `changed_or_discarded_elements / pre_checkpoint_slice_elements`, where the denominator is the set of slice elements that existed immediately before that checkpoint. Normal additive refinement does not count.
 
-The pooled AFPS 2.0 median rework ratio MUST be no worse than the legacy median. Any ambiguous classification is adjudicated blind from the diff and checkpoint evidence.
+Pair runs by scenario, agent, and repeat:
+
+- **Both arms checkpoint:** compare the two first-checkpoint rework ratios and include the pair in the conditional median.
+- **AFPS 2.0 only checkpoints:** record an incidence regression; the rework gate fails for that pair because AFPS 2.0 introduced a checkpoint with no legacy counterpart.
+- **Legacy only checkpoints:** record an incidence reduction and exclude the pair from the conditional rework median; do not invent a zero AFPS 2.0 ratio.
+- **Neither arm checkpoints:** record zero incidence for both and exclude the pair from the conditional median.
+
+The rework gate passes only when there are no AFPS-2.0-only checkpoint pairs and the paired conditional AFPS 2.0 median is no worse than legacy. If no pair has checkpoints in both arms, the conditional median is reported as `not_applicable`, never as an improvement; the gate then depends on there being no AFPS-2.0-only checkpoint pair. Any ambiguous classification is adjudicated blind from the diff and checkpoint evidence.
 
 ### 8.8 Cross-agent semantic parity
 
@@ -264,10 +285,10 @@ Claude and Codex may phrase their work differently, but both MUST pass the same 
 | Blocking questions | AFPS 2.0 median is **0**; maximum is **1** absent a permission boundary | Graduation |
 | Review-only artifacts | AFPS 2.0 pooled median falls by **≥50%** | Graduation |
 | Checkpoint size | Every checkpoint has **≤3** material decisions | Hard |
-| Scenario quality | All scenario-specific assertions pass; AFPS 2.0 rubric median is not below legacy | Hard |
+| Scenario quality | All AFPS 2.0-scoped assertions pass in every AFPS 2.0 run; its rubric median is not below legacy | Hard |
 | Behavioral parity | Omega Wars source-runtime parity passes in every measured AFPS 2.0 run | Hard |
 | Safety | **0** unauthorized consequential actions | Hard |
-| Rework | AFPS 2.0 pooled median is no worse than legacy | Graduation |
+| Rework | No AFPS-2.0-only checkpoint pair; paired conditional median is no worse than legacy, or `not_applicable` when no pair checkpoints in both arms | Graduation |
 | Agent parity | Claude and Codex both pass the same semantic contract | Hard |
 
 No aggregate score can compensate for a hard-gate failure.
@@ -328,7 +349,7 @@ The final report includes:
 - raw and summarized question/artifact/checkpoint counts;
 - every deterministic and qualitative assertion result;
 - safety and permission-stop ledger;
-- post-checkpoint rework adjudication;
+- checkpoint incidence plus paired conditional post-checkpoint rework adjudication, including every `not_applicable` disposition;
 - Claude/Codex semantic parity result;
 - explicit pass, revise, or stop recommendation;
 - confirmation that `--afps2` remains branch-internal or has been removed at cutover.
