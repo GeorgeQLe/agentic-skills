@@ -1,53 +1,53 @@
 # Current Task
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - Target YouTube Skills For AFPS 2.0
 
 ### Goal
 
-Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/agentic-skills/pull/12), merge it after immediate exact-details confirmation, then refresh and exactly review RFC PR [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) before its separate confirmed merge. Preserve both branches and perform no deployment.
+Turn the user's repeated rubber-stamp approvals into an evidence-backed YouTube migration target for AFPS 2.0, without weakening confirmations for publication, account access, destructive actions, payments, privacy, or other real permission boundaries.
 
 ### Current Phase
 
-- [x] Capture the visible `github-audit` and `expert-review` invocations on PR `#14`'s branch.
-- [x] Clean up PR `#12` metadata and its outstanding P2 review thread.
-- [x] Recheck PR `#12`'s exact head, checks, mergeability, base currency, and unresolved-thread state.
-- [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
-- [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
-- [x] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
-- [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
-- [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
+- [x] Create issue [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15), branch `docs/15-youtube-afps2-target`, and the exact `brainstorm --quick` prompt record.
+- [x] Inventory the `youtube-ops` router and all 15 standalone skills without creating an interrogation or alignment page.
+- [x] Verify that every standalone skill currently requires a scope-approval page and an artifact-approval page.
+- [x] Quantify the built-in plays: channel health has at least 10 routine approval stops; pre-production has 6-8; competitive intel has 4-6; video launch has 7 because prelaunch has three stops.
+- [x] Select the video-launch trio as the first YouTube migration slice: `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
+- [x] Record the prioritized quick-brainstorm ideas and autonomy lesson.
+- [ ] Verify, commit, push, and open the ready planning PR.
+
+### Target Contract
+
+- The foundational AFPS 2.0 convention and comparison harness land before active skill migration.
+- Reversible research, metadata collection, report drafting, description drafting, and local asset generation proceed without scope or final-artifact approval pages.
+- The launch trio converges at one chat-first decision checkpoint only when the three generated title/thumbnail candidates need taste or strategy judgment; it exposes a recommendation and at most three decisions.
+- YouTube Studio upload, public visibility, scheduling, account-authenticated changes, and any other external action remain explicit permission stops.
+- Missing target, inaccessible required assets, or unavailable authenticated evidence are capability/input blockers, not approval rituals.
+- The canary compares the current seven-stop launch play with the AFPS 2.0 path using question count, time/turns to first useful slice, page artifacts, checkpoint incidence, rework, packet shape, and publication-safety assertions.
 
 ### Verification
 
-- [x] `node scripts/audit-briefing-slides.mjs briefing-slides/afps-2.0-rfc.html`
 - [x] `node scripts/audit-task-docs.mjs`
-- [x] RFC/canary/deck terminology and interface consistency assertions
-- [x] Linked-source existence and active-scope boundary assertions
-- [x] Headless deck interaction and 1440x1000 plus 500x844 viewport checks
+- [x] Exact prompt-history assertion
+- [x] YouTube inventory and stop-count assertions
+- [x] Planning-only scope assertion
 - [x] `git diff --check`
 
 ### Review
 
-PR `#12` passed exact-head review and merged as `3353af1c6` after confirmation; issue `#11` stayed open and the research branch was preserved.
+The review-page burden is systemic rather than anecdotal: 15 of 15 standalone YouTube skills carry the same staged alignment lifecycle. The router itself creates no page, but its four multi-skill plays multiply those per-skill stops. The launch play is the best first target because it is bounded, frequent, close to shipping, and exercises research, visual taste, canonical writes, and a real external publication boundary in one workflow.
 
-PR `#14`'s fresh GitHub audit exposed two P1 and two P2 threads omitted from the earlier handoff. The canary now scopes target assertions to AFPS 2.0 runs, records legacy failures as comparison evidence, records checkpoint incidence separately, and uses paired conditional rework without assigning zero to missing checkpoints. The deck now preserves slide feedback inside the allowed `notes` field, uses a dedicated title-copy fallback, and fits the 500x844 decisions viewport.
+The intended reduction is seven routine approvals to one material decision checkpoint, with zero alignment/interrogation pages. This planning slice changes no active behavior.
 
-Static deck and task audits pass. Contract, threshold, assertion-scope, rework, packet, source-link, prompt-parity, scope-boundary, secret, and diff checks pass. Headless Chrome passes navigation, feedback preservation, title fallback, exact three-decision packet, forbidden-field absence, and all 11 slides at both 1440x1000 and 500x844. No active skill, convention, generator, runtime mirror, alignment page, or interrogation page changed.
-
-Remediation commit `074b0c127` is pushed. All four review threads have disposition replies and are resolved. The exact-head local review passes every verification above with no surviving Critical, High, Medium, Low, or spec-conformance finding; GitHub reports the PR open, non-draft, current with `master`, and conflict-free with no failed checks.
+Verification reproduced 15 standalone skills, 15 scope-approval contracts, 15 artifact-approval contracts, seven launch-play stops, and a minimum of ten channel-health stops. The task audit reports zero failures and zero warnings; prompt readback, planning-only path scope, and diff hygiene pass.
 
 ### Next Work
 
-Present PR `#14`'s exact merge details and obtain immediate confirmation before merging it with a merge commit.
+Implement the foundational AFPS 2.0 convention and harness, then canary the YouTube launch trio as its first creator-workflow consumer.
 
 ### Recommended Next Command
 
-`$github-pr merge #14`
-
-## Code Review Fixes
-
-- [x] `docs/proposals/afps-2.0-canary-plan.md:124` — scope target-contract assertions to AFPS 2.0 runs while retaining legacy results as comparison evidence.
-- [x] `docs/proposals/afps-2.0-canary-plan.md:263` — record checkpoint incidence separately and define paired missing-checkpoint treatment without converting `0 / 0` to zero.
+`$skill-creator AFPS 2.0 foundational convention and YouTube launch-play canary`
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

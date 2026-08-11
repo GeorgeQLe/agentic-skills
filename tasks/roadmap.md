@@ -2,7 +2,35 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - Target YouTube Skills For AFPS 2.0
+
+### Goal
+
+Use the user's repeated rubber-stamp behavior as workflow evidence, inventory the YouTube review-page burden, and select the first YouTube AFPS 2.0 migration slice that proceeds through reversible research and drafting while preserving real permission boundaries.
+
+### Delivery
+
+- GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
+- Branch: `docs/15-youtube-afps2-target`
+- Scope: planning only; no active skill, convention, generator, runtime mirror, alignment page, or interrogation page changes
+
+### Plan
+
+- [x] Invoke `brainstorm --quick` so this planning pass creates no interrogation or alignment page, and capture the exact visible prompt.
+- [x] Inventory the `youtube-ops` router, all 15 standalone skills, their staged approval stops, current tests, and the AFPS 2.0 dependency.
+- [x] Quantify the play-level burden and select the highest-leverage bounded migration target.
+- [x] Record prioritized ideas, the user's autonomy preference, the implementation handoff, and review evidence.
+- [ ] Run task, prompt, scope, and diff verification; commit, push, and open a ready planning PR without merging it.
+
+### Acceptance Criteria
+
+- [x] The inventory distinguishes routine scope/artifact approvals from account access, publication, destructive, paid, privacy, and other genuine permission boundaries.
+- [x] The recommended first slice names exact skills, current stop count, intended post-migration checkpoint count, and deterministic acceptance evidence.
+- [x] The plan sequences the foundational AFPS 2.0 convention/harness before active YouTube skill migration.
+- [x] This planning PR creates no review page and changes no active skill behavior.
+- [ ] All tracked planning artifacts are verified, committed, pushed, and published in one ready PR linked to issue `#15`.
+
+## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
 
@@ -16,8 +44,8 @@ Finish the exact-head review and metadata cleanup for research PR `#12`, merge i
 - [x] Present PR `#12`'s exact merge details and merge with a merge commit only after immediate user confirmation.
 - [x] Refresh PR `#14` from the resulting `master`, update its body to close issues `#11` and `#13`, and remove stale wording that PR `#12` is still open.
 - [x] Update PR `#14`'s task records, commit and push every intended change, and rerun exact-head expert review plus the full relevant verification set.
-- [ ] Present PR `#14`'s exact merge details and merge with a merge commit only after immediate user confirmation.
-- [ ] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
+- [x] Present PR `#14`'s exact merge details and merge with merge commit `acf167038` only after immediate user confirmation.
+- [x] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
 
 ### Acceptance Criteria
 
@@ -26,7 +54,7 @@ Finish the exact-head review and metadata cleanup for research PR `#12`, merge i
 - [x] PR `#14` closes both issues `#11` and `#13` and contains the final task and review evidence for the combined work.
 - [x] The briefing-slide audit, task-document audit, terminology/interface checks, link/scope assertions, deck interaction/viewport checks, and diff hygiene all pass at PR `#14`'s final reviewed head.
 - [x] PR `#14` changes no active skill, convention, generator, runtime mirror, alignment page, or interrogation page.
-- [ ] Both merges use merge commits; neither source branch is deleted and no deployment is performed.
+- [x] Both merges use merge commits; neither source branch is deleted and no deployment is performed.
 
 ## Historical Implementation - AFPS 2.0 Foundational RFC And Canary Plan
 
@@ -39,7 +67,7 @@ Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 ca
 - GitHub issue: `#13`
 - Branch: `docs/13-afps-2-rfc`
 - Evidence: research issue `#11` and merged PR `#12`
-- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (ready for review; open and unmerged)
+- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (merged as `acf167038`)
 
 ### Plan
 
@@ -65,7 +93,7 @@ The RFC and canary plan share one loop, four-action taxonomy, seven-element slic
 
 Verification passed for the repository briefing static audit, task-doc audit, contract/interface consistency, source-link existence, prompt-capture parity, 1440×1000 and 500×844 rendered fit checks, a headless browser interaction self-test, diff whitespace, intended-file secret scanning, and the active-behavior scope boundary. The generic WSL opener reported `blocked` because of its PowerShell argument forwarding; the prescribed direct file-URI fallback succeeded, so deck opener status is `fallback-opened`.
 
-Commits `8e1892f3c` and `5ac72b380` were published on `docs/13-afps-2-rfc`. Research PR `#12` later merged as `3353af1c6`; PR `#14` now carries that history and remains the issue-closing RFC delivery.
+Commits `8e1892f3c` and `5ac72b380` were published on `docs/13-afps-2-rfc`. Research PR `#12` merged as `3353af1c6`; PR `#14` then merged as `acf167038`, closed issues `#11` and `#13`, and preserved both source branches.
 
 ## Historical Implementation - PR #6 Final Review And Conditional Merge
 

@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-08-10 - Repeated rubber stamps are evidence that routine gates have no decision value
+
+- The user reports approving YouTube review pages almost automatically every time. That is not healthy confirmation evidence; it means the workflow is consuming attention without surfacing a material choice.
+- Rule: when approvals are consistently rubber-stamped, replace reversible scope and artifact gates with inferred intent, evidence-producing work, and a concise recommendation. Stop only for a genuinely material decision, missing required input/capability, or a real permission boundary.
+- For creator workflows, keep public upload, visibility, scheduling, authenticated account changes, payments, privacy-sensitive access, and destructive actions explicit. Do not preserve alignment pages merely to document approval of local research, drafts, reports, or generated candidates.
+
 ## 2026-08-09 - AFPS 2.0 is a clean-break operating model, not a lighter approval pipeline
 
 - The user rejected preserving approval-first orchestration with fewer pages or shorter gates; the target is a ground-up loop of intent inference, decision-revealing slices, evidence evaluation, and only material checkpoints.
