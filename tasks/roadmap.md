@@ -12,6 +12,7 @@ Use the user's repeated rubber-stamp behavior as workflow evidence, inventory th
 
 - GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
 - Branch: `docs/15-youtube-afps2-target`
+- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (ready; not merged)
 - Scope: planning only; no active skill, convention, generator, runtime mirror, alignment page, or interrogation page changes
 
 ### Plan
@@ -20,7 +21,7 @@ Use the user's repeated rubber-stamp behavior as workflow evidence, inventory th
 - [x] Inventory the `youtube-ops` router, all 15 standalone skills, their staged approval stops, current tests, and the AFPS 2.0 dependency.
 - [x] Quantify the play-level burden and select the highest-leverage bounded migration target.
 - [x] Record prioritized ideas, the user's autonomy preference, the implementation handoff, and review evidence.
-- [ ] Run task, prompt, scope, and diff verification; commit, push, and open a ready planning PR without merging it.
+- [x] Run task, prompt, scope, and diff verification; commit, push, and open a ready planning PR without merging it.
 
 ### Acceptance Criteria
 
@@ -28,7 +29,7 @@ Use the user's repeated rubber-stamp behavior as workflow evidence, inventory th
 - [x] The recommended first slice names exact skills, current stop count, intended post-migration checkpoint count, and deterministic acceptance evidence.
 - [x] The plan sequences the foundational AFPS 2.0 convention/harness before active YouTube skill migration.
 - [x] This planning PR creates no review page and changes no active skill behavior.
-- [ ] All tracked planning artifacts are verified, committed, pushed, and published in one ready PR linked to issue `#15`.
+- [x] All tracked planning artifacts are verified, committed, pushed, and published in one ready PR linked to issue `#15`.
 
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 

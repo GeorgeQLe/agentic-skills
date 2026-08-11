@@ -14,7 +14,7 @@ Turn the user's repeated rubber-stamp approvals into an evidence-backed YouTube 
 - [x] Quantify the built-in plays: channel health has at least 10 routine approval stops; pre-production has 6-8; competitive intel has 4-6; video launch has 7 because prelaunch has three stops.
 - [x] Select the video-launch trio as the first YouTube migration slice: `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
 - [x] Record the prioritized quick-brainstorm ideas and autonomy lesson.
-- [ ] Verify, commit, push, and open the ready planning PR.
+- [x] Verify, commit, push, and open ready PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) without merging it.
 
 ### Target Contract
 
@@ -40,6 +40,8 @@ The review-page burden is systemic rather than anecdotal: 15 of 15 standalone Yo
 The intended reduction is seven routine approvals to one material decision checkpoint, with zero alignment/interrogation pages. This planning slice changes no active behavior.
 
 Verification reproduced 15 standalone skills, 15 scope-approval contracts, 15 artifact-approval contracts, seven launch-play stops, and a minimum of ten channel-health stops. The task audit reports zero failures and zero warnings; prompt readback, planning-only path scope, and diff hygiene pass.
+
+Planning commit `5abb06743` is pushed on `docs/15-youtube-afps2-target`, and ready PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) links issue `#15`. No active skill behavior or review page changed, and the PR remains unmerged.
 
 ### Next Work
 
