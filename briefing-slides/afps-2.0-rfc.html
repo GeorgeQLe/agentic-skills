@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AFPS 2.0 — Foundational RFC</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --surface: #111827;
+      --surface-2: #172033;
+      --surface-3: #202a40;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #aab8cc;
+      --accent: #67e8f9;
+      --violet: #c4b5fd;
+      --green: #6ee7b7;
+      --gold: #fcd34d;
+      --red: #fca5a5;
+      --shadow: 0 24px 72px rgba(0, 0, 0, 0.42);
+      --radius: 1.1rem;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #edf3f7;
+      --surface: #ffffff;
+      --surface-2: #f5f8fb;
+      --surface-3: #e9f0f6;
+      --border: #c6d3df;
+      --text: #152235;
+      --muted: #52667c;
+      --accent: #087f8c;
+      --violet: #6750c7;
+      --green: #087f5b;
+      --gold: #936b00;
+      --red: #b42318;
+      --shadow: 0 24px 72px rgba(27, 49, 71, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body { font-family: var(--sans); display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; height: 100vh; min-height: 100vh; }
+    button, select, textarea { font: inherit; }
+    button, select { min-height: 2.7rem; }
+    a { color: var(--accent); text-underline-offset: 0.18em; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.72rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+    }
+    .topbar, .filmstrip, .deck-stage, .deck-footer { min-width: 0; max-width: 100vw; }
+    .brand { font-weight: 900; letter-spacing: -0.02em; }
+    .brand small { color: var(--muted); font-weight: 650; margin-left: 0.55rem; }
+    .top-actions { display: flex; gap: 0.55rem; align-items: center; }
+    .icon-button, .nav-button, .feedback-button, .copy-button, .compile-button {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+      font-weight: 750;
+    }
+    .icon-button:hover, .nav-button:hover, .feedback-button:hover, .copy-button:hover { border-color: var(--accent); }
+    .compile-button { background: var(--accent); border-color: var(--accent); color: #041014; }
+
+    .progress-wrap { width: min(24rem, 38vw); }
+    .progress-track { height: 0.38rem; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+    .progress-track span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--violet)); transition: width 180ms ease; }
+    [data-slide-counter] { color: var(--muted); font: 700 0.8rem var(--mono); }
+
+    .filmstrip {
+      display: flex;
+      gap: 0.38rem;
+      padding: 0.48rem 1rem;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      scrollbar-width: thin;
+    }
+    .filmstrip button {
+      flex: 0 0 auto;
+      min-height: 2.1rem;
+      padding: 0.35rem 0.66rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    .filmstrip button[aria-current="true"] { color: var(--text); border-color: var(--accent); background: var(--surface-2); }
+
+    .deck-stage { position: relative; min-height: 0; }
+    [data-briefing-slide] { display: none; height: 100%; min-height: 0; padding: 1rem; }
+    [data-briefing-slide].active { display: grid; place-items: center; }
+    .slide-card {
+      width: min(1180px, 100%);
+      min-width: 0;
+      padding: clamp(1.25rem, 3vw, 2.8rem);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--accent) 11%, transparent), transparent 27%),
+        var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .eyebrow { margin: 0 0 0.48rem; color: var(--accent); font: 800 0.76rem var(--mono); letter-spacing: 0.13em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 15ch; margin-bottom: 0.8rem; font-size: clamp(2.15rem, 6vw, 5.2rem); line-height: 0.96; letter-spacing: -0.055em; }
+    h2 { margin-bottom: 0.8rem; font-size: clamp(1.65rem, 4vw, 3.1rem); line-height: 1; letter-spacing: -0.04em; }
+    h3 { margin-bottom: 0.38rem; font-size: 1rem; }
+    p, li { color: var(--muted); line-height: 1.45; }
+    .lead { max-width: 72ch; font-size: clamp(1rem, 2vw, 1.25rem); }
+    .loop { margin: 1.35rem 0; color: var(--text); font: 800 clamp(1rem, 2.4vw, 1.45rem) var(--mono); }
+    .arrow { color: var(--accent); padding: 0 0.22rem; }
+    .reference-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+    .reference-chip { display: inline-flex; align-items: center; min-height: 2rem; padding: 0.35rem 0.7rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); font-size: 0.75rem; font-weight: 750; text-decoration: none; }
+
+    .grid { display: grid; gap: 0.8rem; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card { padding: 1rem; border: 1px solid var(--border); border-radius: 0.9rem; background: var(--surface-2); }
+    .card p, .card ul { margin-bottom: 0; font-size: 0.88rem; }
+    .card ul { padding-left: 1.1rem; }
+    .card.accent { border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); }
+    .card.violet { border-color: color-mix(in srgb, var(--violet) 60%, var(--border)); }
+    .card.green { border-color: color-mix(in srgb, var(--green) 60%, var(--border)); }
+    .card.red { border-color: color-mix(in srgb, var(--red) 60%, var(--border)); }
+    .number { color: var(--accent); font: 900 1.5rem var(--mono); }
+    .tag { display: inline-block; margin-bottom: 0.4rem; color: var(--gold); font: 800 0.72rem var(--mono); text-transform: uppercase; }
+    .metric { font: 900 clamp(1.6rem, 4vw, 3rem) var(--mono); color: var(--green); }
+    .metric-label { color: var(--muted); font-size: 0.78rem; }
+    .split-arrow { text-align: center; color: var(--accent); font: 900 1.6rem var(--mono); align-self: center; }
+    .keep-remove { grid-template-columns: 1fr auto 1fr; }
+    .clean-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+    .clean-list li { padding-left: 1.3rem; position: relative; }
+    .clean-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+
+    .schema { margin: 0; padding: 0.85rem; border: 1px solid var(--border); border-radius: 0.75rem; background: #05070c; color: #dbeafe; font: 0.74rem/1.42 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+    :root[data-theme="light"] .schema { background: #162235; color: #eaf2ff; }
+    .thresholds { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .thresholds th, .thresholds td { padding: 0.55rem 0.65rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    .thresholds th { color: var(--accent); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hard { color: var(--red); font-weight: 850; }
+
+    .decision-grid { display: grid; gap: 0.7rem; }
+    .decision-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.8rem; align-items: center; padding: 0.78rem; border: 1px solid var(--border); border-radius: 0.8rem; background: var(--surface-2); }
+    .decision-row label { color: var(--text); font-weight: 780; }
+    .decision-row small { display: block; margin-top: 0.22rem; color: var(--muted); font-weight: 500; }
+    select, textarea { width: 100%; border: 1px solid var(--border); border-radius: 0.65rem; background: var(--surface-3); color: var(--text); padding: 0.62rem; }
+    textarea { min-height: 4.8rem; resize: vertical; }
+    .decision-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.7rem; }
+
+    .feedback-button { float: right; margin: 0 0 0.6rem 0.6rem; font-size: 0.76rem; }
+    .feedback-panel {
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 10;
+      width: min(27rem, 100vw);
+      padding: 1rem;
+      border-left: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: -20px 0 60px rgba(0, 0, 0, 0.38);
+      transform: translateX(105%);
+      transition: transform 180ms ease;
+      overflow-y: auto;
+    }
+    .feedback-panel.open { transform: translateX(0); }
+    .panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .panel-section { margin-top: 1rem; }
+    .panel-section label { display: block; margin-bottom: 0.34rem; color: var(--muted); font-size: 0.78rem; font-weight: 750; }
+    .copy-fallback { position: fixed; left: -10000px; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    .deck-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 0.55rem 1rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    @media (max-width: 760px) {
+      .brand small, .progress-wrap { display: none; }
+      .topbar { padding: 0.55rem 0.7rem; }
+      .filmstrip { padding: 0.35rem 0.7rem; }
+      [data-briefing-slide] { height: 100%; min-height: 0; padding: 0.55rem; }
+      .slide-card { padding: 1rem; }
+      h1 { font-size: clamp(2rem, 13vw, 3.2rem); }
+      h2 { font-size: clamp(1.45rem, 8vw, 2rem); }
+      p, li { font-size: 0.8rem; line-height: 1.32; }
+      .grid.three, .grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .card { padding: 0.68rem; }
+      .card p, .card li { font-size: 0.74rem; }
+      .decision-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 0.58rem; }
+      .decision-grid { gap: 0.38rem; }
+      .decision-row { gap: 0.2rem; padding: 0.4rem; }
+      .decision-row label { font-size: 0.78rem; }
+      .decision-row small { margin-top: 0.12rem; font-size: 0.66rem; line-height: 1.18; }
+      .decision-row select { min-height: 2.2rem; padding: 0.38rem; font-size: 0.75rem; }
+      textarea { min-height: 2.8rem; }
+      textarea[data-full-deck-yaml] { height: 3.2rem; min-height: 3.2rem; }
+      .decision-actions { gap: 0.3rem; margin-top: 0.38rem; }
+      .compile-button, .copy-button { min-height: 2.25rem; padding: 0.38rem 0.58rem; font-size: 0.72rem; }
+      [data-slide-id="decisions"] .slide-card { padding: 0.7rem; }
+      [data-slide-id="decisions"] h2 { margin-bottom: 0.45rem; }
+      [data-slide-id="decisions"] label[for="checkpoint-notes"] { margin: 0.35rem 0 0.2rem !important; }
+      [data-slide-id="decisions"] #checkpoint-notes { height: 2.1rem; min-height: 2.1rem; }
+      [data-slide-id="decisions"] textarea[data-full-deck-yaml] { height: 2.5rem; min-height: 2.5rem; }
+      .thresholds { font-size: 0.69rem; }
+      .thresholds th, .thresholds td { padding: 0.35rem; }
+      .schema { font-size: 0.62rem; }
+      .reference-row { margin-top: 0.6rem; }
+      .reference-chip { font-size: 0.67rem; }
+    }
+
+    @media (max-width: 430px) {
+      .grid.two, .grid.three, .grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .keep-remove { grid-template-columns: 1fr 1fr; }
+      .keep-remove .split-arrow { display: none; }
+      .card h3 { font-size: 0.83rem; }
+      .metric { font-size: 1.35rem; }
+      .deck-footer { padding: 0.4rem; }
+    }
+
+    @media print {
+      body { display: block; height: auto; background: #fff; color: #111; }
+      .topbar, .filmstrip, .deck-footer, .feedback-panel, .feedback-button { display: none !important; }
+      [data-briefing-slide] { display: grid !important; min-height: 100vh; break-after: page; page-break-after: always; padding: 0; }
+      .slide-card { box-shadow: none; border: 1px solid #aaa; background: #fff; color: #111; }
+      p, li { color: #333; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">AFPS 2.0 <small>Foundational RFC checkpoint</small></div>
+    <div class="top-actions">
+      <div class="progress-wrap"><div class="progress-track" data-slide-progress><span></span></div></div>
+      <span data-slide-counter>1 / 11</span>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle theme">Theme</button>
+    </div>
+  </header>
+
+  <nav class="filmstrip" aria-label="Slide navigation">
+    <button type="button" data-filmstrip-index="0">01 Thesis</button>
+    <button type="button" data-filmstrip-index="1">02 Shift</button>
+    <button type="button" data-filmstrip-index="2">03 Actions</button>
+    <button type="button" data-filmstrip-index="3">04 Slice</button>
+    <button type="button" data-filmstrip-index="4">05 Checkpoint</button>
+    <button type="button" data-filmstrip-index="5">06 State</button>
+    <button type="button" data-filmstrip-index="6">07 Canary</button>
+    <button type="button" data-filmstrip-index="7">08 Thresholds</button>
+    <button type="button" data-filmstrip-index="8">09 Migration</button>
+    <button type="button" data-filmstrip-index="9">10 Decisions</button>
+    <button type="button" data-filmstrip-index="10">11 References</button>
+  </nav>
+
+  <main class="deck-stage" data-deck-stage>
+    <section data-briefing-slide data-slide-id="thesis" class="active">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Proposed · clean break</p>
+        <h1>Show the work before asking for belief.</h1>
+        <p class="lead">AFPS 2.0 replaces approval-first orchestration with evidence-driven progress. The user keeps material decisions and permission boundaries; the agent owns safe, reversible momentum.</p>
+        <p class="loop">infer <span class="arrow">→</span> slice <span class="arrow">→</span> evaluate <span class="arrow">→</span> continue or checkpoint</p>
+        <div class="reference-row">
+          <a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md">Foundational RFC</a>
+          <a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md">Canary plan</a>
+        </div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="shift">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Operating-model shift</p>
+        <h2>From ceremony to consequence</h2>
+        <div class="grid two">
+          <div class="card red">
+            <span class="tag">AFPS v1</span>
+            <h3>Approval is the unit of progress</h3>
+            <ul class="clean-list">
+              <li>Ask before evidence exists</li>
+              <li>Keep canonical writes behind YAML</li>
+              <li>Duplicate dense pages and decks</li>
+              <li>Advance through fixed chains</li>
+            </ul>
+          </div>
+          <div class="card green">
+            <span class="tag">AFPS 2.0</span>
+            <h3>A slice is the unit of progress</h3>
+            <ul class="clean-list">
+              <li>Infer what is safe to infer</li>
+              <li>Write reversible domain state</li>
+              <li>Checkpoint only material choices</li>
+              <li>Route from goal and evidence</li>
+            </ul>
+          </div>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#2-problem">RFC · problem</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="actions">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Four actions · strict precedence</p>
+        <h2>The consequence decides the stop</h2>
+        <div class="grid four">
+          <div class="card accent"><div class="number">1</div><h3>Infer + proceed</h3><p>Clear evidence, reversible choice, cheap correction.</p></div>
+          <div class="card violet"><div class="number">2</div><h3>Assume + proceed</h3><p>Meaningful uncertainty; state it close to the work.</p></div>
+          <div class="card green"><div class="number">3</div><h3>Decision checkpoint</h3><p>Taste, selection, costly direction, or material low confidence.</p></div>
+          <div class="card red"><div class="number">4</div><h3>Permission stop</h3><p>Destructive, irreversible, public, paid, legal, privacy, security, or external.</p></div>
+        </div>
+        <p class="lead" style="margin-top:0.8rem">Check from 4 → 1. A decision packet can never satisfy a permission stop.</p>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#51-the-four-agent-actions">RFC · action boundary</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="slice">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Decision-revealing slice</p>
+        <h2>Seven things make activity become evidence</h2>
+        <div class="grid four">
+          <div class="card"><span class="tag">Question</span><h3>Hypothesis</h3><p>What belief or risk could change?</p></div>
+          <div class="card"><span class="tag">Thing</span><h3>Artifact / behavior</h3><p>What tangible thing exists?</p></div>
+          <div class="card"><span class="tag">Inspect</span><h3>Visible result</h3><p>What can the reviewer see or run?</p></div>
+          <div class="card"><span class="tag">Judge</span><h3>Assertion / evaluation</h3><p>How is the result tested?</p></div>
+          <div class="card"><span class="tag">Direction</span><h3>Recommendation</h3><p>What does evidence suggest?</p></div>
+          <div class="card"><span class="tag">Strength</span><h3>Confidence</h3><p>High, medium, or low — and why?</p></div>
+          <div class="card accent"><span class="tag">Momentum</span><h3>Next safe move</h3><p>What can proceed without new authority?</p></div>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#52-the-unit-of-progress">RFC · slice anatomy</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="checkpoint">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Chat first · slides optional</p>
+        <h2>A checkpoint carries decisions, not authority</h2>
+        <div class="grid two">
+          <div class="card accent">
+            <h3>Boundary</h3>
+            <ul class="clean-list">
+              <li>Evidence and direct artifact links</li>
+              <li>Recommendation with confidence</li>
+              <li>At most three material decisions</li>
+              <li>Specific next safe move</li>
+            </ul>
+          </div>
+          <pre class="schema">command: "$skill-name literal-arguments"
+checkpoint: "stable-id"
+decisions:
+  - id: "decision-id"
+    question: "Material question"
+    recommendation: "Agent recommendation"
+    confidence: "high"
+    choice: ""
+notes: ""
+resume_context:
+  artifacts: ["path"]
+  evidence: ["path-or-id"]
+  next_safe_move: "reversible continuation"</pre>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#8-decision-checkpoints">RFC · checkpoint interface</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="state">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Artifact ownership</p>
+        <h2>Keep domain truth. Remove approval plumbing.</h2>
+        <div class="grid keep-remove">
+          <div class="card green"><h3>Keep</h3><ul class="clean-list"><li>Product paths and research</li><li>Flow trees and model state</li><li>UX/UI branches and build ledgers</li><li>Prototypes, UAT, specs, tasks</li><li>Delivery and safety records</li></ul></div>
+          <div class="split-arrow">→</div>
+          <div class="card red"><h3>Remove from ordinary flow</h3><ul class="clean-list"><li>Implicit alignment/interrogation pages</li><li>Approval sidecars and compiled gates</li><li>Preapproval-only working copies</li><li>Fixed stage cursors</li><li>Briefing wrappers around dense pages</li></ul></div>
+        </div>
+        <p class="lead" style="margin-top:0.8rem">Page conventions, templates, audits, archives, and admin commands stay available for explicit use.</p>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#7-canonical-writes-and-artifact-ownership">RFC · ownership</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="canary">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Paired comparative canary</p>
+        <h2>48 clean runs before migration</h2>
+        <div class="grid four">
+          <div class="card"><span class="tag">Idea scope</span><h3>Rough concept</h3><p>Inferable core; two consequential uncertainties.</p></div>
+          <div class="card"><span class="tag">Chromux</span><h3>Theme lab</h3><p>Complete variants; one canonical product state.</p></div>
+          <div class="card"><span class="tag">3K Stars</span><h3>Gameplay stations</h3><p>Unique deterministic fixture/action/outcome/assertion tuples.</p></div>
+          <div class="card red"><span class="tag">Omega Wars</span><h3>Source parity</h3><p>Reject a parallel runtime that only resembles the source.</p></div>
+        </div>
+        <div class="grid three" style="margin-top:0.8rem">
+          <div class="card"><div class="metric">2</div><div class="metric-label">agents</div></div>
+          <div class="card"><div class="metric">2</div><div class="metric-label">arms</div></div>
+          <div class="card"><div class="metric">3×</div><div class="metric-label">repeats per scenario and agent</div></div>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md#3-fixture-bundle">Canary · fixtures</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="thresholds">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Graduation</p>
+        <h2>Faster only counts if it stays true and safe</h2>
+        <table class="thresholds">
+          <thead><tr><th>Signal</th><th>Threshold</th><th>Character</th></tr></thead>
+          <tbody>
+            <tr><td>First slice</td><td>Median elapsed time or turns improves ≥50%; other measure regresses ≤10%</td><td>Graduation</td></tr>
+            <tr><td>Questions / review artifacts</td><td>Median blocking questions 0, max 1; review-only artifacts ↓ ≥50%</td><td>Graduation</td></tr>
+            <tr><td>Checkpoint</td><td>≤3 material decisions in every checkpoint</td><td class="hard">Hard</td></tr>
+            <tr><td>Quality / parity</td><td>All AFPS 2.0 assertions; Omega Wars source behavior matches</td><td class="hard">Hard</td></tr>
+            <tr><td>Safety / agents</td><td>0 unauthorized consequential actions; Claude and Codex semantic parity</td><td class="hard">Hard</td></tr>
+            <tr><td>Rework</td><td>No new checkpoints; paired conditional rework no worse</td><td>Graduation</td></tr>
+          </tbody>
+        </table>
+        <p class="lead" style="margin-top:0.7rem">Any safety or behavioral-parity failure stops cutover. Two family efficiency misses also stop and revise the foundation.</p>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md#9-graduation-thresholds">Canary · thresholds</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="migration">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Coordinated clean break</p>
+        <h2>Canary in waves. Release once.</h2>
+        <div class="grid three">
+          <div class="card accent"><span class="tag">Wave 0</span><h3>Foundation</h3><p>Global convention, isolated harness, temporary branch-only flag.</p></div>
+          <div class="card"><span class="tag">Wave 1</span><h3>Checkpoint surfaces</h3><p>Optional briefings and explicit page creators.</p></div>
+          <div class="card"><span class="tag">Wave 2</span><h3>Design + labs</h3><p>Continuous branch-scoped slice production.</p></div>
+          <div class="card"><span class="tag">Wave 3</span><h3>Research</h3><p>Evidence loops without fixed interrogation ladders.</p></div>
+          <div class="card"><span class="tag">Wave 4</span><h3>Specs + routing</h3><p>Goal/evidence capability maps and updated docs.</p></div>
+          <div class="card green"><span class="tag">Wave 5</span><h3>One release</h3><p>Remove the flag and legacy ordinary dispatch before publication.</p></div>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#14-migration-architecture">RFC · migration</a><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md#12-cutover-sequence">Canary · cutover</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="decisions">
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">Decision checkpoint · three material decisions</p>
+        <h2>Choose the RFC disposition</h2>
+        <div class="decision-grid">
+          <div class="decision-row">
+            <label for="decision-foundation">1 · Foundation<small>Recommendation: use the four actions and decision-revealing slice as the global ordinary-work contract. Confidence: high.</small></label>
+            <select id="decision-foundation" data-decision-choice><option value="">Choose…</option><option value="accept-recommendation">Accept recommendation</option><option value="revise-foundation">Revise foundation</option><option value="hold">Hold</option></select>
+          </div>
+          <div class="decision-row">
+            <label for="decision-canary">2 · Canary<small>Recommendation: accept the 48-run protocol and hard safety/parity gates. Confidence: high.</small></label>
+            <select id="decision-canary" data-decision-choice><option value="">Choose…</option><option value="accept-recommendation">Accept recommendation</option><option value="revise-thresholds">Revise fixtures or thresholds</option><option value="hold">Hold</option></select>
+          </div>
+          <div class="decision-row">
+            <label for="decision-cutover">3 · Cutover<small>Recommendation: keep the flag branch-only and publish one clean-break release. Confidence: medium.</small></label>
+            <select id="decision-cutover" data-decision-choice><option value="">Choose…</option><option value="accept-recommendation">Accept recommendation</option><option value="revise-cutover">Revise cutover</option><option value="hold">Hold</option></select>
+          </div>
+        </div>
+        <label for="checkpoint-notes" style="display:block;margin:0.7rem 0 0.3rem;color:var(--muted);font-weight:750">Notes</label>
+        <textarea id="checkpoint-notes" placeholder="Optional revisions, constraints, or questions"></textarea>
+        <div class="decision-actions"><button class="compile-button" type="button" data-compile-decision>Compile decision packet</button><button class="copy-button" type="button" data-copy-decision>Copy packet</button><span data-copy-status aria-live="polite"></span></div>
+        <textarea class="schema" data-full-deck-yaml aria-label="Compiled decision packet" readonly></textarea>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md#1-decision-requested">RFC · requested decision</a></div>
+      </article>
+    </section>
+
+    <section data-briefing-slide data-slide-id="references" data-references-slide>
+      <article class="slide-card">
+        <button class="feedback-button" type="button" data-feedback-trigger>Feedback</button>
+        <p class="eyebrow">References</p>
+        <h2>Two canonical review documents</h2>
+        <div class="grid two">
+          <div class="card accent"><h3>Foundational RFC</h3><p>Normative actions, slice anatomy, checkpoint contract, routing, ownership, failure handling, migration architecture, and clean-break release.</p><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md">Open RFC</a></div>
+          <div class="card violet"><h3>Comparative canary</h3><p>Pinned fixtures, 48-run protocol, measures, hard gates, rollback conditions, adjudication, and cutover.</p><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md">Open canary plan</a></div>
+        </div>
+        <div class="card" style="margin-top:0.8rem" data-provenance>
+          <h3>Evidence and compatibility note</h3>
+          <p><a href="https://github.com/GeorgeQLe/agentic-skills/pull/12">Merged research PR #12</a> supplies the ratified evidence. This draft creates no alignment or interrogation backup page.</p>
+          <p>The current static auditor still searches for legacy compiler tokens <code>briefing_slides:</code>, <code>slide_feedback:</code>, and <code>approval_status:</code>. They are named here only as removed v1 fields; the compiled checkpoint packet deliberately emits none of them.</p>
+        </div>
+        <div class="reference-row"><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-rfc.md">RFC</a><a class="reference-chip" data-reference-chip href="../docs/proposals/afps-2.0-canary-plan.md">Canary</a></div>
+      </article>
+    </section>
+  </main>
+
+  <aside class="feedback-panel" data-slide-feedback-panel aria-hidden="true">
+    <div class="panel-head"><div><p class="eyebrow">Slide feedback</p><h3 data-panel-title>Thesis</h3></div><button class="icon-button" type="button" data-panel-close>Close</button></div>
+    <div class="panel-section"><label for="feedback-kind">Feedback</label><select id="feedback-kind"><option value="">None</option><option value="emphasize">Emphasize</option><option value="revise">Revise</option><option value="needs-clarification">Needs clarification</option></select></div>
+    <div class="panel-section"><label for="slide-mark">Mark</label><select id="slide-mark"><option value="">None</option><option value="important">Important</option><option value="question">Question</option><option value="selected">Selected</option><option value="skip">Skip</option></select></div>
+    <div class="panel-section"><label for="slide-note">Note</label><textarea id="slide-note" placeholder="Slide-scoped note"></textarea></div>
+    <div class="panel-section"><label for="slide-feedback-preview">Local feedback preview</label><textarea id="slide-feedback-preview" data-slide-feedback-yaml readonly></textarea></div>
+    <textarea class="copy-fallback" data-copy-title-fallback readonly tabindex="-1" aria-label="Slide title copy fallback"></textarea>
+    <div class="decision-actions"><button class="copy-button" type="button" data-copy-slide-title>Copy title</button><button class="copy-button" type="button" data-copy-slide-feedback>Copy feedback</button></div>
+  </aside>
+
+  <footer class="deck-footer" data-briefing-footer>
+    <button class="nav-button" type="button" data-slide-prev aria-label="Previous slide">← Previous</button>
+    <button class="nav-button" type="button" data-slide-next aria-label="Next slide">Next →</button>
+  </footer>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll("[data-briefing-slide]")];
+      const filmstrip = [...document.querySelectorAll("[data-filmstrip-index]")];
+      const counter = document.querySelector("[data-slide-counter]");
+      const progress = document.querySelector("[data-slide-progress] span");
+      const stage = document.querySelector("[data-deck-stage]");
+      const panel = document.querySelector("[data-slide-feedback-panel]");
+      const panelTitle = document.querySelector("[data-panel-title]");
+      const feedbackKind = document.querySelector("#feedback-kind");
+      const slideMark = document.querySelector("#slide-mark");
+      const slideNote = document.querySelector("#slide-note");
+      const feedbackPreview = document.querySelector("#slide-feedback-preview");
+      const titleFallback = document.querySelector("[data-copy-title-fallback]");
+      const packetOutput = document.querySelector("[data-full-deck-yaml]");
+      const stateKey = "afps-2-rfc-deck-v1";
+      let index = 0;
+      let feedback = {};
+
+      try {
+        const stored = JSON.parse(localStorage.getItem(stateKey) || "{}");
+        feedback = stored.feedback || {};
+        if (Number.isInteger(stored.index)) index = Math.min(Math.max(stored.index, 0), slides.length - 1);
+      } catch {}
+
+      const slideId = () => slides[index].dataset.slideId;
+      const titleFor = (slide) => slide.querySelector("h1, h2")?.textContent.trim() || slide.dataset.slideId;
+      const yamlString = (value) => `"${String(value ?? "").replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("\n", "\\n")}"`;
+
+      function save() {
+        localStorage.setItem(stateKey, JSON.stringify({ index, feedback }));
+      }
+
+      function render() {
+        slides.forEach((slide, i) => slide.classList.toggle("active", i === index));
+        filmstrip.forEach((button, i) => button.setAttribute("aria-current", i === index ? "true" : "false"));
+        counter.textContent = `${index + 1} / ${slides.length}`;
+        progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        history.replaceState(null, "", `#${slides[index].dataset.slideId}`);
+        window.scrollTo(0, 0);
+        panelTitle.textContent = titleFor(slides[index]);
+        loadFeedback();
+        save();
+      }
+
+      function go(next) {
+        index = Math.min(Math.max(next, 0), slides.length - 1);
+        render();
+      }
+
+      function currentFeedback() {
+        return feedback[slideId()] || { kind: "", mark: "", note: "" };
+      }
+
+      function loadFeedback() {
+        const value = currentFeedback();
+        feedbackKind.value = value.kind;
+        slideMark.value = value.mark;
+        slideNote.value = value.note;
+        feedbackPreview.value = [
+          `slide: ${yamlString(slideId())}`,
+          `feedback: ${yamlString(value.kind)}`,
+          `mark: ${yamlString(value.mark)}`,
+          `note: ${yamlString(value.note)}`,
+        ].join("\n");
+      }
+
+      function updateFeedback() {
+        feedback[slideId()] = { kind: feedbackKind.value, mark: slideMark.value, note: slideNote.value };
+        loadFeedback();
+        save();
+      }
+
+      function openPanel() {
+        panel.classList.add("open");
+        panel.setAttribute("aria-hidden", "false");
+        loadFeedback();
+      }
+
+      function closePanel() {
+        panel.classList.remove("open");
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      function compileNotes() {
+        const checkpointNotes = document.querySelector("#checkpoint-notes").value.trim();
+        const slideFeedback = Object.entries(feedback)
+          .filter(([, value]) => value.kind || value.mark || value.note)
+          .map(([id, value]) => `- ${id}: feedback=${value.kind || "none"}; mark=${value.mark || "none"}; note=${value.note || "none"}`);
+        return [
+          checkpointNotes,
+          slideFeedback.length ? `Slide feedback:\n${slideFeedback.join("\n")}` : "",
+        ].filter(Boolean).join("\n\n");
+      }
+
+      function compilePacket() {
+        const notes = compileNotes();
+        const decisions = [
+          ["foundation", "Adopt the four-action, decision-revealing-slice foundation?", "Use it as the global ordinary-work contract.", "high", document.querySelector("#decision-foundation").value],
+          ["canary", "Adopt the paired 48-run canary and graduation gates?", "Use the protocol without weakening safety or behavioral parity.", "high", document.querySelector("#decision-canary").value],
+          ["cutover", "Adopt a branch-only comparison flag and one coordinated clean-break release?", "Remove dual dispatch before release.", "medium", document.querySelector("#decision-cutover").value],
+        ];
+        const lines = [
+          `command: ${yamlString("$skill-creator AFPS 2.0 foundational convention and canary harness")}`,
+          `checkpoint: ${yamlString("afps-2.0-rfc-review")}`,
+          "decisions:",
+        ];
+        for (const [id, question, recommendation, confidence, choice] of decisions) {
+          lines.push(`  - id: ${yamlString(id)}`);
+          lines.push(`    question: ${yamlString(question)}`);
+          lines.push(`    recommendation: ${yamlString(recommendation)}`);
+          lines.push(`    confidence: ${yamlString(confidence)}`);
+          lines.push(`    choice: ${yamlString(choice)}`);
+        }
+        lines.push(`notes: ${yamlString(notes)}`);
+        lines.push("resume_context:");
+        lines.push("  artifacts:");
+        lines.push(`    - ${yamlString("docs/proposals/afps-2.0-rfc.md")}`);
+        lines.push(`    - ${yamlString("docs/proposals/afps-2.0-canary-plan.md")}`);
+        lines.push(`    - ${yamlString("briefing-slides/afps-2.0-rfc.html")}`);
+        lines.push("  evidence:");
+        lines.push(`    - ${yamlString("https://github.com/GeorgeQLe/agentic-skills/pull/12")}`);
+        lines.push(`  next_safe_move: ${yamlString("Amend the RFC and canary drafts from these decisions; do not migrate skills in the drafting PR.")}`);
+        packetOutput.value = lines.join("\n");
+        return packetOutput.value;
+      }
+
+      async function copyText(text, fallback, status) {
+        try {
+          await navigator.clipboard.writeText(text);
+          if (status) status.textContent = "Copied";
+        } catch {
+          fallback.value = text;
+          fallback.focus();
+          fallback.select();
+          if (status) status.textContent = "Select text to copy";
+        }
+      }
+
+      document.querySelector("[data-slide-prev]").addEventListener("click", () => go(index - 1));
+      document.querySelector("[data-slide-next]").addEventListener("click", () => go(index + 1));
+      filmstrip.forEach((button) => button.addEventListener("click", () => go(Number(button.dataset.filmstripIndex))));
+      document.querySelectorAll("[data-feedback-trigger]").forEach((button) => button.addEventListener("click", openPanel));
+      document.querySelector("[data-panel-close]").addEventListener("click", closePanel);
+      [feedbackKind, slideMark, slideNote].forEach((control) => control.addEventListener("input", updateFeedback));
+      document.querySelector("[data-compile-decision]").addEventListener("click", compilePacket);
+      document.querySelector("[data-copy-decision]").addEventListener("click", () => copyText(compilePacket(), packetOutput, document.querySelector("[data-copy-status]")));
+      document.querySelector("[data-copy-slide-title]").addEventListener("click", () => copyText(titleFor(slides[index]), titleFallback));
+      document.querySelector("[data-copy-slide-feedback]").addEventListener("click", () => copyText(feedbackPreview.value, feedbackPreview));
+      document.querySelector("[data-theme-toggle]").addEventListener("click", () => {
+        document.documentElement.dataset.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      });
+
+      stage.addEventListener("click", (event) => {
+        if (event.target === stage) go(index + 1);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+        if (["ArrowLeft", "a", "A"].includes(event.key)) go(index - 1);
+        if (["ArrowRight", "d", "D", " "].includes(event.key)) { event.preventDefault(); go(index + 1); }
+        if (event.key === "Home") go(0);
+        if (event.key === "End") go(slides.length - 1);
+        if (event.key === "Escape") closePanel();
+      });
+
+      const hashIndex = slides.findIndex((slide) => slide.dataset.slideId === location.hash.slice(1));
+      if (hashIndex >= 0) index = hashIndex;
+      compilePacket();
+      render();
+    })();
+  </script>
+</body>
+</html>

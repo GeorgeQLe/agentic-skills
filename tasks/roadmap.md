@@ -2,7 +2,72 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+
+### Goal
+
+Finish the exact-head review and metadata cleanup for research PR `#12`, merge it with a merge commit only after immediate user confirmation, refresh RFC PR `#14` from the resulting `master`, and then repeat the exact-head confirmation and merge process without deleting either branch or deploying anything.
+
+### Plan
+
+- [x] Capture the visible `github-audit` and `expert-review` invocations on PR `#14`'s branch and preserve the unrelated starting untracked files.
+- [x] Replace PR `#12`'s issue-closing claim with evidence-only wording, record the user's ratification of its three research-ledger entries, and reply to and resolve the outstanding P2 thread.
+- [x] Recheck PR `#12` at its exact head for review findings, checks, unresolved threads, mergeability, and base currency.
+- [x] Present PR `#12`'s exact merge details and merge with a merge commit only after immediate user confirmation.
+- [x] Refresh PR `#14` from the resulting `master`, update its body to close issues `#11` and `#13`, and remove stale wording that PR `#12` is still open.
+- [x] Update PR `#14`'s task records, commit and push every intended change, and rerun exact-head expert review plus the full relevant verification set.
+- [ ] Present PR `#14`'s exact merge details and merge with a merge commit only after immediate user confirmation.
+- [ ] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
+
+### Acceptance Criteria
+
+- [x] Each PR is open, non-draft, current, conflict-free, and free of failed checks, unresolved threads, or accepted blocking findings when its merge details are presented.
+- [x] PR `#12` treats issue `#11` as research evidence rather than closing it, and its three ledger entries are explicitly recorded as user-ratified.
+- [x] PR `#14` closes both issues `#11` and `#13` and contains the final task and review evidence for the combined work.
+- [x] The briefing-slide audit, task-document audit, terminology/interface checks, link/scope assertions, deck interaction/viewport checks, and diff hygiene all pass at PR `#14`'s final reviewed head.
+- [x] PR `#14` changes no active skill, convention, generator, runtime mirror, alignment page, or interrogation page.
+- [ ] Both merges use merge commits; neither source branch is deleted and no deployment is performed.
+
+## Historical Implementation - AFPS 2.0 Foundational RFC And Canary Plan
+
+### Goal
+
+Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 canary protocol, and one optional decision-checkpoint deck without changing any active skill or convention behavior.
+
+### Delivery
+
+- GitHub issue: `#13`
+- Branch: `docs/13-afps-2-rfc`
+- Evidence: research issue `#11` and merged PR `#12`
+- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (ready for review; open and unmerged)
+
+### Plan
+
+- [x] Read the invoked skill instructions, shared deck convention, repository lessons, research evidence, and delivery contract.
+- [x] Create issue `#13`, branch from `origin/master`, and capture the visible `skill-creator` and `create-briefing-slides` invocations.
+- [x] Draft `docs/proposals/afps-2.0-rfc.md` with the operating model, global convention boundary, artifact ownership, migration architecture, and clean-break release contract.
+- [x] Draft `docs/proposals/afps-2.0-canary-plan.md` with pinned fixtures, paired-run protocol, metrics, thresholds, stop conditions, and cutover sequence.
+- [x] Build `briefing-slides/afps-2.0-rfc.html` as a chat-first review checkpoint with no alignment/interrogation backup page and at most three material decisions.
+- [x] Run terminology/interface consistency checks, the briefing static audit, desktop/mobile fit checks, task-doc audit, diff hygiene, secret scan, and scope-boundary checks.
+- [x] Record review evidence, commit and push all intended files, then open a ready pull request that links issue `#13` and PR `#12` without merging either.
+
+### Acceptance Criteria
+
+- [x] The RFC and canary plan use the same AFPS 2.0 loop, action taxonomy, slice schema, decision-packet interface, graduation thresholds, and clean-break end state.
+- [x] The deck links both documents directly, contains no implicit approval or authorization semantics, and exposes no more than three material decisions.
+- [x] The draft adds no `alignment/*.html` or `interrogation/*.html` page and changes no active skill, convention, generator, audit, package, or runtime mirror.
+- [x] Static, desktop, and mobile deck verification passes; local document/task/diff/secret checks pass.
+- [x] All tracked work is committed and pushed on `docs/13-afps-2-rfc`, with one ready pull request separate from PR `#12`.
+
+### Review
+
+The RFC and canary plan share one loop, four-action taxonomy, seven-element slice, compact decision-packet interface, graduation thresholds, and clean-break end state. The 11-slide checkpoint deck links the two documents directly, exposes exactly three material decisions, and emits no authorization fields. It creates no dense alignment/interrogation backup page.
+
+Verification passed for the repository briefing static audit, task-doc audit, contract/interface consistency, source-link existence, prompt-capture parity, 1440×1000 and 500×844 rendered fit checks, a headless browser interaction self-test, diff whitespace, intended-file secret scanning, and the active-behavior scope boundary. The generic WSL opener reported `blocked` because of its PowerShell argument forwarding; the prescribed direct file-URI fallback succeeded, so deck opener status is `fallback-opened`.
+
+Commits `8e1892f3c` and `5ac72b380` were published on `docs/13-afps-2-rfc`. Research PR `#12` later merged as `3353af1c6`; PR `#14` now carries that history and remains the issue-closing RFC delivery.
+
+## Historical Implementation - PR #6 Final Review And Conditional Merge
 
 ### Goal
 

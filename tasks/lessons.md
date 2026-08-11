@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-08-09 - AFPS 2.0 is a clean-break operating model, not a lighter approval pipeline
+
+- The user rejected preserving approval-first orchestration with fewer pages or shorter gates; the target is a ground-up loop of intent inference, decision-revealing slices, evidence evaluation, and only material checkpoints.
+- Rule: do not translate AFPS 2.0 back into staged approvals, required dense review pages, or authorization-flavored compiled YAML. Reserve stops for permission boundaries, use at most three decisions at a checkpoint, and let reversible canonical work proceed.
+- Keep alignment/interrogation tooling available for explicit use, but ordinary workflows must not invoke it implicitly after the clean-break migration.
+
 ## 2026-07-10 - GitHub delivery preference now favors branches and PRs
 
 - The user's earlier reluctance to use branches and pull requests is no longer the governing preference; carrying that historical preference forward would preserve an obsolete direct-to-primary workflow.

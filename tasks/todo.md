@@ -1,45 +1,53 @@
 # Current Task
 
-## Current Implementation - PR #6 Final Review And Conditional Merge
+## Current Implementation - Review And Conditionally Merge PRs #12 And #14
 
-### Status
+### Goal
 
-Pull request [#6](https://github.com/GeorgeQLe/agentic-skills/pull/6) is open and non-draft for review on issue-backed branch `feat/issue-5-youtube-thumbnail-generation`; it is not merge-ready. Upload-readiness remediation commit `cbeccf06f989610d367cef9b4794dd788e0543cb` is pushed, the verification reply is posted, and the review thread is resolved. The remaining merge gates are a fresh review of the exact final head, a GitHub-state refresh, and explicit user confirmation. Merge and deployment have not occurred.
+Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/agentic-skills/pull/12), merge it after immediate exact-details confirmation, then refresh and exactly review RFC PR [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) before its separate confirmed merge. Preserve both branches and perform no deployment.
 
-### Execution Profile
+### Current Phase
 
-- Mode: serial with fresh read-only Terra review
-- Accountability topology: `sol-terra`
-- Risk classification: non-trivial executable skill-contract remediation and merge gate
-- Reason: both active mirrors, focused tests, generated manifests, GitHub review state, and final-SHA evidence must remain deterministic and parity-safe.
-- Write scope: mirrored `youtube-video-prelaunch-audit` skill directories, focused contract test, generated package/catalog artifacts required by validation, prompt history, and task history/manifest files.
-- Must not edit: unrelated untracked `apps/`, `scratchpad/`, older prompt artifacts, credential files, or runtime skill roots except through `scripts/pack.sh refresh`.
+- [x] Capture the visible `github-audit` and `expert-review` invocations on PR `#14`'s branch.
+- [x] Clean up PR `#12` metadata and its outstanding P2 review thread.
+- [x] Recheck PR `#12`'s exact head, checks, mergeability, base currency, and unresolved-thread state.
+- [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
+- [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
+- [x] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
+- [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
+- [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
 
-### Plan
+### Verification
 
-- [x] Capture the visible invocation, read the review/delivery contracts, inspect task state, and record this execution plan.
-- [x] Confirm PR `#6` is open, non-draft, based on `master`, linked to issue `#5`, conflict-free, and at the expected head SHA.
-- [x] Run a fresh-context read-only adversarial review of the full diff and surrounding skill contracts.
-- [x] Update both active v0.5 mirrors and focused tests to require actual JPG/PNG/GIF validation, per-file byte-size validation at or below 50 MB, and manifest recording of format and size before completion.
-- [x] Refresh index-generated package/catalog artifacts and update changelog, history, manifest, and review disposition evidence without a new skill version or archive.
-- [x] Run focused Stage 2.5, strict version/archive, mirror/changelog, dependency/routing, task-doc, package, catalog/showcase, whitespace, and secret verification; compare global failures with clean `master`.
-- [x] Commit and push all intended tracked changes to the existing feature branch (`cbeccf06f989610d367cef9b4794dd788e0543cb`).
-- [x] Reply to and resolve the blocking review thread only after the fix and verification are present remotely.
-
-The fresh exact-head review, final GitHub refresh, explicit user confirmation, merge, and post-merge verification are external gates. Their results are reported in the terminal and GitHub after this documentation commit; they are deliberately not self-recorded as completed checkboxes here because any follow-up commit would invalidate the exact-SHA review and confirmation.
-
-### Acceptance Criteria
-
-- [x] Exactly three generated files are positively validated as JPG, PNG, or GIF images at 1280x720 and no larger than 50 MB before generation completion.
-- [x] Every completed generation manifest records each file's validated format and byte size.
-- [x] Claude/Codex active v0.5 contracts, tests, changelogs, archives, generated manifests, and public catalog remain internally consistent and fresh.
-- [ ] All independent review findings have an explicit accepted, rejected, or deferred disposition; no accepted Critical/High or functional upload-readiness blocker remains.
-- [ ] GitHub reports no unresolved review thread, change request, conflict, or failed/pending required check at the exact confirmed SHA.
-- [ ] Issue `#5` remains linked through `Closes #5`; merge uses a merge commit, leaves the feature branch intact, and performs no deployment.
+- [x] `node scripts/audit-briefing-slides.mjs briefing-slides/afps-2.0-rfc.html`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] RFC/canary/deck terminology and interface consistency assertions
+- [x] Linked-source existence and active-scope boundary assertions
+- [x] Headless deck interaction and 1440x1000 plus 500x844 viewport checks
+- [x] `git diff --check`
 
 ### Review
 
-Remediation and integrated verification are complete. Final acceptance remains external and requires a clean exact-head independent review, unchanged GitHub gates, and explicit user confirmation immediately before merge.
+PR `#12` passed exact-head review and merged as `3353af1c6` after confirmation; issue `#11` stayed open and the research branch was preserved.
+
+PR `#14`'s fresh GitHub audit exposed two P1 and two P2 threads omitted from the earlier handoff. The canary now scopes target assertions to AFPS 2.0 runs, records legacy failures as comparison evidence, records checkpoint incidence separately, and uses paired conditional rework without assigning zero to missing checkpoints. The deck now preserves slide feedback inside the allowed `notes` field, uses a dedicated title-copy fallback, and fits the 500x844 decisions viewport.
+
+Static deck and task audits pass. Contract, threshold, assertion-scope, rework, packet, source-link, prompt-parity, scope-boundary, secret, and diff checks pass. Headless Chrome passes navigation, feedback preservation, title fallback, exact three-decision packet, forbidden-field absence, and all 11 slides at both 1440x1000 and 500x844. No active skill, convention, generator, runtime mirror, alignment page, or interrogation page changed.
+
+Remediation commit `074b0c127` is pushed. All four review threads have disposition replies and are resolved. The exact-head local review passes every verification above with no surviving Critical, High, Medium, Low, or spec-conformance finding; GitHub reports the PR open, non-draft, current with `master`, and conflict-free with no failed checks.
+
+### Next Work
+
+Present PR `#14`'s exact merge details and obtain immediate confirmation before merging it with a merge commit.
+
+### Recommended Next Command
+
+`$github-pr merge #14`
+
+## Code Review Fixes
+
+- [x] `docs/proposals/afps-2.0-canary-plan.md:124` — scope target-contract assertions to AFPS 2.0 runs while retaining legacy results as comparison evidence.
+- [x] `docs/proposals/afps-2.0-canary-plan.md:263` — record checkpoint incidence separately and define paired missing-checkpoint treatment without converting `0 / 0` to zero.
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 
