@@ -423,6 +423,74 @@ describe('Node lifecycle commands', () => {
     assert.match(stdout, /Reinstall everything removed with: npx skillpacks install exec-loop/);
   });
 
+  it('omits targeted reinstall guidance when requested packs and skills are absent', async () => {
+    const dir = makeTempProject();
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', 'exec-loop', 'enterprise-icp']);
+
+    assert.doesNotMatch(stdout, /Reinstall everything removed with:/);
+  });
+
+  it('prints only recoverable targeted selections in request order without duplicates', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'exec-loop', 'enterprise-icp']);
+
+    const { stdout } = await runSkillpacks(dir, [
+      'uninstall',
+      'enterprise-icp',
+      'code-quality',
+      'exec-loop',
+      'enterprise-icp'
+    ]);
+
+    assert.match(
+      stdout,
+      /Reinstall everything removed with: npx skillpacks install enterprise-icp exec-loop/
+    );
+    assert.doesNotMatch(stdout, /install enterprise-icp code-quality/);
+  });
+
+  it('keeps configured-but-missing targeted packs recoverable', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['exec-loop'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', 'exec-loop']);
+
+    assert.match(stdout, /Reinstall everything removed with: npx skillpacks install exec-loop/);
+  });
+
+  it('canonicalizes configured pack aliases for targeted removal and recovery', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['quality'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', 'code-quality']);
+
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.match(stdout, /Reinstall everything removed with: npx skillpacks install code-quality/);
+  });
+
+  it('keeps owned-but-unconfigured targeted skills recoverable', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'enterprise-icp']);
+    const config = readProjectConfig(dir);
+    delete config.enabled_skills;
+    writeProjectConfig(dir, config);
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', 'enterprise-icp']);
+
+    assert.match(stdout, /Reinstall everything removed with: npx skillpacks install enterprise-icp/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'enterprise-icp')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'enterprise-icp')), false);
+  });
+
   it('cancels uninstall --all without changing project state', async () => {
     const dir = makeTempProject();
     await runSkillpacks(dir, ['install', 'exec']);
@@ -484,6 +552,52 @@ describe('Node lifecycle commands', () => {
     assert.deepEqual(restored.enabled_skills, { 'enterprise-icp': 'business-research' });
     assert.deepEqual(restored.pinned_versions, { exec: 'v0.0' });
     assert.deepEqual(restored.custom_setting, { preserve: true });
+  });
+
+  it('uninstall --all previews and removes legacy project-managed copied installs', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'exec']);
+    for (const tool of ['claude', 'codex']) {
+      rewriteMarkerSource(
+        dir,
+        tool,
+        'exec',
+        join(dir, 'old-agentic-skills-checkout/agentic-skills/packs/exec-loop', tool, 'exec')
+      );
+    }
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all'], {
+      confirmUninstallAll: async () => true
+    });
+
+    assert.match(stdout, /\.claude\/skills\/exec/);
+    assert.match(stdout, /\.codex\/skills\/exec/);
+    assert.match(stdout, /Uninstalled 2 managed skill install\(s\)\./);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'exec')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'exec')), false);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.equal(readProjectConfig(dir).enabled_skills, undefined);
+  });
+
+  it('uninstall --all canonicalizes stored pack aliases in executable recovery guidance', async () => {
+    const dir = makeTempProject();
+    writeProjectConfig(dir, {
+      project_type: 'devtool',
+      enabled_packs: ['quality'],
+      skill_pack_version: 1
+    });
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all'], {
+      confirmUninstallAll: async () => true
+    });
+    const match = stdout.match(/Reinstall everything removed with: npx skillpacks (install [^\n]+)/);
+
+    assert.ok(match);
+    assert.equal(match[1], 'install code-quality');
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+
+    await runSkillpacks(dir, match[1].split(' '));
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, ['code-quality']);
   });
 
   it('uninstall --all refuses mixed arguments and cancels in non-interactive mode', async () => {

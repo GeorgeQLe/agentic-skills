@@ -1,45 +1,46 @@
 # Current Task
 
-## Current Implementation - Skillpacks Uninstall Commands
+## Current Implementation - PR #18 Review Feedback
 
 ### Goal
 
-Implement issue `#17`: add targeted `npx skillpacks uninstall`, add confirmed `npx skillpacks uninstall --all`, preserve unmanaged project content, and always end a successful uninstall with a copy-paste command that restores every removed selection.
+Inspect pull request `#18`'s unresolved review threads, address the user-selected actionable feedback on the existing issue-backed branch, and publish verified remediation without merging or resolving threads unless explicitly requested.
 
 ### Current Phase
 
-- [x] Inspect lifecycle ownership, project config, CLI dispatch, existing remove behavior, tests, and public docs.
-- [x] Create issue `#17` and branch `feat/17-skillpacks-uninstall` from current `origin/master`.
-- [x] Implement targeted uninstall as a first-class command with exact reinstall output.
-- [x] Implement all-install snapshot, confirmation/cancellation, managed cleanup, config preservation, and one-command restore output.
-- [x] Add regression coverage and update help, compatibility docs, public docs, and changelog.
-- [x] Run focused and full verification, review the diff, and record results.
-- [x] Commit, push, and open ready pull request `#18` without merging.
+- [x] Resolve PR `#18` and fetch thread-aware review comments.
+- [x] Classify all three unresolved actionable threads and confirm the supplied all-thread remediation scope.
+- [x] Implement selected fixes and focused regression tests.
+- [x] Run focused and full relevant verification.
+- [x] Record review evidence, commit, and push the remediation branch.
 
 ### Verification
 
-- [x] Focused uninstall, lifecycle, normalization, compatibility, and update-output tests (118/118)
-- [x] `npm --workspace packages/skillpacks run test:node` (222/222)
+- [x] Focused lifecycle and pack-normalization tests (117/117)
+- [x] `npm --workspace packages/skillpacks run test:node` (146/146)
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
-- [x] Real PTY smoke: install `exec`, run `uninstall --all`, answer `y`, verify the restore command is the final output
 
 ### Review
 
-The CLI now has a first-class uninstall route instead of requiring users to infer that `remove` is the inverse of install. Targeted uninstalls reuse the established project-aware resolver and finish with an exact install command.
+All three unresolved PR threads were addressed without replying to or resolving them:
 
-The all-uninstall path inventories ownership-verified Claude/Codex roots, managed convention docs, and install intent while holding the project lifecycle lock. It displays that scope before prompting, accepts only `y`/`yes`, cancels safely in non-interactive shells, preserves unmanaged roots and unrelated config, and snapshots base, pack, individual-skill, and pin state into one executable restore line. The regression test executes that restore sequence and verifies the original selection is reconstructed.
+- Legacy project-managed copied installs now use the same scoped ownership predicate for preview and deletion, while global cleanup retains its existing global-source recognition rules.
+- `uninstall --all` canonicalizes stored pack aliases in memory before formatting recovery guidance; the regression executes the emitted `install code-quality` sequence and verifies canonical configuration is restored without a pre-confirmation config rewrite.
+- Targeted uninstall snapshots configured or ownership-verified selections under the project lock, preserves request order, removes duplicates and absent targets, and omits recovery guidance when nothing recoverable was requested.
 
-Implementation commit `524ba56c3` is pushed on `feat/17-skillpacks-uninstall`. Ready pull request [#18](https://github.com/GeorgeQLe/agentic-skills/pull/18) closes issue `#17` when merged; no merge, release, or deployment was performed.
+Focused lifecycle and normalization coverage passed 117/117 tests. The full Node package suite passed 146/146, the canary package build check passed its 415-skill convention audit and manifest/package checks, and task-doc plus diff-hygiene audits passed.
+
+The remediation is committed as one changeset on `feat/17-skillpacks-uninstall` and pushed to update ready PR `#18`. No review comments were posted, no threads were resolved, and no merge, release, or deployment was performed.
 
 ### Next Work
 
-Review and, only after explicit confirmation, merge pull request `#18`.
+Review the pushed PR `#18` remediation; merge and thread resolution remain separate explicit actions.
 
 ### Recommended Next Command
 
-`$github-pr merge #18`
+`$gh-address-comments #18`
 
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 

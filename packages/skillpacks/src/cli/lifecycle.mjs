@@ -571,23 +571,21 @@ function removeRepoSkillInstall(target, options = {}) {
     return false;
   }
 
-  if (stats.isSymbolicLink()) {
-    const source = readlinkSync(target);
-    if (skillSymlinkOwnedBySkillpacks(target, source, { tool, skillName })) {
-      unlinkSync(target);
-      return true;
-    }
+  const owned = allowLegacyGlobalSource
+    ? globalRepoSkillInstallOwned(target, tool, skillName)
+    : repoSkillInstallOwned(target, { tool, skillName });
+  if (!owned) {
     return false;
   }
 
+  if (stats.isSymbolicLink()) {
+    unlinkSync(target);
+    return true;
+  }
+
   if (isManagedSkillDir(target)) {
-    const source = managedMarkerField(target, 'source');
-    const legacyGlobalSource =
-      allowLegacyGlobalSource && sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName);
-    if (targetManagedBySkillpacks(target) && (sourceOwnedBySkillpacks(source) || legacyGlobalSource)) {
-      rmSync(target, { recursive: true, force: true });
-      return true;
-    }
+    rmSync(target, { recursive: true, force: true });
+    return true;
   }
 
   return false;
@@ -1140,7 +1138,16 @@ function removePack(projectRoot, manifest, pack) {
     }
   }
 
-  const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => candidate !== pack);
+  const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => {
+    if (candidate === pack) {
+      return false;
+    }
+    try {
+      return reconcileStoredPack(manifest, candidate, 'enabled_packs') !== pack;
+    } catch {
+      return true;
+    }
+  });
   if (writePackProjectConfig(projectRoot, pack, packs)) {
     console.log('Updated .agents/project.json');
   }
@@ -2551,6 +2558,67 @@ function installCommand(targets) {
   return `npx skillpacks install ${targets.map(shellQuote).join(' ')}`;
 }
 
+function packSkillNamesForUninstall(manifest, pack) {
+  if (activePackExists(manifest, pack)) {
+    return uniquePackSkillNames(manifest, pack);
+  }
+  return hibernatedSkillNamesForPack(canonicalHibernatedPack(pack) || pack);
+}
+
+function hasOwnedProjectInstall(projectRoot, skillNames) {
+  return skillNames.some((skillName) => {
+    return TOOLS.some((tool) => {
+      return repoSkillInstallOwned(targetPath(projectRoot, tool, skillName), { tool, skillName });
+    });
+  });
+}
+
+function configuredPackMatches(manifest, config, targetPack) {
+  return enabledPacks(config).some((pack) => {
+    if (pack === targetPack) {
+      return true;
+    }
+    try {
+      return reconcileStoredPack(manifest, pack, 'enabled_packs') === targetPack;
+    } catch {
+      return false;
+    }
+  });
+}
+
+function recoverableUninstallTargets({ manifest, projectRoot, orderedTargets, config }) {
+  const configuredSkills = new Set(enabledSkillEntries(config).map(([skillName]) => skillName));
+  const recoverable = [];
+
+  for (const target of orderedTargets) {
+    const skillNames = target.kind === 'pack'
+      ? packSkillNamesForUninstall(manifest, target.name)
+      : [target.name];
+    const configured = target.kind === 'pack'
+      ? configuredPackMatches(manifest, config, target.name)
+      : configuredSkills.has(target.name);
+    if (
+      (configured || hasOwnedProjectInstall(projectRoot, skillNames))
+      && !recoverable.includes(target.name)
+    ) {
+      recoverable.push(target.name);
+    }
+  }
+
+  return recoverable;
+}
+
+function reconciledEnabledPacks(manifest, config) {
+  const packs = [];
+  for (const pack of enabledPacks(config)) {
+    const canonical = reconcileStoredPack(manifest, pack, 'enabled_packs');
+    if (!packs.includes(canonical)) {
+      packs.push(canonical);
+    }
+  }
+  return packs;
+}
+
 export function reinstallCommandForProject({ manifest, projectRoot = process.cwd() }) {
   const config = readProjectConfig(projectRoot);
   if (!config) {
@@ -2563,7 +2631,7 @@ export function reinstallCommandForProject({ manifest, projectRoot = process.cwd
   }
 
   const targets = [
-    ...enabledPacks(config),
+    ...reconciledEnabledPacks(manifest, config),
     ...enabledSkillEntries(config).map(([skillName]) => skillName)
   ].filter((target, index, all) => all.indexOf(target) === index);
   if (targets.length > 0) {
@@ -2660,12 +2728,39 @@ export async function uninstallAllProject({
   });
 }
 
-export async function uninstallResolved({ manifest, projectRoot = process.cwd(), packs = [], skills = [] }) {
-  const targets = [...packs, ...skills];
-  const exitCode = await removeResolved({ manifest, projectRoot, packs, skills });
-  console.log('');
-  console.log(`Reinstall everything removed with: ${installCommand(targets)}`);
-  return exitCode;
+export async function uninstallResolved({
+  manifest,
+  projectRoot = process.cwd(),
+  packs = [],
+  skills = [],
+  orderedTargets = [
+    ...packs.map((name) => ({ kind: 'pack', name })),
+    ...skills.map((name) => ({ kind: 'skill', name }))
+  ]
+}) {
+  return withProjectLock(projectRoot, `uninstall ${[...packs, ...skills].join(' ')}`.trim(), async () => {
+    const config = readProjectConfig(projectRoot);
+    const recoverableTargets = recoverableUninstallTargets({
+      manifest,
+      projectRoot,
+      orderedTargets,
+      config
+    });
+
+    for (const pack of packs) {
+      removePack(projectRoot, manifest, pack);
+    }
+    for (const skill of skills) {
+      removeSingleSkill(projectRoot, manifest, skill);
+    }
+    printSessionReloadNotice();
+
+    if (recoverableTargets.length > 0) {
+      console.log('');
+      console.log(`Reinstall everything removed with: ${installCommand(recoverableTargets)}`);
+    }
+    return 0;
+  });
 }
 
 export async function refreshProject({ manifest, projectRoot = process.cwd() }) {

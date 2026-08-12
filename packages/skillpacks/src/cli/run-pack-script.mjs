@@ -1087,7 +1087,8 @@ export async function runSkillpacksCli(args, options = {}) {
         manifest,
         projectRoot: process.cwd(),
         packs: resolved.packs,
-        skills: resolved.skills
+        skills: resolved.skills,
+        orderedTargets: resolved.orderedTargets
       });
     }
     return removeResolved({

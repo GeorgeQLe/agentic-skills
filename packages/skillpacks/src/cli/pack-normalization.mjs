@@ -642,12 +642,19 @@ export function resolvePackCommandArgs(command, args, options) {
   const tokens = command === 'install'
     ? tokenizeInstallArgs(args, context.activePackTitles)
     : tokenizePackArgs(args);
+  const orderedTargets = [];
   for (const token of tokens) {
+    const packCount = context.packs.length;
+    const skillCount = context.skills.length;
     if (command === 'install') {
       resolveInstallToken(token, context);
     } else {
       resolveRemoveToken(token, context);
     }
+    orderedTargets.push(
+      ...context.packs.slice(packCount).map((name) => ({ kind: 'pack', name })),
+      ...context.skills.slice(skillCount).map((name) => ({ kind: 'skill', name }))
+    );
   }
 
   if (context.packs.length === 0 && context.skills.length === 0) {
@@ -658,6 +665,7 @@ export function resolvePackCommandArgs(command, args, options) {
     args: [...context.packs, ...context.skills],
     packs: [...context.packs],
     skills: [...context.skills],
+    orderedTargets,
     tokens
   };
 }
