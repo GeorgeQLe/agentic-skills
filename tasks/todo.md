@@ -21,6 +21,8 @@ Inspect pull request `#18`'s unresolved review threads, address the user-selecte
 - [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
 - [x] `node scripts/audit-task-docs.mjs`
 - [x] `git diff --check`
+- [x] Fresh thread-aware GitHub audit at `b573054fc`: the same three threads remain, with no new review feedback
+- [x] Fresh focused lifecycle and pack-normalization tests (117/117)
 
 ### Review
 
@@ -33,6 +35,8 @@ All three unresolved PR threads were addressed without replying to or resolving 
 Focused lifecycle and normalization coverage passed 117/117 tests. The full Node package suite passed 146/146, the canary package build check passed its 415-skill convention audit and manifest/package checks, and task-doc plus diff-hygiene audits passed.
 
 The remediation is committed as one changeset on `feat/17-skillpacks-uninstall` and pushed to update ready PR `#18`. No review comments were posted, no threads were resolved, and no merge, release, or deployment was performed.
+
+A fresh invocation confirmed that PR `#18` still points to `b573054fc`, remains open, ready, mergeable, and has no reported checks. The two non-outdated threads and one outdated thread are the same three findings already covered by the remediation and passing regressions; no additional actionable feedback was found. They remain unresolved on GitHub because this workflow was not authorized to reply or resolve them.
 
 ### Next Work
 

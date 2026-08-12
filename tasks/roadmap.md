@@ -15,6 +15,7 @@ Address all user-selected actionable review feedback on pull request `#18`, pres
 - [x] Unify project install ownership checks, canonicalize recovery state, and snapshot exact targeted recovery selections with focused regression coverage.
 - [x] Run focused tests, the full relevant suite, package build checks, task-doc audit, and diff hygiene.
 - [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`, leaving merge and thread-resolution writes outside scope unless explicitly requested.
+- [x] Re-audit PR `#18` at `b573054fc` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
 
 ### Acceptance Criteria
 
