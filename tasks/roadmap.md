@@ -16,6 +16,7 @@ Address all user-selected actionable review feedback on pull request `#18`, pres
 - [x] Run focused tests, the full relevant suite, package build checks, task-doc audit, and diff hygiene.
 - [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`, leaving merge and thread-resolution writes outside scope unless explicitly requested.
 - [x] Re-audit PR `#18` at `b573054fc` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
+- [x] After explicit user authorization, post evidence-backed dispositions and resolve all three review threads; verify zero unresolved threads through GraphQL.
 
 ### Acceptance Criteria
 
