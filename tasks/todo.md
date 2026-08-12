@@ -14,7 +14,7 @@ Implement issue `#17`: add targeted `npx skillpacks uninstall`, add confirmed `n
 - [x] Implement all-install snapshot, confirmation/cancellation, managed cleanup, config preservation, and one-command restore output.
 - [x] Add regression coverage and update help, compatibility docs, public docs, and changelog.
 - [x] Run focused and full verification, review the diff, and record results.
-- [ ] Commit, push, and open a ready pull request without merging.
+- [x] Commit, push, and open ready pull request `#18` without merging.
 
 ### Verification
 
@@ -31,13 +31,15 @@ The CLI now has a first-class uninstall route instead of requiring users to infe
 
 The all-uninstall path inventories ownership-verified Claude/Codex roots, managed convention docs, and install intent while holding the project lifecycle lock. It displays that scope before prompting, accepts only `y`/`yes`, cancels safely in non-interactive shells, preserves unmanaged roots and unrelated config, and snapshots base, pack, individual-skill, and pin state into one executable restore line. The regression test executes that restore sequence and verifies the original selection is reconstructed.
 
+Implementation commit `524ba56c3` is pushed on `feat/17-skillpacks-uninstall`. Ready pull request [#18](https://github.com/GeorgeQLe/agentic-skills/pull/18) closes issue `#17` when merged; no merge, release, or deployment was performed.
+
 ### Next Work
 
-Publish the verified issue-backed branch for review.
+Review and, only after explicit confirmation, merge pull request `#18`.
 
 ### Recommended Next Command
 
-`$ship`
+`$github-pr merge #18`
 
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 

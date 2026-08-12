@@ -16,7 +16,7 @@ Add a first-class `npx skillpacks uninstall` command for selected packs or skill
 - [x] Add CLI injection seams for deterministic prompt tests and non-interactive refusal behavior.
 - [x] Update help, public command documentation, package compatibility ownership, and changelog notes.
 - [x] Run focused lifecycle/compatibility tests, the full Node package suite, package build checks, task-doc audit, and diff hygiene.
-- [ ] Commit and push the issue-backed branch and publish one ready pull request for issue `#17`.
+- [x] Commit and push the issue-backed branch and publish ready pull request `#18` for issue `#17`.
 
 ### Acceptance Criteria
 
