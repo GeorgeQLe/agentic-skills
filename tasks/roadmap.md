@@ -2,7 +2,29 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - PR #18 Review Feedback
+
+### Goal
+
+Address all user-selected actionable review feedback on pull request `#18`, preserve the uninstall safety contract, and publish a verified remediation commit on the existing issue-backed branch.
+
+### Plan
+
+- [x] Resolve PR `#18` and fetch unresolved thread-aware review state.
+- [x] Cluster all three unresolved actionable threads and confirm all are in scope.
+- [x] Unify project install ownership checks, canonicalize recovery state, and snapshot exact targeted recovery selections with focused regression coverage.
+- [x] Run focused tests, the full relevant suite, package build checks, task-doc audit, and diff hygiene.
+- [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`, leaving merge and thread-resolution writes outside scope unless explicitly requested.
+- [x] Re-audit PR `#18` at `b573054fc` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
+- [x] After explicit user authorization, post evidence-backed dispositions and resolve all three review threads; verify zero unresolved threads through GraphQL.
+
+### Acceptance Criteria
+
+- [x] Every selected actionable thread is addressed by code, tests, and a documented disposition.
+- [x] The uninstall ownership, confirmation, cancellation, config-preservation, and reinstall-output contracts remain intact.
+- [x] No unrelated tracked work is introduced, and all intended changes are committed and pushed to PR `#18`'s branch.
+
+## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
 

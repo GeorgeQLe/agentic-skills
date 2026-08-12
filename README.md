@@ -109,11 +109,14 @@ npx skillpacks install alignment-loop
 npx skillpacks install design-system
 npx skillpacks which design-system
 npx skillpacks status
-npx skillpacks remove game
-npx skillpacks remove design-system
+npx skillpacks uninstall game
+npx skillpacks uninstall design-system
+npx skillpacks uninstall --all
 ```
 
 `npx skillpacks install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
+
+`npx skillpacks uninstall <name>` removes selected packs or skills and finishes by printing the exact install command that restores them. `npx skillpacks uninstall --all` previews all project-local skillpacks-managed roots and settings, asks for confirmation, preserves unmanaged skill directories and unrelated project config, then prints one copy-paste command line that restores the previous base, pack, individual-skill, and pin selection. In a non-interactive shell, `--all` cancels without changes. The older `remove <name>` command remains supported for compatibility.
 
 For source-checkout development, `scripts/pack.sh install <pack-or-skill>` remains supported from a local clone. The npm CLI also supports `npx skillpacks refresh`, `npx skillpacks doctor`, `npx skillpacks doctor --fix`, `npx skillpacks doctor --fix --agent-docs --dry-run`, and deck installation from manifest metadata including `npx skillpacks install-deck vard`, `npx skillpacks install-deck ord`, `npx skillpacks install-deck business-afps`, `npx skillpacks install-deck devtool-afps`, and `npx skillpacks install-deck game-afps`.
 

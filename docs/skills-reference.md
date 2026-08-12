@@ -23,6 +23,8 @@ It does not install domain packs as base skills.
 npx skillpacks list
 npx skillpacks recommend
 npx skillpacks install <pack-or-skill>
+npx skillpacks uninstall <pack-or-skill>
+npx skillpacks uninstall --all
 npx skillpacks remove <pack-or-skill>
 npx skillpacks which <skill>
 npx skillpacks refresh
@@ -32,6 +34,8 @@ npx skillpacks status
 Project designation is stored in `.agents/project.json`.
 
 `install <name>` accepts either a pack name or a skill name from any pack. Pack names install all skills in that pack; skill names install only that one local skill and store `{skill: pack}` provenance under `.agents/project.json` `enabled_skills`.
+
+`uninstall <name>` removes selected packs or skills and prints their reinstall command last. `uninstall --all` requires interactive confirmation, removes only project-local skillpacks-managed roots and install settings, preserves unmanaged content and unrelated config, and prints one command line that restores the previous selection. The older `remove <name>` command remains supported.
 
 The scoped alias package `@glexcorp/gskp` is published from the same release artifact and version. `npx @glexcorp/gskp install <pack-or-skill>` is equivalent to `npx skillpacks install <pack-or-skill>`.
 

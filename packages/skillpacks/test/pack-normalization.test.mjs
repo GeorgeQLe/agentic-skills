@@ -255,6 +255,20 @@ describe('pack command argument resolution', () => {
     );
   });
 
+  it('resolves uninstall targets with the same project-aware rules as remove', () => {
+    const projectRoot = makeTempProject();
+    writeProjectConfig(projectRoot, {
+      enabled_packs: [],
+      enabled_skills: { exec: 'exec-loop' },
+      skill_pack_version: 1
+    });
+
+    const resolved = resolvePackCommandArgs('uninstall', ['exec'], { manifest, projectRoot });
+
+    assert.deepEqual(resolved.packs, []);
+    assert.deepEqual(resolved.skills, ['exec']);
+  });
+
   it('blocks hibernated pack and skill installs with PoketoWork safety language', () => {
     assert.throws(
       () => resolvePackCommandArgs('install', ['dev-kanban'], { manifest }),

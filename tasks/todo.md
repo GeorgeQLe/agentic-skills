@@ -1,6 +1,53 @@
 # Current Task
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - PR #18 Review Feedback
+
+### Goal
+
+Inspect pull request `#18`'s unresolved review threads, address the user-selected actionable feedback on the existing issue-backed branch, and publish verified remediation without merging or resolving threads unless explicitly requested.
+
+### Current Phase
+
+- [x] Resolve PR `#18` and fetch thread-aware review comments.
+- [x] Classify all three unresolved actionable threads and confirm the supplied all-thread remediation scope.
+- [x] Implement selected fixes and focused regression tests.
+- [x] Run focused and full relevant verification.
+- [x] Record review evidence, commit, and push the remediation branch.
+- [x] Post evidence-backed disposition replies and resolve all three review threads after explicit user authorization.
+
+### Verification
+
+- [x] Focused lifecycle and pack-normalization tests (117/117)
+- [x] `npm --workspace packages/skillpacks run test:node` (146/146)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] Thread-aware GitHub audit at `4c7cd2fec`: all three addressed threads are resolved
+- [x] Fresh focused lifecycle and pack-normalization tests (117/117)
+
+### Review
+
+All three PR review findings were addressed, received evidence-backed disposition replies, and are resolved:
+
+- Legacy project-managed copied installs now use the same scoped ownership predicate for preview and deletion, while global cleanup retains its existing global-source recognition rules.
+- `uninstall --all` canonicalizes stored pack aliases in memory before formatting recovery guidance; the regression executes the emitted `install code-quality` sequence and verifies canonical configuration is restored without a pre-confirmation config rewrite.
+- Targeted uninstall snapshots configured or ownership-verified selections under the project lock, preserves request order, removes duplicates and absent targets, and omits recovery guidance when nothing recoverable was requested.
+
+Focused lifecycle and normalization coverage passed 117/117 tests. The full Node package suite passed 146/146, the canary package build check passed its 415-skill convention audit and manifest/package checks, and task-doc plus diff-hygiene audits passed.
+
+The remediation is committed on `feat/17-skillpacks-uninstall` and pushed to update ready PR `#18`. After explicit user authorization, each review thread received a reply linking the fix to `b573054fc` and its regression evidence, then all three threads were resolved. No merge, release, or deployment was performed.
+
+A fresh invocation confirmed that PR `#18` remained open, ready, mergeable, and had no reported checks at `4c7cd2fec`. The authoritative post-write GraphQL audit shows zero unresolved review threads: both current threads and the previously outdated thread are resolved by `GeorgeQLe` with their disposition replies present.
+
+### Next Work
+
+Review and, after its separate confirmation gate, merge PR `#18`.
+
+### Recommended Next Command
+
+`$github-pr merge #18`
+
+## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
 
@@ -14,8 +61,8 @@ Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/age
 - [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
 - [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
 - [x] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
-- [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
-- [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
+- Archived open status: PR `#14` still needed an immediate exact-details merge confirmation.
+- Archived open status: final PR, issue, `master`, branch-preservation, deployment, and unrelated-file verification remained pending.
 
 ### Verification
 
