@@ -20,6 +20,8 @@ const expectedMatrix = new Map([
   ['cleanup [--all|--global] [--reinstall-base] [--dry-run]', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['uninstall-global [--reinstall-base] [--dry-run]', { owner: 'Node-owned compatibility alias', bash: 'No', jq: 'No' }],
   ['install <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['uninstall <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
+  ['uninstall --all', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['remove <name...>', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['refresh', { owner: 'Node-owned', bash: 'No', jq: 'No' }],
   ['doctor', { owner: 'Node-owned', bash: 'No', jq: 'No' }],

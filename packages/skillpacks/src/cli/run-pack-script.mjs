@@ -2,6 +2,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
+import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 import {
   printEnabledPacks,
@@ -24,7 +25,9 @@ import {
   refreshProject,
   removeResolved,
   statusAllProjects,
+  uninstallAllProject,
   uninstallGlobal,
+  uninstallResolved,
   unpinSkill
 } from './lifecycle.mjs';
 import {
@@ -71,6 +74,7 @@ const PACK_COMMANDS = new Set([
   'status',
   'recommend',
   'install',
+  'uninstall',
   'remove',
   'refresh',
   'doctor',
@@ -850,7 +854,9 @@ Commands:
                                Remove deprecated state below cwd, or user-home state with --global
   uninstall-global [--reinstall-base] [--dry-run]
                                Deprecated alias for cleanup --global
-  remove <name...>             Remove packs or individual skills
+  uninstall <name...>          Uninstall packs or individual skills and print a reinstall command
+  uninstall --all              Uninstall all project-local managed skills after confirmation
+  remove <name...>             Remove packs or individual skills (legacy command)
   refresh                      Recreate local skill roots from project config
   refresh --all [--dry-run]    Refresh every project under the current directory
   doctor                       Report skill-install drift
@@ -885,7 +891,22 @@ Commands:
 Project-local commands write to the current working directory.`);
 }
 
-export async function runSkillpacksCli(args) {
+async function confirmUninstallAll(promptText) {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) {
+    console.log('Confirmation requires an interactive terminal.');
+    return false;
+  }
+
+  const prompt = createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const answer = await prompt.question(promptText);
+    return ['y', 'yes'].includes(answer.trim().toLowerCase());
+  } finally {
+    prompt.close();
+  }
+}
+
+export async function runSkillpacksCli(args, options = {}) {
   const [command, ...rest] = args;
 
   if (!command || command === 'help' || command === '--help' || command === '-h') {
@@ -1035,7 +1056,19 @@ export async function runSkillpacksCli(args) {
     throw new Error(`unknown command '${command}'`);
   }
 
-  if (command === 'install' || command === 'remove') {
+  if (command === 'uninstall' && rest.length === 1 && rest[0] === '--all') {
+    return uninstallAllProject({
+      manifest: readManifest(),
+      projectRoot: process.cwd(),
+      confirm: options.confirmUninstallAll || confirmUninstallAll
+    });
+  }
+
+  if (command === 'uninstall' && rest.includes('--all')) {
+    throw new Error('uninstall --all does not accept other arguments');
+  }
+
+  if (command === 'install' || command === 'remove' || command === 'uninstall') {
     const manifest = readManifest();
     const resolved = resolvePackCommandArgs(command, rest, {
       manifest,
@@ -1043,6 +1076,14 @@ export async function runSkillpacksCli(args) {
     });
     if (command === 'install') {
       return installResolved({
+        manifest,
+        projectRoot: process.cwd(),
+        packs: resolved.packs,
+        skills: resolved.skills
+      });
+    }
+    if (command === 'uninstall') {
+      return uninstallResolved({
         manifest,
         projectRoot: process.cwd(),
         packs: resolved.packs,

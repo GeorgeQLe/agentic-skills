@@ -29,6 +29,8 @@ describe('skillpacks package status output', () => {
     assert.equal(shouldPrintPackageStatus(['--version']), false);
     assert.equal(shouldPrintPackageStatus(['-v']), false);
     assert.equal(shouldPrintPackageStatus(['list', '--json']), false);
+    assert.equal(shouldPrintPackageStatus(['uninstall', 'quality-sweep']), false);
+    assert.equal(shouldPrintPackageStatus(['uninstall', '--all']), false);
   });
 
   it('writes package status to stderr when enabled', async () => {

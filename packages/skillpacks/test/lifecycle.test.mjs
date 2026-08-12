@@ -81,7 +81,9 @@ async function runSkillpacksRaw(projectRoot, args, options = {}) {
     if (options.home) {
       process.env.HOME = options.home;
     }
-    const exitCode = await runSkillpacksCli(args);
+    const exitCode = await runSkillpacksCli(args, {
+      confirmUninstallAll: options.confirmUninstallAll
+    });
     return { exitCode, stdout, stderr };
   } finally {
     process.chdir(originalCwd);
@@ -406,6 +408,110 @@ describe('Node lifecycle commands', () => {
     const error = await runSkillpacksExpectError(dir, ['init', '--bad']);
 
     assert.match(error.message, /init does not accept arguments/);
+    assert.equal(existsSync(projectConfigPath(dir)), false);
+  });
+
+  it('uninstalls selected packs and prints an exact reinstall command', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'exec-loop']);
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', 'exec-loop']);
+
+    assert.match(stdout, /Removed \.claude\/skills\/exec/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'exec')), false);
+    assert.deepEqual(readProjectConfig(dir).enabled_packs, []);
+    assert.match(stdout, /Reinstall everything removed with: npx skillpacks install exec-loop/);
+  });
+
+  it('cancels uninstall --all without changing project state', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'exec']);
+    const before = installStateSnapshot(dir, 'exec');
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all'], {
+      confirmUninstallAll: async (prompt) => {
+        assert.match(prompt, /Uninstall all/);
+        return false;
+      }
+    });
+
+    assert.match(stdout, /The following project-local skillpacks state will be removed/);
+    assert.match(stdout, /Uninstall cancelled\. No changes were made\./);
+    assert.deepEqual(installStateSnapshot(dir, 'exec'), before);
+  });
+
+  it('uninstall --all removes only managed state and prints a complete restore command', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['init']);
+    await runSkillpacks(dir, ['install', 'exec-loop']);
+    await runSkillpacks(dir, ['install', 'enterprise-icp']);
+
+    const config = readProjectConfig(dir);
+    config.pinned_versions = { exec: 'v0.0' };
+    config.custom_setting = { preserve: true };
+    writeProjectConfig(dir, config);
+
+    const unmanaged = skillPath(dir, 'claude', 'my-local-skill');
+    mkdirSync(unmanaged, { recursive: true });
+    writeFileSync(join(unmanaged, 'SKILL.md'), 'local\n');
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all'], {
+      confirmUninstallAll: async () => true
+    });
+
+    assert.match(stdout, /Uninstalled \d+ managed skill install\(s\)\./);
+    assert.match(
+      stdout,
+      /Reinstall everything removed with: npx skillpacks init && npx skillpacks install exec-loop enterprise-icp && npx skillpacks pin exec v0\.0/
+    );
+    assert.equal(existsSync(skillPath(dir, 'claude', 'exec')), false);
+    assert.equal(existsSync(skillPath(dir, 'codex', 'enterprise-icp')), false);
+    assert.equal(existsSync(unmanaged), true);
+    assert.equal(existsSync(join(dir, '.agents/skillpacks/docs')), false);
+    assert.deepEqual(readProjectConfig(dir), {
+      project_type: config.project_type,
+      enabled_packs: [],
+      skill_pack_version: 1,
+      custom_setting: { preserve: true }
+    });
+
+    await runSkillpacks(dir, ['init']);
+    await runSkillpacks(dir, ['install', 'exec-loop', 'enterprise-icp']);
+    await runSkillpacks(dir, ['pin', 'exec', 'v0.0']);
+    const restored = readProjectConfig(dir);
+    assert.equal(restored.base_skills, true);
+    assert.deepEqual(restored.enabled_packs, ['exec-loop']);
+    assert.deepEqual(restored.enabled_skills, { 'enterprise-icp': 'business-research' });
+    assert.deepEqual(restored.pinned_versions, { exec: 'v0.0' });
+    assert.deepEqual(restored.custom_setting, { preserve: true });
+  });
+
+  it('uninstall --all refuses mixed arguments and cancels in non-interactive mode', async () => {
+    const dir = makeTempProject();
+    await runSkillpacks(dir, ['install', 'exec']);
+
+    const error = await runSkillpacksExpectError(dir, ['uninstall', '--all', 'exec']);
+    assert.match(error.message, /does not accept other arguments/);
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all']);
+    assert.match(stdout, /Confirmation requires an interactive terminal/);
+    assert.match(stdout, /Uninstall cancelled/);
+    assert.equal(existsSync(skillPath(dir, 'claude', 'exec')), true);
+  });
+
+  it('uninstall --all reports an empty project without prompting or writing config', async () => {
+    const dir = makeTempProject();
+    let prompted = false;
+
+    const { stdout } = await runSkillpacks(dir, ['uninstall', '--all'], {
+      confirmUninstallAll: async () => {
+        prompted = true;
+        return true;
+      }
+    });
+
+    assert.match(stdout, /No project-local skillpacks installs found/);
+    assert.equal(prompted, false);
     assert.equal(existsSync(projectConfigPath(dir)), false);
   });
 

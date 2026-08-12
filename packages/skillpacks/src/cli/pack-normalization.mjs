@@ -620,7 +620,7 @@ function resolveRemoveToken(token, context) {
 }
 
 export function resolvePackCommandArgs(command, args, options) {
-  if (command !== 'install' && command !== 'remove') {
+  if (command !== 'install' && command !== 'remove' && command !== 'uninstall') {
     throw new Error(`unsupported pack command for Node normalization: ${command}`);
   }
   if (!options?.manifest) {
@@ -632,7 +632,7 @@ export function resolvePackCommandArgs(command, args, options) {
     activePacks: new Set(activePackNames(options.manifest)),
     activePackTitles: activePackTitleMap(options.manifest),
     skillPacks: skillInstallSourceMap(options.manifest),
-    enabledSkillPacks: command === 'remove'
+    enabledSkillPacks: command !== 'install'
       ? enabledSkillPackMap(options.projectRoot || process.cwd())
       : new Map(),
     packs: [],

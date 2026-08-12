@@ -2,7 +2,31 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - Skillpacks Uninstall Commands
+
+### Goal
+
+Add a first-class `npx skillpacks uninstall` command for selected packs or skills and a confirmed `uninstall --all` path that removes every project-local skillpacks-managed install while preserving unmanaged content and printing an exact copy-paste reinstall command.
+
+### Plan
+
+- [x] Define the uninstall target, confirmation, cancellation, ownership, config, managed-doc, and reinstall-output contracts.
+- [x] Reuse existing pack/skill resolution for targeted uninstall while keeping `remove` backward compatible.
+- [x] Add an all-install snapshot and atomic project-lock mutation that removes managed Claude/Codex skill roots, managed convention docs, and skillpacks install intent from project config only after confirmation.
+- [x] Add CLI injection seams for deterministic prompt tests and non-interactive refusal behavior.
+- [x] Update help, public command documentation, package compatibility ownership, and changelog notes.
+- [x] Run focused lifecycle/compatibility tests, the full Node package suite, package build checks, task-doc audit, and diff hygiene.
+- [ ] Commit and push the issue-backed branch and publish one ready pull request for issue `#17`.
+
+### Acceptance Criteria
+
+- [x] `npx skillpacks uninstall <name...>` removes requested packs or skills and prints the exact command that reinstalls those targets.
+- [x] `npx skillpacks uninstall --all` shows the managed scope, requires explicit confirmation, cancels without mutation on any other answer, and never removes unmanaged skill directories.
+- [x] A confirmed all uninstall removes managed skill roots and managed convention docs, clears base/pack/individual/pin install intent without discarding unrelated project configuration, and prints one command that restores the prior selection.
+- [x] Empty-state behavior is safe and useful, and non-interactive runs do not silently approve deletion.
+- [x] Existing `remove` behavior and package compatibility remain intact.
+
+## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
 

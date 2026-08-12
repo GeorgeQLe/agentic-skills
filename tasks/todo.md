@@ -1,6 +1,45 @@
 # Current Task
 
-## Current Implementation - Review And Conditionally Merge PRs #12 And #14
+## Current Implementation - Skillpacks Uninstall Commands
+
+### Goal
+
+Implement issue `#17`: add targeted `npx skillpacks uninstall`, add confirmed `npx skillpacks uninstall --all`, preserve unmanaged project content, and always end a successful uninstall with a copy-paste command that restores every removed selection.
+
+### Current Phase
+
+- [x] Inspect lifecycle ownership, project config, CLI dispatch, existing remove behavior, tests, and public docs.
+- [x] Create issue `#17` and branch `feat/17-skillpacks-uninstall` from current `origin/master`.
+- [x] Implement targeted uninstall as a first-class command with exact reinstall output.
+- [x] Implement all-install snapshot, confirmation/cancellation, managed cleanup, config preservation, and one-command restore output.
+- [x] Add regression coverage and update help, compatibility docs, public docs, and changelog.
+- [x] Run focused and full verification, review the diff, and record results.
+- [ ] Commit, push, and open a ready pull request without merging.
+
+### Verification
+
+- [x] Focused uninstall, lifecycle, normalization, compatibility, and update-output tests (118/118)
+- [x] `npm --workspace packages/skillpacks run test:node` (222/222)
+- [x] `SKILLPACKS_PACKAGE_LANE=canary npm --workspace packages/skillpacks run build:check`
+- [x] `node scripts/audit-task-docs.mjs`
+- [x] `git diff --check`
+- [x] Real PTY smoke: install `exec`, run `uninstall --all`, answer `y`, verify the restore command is the final output
+
+### Review
+
+The CLI now has a first-class uninstall route instead of requiring users to infer that `remove` is the inverse of install. Targeted uninstalls reuse the established project-aware resolver and finish with an exact install command.
+
+The all-uninstall path inventories ownership-verified Claude/Codex roots, managed convention docs, and install intent while holding the project lifecycle lock. It displays that scope before prompting, accepts only `y`/`yes`, cancels safely in non-interactive shells, preserves unmanaged roots and unrelated config, and snapshots base, pack, individual-skill, and pin state into one executable restore line. The regression test executes that restore sequence and verifies the original selection is reconstructed.
+
+### Next Work
+
+Publish the verified issue-backed branch for review.
+
+### Recommended Next Command
+
+`$ship`
+
+## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
 
@@ -14,8 +53,8 @@ Finish review and cleanup for research PR [#12](https://github.com/GeorgeQLe/age
 - [x] Present PR `#12`'s exact merge details for immediate confirmation; after confirmation, merge it with merge commit `3353af1c6` and preserve its branch.
 - [x] Refresh PR `#14` from the resulting `master`, update its issue-closing and stale-open-PR wording, and complete its task records.
 - [x] Commit and push all intended PR `#14` changes; rerun exact-head expert review and all relevant verification.
-- [ ] Present PR `#14`'s exact merge details for immediate confirmation; after confirmation, merge it with a merge commit and preserve its branch.
-- [ ] Verify the final PR, issue, `master`, branch-preservation, deployment, and unrelated-file state.
+- Archived open status: PR `#14` still needed an immediate exact-details merge confirmation.
+- Archived open status: final PR, issue, `master`, branch-preservation, deployment, and unrelated-file verification remained pending.
 
 ### Verification
 
