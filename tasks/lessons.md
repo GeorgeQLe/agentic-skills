@@ -1,5 +1,10 @@
 # Lessons
 
+## 2026-08-13 - Pull-request body updates need semantic verification
+
+- A pull-request body written with literal `\\n` sequences looked structurally correct in escaped JSON but rendered as one malformed line and prevented GitHub from recognizing its `Closes #N` issue link.
+- Rule: write multiline GitHub issue and pull-request bodies from a real newline-preserving body file, then immediately re-fetch the body and verify `closingIssuesReferences` rather than treating a successful edit command as proof of correct rendering or issue linkage.
+
 ## 2026-08-09 - AFPS 2.0 is a clean-break operating model, not a lighter approval pipeline
 
 - The user rejected preserving approval-first orchestration with fewer pages or shorter gates; the target is a ground-up loop of intent inference, decision-revealing slices, evidence evaluation, and only material checkpoints.
