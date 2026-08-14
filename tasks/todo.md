@@ -45,11 +45,19 @@ Define the smallest coherent Stable 1.0 distribution cleanup after the merged AF
 
 ### Verification
 
-Pending Phase 1 execution.
+Planning intake verification:
+
+- [x] `node scripts/audit-task-docs.mjs` passed with zero failures and zero warnings.
+- [x] `git diff --check` and staged diff hygiene passed for the planning boundary.
+- [x] Issue `#25`, non-primary branch, pushed commits, and ready PR `#26` were verified.
+
+Phase 1 executable verification remains pending execution.
 
 ### Review
 
 Roadmap intake confirmed that PR `#16` merged the AFPS foundation while explicitly deferring Stable 1.0 retirement and leaving `ship-end` plus `sync` unchanged. Current package logic defaults to the stable lane and admits canary-only skills/conventions only in canary builds. The audit therefore begins with distribution evidence and classification, not deletion.
+
+Session closeout preserved the audit-first scope, recorded the issue/branch/PR boundary, and left all implementation checkboxes open for `$exec`.
 
 ### Next Work
 
