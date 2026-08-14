@@ -2,6 +2,11 @@ import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 
 export const SKILL_CONVENTIONS = {
+  "afps-2.0": {
+    canonicalDoc: "docs/afps-2.0-convention.md",
+    packageAsset: "assets/skillpacks-docs/afps-2.0-convention.md",
+    resolver: "managed-doc",
+  },
   "alignment-page": {
     canonicalDoc: "docs/alignment-page-convention.md",
     legacyBundleFile: "ALIGNMENT-PAGE.md",

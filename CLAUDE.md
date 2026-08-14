@@ -4,7 +4,7 @@
 
 This overrides every instruction below (and any routing from `/ship`, Missing Skill Fallback, Cross-Pack Routing, or a recommended-next-command handoff) that would tell you to run or suggest an `npx skillpacks install`/`init` command as a prerequisite for an unavailable or not-enabled pack. In this repo, treat the skill as present in-tree and run it from its source SKILL.md instead of recommending an install. The only skillpacks-related command used here is `scripts/pack.sh refresh`, which republishes the local runtime skill copies from source — it is not an install.
 
-<!-- provision-agentic-config v0.16 -->
+<!-- provision-agentic-config v0.17 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -31,6 +31,12 @@ This overrides every instruction below (and any routing from `/ship`, Missing Sk
 - When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
 - For remove, replace, or reweight requests, update the artifact toward the requested final state.
 - Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
+
+### AFPS 2.0
+- Ordinary product, research, design, specification, implementation, and task work follows the managed AFPS 2.0 convention: source checkouts read `docs/afps-2.0-convention.md`; packaged consumers read `.agents/skillpacks/docs/afps-2.0-convention.md`.
+- Infer intent, produce the smallest decision-revealing slice, evaluate evidence, then continue, adapt, checkpoint, or permission-stop.
+- Proceed through reversible work without implicit alignment/interrogation pages or approval-only sidecars. Use a chat-first checkpoint only for a material decision and ask at most three decisions.
+- A checkpoint never grants authority for destructive, irreversible, public, paid, legal, privacy, security, account-authenticated, or otherwise externally consequential action; those remain explicit permission stops.
 
 ### 4. Verification Before Done
 - Never mark a task complete without proving it works

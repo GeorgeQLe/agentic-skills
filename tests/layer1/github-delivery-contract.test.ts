@@ -64,8 +64,8 @@ describe("GitHub delivery safety subskills", () => {
     const audit = read("scripts/audit-github-delivery-contract.mjs");
     expect(audit).not.toContain("legacyMigrationLimits");
     expect(audit).toContain("repository\\s+");
-    expect(read("AGENTS.md")).toContain("<!-- provision-agentic-config v0.16 -->");
-    expect(read("CLAUDE.md")).toContain("<!-- provision-agentic-config v0.16 -->");
+    expect(read("AGENTS.md")).toContain("<!-- provision-agentic-config v0.17 -->");
+    expect(read("CLAUDE.md")).toContain("<!-- provision-agentic-config v0.17 -->");
     expect(read("AGENTS.md")).not.toContain("explicit exception to direct-to-primary work");
     expect(read("CLAUDE.md")).not.toContain("explicit exception to direct-to-primary work");
   });

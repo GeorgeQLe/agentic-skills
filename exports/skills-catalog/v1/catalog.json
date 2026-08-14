@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "c28e448a162dc14e7de6bc2c5e6c79480155a4c9",
-  "generated_at": "2026-07-28T02:53:32.109Z",
-  "source_fingerprint": "c326bd62eb5ab268a38e5c5756436be99a66a9c0cf6e8742592b6ac2d8b8aa12",
+  "source_commit": "9f3469a77ede944b0792d4d23a47ee39912b70bc",
+  "generated_at": "2026-08-11T17:07:07.979Z",
+  "source_fingerprint": "58a3f0137c4b9218f924d37913626e515702f51522e7095c1b3b0b0cb81c1094",
   "source_count": 459,
   "skill_count": 415,
   "pack_count": 40,
@@ -1058,8 +1058,9 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.15",
+      "version": "v0.16",
       "requiredConventions": [
+        "afps-2.0",
         "alignment-page"
       ],
       "argumentHint": null,
@@ -1603,8 +1604,9 @@
       "type": "ops",
       "contextIntake": null,
       "visualTier": null,
-      "version": "v0.16",
+      "version": "v0.17",
       "requiredConventions": [
+        "afps-2.0",
         "alignment-page"
       ],
       "argumentHint": null,
@@ -10712,9 +10714,9 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]",
       "platform": "claude",
@@ -10855,9 +10857,9 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<channel slug or handle> [--peer <channel>...] [--count N]",
       "platform": "claude",
@@ -10938,13 +10940,13 @@
       "id": "pack-youtube-ops-claude-youtube-video-prelaunch-audit",
       "name": "youtube-video-prelaunch-audit",
       "title": "Youtube Video Prelaunch Audit",
-      "description": "Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, generation of three upload-ready YouTube Test and Compare title/thumbnail pairs from approved assets, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy",
+      "description": "Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, generation of three upload-ready YouTube Test and Compare title/thumbnail pairs, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy",
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--thumbnail-asset <path-or-url>]... [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]",
       "platform": "claude",
@@ -11168,9 +11170,9 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]",
       "platform": "codex",
@@ -11311,9 +11313,9 @@
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.6",
+      "version": "v0.7",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<channel slug or handle> [--peer <channel>...] [--count N]",
       "platform": "codex",
@@ -11394,13 +11396,13 @@
       "id": "pack-youtube-ops-codex-youtube-video-prelaunch-audit",
       "name": "youtube-video-prelaunch-audit",
       "title": "Youtube Video Prelaunch Audit",
-      "description": "Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, generation of three upload-ready YouTube Test and Compare title/thumbnail pairs from approved assets, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy",
+      "description": "Audit unlisted or pre-release YouTube videos before public launch for edit readiness, polish, generation of three upload-ready YouTube Test and Compare title/thumbnail pairs, description, chapters, publish settings, launch timing, URL record capture, and social cross-sharing strategy",
       "type": "research",
       "contextIntake": "artifact_only",
       "visualTier": null,
-      "version": "v0.5",
+      "version": "v0.6",
       "requiredConventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "argumentHint": "<unlisted video URL or ID> [--script <path>] [--thumbnail <path-or-url>] [--thumbnail-asset <path-or-url>]... [--launch-date YYYY-MM-DD] [--social <platforms>] [--compare-channel <slug>]",
       "platform": "codex",

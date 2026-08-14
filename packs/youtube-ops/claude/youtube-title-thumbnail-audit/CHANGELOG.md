@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7 - 2026-08-11
+
+- Migrated packaging analysis and canonical report writes to AFPS 2.0 without implicit scope/final-artifact pages or approval-only working packets.
+- Made the launch play consume the real generated-pair comparison and checkpoint owned by `youtube-video-prelaunch-audit`, preventing a duplicate taste decision.
+- Preserved permission stops for Studio uploads, metadata changes, publication, scheduling, and authenticated account actions.
+
 ## v0.6 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

@@ -1,55 +1,53 @@
 # Current Task
 
-## Current Implementation - Target YouTube Skills For AFPS 2.0
+## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
 ### Goal
 
-Turn the user's repeated rubber-stamp approvals into an evidence-backed YouTube migration target for AFPS 2.0, without weakening confirmations for publication, account access, destructive actions, payments, privacy, or other real permission boundaries.
+Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio from seven routine approvals to one evidence-backed material decision checkpoint while preserving explicit permission stops for YouTube Studio, publication, scheduling, and authenticated account changes.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Reason: the canonical convention, mirrored skill contracts, generated runtime/catalog/package artifacts, and task/shipping records share integration surfaces.
 
 ### Current Phase
 
-- [x] Create issue [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15), branch `docs/15-youtube-afps2-target`, and the exact `brainstorm --quick` prompt record.
-- [x] Inventory the `youtube-ops` router and all 15 standalone skills without creating an interrogation or alignment page.
-- [x] Verify that every standalone skill currently requires a scope-approval page and an artifact-approval page.
-- [x] Quantify the built-in plays: channel health has at least 10 routine approval stops; pre-production has 6-8; competitive intel has 4-6; video launch has 7 because prelaunch has three stops.
-- [x] Select the video-launch trio as the first YouTube migration slice: `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
-- [x] Record the prioritized quick-brainstorm ideas and autonomy lesson.
-- [x] Verify, commit, push, and open ready PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) without merging it.
+- [ ] Add `docs/afps-2.0-convention.md`, register it as a managed convention, package it, and add the concise global pointer to both provisioned agent contracts.
+- [ ] Add a deterministic launch-play canary fixture and checker covering legacy/current stop count, first-slice shape, review-only artifacts, checkpoint materiality/size/packet keys, Claude/Codex parity, and publication safety.
+- [ ] Archive the active Claude/Codex launch-trio skills before editing, then bump prelaunch to `v0.6` and title/thumbnail plus description to `v0.7` with matching changelogs.
+- [ ] Replace staged scope/artifact approval workflows with AFPS 2.0 slices, reversible canonical writes, one shared packaging checkpoint, explicit capability/input blockers, and explicit external-action permission stops.
+- [ ] Refresh runtime skill copies and regenerate the public catalog/package manifest from the staged source boundary.
+- [ ] Run focused AFPS/YouTube tests, mirror/archive/convention audits, catalog validation, package build checks, task audit, secret/diff hygiene, and an adversarial review.
+- [ ] Record review evidence, ship manifest, and history; commit/push the exact boundary and update ready PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) without merging it.
 
-### Target Contract
+### Acceptance Criteria
 
-- The foundational AFPS 2.0 convention and comparison harness land before active skill migration.
-- Reversible research, metadata collection, report drafting, description drafting, and local asset generation proceed without scope or final-artifact approval pages.
-- The launch trio converges at one chat-first decision checkpoint only when the three generated title/thumbnail candidates need taste or strategy judgment; it exposes a recommendation and at most three decisions.
-- YouTube Studio upload, public visibility, scheduling, account-authenticated changes, and any other external action remain explicit permission stops.
-- Missing target, inaccessible required assets, or unavailable authenticated evidence are capability/input blockers, not approval rituals.
-- The canary compares the current seven-stop launch play with the AFPS 2.0 path using question count, time/turns to first useful slice, page artifacts, checkpoint incidence, rework, packet shape, and publication-safety assertions.
+- [ ] The foundational convention is canonical, globally discoverable, packaged, install-refreshable, and identical for Claude/Codex semantics.
+- [ ] Reversible research, metadata collection, report/description drafting, canonical writes, and local asset generation proceed without scope or final-artifact approval pages.
+- [ ] The launch trio converges at one chat-first checkpoint only when three real title/thumbnail candidates need taste or strategy judgment; it includes evidence, recommendation/confidence, at most three decisions, and the next safe move.
+- [ ] YouTube Studio upload, public visibility, scheduling, account-authenticated changes, and any other external action remain explicit permission stops.
+- [ ] Missing target, inaccessible required assets, or unavailable authenticated evidence are capability/input blockers rather than approval rituals.
+- [ ] The deterministic canary distinguishes the archived seven-stop baseline from the migrated zero-routine-stop/one-material-checkpoint path and fails unsafe or approval-flavored variants.
+- [ ] All behavior-changing skills have correct archives, versions, changelogs, mirrored semantics, runtime copies, catalogs, manifests, and passing executable verification.
 
 ### Verification
 
-- [x] `node scripts/audit-task-docs.mjs`
-- [x] Exact prompt-history assertion
-- [x] YouTube inventory and stop-count assertions
-- [x] Planning-only scope assertion
-- [x] `git diff --check`
+- [ ] Focused AFPS 2.0 foundation and YouTube launch-canary tests
+- [ ] Mirror, archive, convention-bundle, catalog, package, task, secret, and diff checks
+- [ ] Adversarial review with all findings fixed or explicitly dispositioned
 
 ### Review
 
-The review-page burden is systemic rather than anecdotal: 15 of 15 standalone YouTube skills carry the same staged alignment lifecycle. The router itself creates no page, but its four multi-skill plays multiply those per-skill stops. The launch play is the best first target because it is bounded, frequent, close to shipping, and exercises research, visual taste, canonical writes, and a real external publication boundary in one workflow.
-
-The intended reduction is seven routine approvals to one material decision checkpoint, with zero alignment/interrogation pages. This planning slice changes no active behavior.
-
-Verification reproduced 15 standalone skills, 15 scope-approval contracts, 15 artifact-approval contracts, seven launch-play stops, and a minimum of ten channel-health stops. The task audit reports zero failures and zero warnings; prompt readback, planning-only path scope, and diff hygiene pass.
-
-Planning commit `5abb06743` is pushed on `docs/15-youtube-afps2-target`, and ready PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) links issue `#15`. No active skill behavior or review page changed, and the PR remains unmerged.
+Pending implementation and verification.
 
 ### Next Work
 
-Implement the foundational AFPS 2.0 convention and harness, then canary the YouTube launch trio as its first creator-workflow consumer.
+Implement the canonical convention and deterministic harness before editing the launch-trio skill contracts.
 
 ### Recommended Next Command
 
-`$skill-creator AFPS 2.0 foundational convention and YouTube launch-play canary`
+`$exec`
 
 ## Historical Implementation - Dangling-Symlink Refresh and Fleet Recovery
 

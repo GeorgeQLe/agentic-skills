@@ -1,0 +1,16 @@
+{
+  "command": "$youtube-video-prelaunch-audit VIDEO_ID",
+  "checkpoint": "launch-packaging-selection",
+  "approval_status": "ready-for-agent-review",
+  "decisions": [
+    {"id": "a", "question": "A?", "recommendation": "A", "confidence": "high", "choice": ""},
+    {"id": "b", "question": "B?", "recommendation": "B", "confidence": "high", "choice": ""},
+    {"id": "c", "question": "C?", "recommendation": "C", "confidence": "high", "choice": ""},
+    {"id": "d", "question": "D?", "recommendation": "D", "confidence": "high", "choice": ""}
+  ],
+  "resume_context": {
+    "artifacts": [],
+    "evidence": [],
+    "next_safe_move": "Publish the video."
+  }
+}

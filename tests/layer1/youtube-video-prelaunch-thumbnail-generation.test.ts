@@ -16,7 +16,7 @@ function normalizePlatformSyntax(content: string): string {
   return content.replaceAll(/\/(youtube-[a-z-]+)/g, "$$$1");
 }
 
-describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
+describe("youtube-video-prelaunch-audit AFPS 2.0 generation contract", () => {
   it("keeps normalized Claude/Codex mirror parity and identical changelogs", () => {
     expect(normalizePlatformSyntax(read(claudePath))).toBe(
       normalizePlatformSyntax(read(codexPath)),
@@ -30,21 +30,14 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
     describe(path, () => {
       const content = read(path);
 
-      it("orders concept approval, Stage 2.5 generation, and Stage 3 finalization", () => {
-        const stage2 = content.indexOf(
-          "**Stage 2 - Research, concepts, and asset-selection review.**",
-        );
-        const stage25 = content.indexOf(
-          "**Stage 2.5 - Generate Test and Compare assets.**",
-        );
-        const stage3 = content.indexOf("**Stage 3 - Finalize approved artifacts.**");
-
-        expect(stage2).toBeGreaterThan(-1);
-        expect(stage25).toBeGreaterThan(stage2);
-        expect(stage3).toBeGreaterThan(stage25);
-        expect(content).toContain(
-          "Enter Stage 2.5 only when final compiled YAML explicitly approves all three titles, concepts, and asset allocations",
-        );
+      it("generates the decision-revealing slice before one material checkpoint", () => {
+        expect(content).toContain("required_conventions: [afps-2.0]");
+        expect(content).toContain("`launch-packaging-selection`");
+        expect(content).toContain("only after all three title/thumbnail pairs exist and pass image/manifest validation");
+        expect(content).toContain("at most three material decisions");
+        expect(content).not.toContain("## Report-First Approval Gate");
+        expect(content).not.toContain("## Staged Research Workflow");
+        expect(content).not.toContain("## Alignment Page");
       });
 
       it("accepts repeatable pointed assets and accounts for every candidate", () => {
@@ -73,7 +66,7 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
           "test-and-compare/<generation-id>/` directory",
         );
         expect(content).toContain(
-          "Write `variant-a`, `variant-b`, and `variant-c` image files plus `manifest.json`",
+          "write `variant-a`, `variant-b`, and `variant-c` image files plus `manifest.json`",
         );
         expect(content).toContain(
           "validate that exactly three variant image files exist, each decodes as 1280x720",
@@ -96,21 +89,21 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
         );
         expect(content).toContain("`byte_size <= 50_000_000`");
         expect(content).toContain(
-          "write the detected format and byte size to the manifest before changing the status to complete or updating the review page",
+          "write the detected format and byte size to the manifest before changing the status to complete or presenting the checkpoint",
         );
         expect(content).toContain(
           "Do not substitute the separate mobile/API limit, infer format from an extension",
         );
       });
 
-      it("embeds generated comparisons in review HTML", () => {
+      it("exposes generated comparisons directly from canonical artifacts", () => {
         expect(content).toContain(
-          "embed the three generated images beside their paired titles",
+          "Candidate comparison: expose each actual image through a resolvable repository-relative path",
         );
-        expect(content).toContain("use actual `<img>` elements");
-        expect(content).toContain("open link, and download link");
+        expect(content).toContain("meaningful alternative text");
+        expect(content).toContain("full paired title, variant ID, source assets, hypothesis");
         expect(content).toContain(
-          "Treat broken images, missing links, missing fields, or a concept-only card as incomplete",
+          "Treat broken images, missing fields, or a concept-only entry as incomplete",
         );
       });
 
@@ -124,18 +117,15 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
         );
       });
 
-      it("requires a distinct post-generation approval before Stage 3", () => {
+      it("keeps checkpoint revision and publication permission semantics distinct", () => {
         expect(content).toContain(
-          "Keep the page in `review` and stop for a new compiled approval",
+          "A response may revise the canonical report or trigger a new immutable generation",
         );
         expect(content).toContain(
-          "Enter only after the post-generation compiled YAML approves the three generated images and paired titles",
+          "The checkpoint does not authorize YouTube Studio upload, public visibility, scheduling, account-authenticated changes",
         );
         expect(content).toContain(
-          "Do not enter Stage 3 on concept approval alone",
-        );
-        expect(content).toContain(
-          "thumbnail or title revisions return to Stage 2.5 and create a new generation",
+          "Do not ask the material packaging question until the actual three image/title pairs pass validation",
         );
       });
 
@@ -143,7 +133,7 @@ describe("youtube-video-prelaunch-audit Stage 2.5 contract", () => {
         expect(content).toContain(
           "the three Test and Compare title/thumbnail pairs with their real image paths",
         );
-        expect(content).toContain("approved generation manifest path");
+        expect(content).toContain("generation manifest path");
         expect(content).toContain(
           "Do not claim YouTube Studio or API upload/configuration automation",
         );

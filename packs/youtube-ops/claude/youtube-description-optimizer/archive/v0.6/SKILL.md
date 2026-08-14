@@ -2,8 +2,8 @@
 name: youtube-description-optimizer
 description: Audit, draft, or template YouTube descriptions and metadata for promise-match, search clarity, CTA hierarchy, links, chapters, hashtags, and upload readiness
 type: research
-version: v0.7
-required_conventions: [afps-2.0]
+version: v0.6
+required_conventions: [alignment-page]
 argument-hint: "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]"
 context_intake: artifact_only
 ---
@@ -14,15 +14,27 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # YouTube Description Optimizer
 
-Invoke as `$youtube-description-optimizer`.
+Invoke as `/youtube-description-optimizer`.
 
-## AFPS 2.0 Description Slice
+## Report-First Approval Gate
 
-Follow `docs/afps-2.0-convention.md` in source checkouts or `.agents/skillpacks/docs/afps-2.0-convention.md` in installed projects. Resolve the target and mode, reuse available launch evidence, draft or audit the description, and write the reversible canonical artifact without a scope gate, working packet, review page, or final-artifact gate.
+Default to scope-first approval: before synthesized research, inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions in a `review` alignment page plus a concise conversation summary.
 
-Make the promise-match hypothesis, upload-ready text, evidence-based evaluation, recommendation, confidence, and next safe move inspectable in the artifact and handoff. Consume any packaging choice already recorded by `$youtube-video-prelaunch-audit`; description work does not add another launch checkpoint. Missing links, disclosure facts, transcript evidence, or a resolvable target are explicit input gaps, not reasons to ask for routine approval.
+Do not perform synthesized research, rank candidates, make recommendations, or write working packets or canonical deliverables until final compiled YAML approves the research scope. Minimal pre-approval discovery may identify available files, source categories, and open questions; label it as scope evidence, not findings.
 
-Changing YouTube Studio metadata, uploading text, selecting public visibility, scheduling, or making any account-authenticated change is a permission stop. This skill produces local upload-ready content only unless the user separately authorizes an enabled external-action path.
+After approved research-scope YAML, perform the research and write only the non-canonical working packet defined in the staged workflow. Then update the `review` alignment page with findings and stop again for feedback-only YAML or final compiled YAML artifact approval before creating or updating canonical research, spec, or task files.
+
+Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
+## Staged Research Workflow
+
+Use this staged workflow for synthesized research or report outputs that would create or update canonical research, spec, or task files.
+
+1. **Stage 1 - Scope discovery and approval.** Inspect only enough repository, user, and source context to propose research scope, source plan, assumptions, output paths, and approval questions. Build the `review` HTML alignment page before synthesized research. The page must render the proposed scope, available source categories, known context, assumptions/confidence, proposed working-packet and canonical output paths, and research-scope approval gates. Stop for final compiled YAML approval of the research scope. Do not perform synthesized research, rank candidates, make recommendations, or write working packets, canonical research, spec, or task files in Stage 1.
+2. **Stage 2 - Research and artifact review.** Only after approved research-scope YAML with no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback, perform the synthesized research, run required source/code checks, and write only a non-canonical working packet: flat mode uses `research/_working/preliminary-<skill>-research.md`; product-path mode uses `research/{slug}/_working/preliminary-<skill>-research.md`. Replace `<skill>` with this skill's `name` value. Raw evidence or search logs may remain as supporting evidence where this skill already requires them, but synthesized deliverables stay in the working packet. Update the `review` HTML alignment page so it renders the complete working-packet substance as structured HTML review UI: purpose-built sections, tables, matrices, gates, cards, and tier-appropriate charts or diagrams that preserve every packet section, finding, caveat, and decision detail without summary loss. Raw Markdown packet text may appear only as a supplemental source view after the rendered review UI; do not make a `Full Preliminary Packet` or `Full Working Packet` raw Markdown dump, giant `<pre><code>` block, link-only view, or source-only view the primary review surface. Include the evidence matrix, assumptions/confidence register, source coverage gaps, proposed canonical file changes, and artifact approval gates. Stop for either feedback-only YAML or final compiled YAML. Feedback-only YAML revises the working packet and page, then remains in Stage 2.
+3. **Stage 3 - Finalize approved artifacts.** Consume final compiled YAML for artifact approval only when it has no unresolved `needs-clarification`, unresolved `down` feedback, or other unresolved negative feedback. Apply approved edits first, archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`, remove the active working packet, write the approved canonical artifacts to the unchanged output paths below, and convert the alignment page to `confirmed` with the approval record preserved.
+
+Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
 ## Evidence And Feedback Handling
 
@@ -132,14 +144,15 @@ Use this structure:
 - Keep description changes practical for the creator's apparent production capacity.
 - Archive existing canonical artifacts before replacing them under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 
-## Artifact Handoff
+## Approved Artifact Handoff
 
-After a synthesized write or any direct artifact mutation:
+After an approved synthesized write, explicit write/update mode, or any direct artifact mutation:
 
 - List every created or updated synthesized artifact path in the final response.
 - State the verification performed, such as readback, schema/check command, or why no executable verification applies for a Markdown-only strategy artifact.
 - Check and report the relevant git status for intended artifacts when the project is a git repository. If intended artifacts are modified or untracked, make the next action shipping, committing, or an explicit dirty-artifact handoff before recommending downstream strategy work.
-- Do not imply the research workflow is complete while intended artifacts remain untracked or uncommitted unless the user explicitly asked not to ship.
+- Do not imply the research workflow is complete while approved artifacts remain untracked or uncommitted unless the user explicitly asked not to ship.
+- If stopping for approval before writing, the approval request remains the next action; do not include downstream routing.
 
 ## Intent-Aware Routing
 
@@ -153,6 +166,10 @@ Before applying the default `## Next-Skill Routing` sequence, classify the user'
 - Dirty intended artifacts: route to shipping/commit/handoff first, not another creator strategy skill.
 
 Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
+
+## Alignment Page
+
+Follow the shared alignment-page convention via the packaged convention resolver; output path is `alignment/youtube-description-optimizer-{topic}.html`.
 
 ## Default Shipping Contract
 

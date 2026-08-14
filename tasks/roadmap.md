@@ -2,34 +2,35 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Target YouTube Skills For AFPS 2.0
+## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
 ### Goal
 
-Use the user's repeated rubber-stamp behavior as workflow evidence, inventory the YouTube review-page burden, and select the first YouTube AFPS 2.0 migration slice that proceeds through reversible research and drafting while preserving real permission boundaries.
+Implement the shared AFPS 2.0 operating contract and deterministic comparison harness, then migrate the first bounded creator-workflow slice from seven routine approval stops to one material decision checkpoint without weakening publication or account-action permission boundaries.
 
 ### Delivery
 
 - GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
 - Branch: `docs/15-youtube-afps2-target`
 - Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (ready; not merged)
-- Scope: planning only; no active skill, convention, generator, runtime mirror, alignment page, or interrogation page changes
+- Scope: foundational convention, managed packaging/provisioning, deterministic launch-play harness, and the mirrored launch-trio skill contracts
 
 ### Plan
 
-- [x] Invoke `brainstorm --quick` so this planning pass creates no interrogation or alignment page, and capture the exact visible prompt.
-- [x] Inventory the `youtube-ops` router, all 15 standalone skills, their staged approval stops, current tests, and the AFPS 2.0 dependency.
-- [x] Quantify the play-level burden and select the highest-leverage bounded migration target.
-- [x] Record prioritized ideas, the user's autonomy preference, the implementation handoff, and review evidence.
-- [x] Run task, prompt, scope, and diff verification; commit, push, and open a ready planning PR without merging it.
+- [ ] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
+- [ ] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
+- [ ] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
+- [ ] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
+- [ ] Perform adversarial review, record the exact ship manifest and history, commit/push the implementation, and update ready PR #16 without merging it.
 
 ### Acceptance Criteria
 
-- [x] The inventory distinguishes routine scope/artifact approvals from account access, publication, destructive, paid, privacy, and other genuine permission boundaries.
-- [x] The recommended first slice names exact skills, current stop count, intended post-migration checkpoint count, and deterministic acceptance evidence.
-- [x] The plan sequences the foundational AFPS 2.0 convention/harness before active YouTube skill migration.
-- [x] This planning PR creates no review page and changes no active skill behavior.
-- [x] All tracked planning artifacts are verified, committed, pushed, and published in one ready PR linked to issue `#15`.
+- [ ] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
+- [ ] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
+- [ ] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
+- [ ] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
+- [ ] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
+- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable.
 
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 

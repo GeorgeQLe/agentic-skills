@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7 - 2026-08-11
+
+- Migrated description audit/drafting and canonical writes to AFPS 2.0 without implicit scope/final-artifact pages or approval-only working packets.
+- Reused the prelaunch packaging decision instead of adding another launch checkpoint, while exposing promise-match evidence, recommendation, confidence, and the next safe move.
+- Preserved permission stops for Studio metadata changes, upload, publication, scheduling, and authenticated account actions.
+
 ## v0.6 - 2026-06-12
 
 - Clarified staged research review pages must render complete working-packet substance as structured HTML UI, with raw Markdown packet text allowed only as a supplemental source view.

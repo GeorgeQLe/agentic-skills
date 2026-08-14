@@ -1,5 +1,10 @@
 # provision-agentic-config Changelog
 
+## v0.17 - 2026-08-11
+
+- Added the managed AFPS 2.0 convention pointer and concise slice/checkpoint/permission-stop contract to both provisioned agent blocks.
+- Bumped the provision marker to `v0.17` so sync tooling can detect stale project instructions.
+
 ## v0.16 - 2026-07-12
 
 - Replaced direct-primary mutation shipping in both provisioned blocks with the canonical issue-backed non-primary branch and ready pull-request lifecycle.
