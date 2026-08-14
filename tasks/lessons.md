@@ -1,5 +1,10 @@
 # Lessons
 
+## 2026-08-13 - Pull-request body updates need semantic verification
+
+- A pull-request body written with literal `\\n` sequences looked structurally correct in escaped JSON but rendered as one malformed line and prevented GitHub from recognizing its `Closes #N` issue link.
+- Rule: write multiline GitHub issue and pull-request bodies from a real newline-preserving body file, then immediately re-fetch the body and verify `closingIssuesReferences` rather than treating a successful edit command as proof of correct rendering or issue linkage.
+
 ## 2026-08-10 - Repeated rubber stamps are evidence that routine gates have no decision value
 
 - The user reports approving YouTube review pages almost automatically every time. That is not healthy confirmation evidence; it means the workflow is consuming attention without surfacing a material choice.
