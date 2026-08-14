@@ -12,7 +12,7 @@ Prepare the first stable 1.0 distribution-cleanup slice after the merged AFPS 2.
 
 - GitHub issue: [#25](https://github.com/GeorgeQLe/agentic-skills/issues/25)
 - Branch: `chore/25-stable-1.0-distribution-cleanup`
-- Pull request: pending
+- Pull request: [#26](https://github.com/GeorgeQLe/agentic-skills/pull/26) (ready)
 - Predecessor: AFPS foundation PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16), merged as `f356ce200`
 - Release boundary: no npm publication, dist-tag mutation, release tag, deployment, or destructive consumer cleanup in this phase
 

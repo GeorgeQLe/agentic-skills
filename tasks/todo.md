@@ -3,7 +3,7 @@
 ## Priority Task Queue
 
 - [x] AFPS predecessor state is reconciled: PR `#16` merged as `f356ce200` on 2026-08-13, issue `#15` is closed, and `origin/master` contains the reviewed head.
-- [x] Stable 1.0 cleanup has an issue-backed non-primary branch: issue `#25` and `chore/25-stable-1.0-distribution-cleanup`.
+- [x] Stable 1.0 cleanup has an issue-backed delivery lane: issue `#25`, branch `chore/25-stable-1.0-distribution-cleanup`, and ready PR `#26`.
 - [x] Task pipeline is healthy; Phase 1 is planned and ready for `$exec`.
 
 ## Current Implementation - Stable 1.0 Distribution Cleanup
