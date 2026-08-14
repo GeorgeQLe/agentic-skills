@@ -1,63 +1,60 @@
 # Current Task
 
-## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
+## Priority Task Queue
+
+- [x] AFPS predecessor state is reconciled: PR `#16` merged as `f356ce200` on 2026-08-13, issue `#15` is closed, and `origin/master` contains the reviewed head.
+- [x] Stable 1.0 cleanup has an issue-backed non-primary branch: issue `#25` and `chore/25-stable-1.0-distribution-cleanup`.
+- [x] Task pipeline is healthy; Phase 1 is planned and ready for `$exec`.
+
+## Current Implementation - Stable 1.0 Distribution Cleanup
 
 ### Goal
 
-Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio from seven routine approvals to one evidence-backed material decision checkpoint while preserving explicit permission stops for YouTube Studio, publication, scheduling, and authenticated account changes.
+Define the smallest coherent Stable 1.0 distribution cleanup after the merged AFPS foundation, then hand off an evidence-backed implementation boundary without publishing or deleting consumer state.
 
 ### Execution Profile
 
 - Parallel mode: serial
-- Accountability topology: `sol-terra`
-- Reason: the canonical convention, mirrored skill contracts, generated runtime/catalog/package artifacts, and task/shipping records share integration surfaces; Sol owns integration and a fresh read-only Terra reviewer owns the final exact-head audit.
+- Reason: stable/canary manifests, convention assets, skill metadata, generated catalogs, lifecycle behavior, and release docs share one distribution boundary.
+- Safety boundary: no npm publication, dist-tag mutation, release tagging, deployment, destructive consumer cleanup, or removal based only on the word “survivor.”
 
-### Current Phase
+### Tests First
 
-- [x] Preserve the original 51-path AFPS implementation as commit `debef6bf8` after removing four trailing blank-line violations.
-- [x] Merge `origin/master` without rebasing or rewriting history and preserve PR `#18` code plus completed historical evidence.
-- [x] Add and package `docs/afps-2.0-convention.md`, register it as a managed convention, and provision concise Claude/Codex pointers.
-- [x] Add the deterministic launch-play canary fixture and checker for stop counts, slice shape, review artifacts, checkpoint materiality, parity, and publication safety.
-- [x] Archive and version the mirrored launch trio, replace routine approval workflows with AFPS 2.0 slices, and preserve explicit external-action permission stops.
-- [x] Refresh local runtime copies and regenerate the public catalog plus canary package manifest from the reconciled source boundary.
-- [x] Run focused tests, package tests, stable/canary build checks, package dry-run verification, archive/convention/catalog/task/diff audits, and baseline-differential mirror review.
-- [x] Push head `b41d017ab`, update PR `#16`, and complete a fresh `expert-review --adversarial-diff --read-only`; accept Medium finding `AFPS-CANARY-001` for remediation.
-- [x] Remediate source-derived counts and producer discovery; accept the focused `a4f4a2c26` re-review's surviving semantic external-action bypasses and add conservative table-driven discrimination.
-- [ ] Publish the canary-integrity remediation, rerun exact-head GitHub gates, and obtain a focused independent re-review of the amended head.
-- [ ] If the exact-head and GitHub merge gates remain green, merge PR `#16` with a merge commit while preserving its branch and verify issue closure plus post-merge reachability.
+- [ ] Capture the stable and canary package manifests/build inventories from the merged `origin/master` boundary.
+- [ ] Add or identify focused assertions that expose legacy ordinary-workflow coupling, implicit page producers, mixed-default risk, and release-lane leakage.
+
+### Implementation
+
+- [ ] Inventory stable-distributed skills, conventions, package assets, lifecycle/install behavior, catalog entries, and release documentation against `docs/afps-2.0-convention.md` and the RFC clean-break contract.
+- [ ] Classify each cleanup candidate as legacy ordinary-workflow coupling, explicit review/admin tooling, historical support, or still-required operational behavior.
+- [ ] Give `ship-end` and `sync` explicit keep, migrate, move-lane, or retire dispositions with evidence from their active contracts, consumers, tests, and usage role.
+- [ ] Write the bounded next cleanup slice, compatibility/rollback boundary, generated-artifact impact, and exact verification commands into the roadmap/todo review.
+
+### Green
+
+- [ ] Run focused distribution/manifest tests plus stable and canary package build checks without publishing.
+- [ ] Run task-document, convention-bundle, catalog freshness, archive, and diff-hygiene checks appropriate to any planned boundary.
 
 ### Acceptance Criteria
 
-- [x] The foundational convention is canonical, globally discoverable, packaged, install-refreshable, and identical for Claude/Codex semantics.
-- [x] Reversible research, metadata collection, report/description drafting, canonical writes, and local asset generation proceed without scope or final-artifact approval pages.
-- [x] The launch trio converges at one chat-first checkpoint only when three real title/thumbnail candidates need taste or strategy judgment; it includes evidence, recommendation/confidence, at most three decisions, and the next safe move.
-- [x] YouTube Studio upload, public visibility, scheduling, authenticated account changes, and any other external action remain explicit permission stops.
-- [x] Missing targets, inaccessible required assets, and unavailable authenticated evidence are capability/input blockers rather than approval rituals.
-- [x] The deterministic canary distinguishes the archived seven-stop baseline from the migrated zero-routine-stop/one-material-checkpoint path and fails unsafe or approval-flavored variants.
-- [x] Behavior-changing skills have correct archives, versions, changelogs, mirrored semantics, runtime copies, catalogs, manifests, and passing executable verification.
-- [x] PR `#18` remains present after reconciliation; no Stable 1.0 retirement work is included, and `ship-end` plus `sync` remain unchanged survivors for that later cleanup.
+- [ ] Every proposed removal or lane change has source-path and executable evidence.
+- [ ] Explicit page/admin tools and historical archives remain available where the AFPS clean-break contract requires them.
+- [ ] `ship-end` and `sync` dispositions preserve operational value and permission boundaries rather than treating continued distribution as sufficient evidence for removal.
+- [ ] The next slice cannot create mixed AFPS defaults across source, stable package, runtime refresh, catalogs, docs, or Claude/Codex mirrors.
+- [ ] Phase 1 performs no publish, tag, dist-tag, deployment, or destructive consumer action.
 
 ### Verification
 
-- [x] Focused Vitest before review: 3 files, 27 tests passed; remediation suite: 3 files, 28 tests passed.
-- [x] Full package Node suite passed.
-- [x] Stable and canary `build:check` passed after lane-specific manifest generation.
-- [x] Canary `verify:package` and dry-run package staging passed; the expected experimental-versus-`latest` notice is accepted because this task performs no release or dist-tag change.
-- [x] Strict archive, convention-bundle (415 active skills / 409 bundles), catalog freshness, task-document, secret, and diff checks passed.
-- [x] Full mirror audit reproduced the same three failures on an untouched `origin/master` archive; AFPS-focused mirror assertions passed, so no branch regression is present.
-- [x] Fresh exact-head adversarial review at `b41d017ab`: no Critical/High findings; accepted Medium `AFPS-CANARY-001` because the canary echoed declared metrics and allowed permission-bound `next_safe_move` values.
-- [x] Focused re-review at `a4f4a2c26`: source/count remediation verified; accepted the surviving Medium semantic bypass and covered public visibility, release timing, account application, and prefixed upload variants while retaining reversible local controls.
-- [ ] Focused independent re-review of the amended canary implementation and exact replacement head.
-- [ ] GitHub head identity, mergeability, checks, unresolved threads, merge commit, issue closure, branch preservation, and remote-master reachability.
+Pending Phase 1 execution.
 
 ### Review
 
-Sol inspected the reconciled `origin/master...HEAD` boundary and confirmed it preserves PR `#18`, changes only the AFPS foundation/YouTube launch trio plus delivery records, removes the six legacy launch-trio alignment producers without adding interrogation producers, and leaves the later Stable 1.0 retirement scope untouched. Terra found no Critical/High issue and one Medium canary-integrity gap. Sol accepted both review passes: the canary now measures stop evidence, checkpoint IDs, and review-page producers from inspected source/filesystem state, and table-driven tests require reversible local next moves while rejecting semantic publication, scheduling, upload, and account actions. Final exact-head re-review remains required before merge.
+Roadmap intake confirmed that PR `#16` merged the AFPS foundation while explicitly deferring Stable 1.0 retirement and leaving `ship-end` plus `sync` unchanged. Current package logic defaults to the stable lane and admits canary-only skills/conventions only in canary builds. The audit therefore begins with distribution evidence and classification, not deletion.
 
 ### Next Work
 
-Publish the amended head, obtain focused read-only re-review of `AFPS-CANARY-001`, and merge only if the re-reviewed SHA remains the conflict-free PR head with no unresolved blocking finding.
+Audit the stable/canary distribution boundary and produce the smallest verified retirement slice.
 
 ### Recommended Next Command
 
-`$expert-review --adversarial-diff --read-only`
+`$exec`

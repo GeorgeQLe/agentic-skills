@@ -2,35 +2,55 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
+## Current Implementation - Stable 1.0 Distribution Cleanup
 
 ### Goal
 
-Implement the shared AFPS 2.0 operating contract and deterministic comparison harness, then migrate the first bounded creator-workflow slice from seven routine approval stops to one material decision checkpoint without weakening publication or account-action permission boundaries.
+Prepare the first stable 1.0 distribution-cleanup slice after the merged AFPS 2.0 foundation, using package and source evidence to separate legacy ordinary-workflow infrastructure from explicit tools, historical support, and still-required operational skills.
 
 ### Delivery
 
-- GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
-- Branch: `docs/15-youtube-afps2-target`
-- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (ready; not merged)
-- Scope: foundational convention, managed packaging/provisioning, deterministic launch-play harness, and the mirrored launch-trio skill contracts
+- GitHub issue: [#25](https://github.com/GeorgeQLe/agentic-skills/issues/25)
+- Branch: `chore/25-stable-1.0-distribution-cleanup`
+- Pull request: pending
+- Predecessor: AFPS foundation PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16), merged as `f356ce200`
+- Release boundary: no npm publication, dist-tag mutation, release tag, deployment, or destructive consumer cleanup in this phase
 
-### Plan
+## Phase 1: Stable Distribution Boundary Audit
 
-- [x] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
-- [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
-- [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
-- [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
-- [ ] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
+### Goal
+
+Produce an executable, evidence-backed retirement boundary for stable 1.0 before changing distributed behavior.
+
+### Scope
+
+- Inventory stable-lane package contents, managed convention assets, active skill dependencies, public catalog entries, runtime refresh behavior, and release documentation against the AFPS 2.0 clean-break contract.
+- Classify legacy surfaces as ordinary-workflow coupling, explicit review/admin tooling, historical support, or still-required operational behavior.
+- Examine the explicitly deferred `ship-end` and `sync` survivors as candidates, without assuming they should be removed merely because they remain distributed.
+- Define the smallest coherent implementation slice, its compatibility/rollback boundary, generated-artifact effects, and focused regression assertions.
+- Keep release publication and any consumer-side deletion outside this audit phase.
+
+**Parallelization:** serial
+
+**Coordination Notes:** Package manifests, source skill metadata, generated catalog/runtime artifacts, and release docs share the same distribution boundary. Keep the audit and eventual edits integrated until exact file ownership and compatibility constraints are proven.
 
 ### Acceptance Criteria
 
-- [x] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
-- [x] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
-- [x] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
-- [x] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
-- [x] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
-- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable at the final exact head.
+- The audit names every stable-distributed surface that encodes or depends on legacy ordinary-workflow approval behavior, with source paths and executable evidence.
+- Explicit page/admin tools and historical archives remain distinguishable from implicit ordinary-workflow producers.
+- `ship-end` and `sync` receive evidence-backed keep, migrate, move-lane, or retire dispositions that preserve daily operational value and AFPS permission boundaries.
+- The proposed cleanup slice cannot create mixed AFPS defaults across source, stable package, runtime refresh, catalog, docs, or agent mirrors.
+- The next phase has bounded acceptance criteria and focused verification commands; no publish, tag, dist-tag, deployment, or destructive consumer action occurs.
+
+### Review Gate
+
+Proceed directly through the reversible audit. Checkpoint only if evidence leaves two materially different stable-1.0 distribution strategies with comparable support or if the next action would cross a release or destructive-cleanup permission boundary.
+
+## Historical Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
+
+### Outcome
+
+Merged PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) as `f356ce200` on 2026-08-13. The canonical AFPS 2.0 foundation, YouTube launch-trio migration, canary checks, package/catalog updates, and external-action safety assertions are now reachable from `origin/master`. Stable 1.0 retirement remained explicitly deferred.
 
 ## Historical Implementation - PR #18 Review Feedback And Merge
 
