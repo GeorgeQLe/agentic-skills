@@ -7,7 +7,14 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(scriptPath), "..");
 const defaultFixturePath = "tests/fixtures/afps-2.0-canary/youtube-launch-play/fixture.json";
-const externalActionPattern = /(?:^|[.;]\s*|\band\s+)(?:publish|upload|schedule)\b|\b(?:YouTube Studio|public visibility|account-authenticated|authenticated account)\b/i;
+const permissionBoundActionPatterns = [
+  /\b(?:publish|publication|schedule|scheduling|post|release)\b/i,
+  /\bupload\b(?!-ready\b)/i,
+  /\b(?:make|set|change|switch)\b.{0,100}\bpublic\b/i,
+  /\bapply\b.{0,100}\b(?:channel|account|YouTube Studio)\b/i,
+  /\b(?:YouTube Studio|public visibility|account-authenticated|authenticated account|log in|sign in)\b/i
+];
+const reversibleLocalActionPattern = /\b(?:local|reversible|canonical|artifact|report|draft|description|research|file|manifest|record|compare|validate|generate|render|write|prepare|revise)\b/i;
 const routineStopPatterns = [
   /Report-First Approval Gate/i,
   /Staged Research Workflow/i,
@@ -71,7 +78,10 @@ export function validateCheckpointPacket(packet) {
   if (!Array.isArray(packet?.resume_context?.evidence)) errors.push("resume_context.evidence must be an array");
   if (typeof packet?.resume_context?.next_safe_move !== "string" || packet.resume_context.next_safe_move.length === 0) {
     errors.push("resume_context.next_safe_move must be a non-empty string");
-  } else if (externalActionPattern.test(packet.resume_context.next_safe_move)) {
+  } else if (
+    permissionBoundActionPatterns.some((pattern) => pattern.test(packet.resume_context.next_safe_move)) ||
+    !reversibleLocalActionPattern.test(packet.resume_context.next_safe_move)
+  ) {
     errors.push("resume_context.next_safe_move must remain reversible and cannot perform a permission-bound external action");
   }
 

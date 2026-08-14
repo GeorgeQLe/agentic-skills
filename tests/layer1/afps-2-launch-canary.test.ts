@@ -74,11 +74,22 @@ describe("AFPS 2.0 YouTube launch canary", () => {
 
   it("accepts the compact decision packet and rejects approval semantics or a fourth decision", () => {
     const goodPacket = readJson("checkpoint-good.json");
+    const nextSafeMoves = readJson("checkpoint-next-safe-moves.json");
     expect(validateCheckpointPacket(goodPacket)).toEqual([]);
-    expect(validateCheckpointPacket({
-      ...goodPacket,
-      resume_context: { ...goodPacket.resume_context, next_safe_move: "Prepare the upload-ready local artifacts." }
-    })).toEqual([]);
+    for (const nextSafeMove of nextSafeMoves.allowed) {
+      expect(validateCheckpointPacket({
+        ...goodPacket,
+        resume_context: { ...goodPacket.resume_context, next_safe_move: nextSafeMove }
+      }), nextSafeMove).toEqual([]);
+    }
+    for (const nextSafeMove of nextSafeMoves.blocked) {
+      expect(validateCheckpointPacket({
+        ...goodPacket,
+        resume_context: { ...goodPacket.resume_context, next_safe_move: nextSafeMove }
+      }), nextSafeMove).toEqual([
+        "resume_context.next_safe_move must remain reversible and cannot perform a permission-bound external action"
+      ]);
+    }
     expect(validateCheckpointPacket(readJson("checkpoint-bad.json"))).toEqual(expect.arrayContaining([
       "checkpoint packet has missing or unsupported top-level keys",
       "decisions must contain at most three entries",

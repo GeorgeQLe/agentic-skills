@@ -22,6 +22,7 @@ Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio f
 - [x] Refresh local runtime copies and regenerate the public catalog plus canary package manifest from the reconciled source boundary.
 - [x] Run focused tests, package tests, stable/canary build checks, package dry-run verification, archive/convention/catalog/task/diff audits, and baseline-differential mirror review.
 - [x] Push head `b41d017ab`, update PR `#16`, and complete a fresh `expert-review --adversarial-diff --read-only`; accept Medium finding `AFPS-CANARY-001` for remediation.
+- [x] Remediate source-derived counts and producer discovery; accept the focused `a4f4a2c26` re-review's surviving semantic external-action bypasses and add conservative table-driven discrimination.
 - [ ] Publish the canary-integrity remediation, rerun exact-head GitHub gates, and obtain a focused independent re-review of the amended head.
 - [ ] If the exact-head and GitHub merge gates remain green, merge PR `#16` with a merge commit while preserving its branch and verify issue closure plus post-merge reachability.
 
@@ -45,12 +46,13 @@ Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio f
 - [x] Strict archive, convention-bundle (415 active skills / 409 bundles), catalog freshness, task-document, secret, and diff checks passed.
 - [x] Full mirror audit reproduced the same three failures on an untouched `origin/master` archive; AFPS-focused mirror assertions passed, so no branch regression is present.
 - [x] Fresh exact-head adversarial review at `b41d017ab`: no Critical/High findings; accepted Medium `AFPS-CANARY-001` because the canary echoed declared metrics and allowed permission-bound `next_safe_move` values.
+- [x] Focused re-review at `a4f4a2c26`: source/count remediation verified; accepted the surviving Medium semantic bypass and covered public visibility, release timing, account application, and prefixed upload variants while retaining reversible local controls.
 - [ ] Focused independent re-review of the amended canary implementation and exact replacement head.
 - [ ] GitHub head identity, mergeability, checks, unresolved threads, merge commit, issue closure, branch preservation, and remote-master reachability.
 
 ### Review
 
-Sol inspected the reconciled `origin/master...HEAD` boundary and confirmed it preserves PR `#18`, changes only the AFPS foundation/YouTube launch trio plus delivery records, removes the six legacy launch-trio alignment producers without adding interrogation producers, and leaves the later Stable 1.0 retirement scope untouched. Terra found no Critical/High issue and one Medium canary-integrity gap. Sol accepted it and changed the canary to measure stop evidence, checkpoint IDs, and review-page producers from inspected source/filesystem state; reject permission-bound next moves; and fail mutation fixtures for an alternate checkpoint, restored alignment bundle, and structurally valid external action. Focused re-review remains required before merge.
+Sol inspected the reconciled `origin/master...HEAD` boundary and confirmed it preserves PR `#18`, changes only the AFPS foundation/YouTube launch trio plus delivery records, removes the six legacy launch-trio alignment producers without adding interrogation producers, and leaves the later Stable 1.0 retirement scope untouched. Terra found no Critical/High issue and one Medium canary-integrity gap. Sol accepted both review passes: the canary now measures stop evidence, checkpoint IDs, and review-page producers from inspected source/filesystem state, and table-driven tests require reversible local next moves while rejecting semantic publication, scheduling, upload, and account actions. Final exact-head re-review remains required before merge.
 
 ### Next Work
 
