@@ -1,0 +1,19 @@
+{
+  "command": "$youtube-video-prelaunch-audit VIDEO_ID",
+  "checkpoint": "launch-packaging-selection",
+  "decisions": [
+    {
+      "id": "packaging-direction",
+      "question": "Which of the three generated title/thumbnail hypotheses should anchor the launch?",
+      "recommendation": "Use variant B because it best matches the opening promise.",
+      "confidence": "medium",
+      "choice": ""
+    }
+  ],
+  "notes": "",
+  "resume_context": {
+    "artifacts": ["research/youtube/video-prelaunch-VIDEO_ID.md"],
+    "evidence": ["research/youtube/data/VIDEO_ID/prelaunch/test-and-compare/run/manifest.json"],
+    "next_safe_move": "Apply the selected packaging direction to the canonical launch report and draft description."
+  }
+}

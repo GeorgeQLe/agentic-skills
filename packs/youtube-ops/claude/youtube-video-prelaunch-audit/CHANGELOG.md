@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6 - 2026-08-11
+
+- Migrated the prelaunch workflow to AFPS 2.0: reversible evidence collection, URL records, canonical reporting, and three real generated thumbnail variants now proceed without scope or final-artifact approval pages.
+- Replaced three routine approval stops with one chat-first `launch-packaging-selection` checkpoint after image/manifest validation, capped at three material decisions.
+- Preserved explicit permission stops for YouTube Studio upload, public visibility, scheduling, account-authenticated changes, and other external actions; input and capability gaps remain blockers rather than approval rituals.
+
 ## v0.5 - 2026-07-27
 
 - Added repeatable `--thumbnail-asset` intake, backward-compatible `--thumbnail` handling, bounded inspection of explicitly pointed files/URLs/attachments/directories, and complete used-or-rejected asset accounting.

@@ -1,13 +1,13 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "c28e448a162dc14e7de6bc2c5e6c79480155a4c9",
-  "generated_at": "2026-07-28T02:53:32.158Z",
-  "source_fingerprint": "c326bd62eb5ab268a38e5c5756436be99a66a9c0cf6e8742592b6ac2d8b8aa12",
+  "source_commit": "e0bd90a1f722456f71a814744c8846da13e78943",
+  "generated_at": "2026-08-14T01:52:16.635Z",
+  "source_fingerprint": "a1119872ef17c78ff3be88ec9e549474b05d27f848714bb197b0759337ec0449",
   "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
-    "branch": "feat/issue-5-youtube-thumbnail-generation",
+    "branch": "docs/15-youtube-afps2-target",
     "ref_policy": "Consumers should pin SKILLS_REPO_REF to a tag or commit SHA for releases and deployments."
   },
   "proof_artifacts": [
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-08-13 - AFPS 2.0 foundation and YouTube launch trio reconciliation",
+    "2026-08-12 - PR #18 uninstall review remediation and merge",
     "2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation",
     "2026-07-12 - GitHub delivery Phase 3 provisioning and verification",
     "2026-07-12 - GitHub delivery Phase 2 orchestrator migration",
     "2026-07-12 - Codex accountable multi-agent lifecycle",
     "2026-07-10 - Dangling-symlink refresh and fleet recovery",
-    "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout",
-    "2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout",
-    "2026-07-09 - Briefing-first review surface convention"
+    "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

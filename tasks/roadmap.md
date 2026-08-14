@@ -2,11 +2,41 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - PR #18 Review Feedback
+## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
 ### Goal
 
-Address all user-selected actionable review feedback on pull request `#18`, preserve the uninstall safety contract, and publish a verified remediation commit on the existing issue-backed branch.
+Implement the shared AFPS 2.0 operating contract and deterministic comparison harness, then migrate the first bounded creator-workflow slice from seven routine approval stops to one material decision checkpoint without weakening publication or account-action permission boundaries.
+
+### Delivery
+
+- GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
+- Branch: `docs/15-youtube-afps2-target`
+- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (ready; not merged)
+- Scope: foundational convention, managed packaging/provisioning, deterministic launch-play harness, and the mirrored launch-trio skill contracts
+
+### Plan
+
+- [x] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
+- [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
+- [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
+- [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
+- [ ] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
+
+### Acceptance Criteria
+
+- [x] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
+- [x] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
+- [x] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
+- [x] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
+- [x] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
+- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable at the final exact head.
+
+## Historical Implementation - PR #18 Review Feedback And Merge
+
+### Goal
+
+Address all actionable review feedback on pull request `#18`, preserve the uninstall safety contract, publish verified remediation, resolve the reviewed threads after authorization, and merge through the issue-backed delivery contract.
 
 ### Plan
 
@@ -14,15 +44,15 @@ Address all user-selected actionable review feedback on pull request `#18`, pres
 - [x] Cluster all three unresolved actionable threads and confirm all are in scope.
 - [x] Unify project install ownership checks, canonicalize recovery state, and snapshot exact targeted recovery selections with focused regression coverage.
 - [x] Run focused tests, the full relevant suite, package build checks, task-doc audit, and diff hygiene.
-- [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`, leaving merge and thread-resolution writes outside scope unless explicitly requested.
-- [x] Re-audit PR `#18` at `b573054fc` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
-- [x] After explicit user authorization, post evidence-backed dispositions and resolve all three review threads; verify zero unresolved threads through GraphQL.
+- [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`.
+- [x] Re-audit PR `#18` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
+- [x] Post evidence-backed dispositions, resolve all three review threads, merge PR `#18`, and preserve the completed evidence on `master`.
 
 ### Acceptance Criteria
 
-- [x] Every selected actionable thread is addressed by code, tests, and a documented disposition.
+- [x] Every selected actionable thread was addressed by code, tests, and a documented disposition.
 - [x] The uninstall ownership, confirmation, cancellation, config-preservation, and reinstall-output contracts remain intact.
-- [x] No unrelated tracked work is introduced, and all intended changes are committed and pushed to PR `#18`'s branch.
+- [x] PR `#18` merged as `8d2c98904`, its issue-backed changes remain on `master`, and the AFPS branch reconciliation preserves them.
 
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
@@ -38,8 +68,8 @@ Finish the exact-head review and metadata cleanup for research PR `#12`, merge i
 - [x] Present PR `#12`'s exact merge details and merge with a merge commit only after immediate user confirmation.
 - [x] Refresh PR `#14` from the resulting `master`, update its body to close issues `#11` and `#13`, and remove stale wording that PR `#12` is still open.
 - [x] Update PR `#14`'s task records, commit and push every intended change, and rerun exact-head expert review plus the full relevant verification set.
-- [ ] Present PR `#14`'s exact merge details and merge with a merge commit only after immediate user confirmation.
-- [ ] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
+- [x] Present PR `#14`'s exact merge details and merge with merge commit `acf167038` only after immediate user confirmation.
+- [x] Verify both PRs merged, issues `#11` and `#13` closed through PR `#14`, both merge commits reached `master`, both branches remain intact, no deployment occurred, and unrelated untracked files remain untouched.
 
 ### Acceptance Criteria
 
@@ -48,7 +78,7 @@ Finish the exact-head review and metadata cleanup for research PR `#12`, merge i
 - [x] PR `#14` closes both issues `#11` and `#13` and contains the final task and review evidence for the combined work.
 - [x] The briefing-slide audit, task-document audit, terminology/interface checks, link/scope assertions, deck interaction/viewport checks, and diff hygiene all pass at PR `#14`'s final reviewed head.
 - [x] PR `#14` changes no active skill, convention, generator, runtime mirror, alignment page, or interrogation page.
-- [ ] Both merges use merge commits; neither source branch is deleted and no deployment is performed.
+- [x] Both merges use merge commits; neither source branch is deleted and no deployment is performed.
 
 ## Historical Implementation - AFPS 2.0 Foundational RFC And Canary Plan
 
@@ -61,7 +91,7 @@ Define the clean-break AFPS 2.0 operating contract, a paired legacy-versus-v2 ca
 - GitHub issue: `#13`
 - Branch: `docs/13-afps-2-rfc`
 - Evidence: research issue `#11` and merged PR `#12`
-- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (ready for review; open and unmerged)
+- Pull request: [#14](https://github.com/GeorgeQLe/agentic-skills/pull/14) (merged as `acf167038`)
 
 ### Plan
 
@@ -87,7 +117,7 @@ The RFC and canary plan share one loop, four-action taxonomy, seven-element slic
 
 Verification passed for the repository briefing static audit, task-doc audit, contract/interface consistency, source-link existence, prompt-capture parity, 1440×1000 and 500×844 rendered fit checks, a headless browser interaction self-test, diff whitespace, intended-file secret scanning, and the active-behavior scope boundary. The generic WSL opener reported `blocked` because of its PowerShell argument forwarding; the prescribed direct file-URI fallback succeeded, so deck opener status is `fallback-opened`.
 
-Commits `8e1892f3c` and `5ac72b380` were published on `docs/13-afps-2-rfc`. Research PR `#12` later merged as `3353af1c6`; PR `#14` now carries that history and remains the issue-closing RFC delivery.
+Commits `8e1892f3c` and `5ac72b380` were published on `docs/13-afps-2-rfc`. Research PR `#12` merged as `3353af1c6`; PR `#14` then merged as `acf167038`, closed issues `#11` and `#13`, and preserved both source branches.
 
 ## Historical Implementation - PR #6 Final Review And Conditional Merge
 

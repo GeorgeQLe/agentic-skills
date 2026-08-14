@@ -61,3 +61,33 @@
 ### Larger initiatives (weeks)
 
 - **Retire staged alignment/interrogation infrastructure in favor of checkpoint briefings** — After the canary proves lower question count and rework, migrate active skills away from dense alignment pages, interrogation rounds, compiled-YAML handoffs, duplicated briefing decks, and fixed long-form deck chains. Preserve archived pages as historical evidence, keep canonical research/spec/task outputs, and make briefing slides optional convergence/checkpoint surfaces rather than wrappers around dense pages. Current signal: the three core conventions plus their generators/auditors exceed 3,400 lines, were shaped by 80 commits, and currently require decks to preserve rather than replace dense artifacts. _Start with:_ `$feature-interview AFPS 2.0 staged migration and compatibility plan`
+
+---
+
+## 2026-08-10 — YouTube AFPS 2.0: replace rubber-stamp pages with useful slices
+
+In this source repository, `feature-interview` is available directly at `packs/product-design/codex/feature-interview/SKILL.md`; do not run a skillpacks install command here.
+
+### Quick wins (hours)
+
+- **Pin a seven-stop YouTube launch fixture and baseline ledger** — The router's launch play invokes `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`; their current contracts require three, two, and two approval stops respectively. Capture one deterministic fixture, expected artifacts, gate chronology, questions, and safety boundaries before changing behavior. _Start with:_ `$feature-interview YouTube launch-play AFPS baseline fixture and seven-stop ledger`
+
+- **Treat an explicit YouTube play invocation as scope intent** — `youtube --launch`, `--health`, `--concept`, and `--intel` currently require another approval before writing the reversible play checklist. Define direct flag invocation as sufficient scope to append the play while retaining a conflict stop for an ambiguous replacement of active work. _Start with:_ `$feature-interview YouTube router explicit-intent play writes without routine approval`
+
+- **Add publication-boundary contract assertions** — The prelaunch contract already says not to claim Studio upload without user confirmation. Turn that into deterministic tests covering upload, visibility, scheduling, authenticated account changes, inaccessible private evidence, and local-only generation so page removal cannot weaken safety. _Start with:_ `$feature-interview YouTube AFPS publication and account permission assertions`
+
+### Medium efforts (days)
+
+- **Priority 1: migrate the three-skill video-launch play** — Replace seven scope/concept/artifact page approvals across prelaunch, packaging, and description work with autonomous reversible slices and one chat-first checkpoint over the three generated title/thumbnail candidates. Keep Studio upload and publication manual or explicitly confirmed. _Start with:_ `$feature-interview AFPS 2.0 YouTube launch trio migration`
+
+- **Canary zero-page video diagnosis** — `youtube-video-audit` and `youtube-vid-research` are read/evidence workflows but each currently requires scope and artifact approval. Let a supplied URL trigger evidence collection and canonical reporting directly, stopping only for a missing target, inaccessible required evidence, or a material decision. _Start with:_ `$feature-interview AFPS 2.0 zero-page YouTube video diagnosis canary`
+
+- **Collapse channel-health play checkpoints** — The five-step health play currently multiplies to at least ten approval stops. Run its evidence collection and analysis as one coordinated slice, deduplicate fetched channel/video evidence, and checkpoint only on competing strategic recommendations. _Start with:_ `$feature-interview AFPS 2.0 YouTube channel-health play consolidation`
+
+### Larger initiatives (weeks)
+
+- **Migrate all remaining standalone YouTube research skills** — All 15 standalone `youtube-ops` skills share the staged alignment lifecycle. After the launch and diagnosis canaries pass, migrate portfolio, cadence, peer, search, concept, competitive, meta, derivative, and channel workflows by risk class instead of reproducing per-skill approval machinery. _Start with:_ `$feature-interview AFPS 2.0 youtube-ops pack-wide migration waves`
+
+- **Retire YouTube alignment-page dependencies after parity** — Once canary evidence meets the AFPS thresholds, remove `required_conventions: [alignment-page]`, staged working-packet approval routing, and confirmed-page outputs from active YouTube skills while preserving canonical reports, raw evidence, histories, and archives. _Start with:_ `$feature-interview YouTube alignment lifecycle retirement after AFPS parity`
+
+- **Extend the proven creator workflow contract across adjacent packs** — Apply the verified YouTube decision boundary to `creator-foundation` and `remotion` workflows so research, scripting, format planning, and local production proceed continuously while public posting, paid services, account changes, and irreversible publication remain explicit stops. _Start with:_ `$feature-interview creator workflow AFPS migration after youtube-ops canary`

@@ -2,8 +2,8 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.16
-required_conventions: [alignment-page]
+version: v0.17
+required_conventions: [alignment-page, afps-2.0]
 ---
 
 # Install Workflow Orchestration
@@ -28,12 +28,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.16 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.17 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.16 -->
+<!-- provision-agentic-config v0.17 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -60,6 +60,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
 - For remove, replace, or reweight requests, update the artifact toward the requested final state.
 - Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
+
+### AFPS 2.0
+- Ordinary product, research, design, specification, implementation, and task work follows the managed AFPS 2.0 convention: source checkouts read `docs/afps-2.0-convention.md`; packaged consumers read `.agents/skillpacks/docs/afps-2.0-convention.md`.
+- Infer intent, produce the smallest decision-revealing slice, evaluate evidence, then continue, adapt, checkpoint, or permission-stop.
+- Proceed through reversible work without implicit alignment/interrogation pages or approval-only sidecars. Use a chat-first checkpoint only for a material decision and ask at most three decisions.
+- A checkpoint never grants authority for destructive, irreversible, public, paid, legal, privacy, security, account-authenticated, or otherwise externally consequential action; those remain explicit permission stops.
 
 ### 4. Verification Before Done
 - Never mark a task complete without proving it works
@@ -167,7 +173,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.16 -->
+<!-- provision-agentic-config v0.17 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -194,6 +200,12 @@ fi
 - When applying user revision feedback, classify the request as add, remove, replace, reweight, or verify.
 - For remove, replace, or reweight requests, update the artifact toward the requested final state.
 - Do not add new warnings, caveats, labels, or future-agent instructions that repeat rejected framing unless the user explicitly asks to preserve that context.
+
+### AFPS 2.0
+- Ordinary product, research, design, specification, implementation, and task work follows the managed AFPS 2.0 convention: source checkouts read `docs/afps-2.0-convention.md`; packaged consumers read `.agents/skillpacks/docs/afps-2.0-convention.md`.
+- Infer intent, produce the smallest decision-revealing slice, evaluate evidence, then continue, adapt, checkpoint, or permission-stop.
+- Proceed through reversible work without implicit alignment/interrogation pages or approval-only sidecars. Use a chat-first checkpoint only for a material decision and ask at most three decisions.
+- A checkpoint never grants authority for destructive, irreversible, public, paid, legal, privacy, security, account-authenticated, or otherwise externally consequential action; those remain explicit permission stops.
 
 ### 4. Verification Before Done
 - Never mark a task complete without proving it works
