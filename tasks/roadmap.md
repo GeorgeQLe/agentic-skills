@@ -17,20 +17,20 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 
 ### Plan
 
-- [ ] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
-- [ ] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
-- [ ] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
-- [ ] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
-- [ ] Perform adversarial review, record the exact ship manifest and history, commit/push the implementation, and update ready PR #16 without merging it.
+- [x] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
+- [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
+- [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
+- [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
+- [ ] Publish the exact documented head, complete the fresh read-only adversarial review, and merge PR #16 only if every exact-head gate passes.
 
 ### Acceptance Criteria
 
-- [ ] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
-- [ ] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
-- [ ] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
-- [ ] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
-- [ ] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
-- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable.
+- [x] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
+- [x] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
+- [x] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
+- [x] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
+- [x] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
+- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable at the final exact head.
 
 ## Historical Implementation - PR #18 Review Feedback And Merge
 

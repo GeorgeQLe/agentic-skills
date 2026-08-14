@@ -1,8 +1,8 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "9f3469a77ede944b0792d4d23a47ee39912b70bc",
-  "generated_at": "2026-08-11T17:07:08.021Z",
-  "source_fingerprint": "58a3f0137c4b9218f924d37913626e515702f51522e7095c1b3b0b0cb81c1094",
+  "source_commit": "e0bd90a1f722456f71a814744c8846da13e78943",
+  "generated_at": "2026-08-14T01:52:16.635Z",
+  "source_fingerprint": "a1119872ef17c78ff3be88ec9e549474b05d27f848714bb197b0759337ec0449",
   "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-08-12 - PR #18 uninstall review remediation and merge",
     "2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation",
     "2026-07-12 - GitHub delivery Phase 3 provisioning and verification",
     "2026-07-12 - GitHub delivery Phase 2 orchestrator migration",
     "2026-07-12 - Codex accountable multi-agent lifecycle",
     "2026-07-10 - Dangling-symlink refresh and fleet recovery",
     "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout",
-    "2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout",
-    "2026-07-09 - Briefing-first review surface convention"
+    "2026-07-09 - skillpacks 0.1.22-experimental.4 canary publish closeout"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-08-13 - AFPS 2.0 foundation and YouTube launch trio reconciliation
+
+- Preserved the staged 51-path AFPS implementation as `debef6bf8` after fixing four trailing blank-line violations, then merged current `origin/master` without rebasing or rewriting published branch history.
+- Reconciled AFPS as the sole current task while preserving completed PR `#18` code and historical evidence; no uninstall behavior from PR `#18` is reverted.
+- Added the managed AFPS 2.0 convention, deterministic legacy-versus-v2 launch canary, provisioned agent pointers, and mirrored launch-trio migrations from seven routine approval stops to one possible material title/thumbnail checkpoint.
+- Removed the six launch-trio legacy alignment bundles, added no interrogation producer, retained explicit YouTube Studio/publication/scheduling/authenticated-action permission stops, and kept Stable 1.0 retirement work out of scope.
+- Refreshed repo-local runtime copies and regenerated the public catalog against the reconciled canary package manifest; generated `.claude/skills/**` and `.codex/skills/**` roots remained untracked and uncommitted.
+- Verification passed for the 27-test focused Vitest suite, the full package Node suite, stable and canary package build checks, canary dry-run package verification, strict archive audit, convention-bundle audit, catalog freshness, task docs, secret scan, and diff hygiene. The full mirror audit's three failures reproduce identically from untouched `origin/master`; AFPS-focused parity assertions pass.
+- Exact-head GitHub identity, fresh read-only adversarial review, conditional merge, issue closure, branch preservation, and post-merge reachability remain the final external gates.
+- Manifest: `tasks/ship-manifest-2026-08-13-afps-2.0-youtube-launch-trio.md`.
+
 ## 2026-08-12 - PR #18 uninstall review remediation and merge
 
 - Addressed all three actionable PR `#18` review threads with shared project-install ownership checks, canonical recovery configuration, and exact targeted-uninstall recovery snapshots.
