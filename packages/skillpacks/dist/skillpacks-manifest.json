@@ -5,7 +5,7 @@
     "version": "0.1.22-experimental.6",
     "release_lane": "canary"
   },
-  "source_fingerprint": "1d6463ec229c7dafdecfaf4ef3570e14a9c7369c8b76eb28c787d8f5ef95d515",
+  "source_fingerprint": "85724523004236216e5d90a4eb365cdd9cb286b391ba2356e86af576c9ffcbeb",
   "packs": [
     {
       "name": "agent-bridge",
@@ -1693,16 +1693,17 @@
       "scope": "base",
       "pack": null,
       "platform": "claude",
-      "version": "v0.15",
+      "version": "v0.16",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
+        "afps-2.0",
         "alignment-page"
       ],
       "path": "packs/base/claude/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "b2c92693693e3baa94b57cbe1771b78c35e72d9f10a079fb121274614e0e7588",
+      "content_sha256": "319bc99e3e8e11050748e555243a681e2ae822c237347051dfc97be4ec3eaefc",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -1711,6 +1712,7 @@
         "v0.12",
         "v0.13",
         "v0.14",
+        "v0.15",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -2194,16 +2196,17 @@
       "scope": "base",
       "pack": null,
       "platform": "codex",
-      "version": "v0.16",
+      "version": "v0.17",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
+        "afps-2.0",
         "alignment-page"
       ],
       "path": "packs/base/codex/provision-agentic-config/SKILL.md",
       "installable": true,
-      "content_sha256": "e1aaf4c9c9e9bdb2201773e05fd12f5d8ded4c526f4a540c4fa5be4fc33980b3",
+      "content_sha256": "77a04c5775c8f5c29a65c804a98840fe4997578416f8fc8ba9797a7ffe06a6ab",
       "archive_versions": [
         "v0.0",
         "v0.1",
@@ -2213,6 +2216,7 @@
         "v0.13",
         "v0.14",
         "v0.15",
+        "v0.16",
         "v0.2",
         "v0.3",
         "v0.4",
@@ -11603,23 +11607,24 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/claude/youtube-description-optimizer/SKILL.md",
       "installable": true,
-      "content_sha256": "7f9225ab173bf3a83a4f50049138d505862dd066a6e2e9b831b78f66119c517b",
+      "content_sha256": "a92482fe5cd97d9a0f5bc4c8ae611678f034aca4b9afbe75f757681e49bfaff9",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/youtube-description-optimizer",
       "deck_memberships": []
@@ -11733,23 +11738,24 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/claude/youtube-title-thumbnail-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "72949f1a13978799283fb06dc5192cea55bbcdead6bf8742ea0c68ea3801da6c",
+      "content_sha256": "d1ee8549a6e130466825b5a395c33985ebe73033cbb8655f8cafe5235973474b",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "/youtube-title-thumbnail-audit",
       "deck_memberships": []
@@ -11814,22 +11820,23 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "claude",
-      "version": "v0.5",
+      "version": "v0.6",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "bcb1d02cb6d27b91b292305f84ecb560ccfc22c6d4530663dd0c11cdbb856735",
+      "content_sha256": "11772460779dfa1efbad453babbafa00007b54b2bc4da02a6e543fc0800aefeb",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "/youtube-video-prelaunch-audit",
       "deck_memberships": []
@@ -12020,23 +12027,24 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/codex/youtube-description-optimizer/SKILL.md",
       "installable": true,
-      "content_sha256": "d81e25317288ede1002d4e55c258ea5570baf0a241f5614742c5412fb01377f9",
+      "content_sha256": "3053a76ba356610b064e97a2f9e1b637d5f28d4b58cb4dec20555d8f2c0fade3",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "$youtube-description-optimizer",
       "deck_memberships": []
@@ -12150,23 +12158,24 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.6",
+      "version": "v0.7",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "4b7fabdbee0b417789b570330c770880c89c2b6fc1d3f3e6f2f02b7de0896c5c",
+      "content_sha256": "1a5ef999f699c3c155db29c9d0218eee70e366a0235e5040e1924bee92b1b367",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
         "v0.4",
-        "v0.5"
+        "v0.5",
+        "v0.6"
       ],
       "command": "$youtube-title-thumbnail-audit",
       "deck_memberships": []
@@ -12231,22 +12240,23 @@
       "scope": "pack",
       "pack": "youtube-ops",
       "platform": "codex",
-      "version": "v0.5",
+      "version": "v0.6",
       "release_lane": "stable",
       "deprecated": false,
       "replaced_by": null,
       "required_conventions": [
-        "alignment-page"
+        "afps-2.0"
       ],
       "path": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/SKILL.md",
       "installable": true,
-      "content_sha256": "dc9e77bf74b03179a6f01f64fa5814944bf3c128d3977c0a14232ebc9e1a4b14",
+      "content_sha256": "4a9a83a57bac4abcb993b77fcb7bd1d94b3555d7fb9d576414beb08c93e64fd9",
       "archive_versions": [
         "v0.0",
         "v0.1",
         "v0.2",
         "v0.3",
-        "v0.4"
+        "v0.4",
+        "v0.5"
       ],
       "command": "$youtube-video-prelaunch-audit",
       "deck_memberships": []

@@ -1,0 +1,13 @@
+{
+  "allowed": [
+    "Prepare the upload-ready local artifacts.",
+    "Apply the selected packaging direction to the canonical launch report and draft description."
+  ],
+  "blocked": [
+    "Upload the selected variant and publish the video.",
+    "Make the video public.",
+    "Set the video release time for Friday.",
+    "Apply the selected thumbnail to the channel account.",
+    "Then upload the selected thumbnail."
+  ]
+}

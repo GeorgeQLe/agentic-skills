@@ -1,5 +1,24 @@
 # Session History
 
+## 2026-08-13 - AFPS 2.0 foundation and YouTube launch trio reconciliation
+
+- Preserved the staged 51-path AFPS implementation as `debef6bf8` after fixing four trailing blank-line violations, then merged current `origin/master` without rebasing or rewriting published branch history.
+- Reconciled AFPS as the sole current task while preserving completed PR `#18` code and historical evidence; no uninstall behavior from PR `#18` is reverted.
+- Added the managed AFPS 2.0 convention, deterministic legacy-versus-v2 launch canary, provisioned agent pointers, and mirrored launch-trio migrations from seven routine approval stops to one possible material title/thumbnail checkpoint.
+- Removed the six launch-trio legacy alignment bundles, added no interrogation producer, retained explicit YouTube Studio/publication/scheduling/authenticated-action permission stops, and kept Stable 1.0 retirement work out of scope.
+- Refreshed repo-local runtime copies and regenerated the public catalog against the reconciled canary package manifest; generated `.claude/skills/**` and `.codex/skills/**` roots remained untracked and uncommitted.
+- Verification passed for the 27-test focused Vitest suite, the full package Node suite, stable and canary package build checks, canary dry-run package verification, strict archive audit, convention-bundle audit, catalog freshness, task docs, secret scan, and diff hygiene. The full mirror audit's three failures reproduce identically from untouched `origin/master`; AFPS-focused parity assertions pass.
+- Fresh read-only review of `b41d017ab` found no Critical/High issue and one high-confidence Medium canary-integrity gap (`AFPS-CANARY-001`). Sol accepted it and replaced fixture-echoed metrics with inspected source/filesystem measurements. Focused re-review of `a4f4a2c26` verified those measurements but retained the finding for semantic external-action bypasses; Sol accepted that second pass and added conservative reversible-local discrimination plus table-driven public/release/account/upload mutations. The focused suite passes 28/28.
+- Amended-head verification and focused independent re-review, conditional merge, issue closure, branch preservation, and post-merge reachability remain the final gates.
+- Manifest: `tasks/ship-manifest-2026-08-13-afps-2.0-youtube-launch-trio.md`.
+
+## 2026-08-12 - PR #18 uninstall review remediation and merge
+
+- Addressed all three actionable PR `#18` review threads with shared project-install ownership checks, canonical recovery configuration, and exact targeted-uninstall recovery snapshots.
+- Verified 117 focused lifecycle/normalization tests, the 146-test package Node suite, canary package `build:check`, task-document audit, and diff hygiene.
+- Posted evidence-backed dispositions, resolved all three review threads, and merged PR `#18` to `master` as merge commit `8d2c98904`.
+- Preserved the uninstall work during the subsequent AFPS PR `#16` reconciliation; no part of PR `#18` is reverted by the AFPS integration.
+
 ## 2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation
 
 - Upgraded mirrored `youtube-video-prelaunch-audit` contracts from v0.4 to v0.5 and archived both pristine v0.4 skill files.

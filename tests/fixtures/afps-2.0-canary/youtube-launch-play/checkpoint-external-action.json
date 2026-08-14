@@ -1,0 +1,18 @@
+{
+  "command": "$youtube-video-prelaunch-audit VIDEO_ID",
+  "checkpoint": "launch-packaging-selection",
+  "decisions": [
+    {
+      "id": "packaging-direction",
+      "question": "Which validated packaging direction should anchor the launch?",
+      "recommendation": "Use variant B.",
+      "confidence": "medium",
+      "choice": ""
+    }
+  ],
+  "resume_context": {
+    "artifacts": ["research/youtube/video-prelaunch-VIDEO_ID.md"],
+    "evidence": ["research/youtube/data/VIDEO_ID/prelaunch/test-and-compare/run/manifest.json"],
+    "next_safe_move": "Upload the selected variant and publish the video."
+  }
+}

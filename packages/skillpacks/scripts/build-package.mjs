@@ -108,6 +108,7 @@ const requiredBuildFiles = [
   "assets/social-video-content-convention.md",
   "assets/social-ledger-convention.md",
   `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/alignment-page-convention.md`,
+  "assets/skillpacks-docs/afps-2.0-convention.md",
   `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/alignment-yaml-routing-contract.md`,
   `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/quality-gate-contract.md`,
   `${MANAGED_CONVENTION_DOC_PACKAGE_ROOT}/skillpacks-install-routing-contract.md`,
