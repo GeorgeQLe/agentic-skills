@@ -21,7 +21,8 @@ Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio f
 - [x] Archive and version the mirrored launch trio, replace routine approval workflows with AFPS 2.0 slices, and preserve explicit external-action permission stops.
 - [x] Refresh local runtime copies and regenerate the public catalog plus canary package manifest from the reconciled source boundary.
 - [x] Run focused tests, package tests, stable/canary build checks, package dry-run verification, archive/convention/catalog/task/diff audits, and baseline-differential mirror review.
-- [ ] Push the exact documented head, update PR `#16`, complete a fresh `expert-review --adversarial-diff --read-only`, and disposition every surviving finding.
+- [x] Push head `b41d017ab`, update PR `#16`, and complete a fresh `expert-review --adversarial-diff --read-only`; accept Medium finding `AFPS-CANARY-001` for remediation.
+- [ ] Publish the canary-integrity remediation, rerun exact-head GitHub gates, and obtain a focused independent re-review of the amended head.
 - [ ] If the exact-head and GitHub merge gates remain green, merge PR `#16` with a merge commit while preserving its branch and verify issue closure plus post-merge reachability.
 
 ### Acceptance Criteria
@@ -37,22 +38,23 @@ Build the shared AFPS 2.0 foundation and migrate the YouTube video-launch trio f
 
 ### Verification
 
-- [x] Focused Vitest: 3 files, 27 tests passed.
+- [x] Focused Vitest before review: 3 files, 27 tests passed; remediation suite: 3 files, 28 tests passed.
 - [x] Full package Node suite passed.
 - [x] Stable and canary `build:check` passed after lane-specific manifest generation.
 - [x] Canary `verify:package` and dry-run package staging passed; the expected experimental-versus-`latest` notice is accepted because this task performs no release or dist-tag change.
 - [x] Strict archive, convention-bundle (415 active skills / 409 bundles), catalog freshness, task-document, secret, and diff checks passed.
 - [x] Full mirror audit reproduced the same three failures on an untouched `origin/master` archive; AFPS-focused mirror assertions passed, so no branch regression is present.
-- [ ] Fresh exact-head adversarial reviewer result and complete Sol disposition ledger.
+- [x] Fresh exact-head adversarial review at `b41d017ab`: no Critical/High findings; accepted Medium `AFPS-CANARY-001` because the canary echoed declared metrics and allowed permission-bound `next_safe_move` values.
+- [ ] Focused independent re-review of the amended canary implementation and exact replacement head.
 - [ ] GitHub head identity, mergeability, checks, unresolved threads, merge commit, issue closure, branch preservation, and remote-master reachability.
 
 ### Review
 
-Sol inspected the reconciled `origin/master...HEAD` boundary and confirmed it preserves PR `#18`, changes only the AFPS foundation/YouTube launch trio plus delivery records, removes the six legacy launch-trio alignment producers without adding interrogation producers, and leaves the later Stable 1.0 retirement scope untouched. The independent exact-head result is the remaining merge gate.
+Sol inspected the reconciled `origin/master...HEAD` boundary and confirmed it preserves PR `#18`, changes only the AFPS foundation/YouTube launch trio plus delivery records, removes the six legacy launch-trio alignment producers without adding interrogation producers, and leaves the later Stable 1.0 retirement scope untouched. Terra found no Critical/High issue and one Medium canary-integrity gap. Sol accepted it and changed the canary to measure stop evidence, checkpoint IDs, and review-page producers from inspected source/filesystem state; reject permission-bound next moves; and fail mutation fixtures for an alternate checkpoint, restored alignment bundle, and structurally valid external action. Focused re-review remains required before merge.
 
 ### Next Work
 
-Publish the documented head, run the fresh read-only adversarial review, and merge only if the reviewed SHA remains the conflict-free PR head with no unresolved blocking finding.
+Publish the amended head, obtain focused read-only re-review of `AFPS-CANARY-001`, and merge only if the re-reviewed SHA remains the conflict-free PR head with no unresolved blocking finding.
 
 ### Recommended Next Command
 

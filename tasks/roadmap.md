@@ -21,7 +21,7 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 - [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
 - [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
 - [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
-- [ ] Publish the exact documented head, complete the fresh read-only adversarial review, and merge PR #16 only if every exact-head gate passes.
+- [ ] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
 
 ### Acceptance Criteria
 

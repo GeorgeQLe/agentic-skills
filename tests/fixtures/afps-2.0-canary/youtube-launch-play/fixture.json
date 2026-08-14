@@ -3,36 +3,37 @@
   "family": "creator-workflow",
   "description": "Deterministic contract canary for the prelaunch, title/thumbnail, and description launch trio.",
   "legacy": {
-    "routine_stops": 7,
-    "review_only_pages": 7,
+    "expected": {
+      "routine_stops": 7,
+      "review_only_pages": 7
+    },
     "skills": [
       {
         "name": "youtube-video-prelaunch-audit",
-        "routine_stops": 3,
         "claude": "packs/youtube-ops/claude/youtube-video-prelaunch-audit/archive/v0.5/SKILL.md",
         "codex": "packs/youtube-ops/codex/youtube-video-prelaunch-audit/archive/v0.5/SKILL.md",
-        "markers": ["Scope discovery and approval", "concept-and-asset-selection compiled YAML", "post-generation compiled YAML"]
+        "stop_markers": ["Scope discovery and approval", "concept-and-asset-selection compiled YAML", "post-generation compiled YAML"]
       },
       {
         "name": "youtube-title-thumbnail-audit",
-        "routine_stops": 2,
         "claude": "packs/youtube-ops/claude/youtube-title-thumbnail-audit/archive/v0.6/SKILL.md",
         "codex": "packs/youtube-ops/codex/youtube-title-thumbnail-audit/archive/v0.6/SKILL.md",
-        "markers": ["Scope discovery and approval", "final compiled YAML artifact approval"]
+        "stop_markers": ["Scope discovery and approval", "final compiled YAML artifact approval"]
       },
       {
         "name": "youtube-description-optimizer",
-        "routine_stops": 2,
         "claude": "packs/youtube-ops/claude/youtube-description-optimizer/archive/v0.6/SKILL.md",
         "codex": "packs/youtube-ops/codex/youtube-description-optimizer/archive/v0.6/SKILL.md",
-        "markers": ["Scope discovery and approval", "artifact approval"]
+        "stop_markers": ["Scope discovery and approval", "artifact approval"]
       }
     ]
   },
   "afps2": {
-    "routine_stops": 0,
-    "maximum_material_checkpoints": 1,
-    "review_only_pages": 0,
+    "expected": {
+      "routine_stops": 0,
+      "maximum_material_checkpoints": 1,
+      "review_only_pages": 0
+    },
     "checkpoint_owner": "youtube-video-prelaunch-audit",
     "checkpoint_id": "launch-packaging-selection",
     "required_slice_fields": ["hypothesis", "artifact_or_behavior", "visible_result", "assertion_or_evaluation", "recommendation", "confidence", "next_safe_move"],

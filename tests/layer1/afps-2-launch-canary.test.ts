@@ -1,4 +1,5 @@
-import { readFileSync } from "node:fs";
+import { appendFileSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -7,6 +8,27 @@ import { runLaunchCanary, validateCheckpointPacket } from "../../scripts/afps-2-
 const root = resolve(import.meta.dirname, "../..");
 const fixtureDir = resolve(root, "tests/fixtures/afps-2.0-canary/youtube-launch-play");
 const readJson = (name: string) => JSON.parse(readFileSync(resolve(fixtureDir, name), "utf8"));
+
+function createMutationRoot() {
+  const mutationRoot = mkdtempSync(resolve(tmpdir(), "afps-2-launch-canary-"));
+  const fixture = readJson("fixture.json");
+  const relativePaths = [
+    "tests/fixtures/afps-2.0-canary/youtube-launch-play/fixture.json",
+    "tests/fixtures/afps-2.0-canary/youtube-launch-play/checkpoint-good.json",
+    "tests/fixtures/afps-2.0-canary/youtube-launch-play/checkpoint-bad.json",
+    ...fixture.legacy.skills.flatMap((skill: { claude: string; codex: string }) => [skill.claude, skill.codex]),
+    ...fixture.afps2.skills.flatMap((name: string) => [
+      `packs/youtube-ops/claude/${name}/SKILL.md`,
+      `packs/youtube-ops/codex/${name}/SKILL.md`
+    ])
+  ];
+  for (const relativePath of relativePaths) {
+    const destination = resolve(mutationRoot, relativePath);
+    mkdirSync(resolve(destination, ".."), { recursive: true });
+    copyFileSync(resolve(root, relativePath), destination);
+  }
+  return mutationRoot;
+}
 
 describe("AFPS 2.0 YouTube launch canary", () => {
   it("publishes one canonical convention through managed docs and provisioned agent pointers", () => {
@@ -45,16 +67,57 @@ describe("AFPS 2.0 YouTube launch canary", () => {
       routine_stops: 0,
       maximum_material_checkpoints: 1,
       review_only_pages: 0,
-      checkpoint_owner: "youtube-video-prelaunch-audit"
+      checkpoint_owner: "youtube-video-prelaunch-audit",
+      checkpoint_ids: ["launch-packaging-selection"]
     });
   });
 
   it("accepts the compact decision packet and rejects approval semantics or a fourth decision", () => {
-    expect(validateCheckpointPacket(readJson("checkpoint-good.json"))).toEqual([]);
+    const goodPacket = readJson("checkpoint-good.json");
+    expect(validateCheckpointPacket(goodPacket)).toEqual([]);
+    expect(validateCheckpointPacket({
+      ...goodPacket,
+      resume_context: { ...goodPacket.resume_context, next_safe_move: "Prepare the upload-ready local artifacts." }
+    })).toEqual([]);
     expect(validateCheckpointPacket(readJson("checkpoint-bad.json"))).toEqual(expect.arrayContaining([
       "checkpoint packet has missing or unsupported top-level keys",
       "decisions must contain at most three entries",
-      "checkpoint packet contains approval or authorization semantics"
+      "checkpoint packet contains approval or authorization semantics",
+      "resume_context.next_safe_move must remain reversible and cannot perform a permission-bound external action"
     ]));
+    expect(validateCheckpointPacket(readJson("checkpoint-external-action.json"))).toEqual([
+      "resume_context.next_safe_move must remain reversible and cannot perform a permission-bound external action"
+    ]);
+  });
+
+  it("measures alternate checkpoints and restored review-page producers from mutated source", () => {
+    const mutations = readJson("source-mutations.json");
+    const mutationRoot = createMutationRoot();
+    try {
+      for (const agent of ["claude", "codex"]) {
+        appendFileSync(
+          resolve(mutationRoot, `packs/youtube-ops/${agent}/youtube-video-prelaunch-audit/SKILL.md`),
+          `\n${mutations.alternate_checkpoint}\n`
+        );
+      }
+      const checkpointResult = runLaunchCanary({ root: mutationRoot });
+      expect(checkpointResult.afps2.maximum_material_checkpoints).toBe(2);
+      expect(checkpointResult.failures).toContain(
+        "measured 2 material checkpoints (alternate-launch-selection, launch-packaging-selection); expected at most 1"
+      );
+
+      const producer = mutations.restored_review_page;
+      for (const agent of ["claude", "codex"]) {
+        const bundlePath = resolve(mutationRoot, `packs/youtube-ops/${agent}/${producer.skill}/${producer.bundle}`);
+        writeFileSync(bundlePath, producer.content);
+      }
+      const producerResult = runLaunchCanary({ root: mutationRoot });
+      expect(producerResult.afps2.review_only_pages).toBe(1);
+      expect(producerResult.failures).toContain(
+        "measured 1 review-page producers (youtube-description-optimizer:alignment); expected 0"
+      );
+    } finally {
+      rmSync(mutationRoot, { recursive: true, force: true });
+    }
   });
 });
