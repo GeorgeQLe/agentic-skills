@@ -10,6 +10,7 @@ Keep this file updated before every npm package publish.
 
 ### Changed
 
+- Added first-class `skillpacks uninstall <name...>` and confirmed `skillpacks uninstall --all` commands. Both successful removal paths end with copy-paste reinstall guidance; all-uninstall preserves unmanaged skills and unrelated project configuration.
 - Added `skillpacks cleanup` as the preferred command for deprecated skillpacks state cleanup; `uninstall-global` remains as a compatibility alias.
 - Extended cleanup to remove Build-In-Public project config keys (`alignment.build_in_public`, `alignment.bip_platforms`, and `alignment.bip_prompt_dismissed`) from discovered projects while preserving unrelated alignment settings.
 - Added a canary npm release lane to `publish.sh` with explicit `--tag` and `--preid` options, prerelease/latest guardrails, tag-aware `--current` recovery, and tag-aware published-package verification for both `skillpacks` and `@glexcorp/gskp`.

@@ -303,6 +303,20 @@ function managedConventionDocsDir(projectRoot) {
   return join(projectRoot, MANAGED_CONVENTION_DOC_ROOT);
 }
 
+function managedConventionDocsOwned(projectRoot) {
+  const metadataPath = join(managedConventionDocsDir(projectRoot), MANAGED_CONVENTION_DOC_METADATA);
+  if (!existsSync(metadataPath)) {
+    return false;
+  }
+
+  try {
+    const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'));
+    return metadata?.managed_by === 'agentic-skills';
+  } catch {
+    return false;
+  }
+}
+
 function conventionDocMetadata(entries, manifest) {
   return `${JSON.stringify({
     managed_by: 'agentic-skills',
@@ -557,41 +571,46 @@ function removeRepoSkillInstall(target, options = {}) {
     return false;
   }
 
-  if (stats.isSymbolicLink()) {
-    const source = readlinkSync(target);
-    if (skillSymlinkOwnedBySkillpacks(target, source, { tool, skillName })) {
-      unlinkSync(target);
-      return true;
-    }
+  const owned = allowLegacyGlobalSource
+    ? globalRepoSkillInstallOwned(target, tool, skillName)
+    : repoSkillInstallOwned(target, { tool, skillName });
+  if (!owned) {
     return false;
   }
 
+  if (stats.isSymbolicLink()) {
+    unlinkSync(target);
+    return true;
+  }
+
   if (isManagedSkillDir(target)) {
-    const source = managedMarkerField(target, 'source');
-    const legacyGlobalSource =
-      allowLegacyGlobalSource && sourceLooksLikeLegacyGlobalSkillpacksInstall(source, tool, skillName);
-    if (targetManagedBySkillpacks(target) && (sourceOwnedBySkillpacks(source) || legacyGlobalSource)) {
-      rmSync(target, { recursive: true, force: true });
-      return true;
-    }
+    rmSync(target, { recursive: true, force: true });
+    return true;
   }
 
   return false;
 }
 
-function repoSkillInstallOwned(target) {
+function repoSkillInstallOwned(target, options = {}) {
+  const { tool = '', skillName = '' } = options;
   const stats = inspectPath(target);
   if (stats === null) {
     return false;
   }
 
   if (stats.isSymbolicLink()) {
-    return skillSymlinkOwnedBySkillpacks(target, readlinkSync(target));
+    return skillSymlinkOwnedBySkillpacks(target, readlinkSync(target), { tool, skillName });
   }
 
   if (isManagedSkillDir(target)) {
     const source = managedMarkerField(target, 'source');
-    return targetManagedBySkillpacks(target) && sourceOwnedBySkillpacks(source);
+    return (
+      targetManagedBySkillpacks(target)
+      && (
+        sourceOwnedBySkillpacks(source)
+        || sourceLooksLikeLegacyProjectSkillpacksInstall(source, tool, skillName)
+      )
+    );
   }
 
   return false;
@@ -1119,7 +1138,16 @@ function removePack(projectRoot, manifest, pack) {
     }
   }
 
-  const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => candidate !== pack);
+  const packs = enabledPacks(readProjectConfig(projectRoot)).filter((candidate) => {
+    if (candidate === pack) {
+      return false;
+    }
+    try {
+      return reconcileStoredPack(manifest, candidate, 'enabled_packs') !== pack;
+    } catch {
+      return true;
+    }
+  });
   if (writePackProjectConfig(projectRoot, pack, packs)) {
     console.log('Updated .agents/project.json');
   }
@@ -2514,6 +2542,223 @@ export async function removeResolved({ manifest, projectRoot = process.cwd(), pa
       removeSingleSkill(projectRoot, manifest, skill);
     }
     printSessionReloadNotice();
+    return 0;
+  });
+}
+
+function shellQuote(value) {
+  const text = String(value);
+  if (/^[A-Za-z0-9._@/+:-]+$/.test(text)) {
+    return text;
+  }
+  return `'${text.replaceAll("'", `'\\''`)}'`;
+}
+
+function installCommand(targets) {
+  return `npx skillpacks install ${targets.map(shellQuote).join(' ')}`;
+}
+
+function packSkillNamesForUninstall(manifest, pack) {
+  if (activePackExists(manifest, pack)) {
+    return uniquePackSkillNames(manifest, pack);
+  }
+  return hibernatedSkillNamesForPack(canonicalHibernatedPack(pack) || pack);
+}
+
+function hasOwnedProjectInstall(projectRoot, skillNames) {
+  return skillNames.some((skillName) => {
+    return TOOLS.some((tool) => {
+      return repoSkillInstallOwned(targetPath(projectRoot, tool, skillName), { tool, skillName });
+    });
+  });
+}
+
+function configuredPackMatches(manifest, config, targetPack) {
+  return enabledPacks(config).some((pack) => {
+    if (pack === targetPack) {
+      return true;
+    }
+    try {
+      return reconcileStoredPack(manifest, pack, 'enabled_packs') === targetPack;
+    } catch {
+      return false;
+    }
+  });
+}
+
+function recoverableUninstallTargets({ manifest, projectRoot, orderedTargets, config }) {
+  const configuredSkills = new Set(enabledSkillEntries(config).map(([skillName]) => skillName));
+  const recoverable = [];
+
+  for (const target of orderedTargets) {
+    const skillNames = target.kind === 'pack'
+      ? packSkillNamesForUninstall(manifest, target.name)
+      : [target.name];
+    const configured = target.kind === 'pack'
+      ? configuredPackMatches(manifest, config, target.name)
+      : configuredSkills.has(target.name);
+    if (
+      (configured || hasOwnedProjectInstall(projectRoot, skillNames))
+      && !recoverable.includes(target.name)
+    ) {
+      recoverable.push(target.name);
+    }
+  }
+
+  return recoverable;
+}
+
+function reconciledEnabledPacks(manifest, config) {
+  const packs = [];
+  for (const pack of enabledPacks(config)) {
+    const canonical = reconcileStoredPack(manifest, pack, 'enabled_packs');
+    if (!packs.includes(canonical)) {
+      packs.push(canonical);
+    }
+  }
+  return packs;
+}
+
+export function reinstallCommandForProject({ manifest, projectRoot = process.cwd() }) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    return '';
+  }
+
+  const commands = [];
+  if (baseSkillsEnabled(config)) {
+    commands.push('npx skillpacks init');
+  }
+
+  const targets = [
+    ...reconciledEnabledPacks(manifest, config),
+    ...enabledSkillEntries(config).map(([skillName]) => skillName)
+  ].filter((target, index, all) => all.indexOf(target) === index);
+  if (targets.length > 0) {
+    commands.push(installCommand(targets));
+  }
+
+  for (const [skillName, version] of Object.entries(pinnedVersions(config)).sort(([left], [right]) => left.localeCompare(right))) {
+    const pack = findPackForSkill(manifest, skillName);
+    const baseSkill = !pack && hasBaseSkill(manifest, skillName);
+    if (pack || baseSkill) {
+      commands.push(`npx skillpacks pin ${shellQuote(skillName)} ${shellQuote(version)}`);
+    }
+  }
+
+  return commands.join(' && ');
+}
+
+function clearManagedInstallIntent(projectRoot) {
+  const config = readProjectConfig(projectRoot);
+  if (!config) {
+    return false;
+  }
+
+  const next = { ...config };
+  delete next.base_skills;
+  delete next.enabled_skills;
+  delete next.pinned_versions;
+  next.enabled_packs = [];
+  return writeProjectConfigIfChanged(projectRoot, next);
+}
+
+export async function uninstallAllProject({
+  manifest,
+  projectRoot = process.cwd(),
+  confirm = async () => false
+}) {
+  return withProjectLock(projectRoot, 'uninstall --all', async () => {
+    const reinstallCommand = reinstallCommandForProject({ manifest, projectRoot });
+    const managedTargets = installedSkillTargets(projectRoot).filter((target) => {
+      const toolRoot = basename(dirname(dirname(target)));
+      const tool = toolRoot === '.claude' ? 'claude' : toolRoot === '.codex' ? 'codex' : '';
+      return repoSkillInstallOwned(target, { tool, skillName: basename(target) });
+    });
+    const docsOwned = managedConventionDocsOwned(projectRoot);
+    const config = readProjectConfig(projectRoot);
+    const hasIntent = hasManagedInstallIntent(config) || Object.keys(pinnedVersions(config)).length > 0;
+
+    if (managedTargets.length === 0 && !docsOwned && !hasIntent) {
+      console.log('No project-local skillpacks installs found.');
+      return 0;
+    }
+
+    console.log('The following project-local skillpacks state will be removed:');
+    for (const target of managedTargets) {
+      console.log(`  ${relativeProjectPath(projectRoot, target)}`);
+    }
+    if (docsOwned) {
+      console.log(`  ${MANAGED_CONVENTION_DOC_ROOT}`);
+    }
+    if (hasIntent) {
+      console.log('  skillpacks install settings in .agents/project.json');
+    }
+
+    const approved = await confirm('Uninstall all project-local skillpacks-managed skills? [y/N] ');
+    if (!approved) {
+      console.log('Uninstall cancelled. No changes were made.');
+      return 0;
+    }
+
+    let removed = 0;
+    for (const target of managedTargets) {
+      const toolRoot = basename(dirname(dirname(target)));
+      const tool = toolRoot === '.claude' ? 'claude' : toolRoot === '.codex' ? 'codex' : '';
+      if (removeRepoSkillInstall(target, { tool, skillName: basename(target) })) {
+        console.log(`Removed ${relativeProjectPath(projectRoot, target)}`);
+        removed += 1;
+      }
+    }
+    if (docsOwned) {
+      rmSync(managedConventionDocsDir(projectRoot), { recursive: true, force: true });
+      console.log(`Removed ${MANAGED_CONVENTION_DOC_ROOT}`);
+    }
+    if (clearManagedInstallIntent(projectRoot)) {
+      console.log('Updated .agents/project.json (removed all skillpacks install settings)');
+    }
+
+    console.log(`Uninstalled ${removed} managed skill install(s).`);
+    printSessionReloadNotice();
+    if (reinstallCommand) {
+      console.log('');
+      console.log(`Reinstall everything removed with: ${reinstallCommand}`);
+    }
+    return 0;
+  });
+}
+
+export async function uninstallResolved({
+  manifest,
+  projectRoot = process.cwd(),
+  packs = [],
+  skills = [],
+  orderedTargets = [
+    ...packs.map((name) => ({ kind: 'pack', name })),
+    ...skills.map((name) => ({ kind: 'skill', name }))
+  ]
+}) {
+  return withProjectLock(projectRoot, `uninstall ${[...packs, ...skills].join(' ')}`.trim(), async () => {
+    const config = readProjectConfig(projectRoot);
+    const recoverableTargets = recoverableUninstallTargets({
+      manifest,
+      projectRoot,
+      orderedTargets,
+      config
+    });
+
+    for (const pack of packs) {
+      removePack(projectRoot, manifest, pack);
+    }
+    for (const skill of skills) {
+      removeSingleSkill(projectRoot, manifest, skill);
+    }
+    printSessionReloadNotice();
+
+    if (recoverableTargets.length > 0) {
+      console.log('');
+      console.log(`Reinstall everything removed with: ${installCommand(recoverableTargets)}`);
+    }
     return 0;
   });
 }

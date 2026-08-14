@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-08-12 - PR #18 uninstall review remediation and merge
+
+- Addressed all three actionable PR `#18` review threads with shared project-install ownership checks, canonical recovery configuration, and exact targeted-uninstall recovery snapshots.
+- Verified 117 focused lifecycle/normalization tests, the 146-test package Node suite, canary package `build:check`, task-document audit, and diff hygiene.
+- Posted evidence-backed dispositions, resolved all three review threads, and merged PR `#18` to `master` as merge commit `8d2c98904`.
+- Preserved the uninstall work during the subsequent AFPS PR `#16` reconciliation; no part of PR `#18` is reverted by the AFPS integration.
+
 ## 2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation
 
 - Upgraded mirrored `youtube-video-prelaunch-audit` contracts from v0.4 to v0.5 and archived both pristine v0.4 skill files.

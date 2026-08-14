@@ -32,6 +32,28 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 - [ ] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
 - [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable.
 
+## Historical Implementation - PR #18 Review Feedback And Merge
+
+### Goal
+
+Address all actionable review feedback on pull request `#18`, preserve the uninstall safety contract, publish verified remediation, resolve the reviewed threads after authorization, and merge through the issue-backed delivery contract.
+
+### Plan
+
+- [x] Resolve PR `#18` and fetch unresolved thread-aware review state.
+- [x] Cluster all three unresolved actionable threads and confirm all are in scope.
+- [x] Unify project install ownership checks, canonicalize recovery state, and snapshot exact targeted recovery selections with focused regression coverage.
+- [x] Run focused tests, the full relevant suite, package build checks, task-doc audit, and diff hygiene.
+- [x] Commit and push the remediation on `feat/17-skillpacks-uninstall`.
+- [x] Re-audit PR `#18` and confirm no new review feedback; all three existing findings remain covered by passing focused regressions.
+- [x] Post evidence-backed dispositions, resolve all three review threads, merge PR `#18`, and preserve the completed evidence on `master`.
+
+### Acceptance Criteria
+
+- [x] Every selected actionable thread was addressed by code, tests, and a documented disposition.
+- [x] The uninstall ownership, confirmation, cancellation, config-preservation, and reinstall-output contracts remain intact.
+- [x] PR `#18` merged as `8d2c98904`, its issue-backed changes remain on `master`, and the AFPS branch reconciliation preserves them.
+
 ## Historical Implementation - Review And Conditionally Merge PRs #12 And #14
 
 ### Goal
