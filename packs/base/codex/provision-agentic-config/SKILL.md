@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.17
+version: v0.18
 required_conventions: [alignment-page, afps-2.0]
 ---
 
@@ -28,12 +28,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.17 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.18 -->`. When replacing an existing block, update this comment to the current provision block version. The `$sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.17 -->
+<!-- provision-agentic-config v0.18 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -97,11 +97,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - In this repository, `/benchmark-test-skill` lives under `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
 
 ### Prompt History
-- On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
+- Capture prompt history only when a user-invoked skill will create or modify substantive tracked repository artifacts. Before substantive work, create `prompts/<skill-slug>/` if it does not exist.
 - Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
 - Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
 - Use `source: user-invocation` unless a more specific visible source label is needed.
-- Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
+- Include the prompt record in the same issue, branch, commit, and pull request as the substantive tracked work.
+- Prompt history must never initiate its own issue, branch, commit, or pull request. For read-only, status-only, review-only, merge-only, cleanup-only, and other external-only operations where the prompt record would be the only tracked mutation, do not create a prompt file.
 - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
 - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 
@@ -173,7 +174,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.17 -->
+<!-- provision-agentic-config v0.18 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -231,11 +232,12 @@ fi
 - For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `npx skillpacks install <pack-or-skill>` from the project shell for either the skill or the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale. If found in an installed pack, suggest the same reload path. If not found in any pack, suggest `$skills` or `$skills search <keyword>` only when `$skills` is visible in the active session; otherwise recommend `npx skillpacks init` from the project shell to install base skills, or use `npx skillpacks which <skill-name>` for a direct package lookup.
 
 ### Prompt History
-- On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
+- Capture prompt history only when a user-invoked skill will create or modify substantive tracked repository artifacts. Before substantive work, create `prompts/<skill-slug>/` if it does not exist.
 - Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
 - Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
 - Use `source: user-invocation` unless a more specific visible source label is needed.
-- Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
+- Include the prompt record in the same issue, branch, commit, and pull request as the substantive tracked work.
+- Prompt history must never initiate its own issue, branch, commit, or pull request. For read-only, status-only, review-only, merge-only, cleanup-only, and other external-only operations where the prompt record would be the only tracked mutation, do not create a prompt file.
 - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
 - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 

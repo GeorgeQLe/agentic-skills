@@ -1,5 +1,11 @@
 # provision-agentic-config Changelog
 
+## v0.18 - 2026-08-22
+
+- Limited prompt capture to invocations that already produce substantive tracked repository artifacts.
+- Prevented prompt history from initiating standalone issues, branches, commits, or pull requests.
+- Bumped the provision marker to `v0.18` so sync tooling detects stale recursive prompt-history policy.
+
 ## v0.17 - 2026-08-11
 
 - Added the managed AFPS 2.0 convention pointer and concise slice/checkpoint/permission-stop contract to both provisioned agent blocks.

@@ -2,7 +2,7 @@
 name: github-branch
 description: Safely create, adopt, publish, or clean up an issue-backed non-primary Git branch without force-pushing or absorbing ambiguous work
 type: operations
-version: v0.0
+version: v0.1
 argument-hint: "<ensure|adopt|publish|cleanup|status> [issue-number] [branch-name]"
 ---
 
@@ -17,6 +17,10 @@ Use this low-freedom subskill to own branch selection, dirty-tree adoption, comm
 - `publish`: push the resolved work branch with an upstream, never with force.
 - `status`: report primary, current branch, issue link, upstream, divergence, dirty paths, and open pull request.
 - `cleanup`: delete an already-merged work branch only after proving safety and receiving separate confirmation.
+
+## Prompt History Termination
+
+Prompt history is metadata, not work that initiates this lifecycle. Never create or adopt a branch, commit, or push solely to ship a prompt-history record. These lifecycle commands create no prompt file when it would be their only tracked mutation; when another user-invoked skill produces substantive tracked changes, its prompt record travels with that same work.
 
 ## Ensure And Adopt
 

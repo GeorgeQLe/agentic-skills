@@ -2,7 +2,7 @@
 name: github-issue
 description: Safely reuse, create, update, or explicitly close the single GitHub Issue that tracks repository work
 type: operations
-version: v0.0
+version: v0.1
 argument-hint: "<ensure|update|close|status> [issue-number] [--title <title>]"
 ---
 
@@ -16,6 +16,10 @@ Use this low-freedom subskill to own the issue/ticket boundary for tracked repos
 - `update`: add material status or acceptance-criteria context to the resolved issue.
 - `status`: report the resolved issue and its relationship to the current branch or pull request without mutation.
 - `close`: close only the explicitly resolved issue after separate user confirmation. Normal delivery uses a pull-request closing keyword instead.
+
+## Prompt History Termination
+
+Prompt history is metadata, not work that initiates this lifecycle. Never create or reuse an issue solely to ship a prompt-history record. These lifecycle commands create no prompt file when it would be their only tracked mutation; when another user-invoked skill produces substantive tracked changes, its prompt record travels with that same work.
 
 ## Resolution
 
