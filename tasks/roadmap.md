@@ -2,7 +2,35 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
+## Current Implementation - Terminating Prompt History Delivery
+
+### Goal
+
+Stop prompt-history capture from recursively creating issue/branch/pull-request chains while preserving prompt records alongside substantive tracked work and retaining the existing GitHub delivery safety boundary.
+
+### Delivery
+
+- GitHub issue: [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103)
+- Branch: `fix/103-stop-recursive-prompt-history-prs`
+- Pull request: [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) (ready)
+
+### Plan
+
+- [x] Make prompt capture conditional on substantive tracked work and forbid standalone prompt-history delivery.
+- [x] Add explicit non-recursion guards to the GitHub issue, branch, and pull-request lifecycle skills.
+- [x] Preserve prompt records from the 16 open prompt-only pull requests in this substantive fix branch.
+- [x] Add termination-focused regression tests, archive and version changed skills, refresh runtime copies, and run repository validation.
+- [x] Publish one ready fix pull request; leave closing superseded pull requests/issues and deleting branches behind separate post-merge confirmation.
+
+### Acceptance Criteria
+
+- [x] Read-only, status-only, and external-only skill invocations create no prompt file when it would be the only tracked mutation.
+- [x] A prompt record produced during substantive tracked work ships in that work's existing issue/branch/pull request.
+- [x] No lifecycle skill may create an issue, branch, or pull request solely for prompt history.
+- [x] Existing open prompt records are preserved without mutating their pull requests, issues, or branches during implementation.
+- [x] Targeted convention, GitHub-delivery, version/archive, mirror, package-refresh, task-document, diff, and secret checks pass.
+
+## Previous Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
 ### Goal
 

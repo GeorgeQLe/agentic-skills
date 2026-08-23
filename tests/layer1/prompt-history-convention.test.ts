@@ -15,7 +15,7 @@ describe("prompt history convention", () => {
     { path: "packs/base/codex/provision-agentic-config/SKILL.md", minOccurrences: 2 },
   ];
 
-  it("requires visible skill invocation prompts to be persisted before skill work", () => {
+  it("persists visible prompts with substantive tracked skill work", () => {
     for (const surface of surfaces) {
       const content = read(surface.path);
       const occurrenceCount = content.match(/### Prompt History/g)?.length ?? 0;
@@ -40,8 +40,11 @@ describe("prompt history convention", () => {
         "prompt_scope: visible-user-invocation",
       );
       expect(content, `${surface.path} default source`).toContain("source: user-invocation");
-      expect(content, `${surface.path} tracked artifact default`).toContain(
-        "tracked repo artifacts by default",
+      expect(content, `${surface.path} substantive tracked work boundary`).toContain(
+        "substantive tracked repository artifacts",
+      );
+      expect(content, `${surface.path} same delivery boundary`).toContain(
+        "same issue, branch, commit, and pull request",
       );
       expect(content, `${surface.path} visible-only scope`).toContain(
         "hidden system/developer instructions and unavailable model context are out of scope",
@@ -55,13 +58,43 @@ describe("prompt history convention", () => {
     }
   });
 
-  it("keeps provisioned config versions in sync with bumped provisioner skills", () => {
-    // Derive the expected version from the source of truth (the provisioner skill
-    // frontmatter) so this assertion self-heals on the next version bump.
-    const skillSource = read("packs/base/claude/provision-agentic-config/SKILL.md");
-    const versionMatch = skillSource.match(/^version:\s*(v\d+\.\d+)/m);
-    expect(versionMatch, "provision-agentic-config SKILL.md version frontmatter").not.toBeNull();
-    const version = versionMatch![1];
+  it("terminates metadata-only and external-only invocations", () => {
+    for (const surface of surfaces) {
+      const content = read(surface.path);
+      expect(content, `${surface.path} standalone lifecycle guard`).toContain(
+        "Prompt history must never initiate its own issue, branch, commit, or pull request",
+      );
+      expect(content, `${surface.path} metadata-only exemption`).toContain(
+        "where the prompt record would be the only tracked mutation, do not create a prompt file",
+      );
+      for (const operation of ["read-only", "status-only", "review-only", "merge-only", "cleanup-only"]) {
+        expect(content, `${surface.path} ${operation} exemption`).toContain(operation);
+      }
+    }
+
+    for (const agent of ["claude", "codex"]) {
+      for (const skill of ["github-issue", "github-branch", "github-pr"]) {
+        const content = read(`packs/base/${agent}/${skill}/SKILL.md`);
+        expect(content, `${agent}/${skill} termination section`).toContain(
+          "## Prompt History Termination",
+        );
+        expect(content, `${agent}/${skill} metadata boundary`).toContain(
+          "Prompt history is metadata, not work that initiates this lifecycle",
+        );
+        expect(content, `${agent}/${skill} standalone delivery guard`).toContain(
+          "solely to ship a prompt-history record",
+        );
+      }
+    }
+  });
+
+  it("keeps provisioned block markers in sync", () => {
+    const codexSource = read("packs/base/codex/provision-agentic-config/SKILL.md");
+    const markerMatch = codexSource.match(
+      /Each block begins with `<!-- provision-agentic-config (v\d+\.\d+) -->`/,
+    );
+    expect(markerMatch, "provision-agentic-config block marker").not.toBeNull();
+    const marker = markerMatch![1];
 
     for (const path of [
       "CLAUDE.md",
@@ -72,15 +105,8 @@ describe("prompt history convention", () => {
       const content = read(path);
 
       expect(content, `${path} provisioned block version`).toContain(
-        `<!-- provision-agentic-config ${version} -->`,
+        `<!-- provision-agentic-config ${marker} -->`,
       );
-    }
-
-    for (const path of [
-      "packs/base/claude/provision-agentic-config/SKILL.md",
-      "packs/base/codex/provision-agentic-config/SKILL.md",
-    ]) {
-      expect(read(path), `${path} skill version`).toContain(`version: ${version}`);
     }
   });
 });

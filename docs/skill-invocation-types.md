@@ -13,6 +13,8 @@
 | **Sub-skill** | `sub-skill` | Agent invokes automatically or via parent router; user rarely invokes directly | No |
 | **Orchestrator** | `orchestrator` | Coordinates execution of other skills; user invokes to drive work forward | No |
 
+Invocation type does not make prompt history substantive work. Capture one prompt record only when the user-requested workflow already creates or modifies substantive tracked repository artifacts, and include it in that work's existing delivery. Delegated sub-skills and read-only or external-only lifecycle operations create no independent prompt record, issue, branch, commit, or pull request.
+
 ## Classification by Location
 
 ### Base Skills (`packs/base/claude/`)

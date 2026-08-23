@@ -52,7 +52,7 @@ describe("AFPS 2.0 YouTube launch canary", () => {
     expect(registry).toContain('assets/skillpacks-docs/afps-2.0-convention.md');
     expect(packageBuild).toContain("afps-2.0-convention.md");
     for (const contract of [agents, claude]) {
-      expect(contract).toContain("<!-- provision-agentic-config v0.17 -->");
+      expect(contract).toContain("<!-- provision-agentic-config v0.18 -->");
       expect(contract).toContain(".agents/skillpacks/docs/afps-2.0-convention.md");
       expect(contract).toContain("at most three decisions");
     }

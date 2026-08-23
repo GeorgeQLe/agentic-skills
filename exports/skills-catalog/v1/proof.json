@@ -1,13 +1,13 @@
 {
   "schema_version": "skills-catalog.v1",
-  "source_commit": "e0bd90a1f722456f71a814744c8846da13e78943",
-  "generated_at": "2026-08-14T01:52:16.635Z",
-  "source_fingerprint": "a1119872ef17c78ff3be88ec9e549474b05d27f848714bb197b0759337ec0449",
+  "source_commit": "ef2b510648d2e2ab82b09fc037d27e3c3d4249b6",
+  "generated_at": "2026-08-23T04:07:36.628Z",
+  "source_fingerprint": "1b82bd3db4761b62fe6cadb172d9c46100fbe44b04aef1b0bd9c2d3974f08caa",
   "source_count": 459,
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
-    "branch": "docs/15-youtube-afps2-target",
+    "branch": "fix/103-stop-recursive-prompt-history-prs",
     "ref_policy": "Consumers should pin SKILLS_REPO_REF to a tag or commit SHA for releases and deployments."
   },
   "proof_artifacts": [
