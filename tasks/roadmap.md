@@ -12,7 +12,7 @@ Stop prompt-history capture from recursively creating issue/branch/pull-request 
 
 - GitHub issue: [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103)
 - Branch: `fix/103-stop-recursive-prompt-history-prs`
-- Pull request: pending
+- Pull request: [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) (ready)
 
 ### Plan
 
@@ -20,7 +20,7 @@ Stop prompt-history capture from recursively creating issue/branch/pull-request 
 - [x] Add explicit non-recursion guards to the GitHub issue, branch, and pull-request lifecycle skills.
 - [x] Preserve prompt records from the 16 open prompt-only pull requests in this substantive fix branch.
 - [x] Add termination-focused regression tests, archive and version changed skills, refresh runtime copies, and run repository validation.
-- [ ] Publish one ready fix pull request; leave closing superseded pull requests/issues and deleting branches behind separate post-merge confirmation.
+- [x] Publish one ready fix pull request; leave closing superseded pull requests/issues and deleting branches behind separate post-merge confirmation.
 
 ### Acceptance Criteria
 

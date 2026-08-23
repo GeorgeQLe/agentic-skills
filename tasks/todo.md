@@ -13,7 +13,7 @@ Eliminate recursive prompt-only pull requests while preserving prompt records in
 - [x] Update the prompt-history convention and GitHub lifecycle contracts with a terminating rule.
 - [x] Archive, bump, changelog, and refresh every affected skill mirror.
 - [x] Consolidate the open prompt-only records without closing or deleting their existing delivery objects.
-- [ ] Run focused and repository-level verification, record review evidence, and publish one ready pull request.
+- [x] Run focused and repository-level verification, record review evidence, and publish ready pull request [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104).
 
 ### Acceptance Criteria
 
@@ -34,7 +34,7 @@ Eliminate recursive prompt-only pull requests while preserving prompt records in
 
 ### Review
 
-The terminating rule is implemented in the provisioned agent policies, canonical delivery contract, invocation taxonomy, and all six GitHub lifecycle skill mirrors. Twenty records from 16 open prompt-only pull requests plus the two current substantive-work prompt records are consolidated on this branch. Focused tests, strict version/archive checks, the full layer-one baseline differential, runtime refresh, catalog generation, canary package verification, task/diff hygiene, and staged secret scanning pass. Pull-request publication remains.
+The terminating rule is implemented in the provisioned agent policies, canonical delivery contract, invocation taxonomy, and all six GitHub lifecycle skill mirrors. Twenty records from 16 open prompt-only pull requests plus the two current substantive-work prompt records are consolidated on this branch. Focused tests, strict version/archive checks, the full layer-one baseline differential, runtime refresh, catalog generation, canary package verification, task/diff hygiene, and staged secret scanning pass. Commit `f02acb06e` was published in ready pull request [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104), which closes issue `#103` when merged.
 
 ### Next Work
 
