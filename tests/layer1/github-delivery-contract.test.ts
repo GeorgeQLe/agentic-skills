@@ -14,8 +14,9 @@ describe("GitHub delivery safety subskills", () => {
       for (const agent of ["claude", "codex"]) {
         const source = read(`packs/base/${agent}/${skill}/SKILL.md`);
         expect(source).toContain(`name: ${skill}`);
-        expect(source).toContain("version: v0.0");
-        expect(read(`packs/base/${agent}/${skill}/CHANGELOG.md`)).toContain("## v0.0 - 2026-07-12");
+        expect(source).toContain("version: v0.1");
+        expect(read(`packs/base/${agent}/${skill}/archive/v0.0/SKILL.md`)).toContain("version: v0.0");
+        expect(read(`packs/base/${agent}/${skill}/CHANGELOG.md`)).toContain("## v0.1 - 2026-08-22");
         expect(read("packages/skillpacks/dist/skillpacks-manifest.json")).toContain(`"id": "base-${agent}-${skill}"`);
       }
       expect(read("packs/base/PACK.md")).toContain(`\`${skill}\``);
@@ -34,6 +35,11 @@ describe("GitHub delivery safety subskills", () => {
       expect(pr).toContain("Ordinary shipping ends after the ready pull request");
       expect(pr).toContain("explicit user confirmation immediately before the merge mutation");
       expect(pr).toContain("Never enable auto-merge");
+      for (const contract of [issue, branch, pr]) {
+        expect(contract).toContain("Prompt history is metadata, not work that initiates this lifecycle");
+        expect(contract).toContain("solely to ship a prompt-history record");
+      }
+      expect(pr).toContain("Never route next work to a prompt-history-only pull request");
     }
   });
 
@@ -50,6 +56,8 @@ describe("GitHub delivery safety subskills", () => {
     const contract = read("docs/github-delivery-contract.md");
     expect(contract).toContain("Never commit tracked mutations on, push tracked mutations directly to");
     expect(contract).toContain("Ordinary shipping stops at the ready pull request");
+    expect(contract).toContain("Prompt history is delivery metadata, not substantive tracked work");
+    expect(contract).toContain("Never create or reuse an issue, branch, commit, or pull request solely");
     expect(() => execFileSync("node", ["scripts/audit-github-delivery-contract.mjs"], { cwd: ROOT })).not.toThrow();
   });
 
@@ -64,8 +72,8 @@ describe("GitHub delivery safety subskills", () => {
     const audit = read("scripts/audit-github-delivery-contract.mjs");
     expect(audit).not.toContain("legacyMigrationLimits");
     expect(audit).toContain("repository\\s+");
-    expect(read("AGENTS.md")).toContain("<!-- provision-agentic-config v0.17 -->");
-    expect(read("CLAUDE.md")).toContain("<!-- provision-agentic-config v0.17 -->");
+    expect(read("AGENTS.md")).toContain("<!-- provision-agentic-config v0.18 -->");
+    expect(read("CLAUDE.md")).toContain("<!-- provision-agentic-config v0.18 -->");
     expect(read("AGENTS.md")).not.toContain("explicit exception to direct-to-primary work");
     expect(read("CLAUDE.md")).not.toContain("explicit exception to direct-to-primary work");
   });

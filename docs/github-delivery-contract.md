@@ -15,6 +15,13 @@ When a repository has a GitHub remote, every tracked mutation must use one revie
 
 Reuse before create. A command must stop on ambiguous issue, branch, pull-request, remote, or dirty-tree ownership instead of guessing or creating duplicates.
 
+## Metadata Termination
+
+- Prompt history is delivery metadata, not substantive tracked work, and never starts this lifecycle by itself.
+- Never create or reuse an issue, branch, commit, or pull request solely to ship a prompt-history record.
+- When a user-invoked skill already produces substantive tracked changes, include its prompt record in that same issue-backed delivery.
+- For read-only, status-only, review-only, merge-only, cleanup-only, and other external-only operations where prompt history would be the only tracked mutation, create no prompt file.
+
 ## Primary-Branch Boundary
 
 - Never commit tracked mutations on, push tracked mutations directly to, or force-update `main`, `master`, or the repository's detected primary branch.

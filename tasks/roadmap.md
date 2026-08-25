@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Stable 1.0 Distribution Cleanup
+## Active Implementation Roadmap - Stable 1.0 Distribution Cleanup
 
 ### Goal
 
@@ -12,11 +12,11 @@ Prepare the first stable 1.0 distribution-cleanup slice after the merged AFPS 2.
 
 - GitHub issue: [#25](https://github.com/GeorgeQLe/agentic-skills/issues/25)
 - Branch: `chore/25-stable-1.0-distribution-cleanup`
-- Pull request: [#26](https://github.com/GeorgeQLe/agentic-skills/pull/26) (ready)
+- Pull request: [#26](https://github.com/GeorgeQLe/agentic-skills/pull/26) (remediation in progress after review)
 - Predecessor: AFPS foundation PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16), merged as `f356ce200`
 - Release boundary: no npm publication, dist-tag mutation, release tag, deployment, or destructive consumer cleanup in this phase
 
-## Phase 1: Stable Distribution Boundary Audit
+## Phase 1: Stable Distribution Boundary Audit ✓
 
 ### Goal
 
@@ -34,23 +34,103 @@ Produce an executable, evidence-backed retirement boundary for stable 1.0 before
 
 **Coordination Notes:** Package manifests, source skill metadata, generated catalog/runtime artifacts, and release docs share the same distribution boundary. Keep the audit and eventual edits integrated until exact file ownership and compatibility constraints are proven.
 
+### Implementation
+
+- [x] Inventory stable/canary package, convention, catalog, runtime, and release boundaries.
+- [x] Classify the complete stable page-convention dependency population and distinguish explicit tooling from implicit ordinary-workflow gates.
+- [x] Keep `ship-end` stable, schedule a bounded safety migration for `sync`, and define the smallest coherent next slice.
+- [x] Record evidence in `tasks/stable-1.0-distribution-audit.md` and validate without publishing or mutating consumers.
+
 ### Acceptance Criteria
 
-- The audit names every stable-distributed surface that encodes or depends on legacy ordinary-workflow approval behavior, with source paths and executable evidence.
-- Explicit page/admin tools and historical archives remain distinguishable from implicit ordinary-workflow producers.
-- `ship-end` and `sync` receive evidence-backed keep, migrate, move-lane, or retire dispositions that preserve daily operational value and AFPS permission boundaries.
-- The proposed cleanup slice cannot create mixed AFPS defaults across source, stable package, runtime refresh, catalog, docs, or agent mirrors.
-- The next phase has bounded acceptance criteria and focused verification commands; no publish, tag, dist-tag, deployment, or destructive consumer action occurs.
+- [x] The audit names every stable-distributed surface that encodes or depends on legacy ordinary-workflow approval behavior, with source paths and executable evidence.
+- [x] Explicit page/admin tools and historical archives remain distinguishable from implicit ordinary-workflow producers.
+- [x] `ship-end` and `sync` receive evidence-backed keep and migrate dispositions that preserve daily operational value and AFPS permission boundaries.
+- [x] The proposed cleanup slice cannot create mixed AFPS defaults across source, stable package, runtime refresh, catalog, docs, or agent mirrors.
+- [x] The next phase has bounded acceptance criteria and focused verification commands; no publish, tag, dist-tag, deployment, or destructive consumer action occurs.
 
 ### Review Gate
 
 Proceed directly through the reversible audit. Checkpoint only if evidence leaves two materially different stable-1.0 distribution strategies with comparable support or if the next action would cross a release or destructive-cleanup permission boundary.
 
+## Phase 2: Public Catalog Release-Lane Identity
+
+### Goal
+
+Make stable-versus-canary identity explicit and testable on every public catalog skill record without changing any skill's lane or publishing a package.
+
+### Plan
+
+- [ ] Add failing schema/generator tests for valid item-level release-lane identity and exact stable/canary projections.
+- [ ] Generate additive `release_lane` identity and deterministic lane counts from the canonical skill metadata.
+- [ ] Regenerate catalog artifacts and update public schema documentation where required.
+- [ ] Run catalog, stable/canary manifest, package-boundary, build, task, diff, and independent review gates.
+
+### Acceptance Criteria
+
+- [ ] Every public catalog skill record has `release_lane: stable|canary`, derived from canonical metadata with stable as the documented default.
+- [ ] Stable and canary projections agree across the catalog generator and package manifest generator; only the two `create-briefing-slides` mirrors are canary.
+- [ ] The change is additive for existing catalog consumers, and the package manifest remains the installation source of truth.
+- [ ] Generated exports are current and focused regression tests fail on missing, invalid, or leaked lane identity.
+- [ ] No package publication, tag, dist-tag, deployment, lane reassignment, or installed-consumer mutation occurs.
+
+## Historical Implementation - Terminating Prompt History Delivery
+
+### Goal
+
+Stop prompt-history capture from recursively creating issue/branch/pull-request chains while preserving prompt records alongside substantive tracked work and retaining the existing GitHub delivery safety boundary.
+
+### Delivery
+
+- GitHub issue: [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103)
+- Branch: `fix/103-stop-recursive-prompt-history-prs`
+- Pull request: [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) (merged as `1dbe9b4bc` on 2026-08-23; issue #103 closed through the merge)
+
+### Plan
+
+- [x] Make prompt capture conditional on substantive tracked work and forbid standalone prompt-history delivery.
+- [x] Add explicit non-recursion guards to the GitHub issue, branch, and pull-request lifecycle skills.
+- [x] Preserve prompt records from the 16 open prompt-only pull requests in this substantive fix branch.
+- [x] Add termination-focused regression tests, archive and version changed skills, refresh runtime copies, and run repository validation.
+- [x] Publish one ready fix pull request; leave closing superseded pull requests/issues and deleting branches behind separate post-merge confirmation.
+
+### Acceptance Criteria
+
+- [x] Read-only, status-only, and external-only skill invocations create no prompt file when it would be the only tracked mutation.
+- [x] A prompt record produced during substantive tracked work ships in that work's existing issue/branch/pull request.
+- [x] No lifecycle skill may create an issue, branch, or pull request solely for prompt history.
+- [x] Existing open prompt records are preserved without mutating their pull requests, issues, or branches during implementation.
+- [x] Targeted convention, GitHub-delivery, version/archive, mirror, package-refresh, task-document, diff, and secret checks pass.
+
 ## Historical Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
-### Outcome
+### Goal
 
-Merged PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) as `f356ce200` on 2026-08-13. The canonical AFPS 2.0 foundation, YouTube launch-trio migration, canary checks, package/catalog updates, and external-action safety assertions are now reachable from `origin/master`. Stable 1.0 retirement remained explicitly deferred.
+Implement the shared AFPS 2.0 operating contract and deterministic comparison harness, then migrate the first bounded creator-workflow slice from seven routine approval stops to one material decision checkpoint without weakening publication or account-action permission boundaries.
+
+### Delivery
+
+- GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
+- Branch: `docs/15-youtube-afps2-target`
+- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (merged as `f356ce200` on 2026-08-14 UTC; issue #15 closed through the merge)
+- Scope: foundational convention, managed packaging/provisioning, deterministic launch-play harness, and the mirrored launch-trio skill contracts
+
+### Plan
+
+- [x] Add the canonical AFPS 2.0 convention to the managed convention-doc/package channel and provision the global Claude/Codex pointer.
+- [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
+- [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
+- [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
+- [x] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
+
+### Acceptance Criteria
+
+- [x] The convention defines the four ordered actions, seven slice elements, chat-first checkpoint packet, reversible canonical writes, and permission-stop precedence from the accepted RFC.
+- [x] Managed source, package, installed-doc, and provisioned-agent paths expose one semantically identical AFPS 2.0 contract.
+- [x] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
+- [x] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
+- [x] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
+- [x] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR were current and reviewable at the merged exact head.
 
 ## Historical Implementation - PR #18 Review Feedback And Merge
 

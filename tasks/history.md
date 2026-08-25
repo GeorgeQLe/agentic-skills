@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-08-24 - Stable 1.0 distribution boundary audit
+
+- Refreshed PR `#26` from current `master` with a merge commit workflow and reconciled its stale task-document conflicts without rebasing or rewriting published history.
+- Proved stable package generation contains 413 skills across 40 packs and excludes the two canary-only `create-briefing-slides` mirrors and their managed convention; the canary projection contains 415 skills.
+- Inventoried 309 stable page-convention-dependent agent surfaces, including the 152-surface report-first approval subset, while distinguishing explicit tooling and historical support from implicit ordinary-workflow coupling.
+- Kept `ship-end` stable, scheduled `sync` for a safety migration away from implicit stash/rebase behavior, and selected additive public catalog release-lane identity as the smallest coherent Phase 2 slice.
+- Closed superseded PR `#10` and issue `#9`; left PR `#26` open and unmerged for exact-head review and a separate merge decision.
+- Manifest: `tasks/ship-manifest-2026-08-24-stable-1.0-distribution-audit.md`.
+
 ## 2026-08-13 - Stable 1.0 distribution cleanup intake
 
 - Verified AFPS foundation PR `#16` merged as `f356ce200`, then created issue `#25` and non-primary branch `chore/25-stable-1.0-distribution-cleanup` from current `origin/master`.
@@ -15585,3 +15594,17 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added lifecycle and compatibility coverage for explicit scopes, flag ordering, global dry-run, global reinstall migration, and incompatible scope rejection.
 - Verification: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check passed.
 - Commit: `438d87939 Add cleanup scope flags`, pushed to `master`.
+
+## 2026-08-24 — PR #104 task-state reconciliation
+
+- Verified GitHub pull request [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) merged into `master` as `1dbe9b4bc035517f271000c2b2da471b1c5073da` on 2026-08-23 and closed linked issue [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103).
+- Reclassified the completed "Terminating Prompt History Delivery" roadmap entry as historical and replaced its stale review route in `tasks/todo.md` with an explicit no-active-task state.
+- Preserved the two unchecked recurring documentation tasks as advisory; neither was promoted into active execution.
+- Delivered this reconciliation through issue [#105](https://github.com/GeorgeQLe/agentic-skills/issues/105) on branch `docs/105-reconcile-pr-104-task-state`; existing issue #9 and PR #10 remain untouched because they own a broader, older roadmap-pipeline change set.
+- Verification passed: `node scripts/audit-task-docs.mjs` reported 0 failures and 0 warnings, targeted routing checks found no active implementation or unchecked todo item, and `git diff --check` passed.
+
+## 2026-08-24 — PR #106 review remediation for PR #16 roadmap state
+
+- Confirmed pull request [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) merged into `master` as `f356ce20042f1e87005e0daee54470343422f215` on 2026-08-14 UTC and closed linked issue [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15).
+- Corrected its stale `tasks/roadmap.md` delivery status and checked the two remaining milestones whose completion is supported by the merge and ancestry evidence.
+- Kept `tasks/todo.md` in its explicit no-active-task state; this review remediation does not promote historical AFPS work back into execution.

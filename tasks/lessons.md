@@ -1,5 +1,16 @@
 # Lessons
 
+## 2026-08-22 - Metadata delivery must terminate
+
+- Prompt-history capture became a tracked mutation for every skill invocation; mandatory issue-backed delivery then created a new pull request for each GitHub review or merge operation, and reviewing that bookkeeping pull request repeated the cycle.
+- Rule: never create an issue, branch, pull request, or standalone commit solely to ship prompt history. Capture a prompt record only when the invocation already produces substantive tracked work, and include it in that work's existing delivery boundary.
+- Read-only, status-only, and external-only operational invocations are prompt-capture exempt when the prompt file would otherwise be their only tracked change. Add regression coverage that proves metadata workflows reach a terminal state.
+
+## 2026-08-13 - Pull-request body updates need semantic verification
+
+- A pull-request body written with literal `\\n` sequences looked structurally correct in escaped JSON but rendered as one malformed line and prevented GitHub from recognizing its `Closes #N` issue link.
+- Rule: write multiline GitHub issue and pull-request bodies from a real newline-preserving body file, then immediately re-fetch the body and verify `closingIssuesReferences` rather than treating a successful edit command as proof of correct rendering or issue linkage.
+
 ## 2026-08-10 - Repeated rubber stamps are evidence that routine gates have no decision value
 
 - The user reports approving YouTube review pages almost automatically every time. That is not healthy confirmation evidence; it means the workflow is consuming attention without surfacing a material choice.

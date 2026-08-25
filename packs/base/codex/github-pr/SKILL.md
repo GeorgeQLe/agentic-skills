@@ -2,7 +2,7 @@
 name: github-pr
 description: Safely upsert, inspect, review, or explicitly merge the pull request for an issue-backed work branch
 type: operations
-version: v0.0
+version: v0.1
 argument-hint: "<upsert|review|merge|status> [pr-number] [--draft|--ready]"
 ---
 
@@ -16,6 +16,10 @@ Use this low-freedom subskill to own pull-request reuse, creation, readiness, re
 - `status`: report identity, head/base, draft state, mergeability, checks, approvals, unresolved threads, and linked issue.
 - `review`: inspect review feedback and gates without merging.
 - `merge`: merge only after all strict gates and immediate explicit user confirmation.
+
+## Prompt History Termination
+
+Prompt history is metadata, not work that initiates this lifecycle. Never create or reuse a pull request solely to ship a prompt-history record. Status, review, and merge commands create no prompt file when it would be their only tracked mutation; when another user-invoked skill produces substantive tracked changes, its prompt record travels with that same work.
 
 ## Upsert
 
@@ -49,4 +53,4 @@ After merge, verify the merged SHA and linked issue state. Branch cleanup is sep
 
 ## Output
 
-Report pull-request identity, reuse/create decision, readiness, exact gate status, linked issue behavior, and the next review or remediation action.
+Report pull-request identity, reuse/create decision, readiness, exact gate status, linked issue behavior, and the next substantive review or remediation action. Never route next work to a prompt-history-only pull request.

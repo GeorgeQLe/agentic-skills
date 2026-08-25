@@ -4,7 +4,7 @@
 
 This overrides every instruction below (and any routing from `/ship`, Missing Skill Fallback, Cross-Pack Routing, or a recommended-next-command handoff) that would tell you to run or suggest an `npx skillpacks install`/`init` command as a prerequisite for an unavailable or not-enabled pack. In this repo, treat the skill as present in-tree and run it from its source SKILL.md instead of recommending an install. The only skillpacks-related command used here is `scripts/pack.sh refresh`, which republishes the local runtime skill copies from source — it is not an install.
 
-<!-- provision-agentic-config v0.17 -->
+<!-- provision-agentic-config v0.18 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -76,11 +76,12 @@ This overrides every instruction below (and any routing from `/ship`, Missing Sk
 - In this repository, `/benchmark-test-skill` lives under `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
 
 ### Prompt History
-- On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
+- Capture prompt history only when a user-invoked skill will create or modify substantive tracked repository artifacts. Before substantive work, create `prompts/<skill-slug>/` if it does not exist.
 - Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
 - Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
 - Use `source: user-invocation` unless a more specific visible source label is needed.
-- Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
+- Include the prompt record in the same issue, branch, commit, and pull request as the substantive tracked work.
+- Prompt history must never initiate its own issue, branch, commit, or pull request. For read-only, status-only, review-only, merge-only, cleanup-only, and other external-only operations where the prompt record would be the only tracked mutation, do not create a prompt file.
 - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
 - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 
