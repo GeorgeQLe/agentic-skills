@@ -1,5 +1,81 @@
 # Development Docs Reconciliation Report
 
+## 2026-08-24 — PR #106 review remediation for merged PR #16
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **fixed** — the first prior roadmap entry now records PR #16 as merged instead of routing its completed merge work as unfinished.
+- History coverage: **fixed** — the follow-up records the verified merge commit and linked issue closure.
+- Phase archives: **not changed** — this was a stale delivery-state correction, not a numbered phase transition.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: independently re-review PR #106 at its amended exact head.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md** — the "AFPS 2.0 Foundation And YouTube Launch Trio" entry still described PR #16 as ready but unmerged and left its final delivery milestones unchecked. GitHub and git history confirm PR #16 merged as `f356ce20042f1e87005e0daee54470343422f215` on 2026-08-14 UTC, closed issue #15, and is an ancestor of the PR #106 branch.
+
+### Fixed
+
+- [x] `tasks/roadmap.md` — recorded PR #16's merge and issue #15 closure, then checked the two delivery milestones supported by that evidence.
+- [x] `tasks/history.md` — appended the PR #106 review-remediation evidence.
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260824-204047-reconcile-pr-16-roadmap.md` — captured the exact visible remediation invocation with the substantive task-document amendment.
+
+### Deferred
+
+- None.
+
+### Validation
+
+- GitHub reports PR #16 `MERGED` with merge commit `f356ce20042f1e87005e0daee54470343422f215`; issue #15 is `CLOSED` at the immediately following timestamp.
+- `git merge-base --is-ancestor f356ce20042f1e87005e0daee54470343422f215 d9991c3d37280b5857d0c65d1fc93a09a718a798` passed before the amendment.
+- `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings; staged diff hygiene passed; staged gitleaks scanning found no leaks.
+
+---
+
+## 2026-08-24 — PR #104 task-state reconciliation
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **fixed** — completed PR #104 work is historical and no longer routed as active execution.
+- History coverage: **fixed** — the verified merge commit and issue closure are recorded in append-only history.
+- Phase archives: **not changed** — this implementation was not a numbered roadmap phase.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: run `$roadmap` to select and explicitly promote new executable work.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md / tasks/todo.md** — "Terminating Prompt History Delivery" remained under matching `Current Implementation` headings after every step was complete and PR #104 had merged. The stale todo route still recommended reviewing the already-merged pull request. Evidence: PR #104 state `MERGED`, merge commit `1dbe9b4bc`, and issue #103 state `CLOSED`.
+
+### Warnings
+
+- **tasks/recurring-todo.md** — Two recurring documentation items remain unchecked and advisory (`Devtool docs audit refresh`, `Spec drift check`). This invocation did not promote either item.
+- **Issue #9 / PR #10** — The older open documentation-pipeline delivery remains separate. Its three commits and eight-file diff predate this narrow reconciliation and were not modified or closed.
+
+### Fixed
+
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260824-202734-reconcile-pr-104.md` — captured the exact visible invocation alongside substantive task-document changes.
+- [x] `tasks/roadmap.md` — reclassified the completed work as historical and recorded PR #104 merge evidence.
+- [x] `tasks/todo.md` — replaced the stale completed task and review command with a no-active-task state.
+- [x] `tasks/history.md` — appended verified merge, issue-closure, and reconciliation delivery evidence.
+- [x] `tasks/reconciliation-report.md` — recorded the resolved drift, advisory items, and separate legacy PR boundary.
+
+### Deferred
+
+- [ ] `tasks/recurring-todo.md` — decide separately whether to promote either recurring documentation task.
+- [ ] Issue #9 / PR #10 — review or reconcile that older roadmap-pipeline delivery separately; no closure or merge action was authorized here.
+
+### Validation
+
+- `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings; its two informational notices confirm the intentional no-active-task state and two advisory recurring items.
+- Targeted routing checks found no `Current Implementation` section in `tasks/todo.md` or `tasks/roadmap.md`, no unchecked todo item, and no stale `$github-pr review` route for PR #104.
+- `git diff --check` passed.
+
+---
+
 ## 2026-07-02 — `$reconcile-dev-docs fix tasks`
 
 - **Mode:** fix · **Scope:** tasks
