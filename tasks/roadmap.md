@@ -2,7 +2,7 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
-## Current Implementation - Terminating Prompt History Delivery
+## Historical Implementation - Terminating Prompt History Delivery
 
 ### Goal
 
@@ -12,7 +12,7 @@ Stop prompt-history capture from recursively creating issue/branch/pull-request 
 
 - GitHub issue: [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103)
 - Branch: `fix/103-stop-recursive-prompt-history-prs`
-- Pull request: [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) (ready)
+- Pull request: [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) (merged as `1dbe9b4bc` on 2026-08-23; issue #103 closed through the merge)
 
 ### Plan
 

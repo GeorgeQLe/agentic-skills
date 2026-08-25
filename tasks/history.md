@@ -15576,3 +15576,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Added lifecycle and compatibility coverage for explicit scopes, flag ordering, global dry-run, global reinstall migration, and incompatible scope rejection.
 - Verification: focused lifecycle/project-config/compatibility Node tests, full `npm --workspace packages/skillpacks run test:node`, task-doc audit, and diff whitespace check passed.
 - Commit: `438d87939 Add cleanup scope flags`, pushed to `master`.
+
+## 2026-08-24 — PR #104 task-state reconciliation
+
+- Verified GitHub pull request [#104](https://github.com/GeorgeQLe/agentic-skills/pull/104) merged into `master` as `1dbe9b4bc035517f271000c2b2da471b1c5073da` on 2026-08-23 and closed linked issue [#103](https://github.com/GeorgeQLe/agentic-skills/issues/103).
+- Reclassified the completed "Terminating Prompt History Delivery" roadmap entry as historical and replaced its stale review route in `tasks/todo.md` with an explicit no-active-task state.
+- Preserved the two unchecked recurring documentation tasks as advisory; neither was promoted into active execution.
+- Delivered this reconciliation through issue [#105](https://github.com/GeorgeQLe/agentic-skills/issues/105) on branch `docs/105-reconcile-pr-104-task-state`; existing issue #9 and PR #10 remain untouched because they own a broader, older roadmap-pipeline change set.
+- Verification passed: `node scripts/audit-task-docs.mjs` reported 0 failures and 0 warnings, targeted routing checks found no active implementation or unchecked todo item, and `git diff --check` passed.
