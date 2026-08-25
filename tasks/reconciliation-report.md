@@ -1,5 +1,39 @@
 # Development Docs Reconciliation Report
 
+## 2026-08-24 — PR #106 review remediation for merged PR #16
+
+- **Mode:** fix · **Scope:** tasks
+
+### Summary
+
+- Roadmap/todo alignment: **fixed** — the first prior roadmap entry now records PR #16 as merged instead of routing its completed merge work as unfinished.
+- History coverage: **fixed** — the follow-up records the verified merge commit and linked issue closure.
+- Phase archives: **not changed** — this was a stale delivery-state correction, not a numbered phase transition.
+- Spec freshness: **not in scope** (tasks-only run).
+- Recommended next action: independently re-review PR #106 at its amended exact head.
+
+### Errors (resolved)
+
+- **tasks/roadmap.md** — the "AFPS 2.0 Foundation And YouTube Launch Trio" entry still described PR #16 as ready but unmerged and left its final delivery milestones unchecked. GitHub and git history confirm PR #16 merged as `f356ce20042f1e87005e0daee54470343422f215` on 2026-08-14 UTC, closed issue #15, and is an ancestor of the PR #106 branch.
+
+### Fixed
+
+- [x] `tasks/roadmap.md` — recorded PR #16's merge and issue #15 closure, then checked the two delivery milestones supported by that evidence.
+- [x] `tasks/history.md` — appended the PR #106 review-remediation evidence.
+- [x] `prompts/reconcile-dev-docs/skill-prompt-20260824-204047-reconcile-pr-16-roadmap.md` — captured the exact visible remediation invocation with the substantive task-document amendment.
+
+### Deferred
+
+- None.
+
+### Validation
+
+- GitHub reports PR #16 `MERGED` with merge commit `f356ce20042f1e87005e0daee54470343422f215`; issue #15 is `CLOSED` at the immediately following timestamp.
+- `git merge-base --is-ancestor f356ce20042f1e87005e0daee54470343422f215 d9991c3d37280b5857d0c65d1fc93a09a718a798` passed before the amendment.
+- `node scripts/audit-task-docs.mjs` passed with 0 failures and 0 warnings; staged diff hygiene passed; staged gitleaks scanning found no leaks.
+
+---
+
 ## 2026-08-24 — PR #104 task-state reconciliation
 
 - **Mode:** fix · **Scope:** tasks

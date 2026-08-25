@@ -40,7 +40,7 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 
 - GitHub issue: [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15)
 - Branch: `docs/15-youtube-afps2-target`
-- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (ready; not merged)
+- Pull request: [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) (merged as `f356ce200` on 2026-08-14 UTC; issue #15 closed through the merge)
 - Scope: foundational convention, managed packaging/provisioning, deterministic launch-play harness, and the mirrored launch-trio skill contracts
 
 ### Plan
@@ -49,7 +49,7 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 - [x] Add deterministic schema, forbidden-semantics, checkpoint-size, page-count, stop-count, and publication-safety checks for the YouTube launch play.
 - [x] Archive, decimal-bump, changelog, and migrate both agent copies of `youtube-video-prelaunch-audit`, `youtube-title-thumbnail-audit`, and `youtube-description-optimizer`.
 - [x] Refresh runtime mirrors, public catalog/package artifacts, and run focused plus package-facing verification.
-- [ ] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
+- [x] Publish the canary-integrity remediation, complete focused independent re-review, and merge PR #16 only if every amended exact-head gate passes.
 
 ### Acceptance Criteria
 
@@ -58,7 +58,7 @@ Implement the shared AFPS 2.0 operating contract and deterministic comparison ha
 - [x] The launch play performs reversible evidence gathering, canonical report/description writes, and local thumbnail generation without implicit alignment/interrogation pages or compiled approval YAML.
 - [x] The three skills share at most one material title/thumbnail checkpoint with no more than three decisions, and YouTube Studio upload/publication/scheduling/authenticated changes remain explicit permission stops.
 - [x] The harness proves the archived baseline has seven routine stops while the migrated contract has zero routine approval stops, one possible material checkpoint, zero review pages, valid slice/packet shape, and intact publication safety.
-- [ ] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR are current and reviewable at the final exact head.
+- [x] Mirrored skill versions, archives, changelogs, runtime copies, catalog export, package manifest, tests, task records, branch, and PR were current and reviewable at the merged exact head.
 
 ## Historical Implementation - PR #18 Review Feedback And Merge
 

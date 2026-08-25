@@ -15584,3 +15584,9 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Preserved the two unchecked recurring documentation tasks as advisory; neither was promoted into active execution.
 - Delivered this reconciliation through issue [#105](https://github.com/GeorgeQLe/agentic-skills/issues/105) on branch `docs/105-reconcile-pr-104-task-state`; existing issue #9 and PR #10 remain untouched because they own a broader, older roadmap-pipeline change set.
 - Verification passed: `node scripts/audit-task-docs.mjs` reported 0 failures and 0 warnings, targeted routing checks found no active implementation or unchecked todo item, and `git diff --check` passed.
+
+## 2026-08-24 — PR #106 review remediation for PR #16 roadmap state
+
+- Confirmed pull request [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16) merged into `master` as `f356ce20042f1e87005e0daee54470343422f215` on 2026-08-14 UTC and closed linked issue [#15](https://github.com/GeorgeQLe/agentic-skills/issues/15).
+- Corrected its stale `tasks/roadmap.md` delivery status and checked the two remaining milestones whose completion is supported by the merge and ancestry evidence.
+- Kept `tasks/todo.md` in its explicit no-active-task state; this review remediation does not promote historical AFPS work back into execution.
