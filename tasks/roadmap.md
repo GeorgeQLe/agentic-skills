@@ -2,6 +2,78 @@
 
 `tasks/todo.md` is the current execution contract. This roadmap contains strategic plans plus historical reverse-chronological implementation notes. Only a single `Current Implementation` section may appear here during active execution, and it must match the task explicitly promoted into `tasks/todo.md`; historical notes use `Historical Implementation` or `Previous Implementation` headings.
 
+## Active Implementation Roadmap - Stable 1.0 Distribution Cleanup
+
+### Goal
+
+Prepare the first stable 1.0 distribution-cleanup slice after the merged AFPS 2.0 foundation, using package and source evidence to separate legacy ordinary-workflow infrastructure from explicit tools, historical support, and still-required operational skills.
+
+### Delivery
+
+- GitHub issue: [#25](https://github.com/GeorgeQLe/agentic-skills/issues/25)
+- Branch: `chore/25-stable-1.0-distribution-cleanup`
+- Pull request: [#26](https://github.com/GeorgeQLe/agentic-skills/pull/26) (remediation in progress after review)
+- Predecessor: AFPS foundation PR [#16](https://github.com/GeorgeQLe/agentic-skills/pull/16), merged as `f356ce200`
+- Release boundary: no npm publication, dist-tag mutation, release tag, deployment, or destructive consumer cleanup in this phase
+
+## Phase 1: Stable Distribution Boundary Audit ✓
+
+### Goal
+
+Produce an executable, evidence-backed retirement boundary for stable 1.0 before changing distributed behavior.
+
+### Scope
+
+- Inventory stable-lane package contents, managed convention assets, active skill dependencies, public catalog entries, runtime refresh behavior, and release documentation against the AFPS 2.0 clean-break contract.
+- Classify legacy surfaces as ordinary-workflow coupling, explicit review/admin tooling, historical support, or still-required operational behavior.
+- Examine the explicitly deferred `ship-end` and `sync` survivors as candidates, without assuming they should be removed merely because they remain distributed.
+- Define the smallest coherent implementation slice, its compatibility/rollback boundary, generated-artifact effects, and focused regression assertions.
+- Keep release publication and any consumer-side deletion outside this audit phase.
+
+**Parallelization:** serial
+
+**Coordination Notes:** Package manifests, source skill metadata, generated catalog/runtime artifacts, and release docs share the same distribution boundary. Keep the audit and eventual edits integrated until exact file ownership and compatibility constraints are proven.
+
+### Implementation
+
+- [x] Inventory stable/canary package, convention, catalog, runtime, and release boundaries.
+- [x] Classify the complete stable page-convention dependency population and distinguish explicit tooling from implicit ordinary-workflow gates.
+- [x] Keep `ship-end` stable, schedule a bounded safety migration for `sync`, and define the smallest coherent next slice.
+- [x] Record evidence in `tasks/stable-1.0-distribution-audit.md` and validate without publishing or mutating consumers.
+
+### Acceptance Criteria
+
+- [x] The audit names every stable-distributed surface that encodes or depends on legacy ordinary-workflow approval behavior, with source paths and executable evidence.
+- [x] Explicit page/admin tools and historical archives remain distinguishable from implicit ordinary-workflow producers.
+- [x] `ship-end` and `sync` receive evidence-backed keep and migrate dispositions that preserve daily operational value and AFPS permission boundaries.
+- [x] The proposed cleanup slice cannot create mixed AFPS defaults across source, stable package, runtime refresh, catalog, docs, or agent mirrors.
+- [x] The next phase has bounded acceptance criteria and focused verification commands; no publish, tag, dist-tag, deployment, or destructive consumer action occurs.
+
+### Review Gate
+
+Proceed directly through the reversible audit. Checkpoint only if evidence leaves two materially different stable-1.0 distribution strategies with comparable support or if the next action would cross a release or destructive-cleanup permission boundary.
+
+## Phase 2: Public Catalog Release-Lane Identity
+
+### Goal
+
+Make stable-versus-canary identity explicit and testable on every public catalog skill record without changing any skill's lane or publishing a package.
+
+### Plan
+
+- [ ] Add failing schema/generator tests for valid item-level release-lane identity and exact stable/canary projections.
+- [ ] Generate additive `release_lane` identity and deterministic lane counts from the canonical skill metadata.
+- [ ] Regenerate catalog artifacts and update public schema documentation where required.
+- [ ] Run catalog, stable/canary manifest, package-boundary, build, task, diff, and independent review gates.
+
+### Acceptance Criteria
+
+- [ ] Every public catalog skill record has `release_lane: stable|canary`, derived from canonical metadata with stable as the documented default.
+- [ ] Stable and canary projections agree across the catalog generator and package manifest generator; only the two `create-briefing-slides` mirrors are canary.
+- [ ] The change is additive for existing catalog consumers, and the package manifest remains the installation source of truth.
+- [ ] Generated exports are current and focused regression tests fail on missing, invalid, or leaked lane identity.
+- [ ] No package publication, tag, dist-tag, deployment, lane reassignment, or installed-consumer mutation occurs.
+
 ## Historical Implementation - Terminating Prompt History Delivery
 
 ### Goal
@@ -30,7 +102,7 @@ Stop prompt-history capture from recursively creating issue/branch/pull-request 
 - [x] Existing open prompt records are preserved without mutating their pull requests, issues, or branches during implementation.
 - [x] Targeted convention, GitHub-delivery, version/archive, mirror, package-refresh, task-document, diff, and secret checks pass.
 
-## Previous Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
+## Historical Implementation - AFPS 2.0 Foundation And YouTube Launch Trio
 
 ### Goal
 

@@ -7,7 +7,7 @@
   "repository": {
     "remote_url": "https://github.com/GeorgeQLe/agentic-skills.git",
     "url": "https://github.com/GeorgeQLe/agentic-skills",
-    "branch": "fix/103-stop-recursive-prompt-history-prs",
+    "branch": "chore/25-stable-1.0-distribution-cleanup",
     "ref_policy": "Consumers should pin SKILLS_REPO_REF to a tag or commit SHA for releases and deployments."
   },
   "proof_artifacts": [
@@ -87,14 +87,14 @@
     }
   ],
   "recent_history_entries": [
+    "2026-08-24 - Stable 1.0 distribution boundary audit",
+    "2026-08-13 - Stable 1.0 distribution cleanup intake",
     "2026-08-13 - AFPS 2.0 foundation and YouTube launch trio reconciliation",
     "2026-08-12 - PR #18 uninstall review remediation and merge",
     "2026-07-27 - YouTube prelaunch Stage 2.5 thumbnail generation",
     "2026-07-12 - GitHub delivery Phase 3 provisioning and verification",
     "2026-07-12 - GitHub delivery Phase 2 orchestrator migration",
-    "2026-07-12 - Codex accountable multi-agent lifecycle",
-    "2026-07-10 - Dangling-symlink refresh and fleet recovery",
-    "2026-07-09 - skillpacks 0.1.22-experimental.5 canary source closeout"
+    "2026-07-12 - Codex accountable multi-agent lifecycle"
   ],
   "boundaries": [
     "agentic-skills owns canonical skills/package source and versioned export artifacts.",

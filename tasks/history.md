@@ -1,5 +1,23 @@
 # Session History
 
+## 2026-08-24 - Stable 1.0 distribution boundary audit
+
+- Refreshed PR `#26` from current `master` with a merge commit workflow and reconciled its stale task-document conflicts without rebasing or rewriting published history.
+- Proved stable package generation contains 413 skills across 40 packs and excludes the two canary-only `create-briefing-slides` mirrors and their managed convention; the canary projection contains 415 skills.
+- Inventoried 309 stable page-convention-dependent agent surfaces, including the 152-surface report-first approval subset, while distinguishing explicit tooling and historical support from implicit ordinary-workflow coupling.
+- Kept `ship-end` stable, scheduled `sync` for a safety migration away from implicit stash/rebase behavior, and selected additive public catalog release-lane identity as the smallest coherent Phase 2 slice.
+- Closed superseded PR `#10` and issue `#9`; left PR `#26` open and unmerged for exact-head review and a separate merge decision.
+- Manifest: `tasks/ship-manifest-2026-08-24-stable-1.0-distribution-audit.md`.
+
+## 2026-08-13 - Stable 1.0 distribution cleanup intake
+
+- Verified AFPS foundation PR `#16` merged as `f356ce200`, then created issue `#25` and non-primary branch `chore/25-stable-1.0-distribution-cleanup` from current `origin/master`.
+- Replaced stale pre-merge current-task state with an audit-first Stable 1.0 phase covering stable/canary manifests, legacy ordinary-workflow coupling, explicit review/admin tooling, lifecycle behavior, catalogs, and release documentation.
+- Required evidence-backed keep, migrate, move-lane, or retire dispositions for the explicitly deferred `ship-end` and `sync` survivors; no removal is presumed from continued distribution alone.
+- Kept npm publication, dist-tag mutation, release tags, deployment, and destructive consumer cleanup outside the phase boundary.
+- Published planning commits `41b6dc874` and `cf90032be` to ready PR [#26](https://github.com/GeorgeQLe/agentic-skills/pull/26); task audit and diff hygiene passed.
+- Manifest: `tasks/ship-manifest-2026-08-13-stable-1.0-distribution-cleanup-intake.md`.
+
 ## 2026-08-13 - AFPS 2.0 foundation and YouTube launch trio reconciliation
 
 - Preserved the staged 51-path AFPS implementation as `debef6bf8` after fixing four trailing blank-line violations, then merged current `origin/master` without rebasing or rewriting published branch history.
