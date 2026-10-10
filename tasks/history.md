@@ -36,6 +36,11 @@
   those artifacts exist before website publication.
 - **Rollback note:** revert this correction's commits; no services or credentials
   changed. Test dependencies installed from existing lockfile with scripts disabled.
+- **Publication blocker:** push was rejected; fetch revealed a rewritten/divergent
+  remote (741 local-only and 2,247 remote-only commits, including this fix).
+  The remote no longer has `global/codex/run/SKILL.md`. Local installed symlinks
+  use this corrected source. Do not force-push or merge the obsolete tree into
+  the remote; publication requires a separately scoped port to its new pack layout.
 - **Next command:** continue the active Chromux task automatically; no user handoff.
 
 # Session History
