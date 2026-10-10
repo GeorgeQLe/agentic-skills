@@ -1,25 +1,49 @@
 ---
 name: run
-description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
+description: "Execute and ship approved project work continuously; use --step or --phase for an explicit stopping boundary"
 type: execution
-version: 1.0.0
-argument-hint: "[--phase]"
+version: 1.1.0
+argument-hint: "[--step | --phase]"
 ---
 
 # Run
 
-Identify the next incomplete unit of work from the phased plan, build an execution plan, and enter plan mode for user approval before implementing. By default, plans **only the next single incomplete step**. If `$ARGUMENTS` contains `--phase`, plans the **entire next phase**.
+Execute approved project work continuously: plan the next actionable unit, implement,
+validate and ship it, update the plan, then continue without requiring another
+invocation. A step or phase is a review/checkpoint boundary, not a mandatory stop.
+Use `--step` to stop after one step or `--phase` to stop after one phase. A user's
+explicit scope or stopping instruction takes precedence; never expand a narrow
+request into unrelated project work.
+
+## Continuous execution contract
+
+- Continue through the approved backlog until the project acceptance criteria are
+  actually met, the user asks to stop, or no authorized independent work remains.
+- Do not end a turn merely to recommend another run command after a successful
+  step. Prepare and execute the next eligible unit in the same ongoing task.
+- Re-plan at phase boundaries and validate/ship coherent units. Keep progress
+  updates and durable task notes so compaction or session resumption preserves scope.
+- A blocked item blocks its dependents, not unrelated authorized work. Record the
+  concrete missing input/permission/device, request it once when needed, and continue
+  independent work. Never bypass a safety boundary or mark an untested gate complete.
+- Preserve credential confidentiality, budget/billing consent, production/deletion
+  approvals, isolated write ownership and required tests. Continuous execution is
+  not authorization for paid actions, deployment or destructive changes.
+- When returning to a continuous caller from shipping/planning skills, continue
+  execution; next-command output is a recovery aid, not an instruction to stop.
+- `--execute-approved` remains restricted to its one approved packet unless a
+  separate user instruction authorizes continued work. Never widen packet scope.
 
 ## Protocol
 
-1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` -> `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Stop after the migration and tell the user to run `/ship` to package and push the task-doc split. Do **not** commit or push from `/run`.
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` -> `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Invoke `/ship --no-deploy` to validate/publish the task-doc split, then continue within the authorized scope.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 3. **Read CLAUDE.md** for project conventions.
 3b. If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
 4. **Find the next incomplete item:**
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
-   - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
+   - Otherwise: select the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phase` for this phase** to generate implementation steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phase` manually — this auto-invocation is the designed workflow. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
 5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
@@ -28,12 +52,12 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 6. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
 6b. **Read the execution profile** — read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
    - If missing, treat the phase as `serial`.
-   - Use the profile only for the current step or scoped phase; do not plan ahead.
+   - Apply the execution profile per unit and reassess at phase transitions.
    - If the profile's `Parallel mode` is `agent-team`:
      - Parse all lanes. If any lane is missing `Mode:` or `Depends on:`, still contains placeholder text, write lanes have overlapping `Owns`, or write lanes are missing a concrete non-primary `Branch:`, **auto-invoke `/patch-exec-profile`** for this phase (same pattern as step 4's auto-invocation of `/plan-phase`). Re-read `tasks/todo.md` after it returns. Do not tell the user to run `/patch-exec-profile` manually — this auto-invocation is the designed workflow.
      - Build the lane DAG from each lane's `Depends on:` field. Compute topological waves. Include the DAG and wave structure in the plan-mode presentation at step 8.
      - Confirm the plan includes a consolidation/PR review step after all write lanes and before final validation or shipping. If not, stop and patch the phase plan before dispatch.
-7. **Enter plan mode** using the EnterPlanMode tool.
+7. **Plan the next unit.** Use plan mode when required by the active environment; existing continuous authorization does not require fresh routine approval.
 8. **Present the execution plan** to the user:
    - What the step/phase requires
    - Which files will be created or modified
@@ -41,7 +65,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
    - For `agent-team`: the planned lane branches and the consolidation/PR review gate
    - Any decisions or trade-offs the user should weigh in on
-9. **Wait for user approval.** Do NOT write any code until the user approves.
+9. **Proceed within existing authorization.** Ask only for missing decisions or separately gated actions; do not ask for routine approval at every step.
 10. **After approval, execute the approved plan.** If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with implementation. Only use the plan-mode exit tool when the session is still visibly in plan mode.
 
 ### Execution Profile Handling
@@ -80,12 +104,12 @@ When the profile is `agent-team`:
   - Else: record the findings, check off the step, and continue normal `/run` flow.
 - Run the phase's test strategy against the integrated state before checking off the step.
 
-### Single Step Mode (default)
+### Per-unit execution (stop only with `--step`)
 
 - If the step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before handing off to `/ship`: run `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`; include changed generated assets in the dirty tree. Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
-- If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
-- If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
-- If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of leaving it for a separate plan-mode handoff. Stop.
+- If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). In continuous mode proceed to the matching implementation; do not publish expected-red tests as a completed green unit.
+- If it's an implementation step: implement it, run existing tests to check for regressions. Continue after validation and shipping unless --step applies.
+- If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of leaving it for a separate plan-mode handoff. Continue unless an explicit scope boundary applies.
 - **Mark the step as done** in `tasks/todo.md` (check it off).
 
 ### Full Phase Mode (`--phase`)
@@ -101,7 +125,11 @@ When the profile is `agent-team`:
   - Run the full test suite to confirm no regressions.
   - Check off completed criteria in `tasks/todo.md`.
 
-## After Execution (both modes)
+## After each execution unit
+
+Validate and invoke `/ship --no-deploy` for authorized publication, then plan and
+execute the next eligible unit. Honor explicit --step/--phase boundaries. Final
+handoff output below applies only at completion or a genuine stopping boundary.
 
 **Report concisely:**
 - Phase/step completed
@@ -134,42 +162,42 @@ Rules:
 
 ## What NOT to do
 
-- Do NOT write code before entering plan mode and getting user approval.
+- Do not exceed the user's authorized scope; ask only for separate decisions, not repeated routine approval.
 - Do NOT call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
-- Do NOT execute more than one step (or more than one phase in `--phase` mode).
+- Honor explicit `--step` or `--phase` limits; otherwise continue through the approved backlog.
 - Do NOT read unnecessary files — only what's needed for the current work.
-- Do NOT plan ahead or analyze future phases/steps.
+- Plan the next eligible unit when the current one passes validation.
 - Do NOT refactor unrelated code.
 - Do NOT update CLAUDE.md.
-- Do NOT commit or push. `/run` is the Claude execution step; `/ship` owns packaging, task-history updates, commits, pushes, deploys, and next-step planning.
+- Delegate publication to `/ship --no-deploy` and resume execution afterward. Deployment needs its separate authorization.
 - Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `/reconcile-dev-docs` or promoted into `tasks/todo.md`, not routed to `/guide`.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 
 ## Workflow
 
 ```
-/run                  → plans one step, enters plan mode, executes after approval
-/run --phase          → plans the next full phase, enters plan mode, executes after approval
-/ship                 → commits, pushes, plans next, enters plan mode
-                      → select "clear context and implement"
-                      → fresh context reads tasks/todo.md and implements
+/run                  → executes, validates, ships and continues approved work
+/run --step           → executes one step then returns
+/run --phase          → executes one phase then returns
+/ship --no-deploy     → validates, commits, pushes, plans next; returns to continuous caller
 ```
 
 ## Constraints
-- **One step (or one phase). That's it.** Then stop and let the user decide what's next.
-- **Always enter plan mode before executing.** The user must approve the approach first.
+- **Continue by default.** Step/phase boundaries are checkpoints, not mandatory stops.
+- Present the next plan and proceed under existing authorization; preserve separate safety approvals.
 - Keep context footprint minimal — don't read the entire codebase, only files relevant to this work.
-- If the work can't be completed due to a blocker, document the blocker in `tasks/todo.md` and stop.
+- Document a blocked item and continue independent authorized work; stop only when none remains.
 - Follow the test strategy annotated on each phase (`tdd`, `tests-after`, or `none`). Do not skip test steps for `tdd` phases.
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
-- Do not invoke `/commit-and-push-by-feature` or push shipping commits from the main `/run` tree. A dirty tracked tree after successful `/run` is expected and is the handoff to `/ship`. The narrow exception is `agent-team` lane work: lane agents must commit and push their assigned non-primary GitHub branches for PR review.
+- `/ship --no-deploy` owns publication; call it within continuous execution instead of leaving a routine handoff for the user.
 - For `agent-team` phases: do not integrate a lane whose diff contains files outside its declared `Owns` — surface the violation and stop instead. Lane agent prompts must require branch-backed commit, push, and PR evidence before return; do not integrate from an uncommitted worktree, unpushed branch, or unreviewed PR. Clean up local worktrees after every integration, but preserve remote branches/PRs until consolidation status is documented.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 
 ## Execution Handoff Contract
 
-- `/run` deliberately leaves completed tracked changes uncommitted so `/ship` can validate, update `tasks/history.md`, commit, push, deploy, plan the next step, and enter plan mode in one coherent shipping pass.
-- If the user explicitly asks `/run` to commit or push, stop and redirect them to `/ship` or `/commit-and-push-by-feature`; do not reinterpret `/run` as a shipping command.
-- Report the exact next command as `/ship` unless a blocker prevents shipping.
+Invoke `/ship --no-deploy` to validate, record history, commit/push and plan the
+next unit. Resume the continuous loop afterward without requesting another run
+invocation. At an explicit --step/--phase boundary or genuine blocker, return a
+self-contained status with remaining work and the actual next route.

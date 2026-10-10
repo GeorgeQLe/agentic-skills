@@ -963,3 +963,26 @@ Implement only this step, validate it, then run `/ship` when done.
 **Deploy:** Skipped. `tasks/deploy.md` describes a Vercel production deploy from `master`; no explicit production deploy confirmation was provided for this `$ship` run.
 
 **Recommended next command:** `$benchmark-test-skill icon-handler`
+
+## 2026-10-09 — Continuous run execution correction
+
+- [x] Replace default single-step stopping with continuous authorized execution in
+  both run skills; explicit --step/--phase and approved-packet scopes remain.
+- [x] Preserve safety gates and continue independent work around blocked items.
+- [x] Add regression checks; make the plan-only benchmark explicitly --step.
+- [x] Refresh run discovery metadata and curated workflow copy.
+- [x] Validate and publish the exact correction; return to Chromux work.
+
+Review: 47 focused tests passed after resolving local IPC sandbox restrictions
+and the renamed fixture expectation. Coverage valid for 152 skills. Installed
+links already target these sources (installer succeeds with zero new links).
+Bash integrity scripts cannot run on this Mac's Bash 3 (associative arrays/mapfile);
+portable frontmatter check covers 105 global skills and changed routing, plus
+focused contract assertions. No dependency lockfile changed.
+
+Showcase generators/freshness check ran, but this checkout lacks historical raw
+benchmark artifacts: regeneration removed unrelated published evidence. Those
+removals were discarded; only run description/version/argument metadata in both
+catalog copies was retained. Historical benchmark/proof snapshots remain unchanged.
+Full catalog-fingerprint freshness is therefore not claimed; rerun the generators
+in an evidence-complete checkout before a site publication. No site is deployed.

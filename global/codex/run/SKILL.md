@@ -1,16 +1,40 @@
 ---
 name: run
-description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
+description: "Execute and ship approved project work continuously; use --step or --phase for an explicit stopping boundary"
 type: execution
-version: 1.0.0
-argument-hint: "[--phase] [--execute-approved]"
+version: 1.1.0
+argument-hint: "[--step | --phase] [--execute-approved]"
 ---
 
 # Run
 
 Invoke as `$run`.
 
-Identify the next incomplete unit of work from the phased plan, build an execution plan, implement it, ship the result, and prepare the next step. By default, executes only the next single incomplete step. If `$ARGUMENTS` contains `--phase`, execute the next full phase and ship once at the end.
+Execute approved project work continuously: plan the next actionable unit, implement,
+validate and ship it, update the plan, then continue without requiring another
+invocation. A step or phase is a review/checkpoint boundary, not a mandatory stop.
+Use `--step` to stop after one step or `--phase` to stop after one phase. A user's
+explicit scope or stopping instruction takes precedence; never expand a narrow
+request into unrelated project work.
+
+## Continuous execution contract
+
+- Continue through the approved backlog until the project acceptance criteria are
+  actually met, the user asks to stop, or no authorized independent work remains.
+- Do not end a turn merely to recommend another run command after a successful
+  step. Prepare and execute the next eligible unit in the same ongoing task.
+- Re-plan at phase boundaries and validate/ship coherent units. Keep progress
+  updates and durable task notes so compaction or session resumption preserves scope.
+- A blocked item blocks its dependents, not unrelated authorized work. Record the
+  concrete missing input/permission/device, request it once when needed, and continue
+  independent work. Never bypass a safety boundary or mark an untested gate complete.
+- Preserve credential confidentiality, budget/billing consent, production/deletion
+  approvals, isolated write ownership and required tests. Continuous execution is
+  not authorization for paid actions, deployment or destructive changes.
+- When returning to a continuous caller from shipping/planning skills, continue
+  execution; next-command output is a recovery aid, not an instruction to stop.
+- `--execute-approved` remains restricted to its one approved packet unless a
+  separate user instruction authorizes continued work. Never widen packet scope.
 
 ## Workflow
 
@@ -21,13 +45,13 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 4. Find the next incomplete item:
    - Look for the next phase with an unchecked milestone.
    - If `$ARGUMENTS` contains `--phase`, scope the full next incomplete phase.
-   - Otherwise, find the next unchecked `- [ ]` step within that phase.
+   - Otherwise, select the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phase` for this phase to generate implementation steps and file-level detail before proceeding.
 5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If a blocking external human-only manual task is found, stop and tell the user: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `$guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker. If the unchecked item is task-doc bookkeeping, reconciliation, or agent-executable work (repo edits, SDK wiring, local commands, tests, audits, generated assets, or authenticated CLI/API work), do not route it to `$guide`; route it to `$reconcile-dev-docs fix tasks`, promote it to `tasks/todo.md`, or handle it as a direct dev-doc audit.
 6. Research what is needed — read only the files relevant to the step.
 6b. Read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
    - If missing, treat the phase as `serial`.
-   - Use the profile only for the current step or scoped phase; do not plan ahead.
+   - Apply the current execution profile per unit; re-evaluate it when progressing to the next phase.
    - If the profile's `Parallel mode` is `agent-team`, stop before implementation unless the active workflow can run branch-backed isolated worktrees or a dedicated agent team. Each write lane must have a non-primary GitHub `Branch:` value and the phase must include a consolidation/PR review step before final validation or shipping.
 6c. **`--execute-approved` branch** (if `$ARGUMENTS` contains `--execute-approved`):
    - Reject `--execute-approved --phase` — approved packets target one step, not a full phase.
@@ -41,7 +65,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - The approach and any trade-offs
    - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
    - For `agent-team`: the planned lane branches and the consolidation/PR review gate
-8. Use `update_plan` to track the proposed work, then execute by default. Do not ask for routine approval after presenting a `$run` plan; the user's `$run` invocation is implicit approval for the next planned step or scoped phase. Ask a concise confirmation question only when the work requires a separate safety decision: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, accepting an execution-profile downgrade, proceeding despite a blocker, or materially changing the planned scope.
+8. Use `update_plan` to track the proposed work, then execute by default. Do not ask for routine approval after presenting a `$run` plan; the user's `$run` invocation is authorization for the approved backlog, subject to explicit --step/--phase limits. Ask a concise confirmation question only when the work requires a separate safety decision: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, accepting an execution-profile downgrade, proceeding despite a blocker, or materially changing the planned scope.
 9. Execute the plan:
    - Apply the execution profile:
      - `serial`: execute normally.
@@ -111,6 +135,10 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Output
 
+Emit final handoff output only at completion, an explicit scope boundary, or when
+no independent authorized work remains. During continuous execution report
+progress and continue; do not turn next-step routing into a pause.
+
 - Step or phase completed
 - Files modified
 - Deploy status (if deployed)
@@ -154,12 +182,12 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 
 ## Constraints
 
-- One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
+- Default: continue through authorized project work. Only `--step`, `--phase`, an explicit user stop, or a genuine blocking boundary limits continuation.
 - `--execute-approved` consumes an `approved` packet at `.agents/approved-plan.json` (contract in `docs/operating-modes.md` § "Approval packet"). `--execute-approved --phase` is rejected — packets target one step. In `claude-only` mode the flag is a user error; Codex is not the executor. Requires `jq` on PATH.
 - Always present the plan before executing, then proceed by default under implicit approval. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Ask for explicit confirmation only for separate safety decisions, and ask one concise question when that is needed. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
 - Keep context footprint minimal — only read files relevant to the current step.
-- If a blocker prevents completion, document it in `tasks/todo.md` and stop.
+- If a blocker prevents one item, document it in `tasks/todo.md` and continue independent authorized work. Stop only when no such work remains.
 - Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.

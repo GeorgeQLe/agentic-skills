@@ -1,3 +1,11 @@
+## 2026-10-09 — Step boundaries must not override continuous authorization
+
+When the user asks to continue until project completion, do not repeatedly return
+with a next-command prompt after every successful step. Global run now continues
+through authorized work by default, with explicit --step/--phase limits. Keep
+validation/shipping checkpoints and genuine safety approvals; continue independent
+work around blocked items. Regression: tests/layer1/run-continuation.test.ts.
+
 # Lessons
 
 ## 2026-05-13 — Hygiene must check canonical root existence, not just contents

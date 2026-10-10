@@ -1059,7 +1059,7 @@ describe("benchmark coverage matrix", () => {
     });
     expect(matrix.find((row) => row.skill === "run")).toMatchObject({
       coverage_status: "custom",
-      fixture_type: "execution-plan-fixture",
+      fixture_type: "explicit-step-plan-and-continuation-contract-fixture",
       priority_tier: 1,
     });
   });

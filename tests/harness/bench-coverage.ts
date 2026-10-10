@@ -424,7 +424,7 @@ const COVERAGE_OVERRIDES: Record<string, Partial<BenchCoverageRow>> = {
     coverage_status: "custom",
     setup_path: "tests/layer4/setups/tier1-workflows.setup.ts",
     priority_tier: 1,
-    fixture_type: "execution-plan-fixture",
+    fixture_type: "explicit-step-plan-and-continuation-contract-fixture",
   },
   "session-triage": {
     coverage_status: "custom",

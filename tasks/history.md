@@ -1,3 +1,43 @@
+## 2026-10-09 — Continuous execution rather than repeated step handoffs
+
+- **User goal:** remove mandatory step-by-step stopping and progress through an
+  authorized project without repeated run invocations.
+- **Changed files / per-file purpose / user-goal mapping:**
+  - `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`: default continuous
+    loop, explicit scope limits, independent-blocker handling and retained safety gates.
+  - `AGENTS.md`, `CLAUDE.md`: remove conflicting routine approval/handoff rules.
+  - `global/codex/run/agents/openai.yaml`: discovery prompt matches continuation.
+  - `tests/layer1/run-continuation.test.ts`: deterministic mirror/scope/safety guard.
+  - `tests/layer4/setups/tier1-workflows.setup.ts`: benchmark explicitly requests
+    bounded --step plan-only output rather than assuming the obsolete default.
+  - `tests/harness/bench-coverage.ts`, `tests/layer1/bench-setups.test.ts`: fixture
+    coverage/expectation name reflects scoped-plan plus continuation checks.
+  - `docs/skills-showcase/assets/skills-data.js`,
+    `apps/skills-showcase/public/assets/skills-data.js`: run metadata only;
+    historical evidence preserved because raw archives are absent locally.
+  - `apps/skills-showcase/src/showcase/tui/workflow-data.ts`: curated workflow wording.
+  - `tasks/lessons.md`: current user correction and regression enforcement.
+  - `tasks/todo.md`, `tasks/history.md`: exact validation/limitation record.
+- **Tests run:** focused run/benchmark setup Vitest: 49 pass; coverage checker:
+  152 valid; installer succeeds; portable 105-global-skill version/routing check;
+  whitespace and redacted diff scan pass. Post-fix continuation check rerun before ship.
+- **Skipped tests:** no paid live-agent benchmark or website deploy. Bash 3 cannot
+  execute existing Bash 4 integrity scripts; equivalent targeted checks above.
+  Full catalog freshness not asserted without missing historical benchmark inputs;
+  generator deletion of unrelated evidence was deliberately not shipped.
+- **Adversarial review:** main-agent changed-file review checked explicit --step,
+  --phase and packet limits, user stop, billing/credential/deploy gates, blocked
+  dependencies, preserved Claude dispatch sections and routine shipping return.
+  Corrected an initial edit that matched the wrong Claude heading before validation.
+- **Correction enforcement:** mirrored run rules, project-specific AGENTS override
+  in Chromux, current lesson and deterministic regression check close this pattern.
+- **Residual risk:** agents still interpret prose; no end-to-end paid session test.
+  Catalog snapshots preserve historical evidence but need full regeneration where
+  those artifacts exist before website publication.
+- **Rollback note:** revert this correction's commits; no services or credentials
+  changed. Test dependencies installed from existing lockfile with scripts disabled.
+- **Next command:** continue the active Chromux task automatically; no user handoff.
+
 # Session History
 
 ## 2026-05-13 — UI review: G Skillpacks website

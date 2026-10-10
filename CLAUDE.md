@@ -55,7 +55,7 @@
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
-2. **Verify Plan**: Check in before starting implementation
+2. **Verify Plan**: Share the plan and proceed within existing authorization; ask only for missing decisions or separately gated actions.
 3. **Track Progress**: Mark items complete as you go
 4. **Explain Changes**: High-level summary at each step
 5. **Document Results**: Add review section to `tasks/todo.md`
@@ -66,5 +66,14 @@
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-- **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: direct Claude `/run` is execution-only and hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
+- **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Claude `/run` invokes `/ship --no-deploy` within its execution loop. Continue remaining approved work after shipping without a routine user handoff.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.
+
+## Continuous Execution
+
+Execute approved project work through planning, implementation, validation and
+shipping checkpoints without requiring a new run command at each step. Explicit
+user scope limits and stop requests take precedence. Preserve credential, billing,
+deployment, destructive-operation and acceptance gates; record blocked dependencies
+and continue independent authorized work. Do not claim completion until the actual
+acceptance criteria are met.

@@ -32,7 +32,7 @@ export const workflows: Workflow[] = [
       ["Install", "./install.sh", "Global skill links refresh."],
       ["Select pack", "./scripts/pack.sh", "Project context narrows loaded workflows."],
       ["Plan", "$roadmap", "Task docs describe the next phase."],
-      ["Run", "$run", "One step executes with validation."],
+      ["Run", "$run", "Approved work continues with validation."],
       ["Ship", "git push", "History and commit land on primary."]
     ]
   },
@@ -62,9 +62,9 @@ export const workflows: Workflow[] = [
     badge: "shipping",
     command: "$run",
     title: "Plan -> Run -> Ship",
-    subtitle: "Turn one roadmap step into committed work.",
+    subtitle: "Turn approved roadmap work into verified commits.",
     copy: "The active todo becomes an execution plan, source change, validation record, history note, and direct-to-primary push.",
-    when: "Use this for the next incomplete implementation step when the roadmap already has enough detail.",
+    when: "Use this to progress through approved project work; --step and --phase set explicit stopping boundaries.",
     changes: ["target source files", "tasks/todo.md", "tasks/history.md", "generated proof assets when stale"],
     artifacts: ["quality gate manifest", "validation output", "history entry", "primary branch commit"],
     failure: "If validation fails, fix the source issue and rerun the failing command; do not commit known regressions.",
@@ -93,7 +93,7 @@ export const workflows: Workflow[] = [
       ["Interview", "$spec-interview", "Assumptions become explicit."],
       ["Spec", "specs/*.md", "Behavior and constraints are written."],
       ["Roadmap", "$roadmap", "The work becomes phases."],
-      ["Implement", "$run", "A single phase step executes."]
+      ["Implement", "$run", "Approved work executes through validated checkpoints."]
     ]
   },
   {

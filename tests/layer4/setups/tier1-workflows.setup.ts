@@ -224,7 +224,7 @@ const workflowDefinitions: Tier1WorkflowDefinition[] = [
   {
     skill: "run",
     outputPath: "run-plan.md",
-    prompt: "You have the run skill installed. Using the local task files, write run-plan.md with the selected next step, files you would inspect or modify, validation commands, shipping note, and Next command. Do not modify task docs or run git.",
+    prompt: "You have the run skill installed. The user explicitly requests --step scope and a plan-only artifact. Using the local task files, write run-plan.md with the selected next step, files you would inspect or modify, validation commands, shipping note, and Next command. Do not modify task docs or run git.",
     fixtureFiles: {
       "CLAUDE.md": "# Project Rules\n\nShip verified changes on master.\n",
       "tasks/todo.md": "# Active Phase\n\n### Execution Profile\n**Parallel mode:** serial\n\n## Implementation\n\n- [ ] Step 1.1: Add a deterministic benchmark fixture.\n  - Files: modify `tests/example.test.ts`\n",
